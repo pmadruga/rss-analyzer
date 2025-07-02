@@ -1,0 +1,108 @@
+version: '3.8'
+
+services:
+  rss-analyzer:
+    build: .
+    container_name: rss-analyzer
+    environment:
+      # API Configuration
+      - API_PROVIDER=${API_PROVIDER:-anthropic}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - MISTRAL_API_KEY=${MISTRAL_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - CLAUDE_MODEL=${CLAUDE_MODEL:-claude-3-5-sonnet-20241022}
+      - MISTRAL_MODEL=${MISTRAL_MODEL:-mistral-large-latest}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4}
+      
+      # RSS Configuration
+      - RSS_FEED_URL=${RSS_FEED_URL:-https://bg.raindrop.io/rss/public/57118738}
+      - USER_AGENT=${USER_AGENT:-RSS-Article-Analyzer/1.0}
+      
+      # Processing Configuration
+      - MAX_ARTICLES_PER_RUN=${MAX_ARTICLES_PER_RUN:-10}
+      - SCRAPER_DELAY=${SCRAPER_DELAY:-1.0}
+      - REQUEST_TIMEOUT=${REQUEST_TIMEOUT:-30}
+      - FOLLOW_LINKS=${FOLLOW_LINKS:-true}
+      - MAX_LINKED_ARTICLES=${MAX_LINKED_ARTICLES:-3}
+      
+      # Database Configuration
+      - DB_PATH=/app/data/articles.db
+      
+      # Output Configuration
+      - OUTPUT_DIR=/app/output
+      - REPORT_FILENAME=${REPORT_FILENAME:-article_analysis_report.md}
+      
+      # Logging Configuration
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - LOG_FILE=/app/logs/analyzer.log
+      
+      # Processing Options
+      - FORCE_REFRESH=${FORCE_REFRESH:-false}
+      - SKIP_SCRAPING=${SKIP_SCRAPING:-false}
+      - SKIP_ANALYSIS=${SKIP_ANALYSIS:-false}
+    
+    volumes:
+      # Data persistence
+      - ./data:/app/data
+      - ./output:/app/output
+      - ./logs:/app/logs
+      
+      # Configuration (optional)
+      - ./config:/app/config:ro
+      
+      # Environment file (if exists)
+      - ./.env:/app/.env:ro
+    
+    # Default command - can be overridden
+    command: ["run", "--limit", "5"]
+    
+    # Restart policy
+    restart: unless-stopped
+    
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '1.0'
+        reservations:
+          memory: 256M
+          cpus: '0.25'
+    
+    # Health check
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys; sys.exit(0)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    
+    # Networking
+    networks:
+      - rss-analyzer-network
+
+  # Optional: Web interface for reports (future enhancement)
+  # web-ui:
+  #   image: nginx:alpine
+  #   container_name: rss-analyzer-web
+  #   ports:
+  #     - "8080:80"
+  #   volumes:
+  #     - ./output:/usr/share/nginx/html/reports:ro
+  #   depends_on:
+  #     - rss-analyzer
+  #   networks:
+  #     - rss-analyzer-network
+
+networks:
+  rss-analyzer-network:
+    driver: bridge
+
+volumes:
+  # Named volumes for data persistence
+  analyzer-data:
+    driver: local
+  analyzer-logs:
+    driver: local
+  analyzer-output:
+    driver: local

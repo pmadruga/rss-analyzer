@@ -1,0 +1,139 @@
+# API Keys and Secrets
+.env
+.env.local
+.env.production
+.env.staging
+*.key
+*.pem
+*_key
+*_secret
+
+# API Configuration Files
+api_keys.txt
+secrets.txt
+credentials.json
+auth.json
+
+# Database Files (contain processed data, can be large)
+data/*.db
+data/*.db-*
+data/*.sqlite
+data/*.sqlite3
+*.db
+*.sqlite
+*.sqlite3
+
+# Log Files (can contain sensitive info and get large)
+logs/
+*.log
+*.log.*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.conda/
+
+# IDE Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Docker
+.dockerignore
+
+# Temporary Files
+tmp/
+temp/
+*.tmp
+*.temp
+*.cache
+.cache/
+
+# Output Files (can be regenerated, might be large)
+output/*.json
+output/*.csv
+output/*.xlsx
+
+# Keep only the main markdown output
+!output/articles_by_date.md
+!output/run_summary.json
+
+# Backup Files
+*.bak
+*.backup
+*_backup
+backup/
+backups/
+
+# System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Archive Files
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# Test Files
+test_output/
+*_test.db
+test_*.log
+
+# Node.js (if any JS tooling is added)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Coverage Reports
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
