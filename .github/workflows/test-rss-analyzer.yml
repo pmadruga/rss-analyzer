@@ -47,7 +47,7 @@ jobs:
         python -c "
         from src.rss_parser import RSSParser
         parser = RSSParser()
-        entries = parser.fetch_and_parse('https://bg.raindrop.io/rss/public/57118738')
+        entries = parser.fetch_feed('https://bg.raindrop.io/rss/public/57118738')
         print(f'✅ RSS parsing test: Found {len(entries)} entries')
         "
         
