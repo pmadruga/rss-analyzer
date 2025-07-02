@@ -145,14 +145,14 @@ jobs:
         fi
         
     - name: Upload database backup
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: database-backup
         path: data/articles.db
         retention-days: 30
         
     - name: Upload logs
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: logs-${{ github.run_number }}
