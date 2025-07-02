@@ -135,9 +135,10 @@ jobs:
         if git diff --staged --quiet; then
           echo "No changes to commit"
         else
+          SUMMARY=$(cat output/run_summary.json | jq -r '"Articles: " + (.completed_articles | tostring) + "/" + (.total_articles | tostring) + " | Avg Confidence: " + (.average_confidence | tostring) + "/10"')
           git commit -m "Update RSS analysis - $(date -u '+%Y-%m-%d %H:%M UTC') 🤖
           
-          $(cat output/run_summary.json | jq -r '\"Articles: \" + (.completed_articles | tostring) + \"/\" + (.total_articles | tostring) + \" | Avg Confidence: \" + (.average_confidence | tostring) + \"/10\"')
+          $SUMMARY
           
           Co-Authored-By: RSS-Analyzer-Bot <noreply@github.com>"
           
