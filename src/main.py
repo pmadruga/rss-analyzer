@@ -485,5 +485,98 @@ def list_reports(ctx):
         click.echo(f"❌ Failed to list reports: {e}", err=True)
 
 
+@cli.command()
+@click.option('--detailed', is_flag=True, help='Show detailed API information')
+@click.pass_context
+def api_status(ctx, detailed):
+    """Check API health status for all providers"""
+    import subprocess
+    import os
+    from pathlib import Path
+    
+    try:
+        # Run the quick API check script
+        script_path = Path(__file__).parent.parent / "tools" / "quick_api_check.py"
+        
+        if not script_path.exists():
+            click.echo("❌ API monitoring script not found", err=True)
+            sys.exit(1)
+        
+        # Run the script
+        result = subprocess.run([sys.executable, str(script_path)], 
+                              capture_output=True, text=True)
+        
+        click.echo(result.stdout)
+        
+        if result.stderr:
+            click.echo("Errors:", err=True)
+            click.echo(result.stderr, err=True)
+        
+        if detailed:
+            click.echo("\n🔍 Detailed API Information:")
+            click.echo("-" * 40)
+            
+            # Show configuration
+            config = ctx.obj['config']
+            api_config = config.get('api', {})
+            
+            for provider in ['anthropic', 'mistral', 'openai']:
+                provider_config = api_config.get(provider, {})
+                click.echo(f"\n{provider.title()}:")
+                click.echo(f"  Model: {provider_config.get('model', 'Not configured')}")
+                click.echo(f"  Max Retries: {provider_config.get('max_retries', 'Not configured')}")
+                click.echo(f"  Timeout: {provider_config.get('timeout', 'Not configured')}s")
+        
+        sys.exit(result.returncode)
+        
+    except Exception as e:
+        click.echo(f"❌ Failed to check API status: {e}", err=True)
+        sys.exit(1)
+
+
+@cli.command()
+@click.option('--output', '-o', default='logs/api_health_report.json', 
+              help='Output file for detailed report')
+@click.pass_context
+def api_monitor(ctx, output):
+    """Run comprehensive API monitoring and generate detailed report"""
+    import subprocess
+    import os
+    from pathlib import Path
+    
+    try:
+        # Run the comprehensive API monitor script
+        script_path = Path(__file__).parent.parent / "tools" / "api_health_monitor.py"
+        
+        if not script_path.exists():
+            click.echo("❌ API monitoring script not found", err=True)
+            sys.exit(1)
+        
+        click.echo("🔍 Running comprehensive API health check...")
+        
+        # Set environment variable for output file
+        env = os.environ.copy()
+        env['API_MONITOR_OUTPUT'] = output
+        
+        # Run the script
+        result = subprocess.run([sys.executable, str(script_path)], 
+                              env=env, capture_output=True, text=True)
+        
+        click.echo(result.stdout)
+        
+        if result.stderr:
+            click.echo("Errors:", err=True)
+            click.echo(result.stderr, err=True)
+        
+        if result.returncode == 0:
+            click.echo(f"\n📄 Detailed report saved to: {output}")
+        
+        sys.exit(result.returncode)
+        
+    except Exception as e:
+        click.echo(f"❌ Failed to run API monitoring: {e}", err=True)
+        sys.exit(1)
+
+
 if __name__ == '__main__':
     cli()

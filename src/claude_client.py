@@ -249,9 +249,20 @@ Make sure your response is valid JSON. Prioritize methodology and technical appr
         return results
 
     def test_connection(self) -> bool:
-        """Test connection to Claude API"""
+        """Test connection to Claude API with detailed logging"""
+        import time
+        
+        start_time = time.time()
+        
         try:
             logger.info("Testing Claude API connection...")
+            logger.info(f"Model: {self.model}")
+            logger.info(f"Max tokens: 50")
+            
+            # Check if API key is available
+            if not hasattr(self.client, '_api_key') or not self.client._api_key:
+                logger.error("No API key found for Claude")
+                return False
 
             response = self.client.messages.create(
                 model=self.model,
@@ -263,15 +274,47 @@ Make sure your response is valid JSON. Prioritize methodology and technical appr
                     }
                 ]
             )
+            
+            response_time = (time.time() - start_time) * 1000
 
             if response.content and len(response.content) > 0:
                 response_text = response.content[0].text
-                logger.info(f"Claude API test response: {response_text}")
+                logger.info(f"✅ Claude API test successful")
+                logger.info(f"Response time: {response_time:.0f}ms")
+                logger.info(f"Response: {response_text}")
+                logger.info(f"Usage: {getattr(response, 'usage', 'Not available')}")
                 return True
             else:
-                logger.error("Empty response from Claude API test")
+                logger.error("❌ Empty response from Claude API test")
                 return False
 
         except Exception as e:
-            logger.error(f"Claude API connection test failed: {e}")
+            response_time = (time.time() - start_time) * 1000
+            error_msg = str(e)
+            
+            # Enhanced error logging with categorization
+            logger.error(f"❌ Claude API connection test failed after {response_time:.0f}ms")
+            logger.error(f"Error type: {type(e).__name__}")
+            logger.error(f"Error message: {error_msg}")
+            
+            # Specific error analysis
+            if "credit balance" in error_msg.lower():
+                logger.error("🔍 Diagnosis: Insufficient API credits")
+                logger.error("💡 Solution: Add credits to your Anthropic account")
+            elif "rate limit" in error_msg.lower():
+                logger.error("🔍 Diagnosis: Rate limit exceeded")
+                logger.error("💡 Solution: Wait before retrying or upgrade plan")
+            elif "401" in error_msg or "unauthorized" in error_msg.lower():
+                logger.error("🔍 Diagnosis: Invalid or missing API key")
+                logger.error("💡 Solution: Check ANTHROPIC_API_KEY environment variable")
+            elif "400" in error_msg:
+                logger.error("🔍 Diagnosis: Bad request")
+                logger.error("💡 Solution: Check request parameters")
+            elif "500" in error_msg:
+                logger.error("🔍 Diagnosis: Server error")
+                logger.error("💡 Solution: Retry later or contact Anthropic support")
+            else:
+                logger.error("🔍 Diagnosis: Unknown error")
+                logger.error("💡 Solution: Check network connectivity and API status")
+            
             return False

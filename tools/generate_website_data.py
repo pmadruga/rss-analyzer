@@ -18,6 +18,19 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Optional, Any
 from dataclasses import dataclass, asdict
+
+# Add src to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+
+try:
+    from error_logger import get_error_logger
+except ImportError:
+    # Fallback if error_logger is not available
+    def get_error_logger():
+        class DummyLogger:
+            def generate_website_status(self):
+                return {'system_status': 'unknown', 'dates': {}, 'recent_errors_by_date': {}}
+        return DummyLogger()
 import argparse
 
 
@@ -60,6 +73,7 @@ class WebsiteData:
     total_articles: int
     articles: List[Article]
     metadata: Dict[str, Any]
+    processing_status: Optional[Dict[str, Any]] = None
 
 
 class DatabaseError(Exception):
@@ -333,12 +347,21 @@ class WebsiteDataGenerator:
         # Generate metadata
         metadata = self.generate_metadata(articles)
         
+        # Get processing status from error logger
+        try:
+            error_logger = get_error_logger("output")
+            processing_status = error_logger.generate_website_status()
+        except Exception as e:
+            self.logger.warning(f"Could not get processing status: {e}")
+            processing_status = {'system_status': 'unknown', 'dates': {}, 'recent_errors_by_date': {}}
+        
         # Create website data structure
         website_data = WebsiteData(
             generated_at=datetime.now(timezone.utc).isoformat(),
             total_articles=len(articles),
             articles=articles,
-            metadata=metadata
+            metadata=metadata,
+            processing_status=processing_status
         )
         
         self.logger.info(f"Generated website data with {len(articles)} articles")

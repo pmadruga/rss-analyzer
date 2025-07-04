@@ -35,7 +35,8 @@ class AppState {
             filteredArticles: [],
             isLoading: true,
             hasError: false,
-            lastUpdated: null
+            lastUpdated: null,
+            processingStatus: null
         };
         
         this.filters = {
@@ -376,6 +377,87 @@ class AppState {
             document.getElementById('ai-provider').textContent = 
                 this.data.articles[0].ai_provider.charAt(0).toUpperCase() + 
                 this.data.articles[0].ai_provider.slice(1);
+        }
+        
+        // Update system status
+        this.updateSystemStatus();
+    }
+    
+    /**
+     * Update system status display
+     */
+    updateSystemStatus() {
+        const statusElement = document.getElementById('system-status');
+        if (!statusElement) return;
+        
+        const status = this.data.processingStatus;
+        if (!status) {
+            statusElement.textContent = 'Unknown';
+            statusElement.className = 'stat-value system-status status-unknown';
+            return;
+        }
+        
+        const systemStatus = status.system_status || 'unknown';
+        
+        // Update status text and class
+        statusElement.className = `stat-value system-status status-${systemStatus}`;
+        
+        switch (systemStatus) {
+            case 'success':
+                statusElement.textContent = 'Healthy';
+                statusElement.title = 'All systems operational';
+                break;
+            case 'partial':
+                statusElement.textContent = 'Partial';
+                statusElement.title = 'Some issues detected';
+                break;
+            case 'failed':
+                statusElement.textContent = 'Issues';
+                statusElement.title = 'System experiencing problems';
+                this.showRecentErrors(status);
+                break;
+            default:
+                statusElement.textContent = 'Unknown';
+                statusElement.title = 'Status unknown';
+        }
+    }
+    
+    /**
+     * Show recent errors as alerts
+     */
+    showRecentErrors(status) {
+        const recentErrors = status.recent_errors_by_date || {};
+        const today = new Date().toISOString().split('T')[0];
+        const todayErrors = recentErrors[today] || [];
+        
+        if (todayErrors.length > 0) {
+            // Find a good place to show errors (after the stats section)
+            const statsSection = document.querySelector('.stats-section');
+            
+            // Remove any existing error alerts
+            const existingAlerts = document.querySelectorAll('.error-alert');
+            existingAlerts.forEach(alert => alert.remove());
+            
+            // Create error alert
+            const errorAlert = document.createElement('div');
+            errorAlert.className = 'error-alert';
+            errorAlert.innerHTML = `
+                <h4>⚠️ Processing Issues Detected</h4>
+                <p>There were ${todayErrors.length} error(s) during today's processing:</p>
+                <div class="error-details">
+                    ${todayErrors.map(error => `
+                        <div>
+                            <strong>${error.component}:</strong> ${error.message}
+                            <div class="error-timestamp">${Utils.formatDateTime(error.timestamp)}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            
+            // Insert after stats section
+            if (statsSection && statsSection.nextSibling) {
+                statsSection.parentNode.insertBefore(errorAlert, statsSection.nextSibling);
+            }
         }
     }
     
@@ -718,6 +800,7 @@ class EventHandlers {
             this.appState.update({
                 articles: data.articles,
                 lastUpdated: data.generated_at,
+                processingStatus: data.processing_status,
                 isLoading: false,
                 hasError: false
             });

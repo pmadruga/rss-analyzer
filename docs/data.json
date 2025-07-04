@@ -1,5 +1,5 @@
 {
-  "generated_at": "2025-07-04T15:12:38.094224+00:00",
+  "generated_at": "2025-07-04T15:31:01.661475+00:00",
   "total_articles": 14,
   "articles": [
     {
@@ -153,6 +153,43 @@
     },
     "status_counts": {
       "completed": 14
+    }
+  },
+  "processing_status": {
+    "system_status": "failed",
+    "last_updated": "2025-07-04T15:30:55.088500+00:00",
+    "summary": {
+      "total_days": 1,
+      "successful_days": 0,
+      "failed_days": 1,
+      "partial_days": 0
+    },
+    "dates": {
+      "2025-07-04": {
+        "date": "2025-07-04",
+        "status": "failed",
+        "total_attempted": 1,
+        "successful": 0,
+        "failed": 1,
+        "errors": [],
+        "last_attempt": "2025-07-04T15:30:55.088498+00:00"
+      }
+    },
+    "recent_errors_by_date": {
+      "2025-07-04": [
+        {
+          "timestamp": "2025-07-04T15:30:55.087706+00:00",
+          "type": "capacity_exceeded",
+          "message": "Service tier capacity exceeded for this model",
+          "component": "api_mistral"
+        }
+      ]
+    },
+    "health_check": {
+      "timestamp": "2025-07-04T15:31:01.661470+00:00",
+      "apis_working": 0,
+      "rss_feed_accessible": true,
+      "database_accessible": true
     }
   }
 }
