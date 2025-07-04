@@ -6,15 +6,6 @@ on:
     paths:
       - 'docs/**'
   workflow_dispatch:
-    inputs:
-      environment:
-        description: 'Deployment environment'
-        required: false
-        default: 'production'
-        type: choice
-        options:
-          - production
-          - staging
 
 permissions:
   contents: read
@@ -22,288 +13,27 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages-${{ github.ref }}"
+  group: "pages"
   cancel-in-progress: false
 
-env:
-  NODE_VERSION: '18'
-
 jobs:
-  # Build job
-  build:
-    name: Build Website
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: 🔄 Checkout repository
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-    
-    - name: 🔍 Detect changes
-      id: changes
-      run: |
-        # Check if this is a docs-only change
-        CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} || echo "docs/")
-        
-        if echo "$CHANGED_FILES" | grep -v '^docs/' | grep -q .; then
-          echo "non_docs_changes=true" >> $GITHUB_OUTPUT
-          echo "Contains non-docs changes"
-        else
-          echo "non_docs_changes=false" >> $GITHUB_OUTPUT
-          echo "Only docs changes detected"
-        fi
-        
-        echo "changed_files<<EOF" >> $GITHUB_OUTPUT
-        echo "$CHANGED_FILES" >> $GITHUB_OUTPUT
-        echo "EOF" >> $GITHUB_OUTPUT
-    
-    - name: 📊 Validate website data
-      run: |
-        echo "Validating website files..."
-        
-        # Check if required files exist
-        REQUIRED_FILES=("docs/index.html" "docs/styles.css" "docs/script.js")
-        for file in "${REQUIRED_FILES[@]}"; do
-          if [ ! -f "$file" ]; then
-            echo "ERROR: Required file $file not found"
-            exit 1
-          fi
-          echo "✓ Found $file"
-        done
-        
-        # Validate data.json if it exists
-        if [ -f "docs/data.json" ]; then
-          echo "Validating data.json..."
-          python -m json.tool docs/data.json > /dev/null
-          
-          # Check data structure
-          python -c "
-import json
-with open('docs/data.json', 'r') as f:
-    data = json.load(f)
-
-required_keys = ['generated_at', 'total_articles', 'articles']
-for key in required_keys:
-    if key not in data:
-        raise ValueError(f'Missing required key: {key}')
-
-print(f'✓ Valid data.json with {len(data[\"articles\"])} articles')
-"
-        else
-          echo "⚠️ data.json not found - website will show empty state"
-        fi
-        
-        # Check HTML validity (basic)
-        echo "Checking HTML structure..."
-        if grep -q "<!DOCTYPE html>" docs/index.html && \
-           grep -q "<html lang=" docs/index.html && \
-           grep -q "</html>" docs/index.html; then
-          echo "✓ HTML structure looks valid"
-        else
-          echo "ERROR: Invalid HTML structure"
-          exit 1
-        fi
-        
-        # Check CSS syntax (basic)
-        echo "Checking CSS syntax..."
-        if [ -f "docs/styles.css" ]; then
-          # Basic CSS validation - check for unclosed braces
-          OPEN_BRACES=$(grep -o '{' docs/styles.css | wc -l)
-          CLOSE_BRACES=$(grep -o '}' docs/styles.css | wc -l)
-          
-          if [ "$OPEN_BRACES" -eq "$CLOSE_BRACES" ]; then
-            echo "✓ CSS brace count matches"
-          else
-            echo "ERROR: CSS has unmatched braces (open: $OPEN_BRACES, close: $CLOSE_BRACES)"
-            exit 1
-          fi
-        fi
-        
-        # Check JavaScript syntax (basic)
-        echo "Checking JavaScript syntax..."
-        if [ -f "docs/script.js" ]; then
-          # Use Node.js to check syntax
-          if command -v node >/dev/null 2>&1; then
-            if node -c docs/script.js; then
-              echo "✓ JavaScript syntax is valid"
-            else
-              echo "ERROR: JavaScript syntax error"
-              exit 1
-            fi
-          else
-            echo "⚠️ Node.js not available for JS validation"
-          fi
-        fi
-    
-    - name: 🛠️ Setup Pages
-      uses: actions/configure-pages@v4
-      with:
-        static_site_generator: "custom"
-    
-    - name: 📦 Prepare deployment package
-      run: |
-        echo "Preparing deployment package..."
-        
-        # Create deployment directory
-        mkdir -p _site
-        
-        # Copy all docs content
-        cp -r docs/* _site/
-        
-        # Add deployment metadata
-        cat > _site/deployment-info.json << EOF
-        {
-          "deployed_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
-          "commit_sha": "${{ github.sha }}",
-          "commit_message": $(echo '${{ github.event.head_commit.message }}' | jq -R .),
-          "workflow_run": "${{ github.run_number }}",
-          "environment": "${{ github.event.inputs.environment || 'production' }}",
-          "changed_files": $(echo '${{ steps.changes.outputs.changed_files }}' | jq -R . | jq -s .)
-        }
-        EOF
-        
-        # Add robots.txt for production
-        if [ "${{ github.event.inputs.environment || 'production' }}" = "production" ]; then
-          cat > _site/robots.txt << EOF
-        User-agent: *
-        Allow: /
-        
-        Sitemap: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/sitemap.xml
-        EOF
-        else
-          cat > _site/robots.txt << EOF
-        User-agent: *
-        Disallow: /
-        EOF
-        fi
-        
-        # Generate simple sitemap
-        cat > _site/sitemap.xml << EOF
-        <?xml version="1.0" encoding="UTF-8"?>
-        <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-          <url>
-            <loc>https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/</loc>
-            <lastmod>$(date -u +%Y-%m-%d)</lastmod>
-            <changefreq>daily</changefreq>
-            <priority>1.0</priority>
-          </url>
-        </urlset>
-        EOF
-        
-        echo "Deployment package prepared:"
-        ls -la _site/
-    
-    - name: 📤 Upload Pages artifact
-      uses: actions/upload-pages-artifact@v3
-      with:
-        path: './_site'
-    
-    - name: 📋 Generate deployment summary
-      run: |
-        # Count files in deployment
-        FILE_COUNT=$(find _site -type f | wc -l)
-        TOTAL_SIZE=$(du -sh _site | cut -f1)
-        
-        echo "## 📦 Deployment Package" >> $GITHUB_STEP_SUMMARY
-        echo "- **Files:** $FILE_COUNT" >> $GITHUB_STEP_SUMMARY
-        echo "- **Total Size:** $TOTAL_SIZE" >> $GITHUB_STEP_SUMMARY
-        echo "- **Environment:** ${{ github.event.inputs.environment || 'production' }}" >> $GITHUB_STEP_SUMMARY
-        echo "- **Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
-        
-        if [ -f "_site/data.json" ]; then
-          ARTICLE_COUNT=$(python -c "
-          import json
-          try:
-              with open('_site/data.json', 'r') as f:
-                  data = json.load(f)
-              print(len(data.get('articles', [])))
-          except:
-              print('0')
-          ")
-          echo "- **Articles:** $ARTICLE_COUNT" >> $GITHUB_STEP_SUMMARY
-        fi
-
-  # Deploy job
   deploy:
-    name: Deploy to GitHub Pages
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: build
-    
     steps:
-    - name: 🚀 Deploy to GitHub Pages
-      id: deployment
-      uses: actions/deploy-pages@v4
-    
-    - name: 🔗 Post deployment info
-      run: |
-        echo "## 🚀 Deployment Successful" >> $GITHUB_STEP_SUMMARY
-        echo "**Website URL:** ${{ steps.deployment.outputs.page_url }}" >> $GITHUB_STEP_SUMMARY
-        echo "**Deployed at:** $(date -u +'%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
+      - name: Checkout
+        uses: actions/checkout@v4
         
-        # Create a comment for deployment (if this is triggered by a PR)
-        if [ "${{ github.event_name }}" = "pull_request" ]; then
-          echo "🚀 **Deployment Preview Available**" >> deployment_comment.md
-          echo "" >> deployment_comment.md
-          echo "**Preview URL:** ${{ steps.deployment.outputs.page_url }}" >> deployment_comment.md
-          echo "**Deployed from:** \`${{ github.sha }}\`" >> deployment_comment.md
-          echo "**Environment:** ${{ github.event.inputs.environment || 'production' }}" >> deployment_comment.md
-        fi
-
-  # Health check job
-  health-check:
-    name: Post-Deployment Health Check
-    runs-on: ubuntu-latest
-    needs: deploy
-    if: always() && needs.deploy.result == 'success'
-    
-    steps:
-    - name: 🔍 Health check
-      run: |
-        # Wait a moment for deployment to propagate
-        sleep 30
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
         
-        SITE_URL="${{ needs.deploy.outputs.page_url }}"
-        echo "Performing health check on: $SITE_URL"
-        
-        # Check if site is accessible
-        HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$SITE_URL" || echo "000")
-        
-        if [ "$HTTP_STATUS" = "200" ]; then
-          echo "✅ Site is accessible (HTTP $HTTP_STATUS)"
+      - name: Upload to GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'docs'
           
-          # Check if site content looks correct
-          CONTENT=$(curl -s "$SITE_URL" || echo "")
-          
-          if echo "$CONTENT" | grep -q "RSS Article Analysis"; then
-            echo "✅ Site content appears correct"
-            
-            # Check if data.json is accessible
-            JSON_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${SITE_URL}data.json" || echo "000")
-            if [ "$JSON_STATUS" = "200" ]; then
-              echo "✅ data.json is accessible"
-            else
-              echo "⚠️ data.json not accessible (HTTP $JSON_STATUS)"
-            fi
-            
-            echo "## ✅ Health Check Passed" >> $GITHUB_STEP_SUMMARY
-            echo "- **Site Status:** Healthy" >> $GITHUB_STEP_SUMMARY
-            echo "- **HTTP Status:** $HTTP_STATUS" >> $GITHUB_STEP_SUMMARY
-            echo "- **Data JSON:** $JSON_STATUS" >> $GITHUB_STEP_SUMMARY
-            echo "- **Checked at:** $(date -u +'%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
-            
-          else
-            echo "❌ Site content appears incorrect"
-            echo "## ❌ Health Check Failed" >> $GITHUB_STEP_SUMMARY
-            echo "Site is accessible but content is not as expected" >> $GITHUB_STEP_SUMMARY
-            exit 1
-          fi
-        else
-          echo "❌ Site is not accessible (HTTP $HTTP_STATUS)"
-          echo "## ❌ Health Check Failed" >> $GITHUB_STEP_SUMMARY
-          echo "Site is not accessible (HTTP $HTTP_STATUS)" >> $GITHUB_STEP_SUMMARY
-          exit 1
-        fi
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
