@@ -52,14 +52,14 @@ docker compose logs rss-analyzer
 
 ### Direct Python Development
 ```bash
-# Install dependencies
-pip install -r requirements.txt
+# Install dependencies with uv
+uv sync
 
 # Run main application
-python -m src.main run --limit 5
+uv run python -m src.main run --limit 5
 
 # Generate comprehensive reports
-python generate_comprehensive_reports.py
+uv run python generate_comprehensive_reports.py
 ```
 
 ### Environment Setup

@@ -10,11 +10,17 @@ RUN apt-get update && apt-get install -y \
     g++ \
     libxml2-dev \
     libxslt-dev \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements and install Python dependencies
-COPY requirements.txt .
-RUN pip install --no-cache-dir --user -r requirements.txt
+# Install uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /usr/local/bin/
+
+# Copy project configuration
+COPY pyproject.toml uv.lock* ./
+
+# Install dependencies with uv
+RUN uv sync --frozen --no-install-project
 
 # Final stage
 FROM python:3.11-slim
@@ -34,8 +40,11 @@ RUN apt-get update && apt-get install -y \
 # Create non-root user
 RUN groupadd -r appuser && useradd -r -g appuser appuser
 
-# Copy Python packages from builder
-COPY --from=builder /root/.local /home/appuser/.local
+# Install uv in final stage
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /usr/local/bin/
+
+# Copy virtual environment from builder
+COPY --from=builder /app/.venv /app/.venv
 
 # Copy application code
 COPY src/ ./src/
@@ -46,9 +55,10 @@ RUN mkdir -p /app/data /app/output && \
     chown -R appuser:appuser /app
 
 # Set environment variables
-ENV PATH=/home/appuser/.local/bin:$PATH
+ENV PATH=/app/.venv/bin:$PATH
 ENV PYTHONPATH=/app
 ENV PYTHONUNBUFFERED=1
+ENV VIRTUAL_ENV=/app/.venv
 
 # Switch to non-root user
 USER appuser

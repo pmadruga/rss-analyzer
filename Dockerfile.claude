@@ -1,0 +1,69 @@
+# Dockerfile for RSS Analyzer with Claude Code integration
+FROM python:3.11-slim
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Claude Code CLI
+RUN curl -sSL https://claude.ai/install.sh | bash
+
+# Set working directory
+WORKDIR /app
+
+# Copy requirements and install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application code
+COPY . .
+
+# Create necessary directories
+RUN mkdir -p /app/data /app/output /app/logs /app/config
+
+# Set permissions for scripts
+RUN chmod +x tools/*.py tools/*.sh 2>/dev/null || true
+
+# Set environment variables for non-interactive mode
+ENV CLAUDE_NON_INTERACTIVE=true
+ENV CLAUDE_TIMEOUT=300
+ENV PYTHONPATH=/app
+
+# Create entrypoint script for Claude Code integration
+RUN cat > /app/claude_entrypoint.sh << 'EOF'
+#!/bin/bash
+set -e
+
+# Check if Claude Code is available
+if command -v claude &> /dev/null; then
+    echo "✅ Claude Code is available"
+    claude --version 2>/dev/null || echo "⚠️  Claude Code version check failed"
+else
+    echo "❌ Claude Code is not available"
+fi
+
+# Execute the command
+if [ "$1" = "claude-review" ]; then
+    python tools/claude_code_integration.py review
+elif [ "$1" = "claude-optimize" ]; then
+    python tools/claude_code_integration.py optimize
+elif [ "$1" = "claude-analyze-errors" ]; then
+    python tools/claude_code_integration.py analyze-errors --log-file logs/analyzer.log
+elif [ "$1" = "claude-check" ]; then
+    python tools/claude_code_integration.py check
+elif [ "$1" = "claude-help" ]; then
+    python tools/claude_code_integration.py help
+else
+    # Default to regular RSS analyzer commands
+    python -m src.main "$@"
+fi
+EOF
+
+RUN chmod +x /app/claude_entrypoint.sh
+
+# Default entrypoint
+ENTRYPOINT ["/app/claude_entrypoint.sh"]
+CMD ["claude-help"]

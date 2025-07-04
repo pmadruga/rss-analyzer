@@ -13,7 +13,6 @@ import time
 import click
 from tqdm import tqdm
 
-from .claude_client import ClaudeClient
 from .database import DatabaseManager
 from .mistral_client import MistralClient
 from .openai_client import OpenAIClient
@@ -39,15 +38,9 @@ class ArticleProcessor:
         self.scraper = WebScraper(config.get('scraper_delay', 1.0))
 
         # Initialize API client based on provider
-        api_provider = config.get('api_provider', 'anthropic')
+        api_provider = config.get('api_provider', 'mistral')
 
-        if api_provider == 'anthropic':
-            self.api_client = ClaudeClient(
-                api_key=config['anthropic_api_key'],
-                model=config.get('claude_model', 'claude-3-5-sonnet-20241022')
-            )
-            logger.info("Using Anthropic Claude API")
-        elif api_provider == 'mistral':
+        if api_provider == 'mistral':
             self.api_client = MistralClient(
                 api_key=config['mistral_api_key'],
                 model=config.get('mistral_model', 'mistral-large-latest')
@@ -60,10 +53,7 @@ class ArticleProcessor:
             )
             logger.info("Using OpenAI API")
         else:
-            raise ValueError(f"Unsupported API provider: {api_provider}")
-
-        # Keep reference for compatibility
-        self.claude_client = self.api_client
+            raise ValueError(f"Unsupported API provider: {api_provider}. Supported providers: mistral, openai")
 
         self.report_generator = ReportGenerator(config['output_dir'])
 
@@ -374,15 +364,9 @@ def test_api(ctx):
     config = ctx.obj['config']
 
     try:
-        api_provider = config.get('api_provider', 'anthropic')
+        api_provider = config.get('api_provider', 'mistral')
 
-        if api_provider == 'anthropic':
-            api_client = ClaudeClient(
-                api_key=config['anthropic_api_key'],
-                model=config.get('claude_model', 'claude-3-5-sonnet-20241022')
-            )
-            provider_name = "Anthropic Claude"
-        elif api_provider == 'mistral':
+        if api_provider == 'mistral':
             api_client = MistralClient(
                 api_key=config['mistral_api_key'],
                 model=config.get('mistral_model', 'mistral-large-latest')
@@ -395,7 +379,7 @@ def test_api(ctx):
             )
             provider_name = "OpenAI"
         else:
-            click.echo(f"❌ Unsupported API provider: {api_provider}", err=True)
+            click.echo(f"❌ Unsupported API provider: {api_provider}. Supported: mistral, openai", err=True)
             sys.exit(1)
 
         if api_client.test_connection():
