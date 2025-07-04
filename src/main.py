@@ -448,7 +448,6 @@ def stats(ctx):
             for status, count in stats['by_status'].items():
                 click.echo(f"  {status}: {count}")
 
-        click.echo(f"  Average confidence: {stats.get('average_confidence', 0):.1f}/10")
 
         if 'recent_activity' in stats:
             click.echo("\nRecent activity:")

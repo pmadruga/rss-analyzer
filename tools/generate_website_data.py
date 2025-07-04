@@ -49,7 +49,6 @@ class Article:
     processed_date: str
     status: str
     analysis: str
-    confidence_score: float
     ai_provider: str
     linked_articles: List[LinkedArticle]
 
@@ -139,7 +138,7 @@ class WebsiteDataGenerator:
                 # Check content table structure
                 cursor.execute("PRAGMA table_info(content)")
                 content_columns = {row[1] for row in cursor.fetchall()}
-                required_content_columns = {'article_id', 'key_findings', 'confidence_score'}
+                required_content_columns = {'article_id', 'key_findings'}
                 
                 missing_columns = required_content_columns - content_columns
                 if missing_columns:
@@ -177,7 +176,6 @@ class WebsiteDataGenerator:
                     COALESCE(c.key_findings, '') as key_findings,
                     COALESCE(c.technical_approach, '') as technical_approach,
                     COALESCE(c.methodology_detailed, '') as methodology_detailed,
-                    COALESCE(c.confidence_score, 0) as confidence_score,
                     COALESCE(c.metadata, '{}') as metadata
                 FROM articles a
                 LEFT JOIN content c ON a.id = c.article_id
@@ -233,8 +231,6 @@ class WebsiteDataGenerator:
         
         analysis = "\n\n".join(analysis_parts) if analysis_parts else "No analysis available"
         
-        # Process confidence score (convert from 0-10 to 0-1 scale)
-        confidence_score = max(0.0, min(1.0, float(row['confidence_score']) / 10.0))
         
         # Parse metadata
         linked_articles = []
@@ -267,7 +263,6 @@ class WebsiteDataGenerator:
             processed_date=str(row['processed_date']),
             status=str(row['status']),
             analysis=analysis,
-            confidence_score=confidence_score,
             ai_provider=ai_provider,
             linked_articles=linked_articles
         )
@@ -286,12 +281,6 @@ class WebsiteDataGenerator:
             return {
                 'date_range': None,
                 'ai_providers': {},
-                'confidence_stats': {
-                    'average': 0,
-                    'high_count': 0,
-                    'medium_count': 0,
-                    'low_count': 0
-                },
                 'status_counts': {}
             }
         
@@ -309,20 +298,6 @@ class WebsiteDataGenerator:
             provider = article.ai_provider
             ai_providers[provider] = ai_providers.get(provider, 0) + 1
         
-        # Confidence statistics
-        confidence_scores = [article.confidence_score for article in articles]
-        avg_confidence = sum(confidence_scores) / len(confidence_scores)
-        
-        high_count = sum(1 for score in confidence_scores if score >= 0.8)
-        medium_count = sum(1 for score in confidence_scores if 0.5 <= score < 0.8)
-        low_count = sum(1 for score in confidence_scores if score < 0.5)
-        
-        confidence_stats = {
-            'average': round(avg_confidence, 3),
-            'high_count': high_count,
-            'medium_count': medium_count,
-            'low_count': low_count
-        }
         
         # Status counts
         status_counts = {}
@@ -333,7 +308,6 @@ class WebsiteDataGenerator:
         return {
             'date_range': date_range,
             'ai_providers': ai_providers,
-            'confidence_stats': confidence_stats,
             'status_counts': status_counts
         }
     
@@ -417,12 +391,6 @@ class WebsiteDataGenerator:
         for provider, count in website_data.metadata['ai_providers'].items():
             print(f"  {provider}: {count}")
         
-        confidence_stats = website_data.metadata['confidence_stats']
-        print(f"\nConfidence statistics:")
-        print(f"  Average: {confidence_stats['average']:.1%}")
-        print(f"  High (≥80%): {confidence_stats['high_count']}")
-        print(f"  Medium (50-79%): {confidence_stats['medium_count']}")
-        print(f"  Low (<50%): {confidence_stats['low_count']}")
         
         print(f"{'='*60}\n")
     

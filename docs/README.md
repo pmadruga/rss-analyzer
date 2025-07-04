@@ -6,7 +6,7 @@ A beautiful, professional web interface for displaying AI-powered analysis of ac
 
 - **Modern Design**: Clean, responsive interface with professional styling
 - **Smart Organization**: Articles grouped by date with today's content expanded by default
-- **Advanced Filtering**: Real-time search and confidence level filtering
+- **Advanced Filtering**: Real-time search and filtering
 - **Accessibility**: Full WCAG compliance with keyboard navigation and screen reader support
 - **Performance**: Optimized loading with caching and efficient data structures
 - **Mobile-First**: Responsive design that works perfectly on all devices
@@ -98,7 +98,6 @@ The dashboard expects JSON data in the following format:
       "processed_date": "2025-01-01T00:00:00Z",
       "status": "completed",
       "analysis": "AI analysis text...",
-      "confidence_score": 0.85,
       "ai_provider": "anthropic",
       "linked_articles": []
     }
@@ -106,7 +105,6 @@ The dashboard expects JSON data in the following format:
   "metadata": {
     "date_range": {...},
     "ai_providers": {...},
-    "confidence_stats": {...}
   }
 }
 ```

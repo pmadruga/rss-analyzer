@@ -22,7 +22,7 @@ def get_articles_from_db(db_path="data/articles.db"):
         c.methodology_detailed, 
         c.technical_approach, 
         c.key_findings, 
-        c.confidence_score 
+ 
     FROM articles a 
     LEFT JOIN content c ON a.id = c.article_id 
     WHERE a.status = 'completed' 
@@ -40,7 +40,7 @@ def format_article_data(articles):
     articles_by_date = defaultdict(list)
 
     for article in articles:
-        title, url, processed_date, methodology, technical_approach, key_findings, confidence = article
+        title, url, processed_date, methodology, technical_approach, key_findings = article
 
         # Parse date
         date_obj = datetime.fromisoformat(processed_date.replace('Z', '+00:00'))
@@ -53,7 +53,6 @@ def format_article_data(articles):
             'methodology': methodology or "Not specified",
             'technical_approach': technical_approach or "Not specified",
             'key_findings': key_findings or "Not specified",
-            'confidence': confidence or 0
         })
 
     return articles_by_date
@@ -65,8 +64,6 @@ def generate_markdown(articles_by_date, output_path="output/articles_by_date.md"
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
     total_articles = sum(len(articles) for articles in articles_by_date.values())
-    avg_confidence = sum(
-        sum(article['confidence'] for article in articles)
         for articles in articles_by_date.values()
     ) / total_articles if total_articles > 0 else 0
 
@@ -81,7 +78,6 @@ def generate_markdown(articles_by_date, output_path="output/articles_by_date.md"
                 f.write(f"### {article['title']}\n")
                 f.write(f"**Source:** {article['url']}  \n")
                 f.write(f"**Processed:** {article['processed_date']}  \n")
-                f.write(f"**Confidence Score:** {article['confidence']}/10\n\n")
 
                 f.write("**Methodology:**\n")
                 f.write(f"{article['methodology']}\n\n")
@@ -96,7 +92,6 @@ def generate_markdown(articles_by_date, output_path="output/articles_by_date.md"
 
         f.write("## Summary Statistics\n")
         f.write(f"- **Total Articles Analyzed:** {total_articles}\n")
-        f.write(f"- **Average Confidence Score:** {avg_confidence:.1f}/10  \n")
         f.write("- **Sources:** ArXiv papers, Jina.ai articles, Bluesky posts\n")
         f.write("- **Topics:** AI/ML, Embeddings, Quantization, LLM Routing, Knowledge Graphs, Document Retrieval, Recommendation Systems\n")
 

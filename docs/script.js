@@ -39,8 +39,7 @@ class AppState {
         };
         
         this.filters = {
-            searchTerm: '',
-            confidenceLevel: ''
+            searchTerm: ''
         };
         
         this.ui = {
@@ -100,9 +99,7 @@ class AppState {
      */
     filterAndRender() {
         this.data.filteredArticles = this.data.articles.filter(article => {
-            const matchesSearch = this.matchesSearch(article);
-            const matchesConfidence = this.matchesConfidence(article);
-            return matchesSearch && matchesConfidence;
+            return this.matchesSearch(article);
         });
         
         this.data.groupedArticles = this.groupArticlesByDate(this.data.filteredArticles);
@@ -129,17 +126,6 @@ class AppState {
         );
     }
     
-    /**
-     * Check if article matches confidence filter
-     * @param {Object} article - Article to check
-     * @returns {boolean} Whether article matches confidence filter
-     */
-    matchesConfidence(article) {
-        if (!this.filters.confidenceLevel) return true;
-        
-        const confidenceLevel = Utils.getConfidenceLevel(article.confidence_score);
-        return confidenceLevel === this.filters.confidenceLevel;
-    }
     
     /**
      * Group articles by date
@@ -303,8 +289,6 @@ class AppState {
      * @returns {string} Article card HTML
      */
     createArticleCard(article) {
-        const confidenceLevel = Utils.getConfidenceLevel(article.confidence_score);
-        const confidencePercent = Math.round(article.confidence_score * 100);
         const processedDate = Utils.formatDateTime(article.processed_date);
         
         const linkedArticlesHtml = article.linked_articles?.length > 0 ? `
@@ -336,9 +320,6 @@ class AppState {
                         <time datetime="${article.processed_date}">
                             Processed: ${processedDate}
                         </time>
-                        <span class="confidence-badge confidence-${confidenceLevel}">
-                            ${confidenceLevel} confidence (${confidencePercent}%)
-                        </span>
                     </div>
                 </header>
                 <div class="article-analysis">
@@ -387,13 +368,8 @@ class AppState {
             new Date(article.processed_date).toDateString() === today
         ).length;
         
-        const avgConfidence = this.data.articles.length > 0 ? 
-            this.data.articles.reduce((sum, article) => sum + article.confidence_score, 0) / this.data.articles.length : 0;
-        
         document.getElementById('total-articles').textContent = this.data.articles.length;
         document.getElementById('today-articles').textContent = todayArticles;
-        document.getElementById('avg-confidence').textContent = 
-            avgConfidence > 0 ? `${Math.round(avgConfidence * 100)}%` : '—';
         
         // Get AI provider from first article
         if (this.data.articles.length > 0 && this.data.articles[0].ai_provider) {
@@ -418,16 +394,6 @@ class AppState {
  * Utility Functions
  */
 class Utils {
-    /**
-     * Get confidence level from score
-     * @param {number} score - Confidence score (0-1)
-     * @returns {string} Confidence level
-     */
-    static getConfidenceLevel(score) {
-        if (score >= 0.8) return 'high';
-        if (score >= 0.5) return 'medium';
-        return 'low';
-    }
     
     /**
      * Format date for display
@@ -642,7 +608,6 @@ class EventHandlers {
      */
     setupEventListeners() {
         this.setupSearchHandler();
-        this.setupFilterHandler();
         this.setupControlButtons();
         this.setupRetryButton();
         this.setupKeyboardNavigation();
@@ -664,17 +629,6 @@ class EventHandlers {
         }
     }
     
-    /**
-     * Setup confidence filter handler
-     */
-    setupFilterHandler() {
-        const confidenceFilter = document.getElementById('confidence-filter');
-        if (confidenceFilter) {
-            confidenceFilter.addEventListener('change', (e) => {
-                this.appState.updateFilters({ confidenceLevel: e.target.value });
-            });
-        }
-    }
     
     /**
      * Setup control button handlers

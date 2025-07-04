@@ -82,12 +82,6 @@ class ReportGenerator:
 
         # Calculate statistics
         total_articles = len(articles)
-        avg_confidence = sum(article.get('confidence_score', 0) for article in articles) / total_articles
-
-        # Count by confidence ranges
-        high_confidence = sum(1 for article in articles if article.get('confidence_score', 0) >= 8)
-        medium_confidence = sum(1 for article in articles if 5 <= article.get('confidence_score', 0) < 8)
-        low_confidence = sum(1 for article in articles if article.get('confidence_score', 0) < 5)
 
         # Count by domain
         domains = {}
@@ -97,10 +91,6 @@ class ReportGenerator:
 
         # Write statistics
         f.write(f"- **Total Articles:** {total_articles}\n")
-        f.write(f"- **Average Confidence Score:** {avg_confidence:.1f}/10\n")
-        f.write(f"- **High Confidence (8-10):** {high_confidence} articles\n")
-        f.write(f"- **Medium Confidence (5-7):** {medium_confidence} articles\n")
-        f.write(f"- **Low Confidence (1-4):** {low_confidence} articles\n\n")
 
         # Domain breakdown
         if domains:
@@ -162,9 +152,6 @@ class ReportGenerator:
         if article.get('processed_date'):
             f.write(f"**Processed:** {article.get('processed_date')}\n\n")
 
-        confidence = article.get('confidence_score', 0)
-        if confidence > 0:
-            f.write(f"**Analysis Confidence:** {confidence}/10\n\n")
 
         # Methodology Section
         methodology = article.get('methodology_detailed', '').strip()
@@ -316,7 +303,7 @@ class ReportGenerator:
             # Define CSV columns
             columns = [
                 'title', 'url', 'publication_date', 'processed_date',
-                'confidence_score', 'methodology_detailed', 'key_findings',
+                'methodology_detailed', 'key_findings',
                 'technical_approach', 'research_design'
             ]
 

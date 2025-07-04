@@ -54,7 +54,7 @@ def get_all_articles(db_path: str) -> list[dict[str, Any]]:
     query = """
     SELECT a.id, a.title, a.url, a.publication_date, a.processed_date, 
            c.methodology_detailed, c.technical_approach, c.key_findings, 
-           c.research_design, c.confidence_score, c.metadata
+           c.research_design, c.metadata
     FROM articles a 
     JOIN content c ON a.id = c.article_id 
     WHERE a.status = 'completed' 
@@ -81,7 +81,6 @@ def get_all_articles(db_path: str) -> list[dict[str, Any]]:
             'technical_approach': row[6],
             'key_findings': row[7],
             'research_design': row[8],
-            'confidence_score': row[9],
             'analyzed_at': metadata.get('analyzed_at'),
             'model_used': metadata.get('model_used', 'Unknown')
         }
@@ -157,7 +156,6 @@ def generate_paper_specific_files(articles: list[dict[str, Any]], output_dir: st
             md_content += f"**Source:** [{article['url']}]({article['url']})\n\n"
             md_content += f"**Publication Date:** {article['publication_date']}\n\n"
             md_content += f"**Processed:** {article['processed_date']}\n\n"
-            md_content += f"**Analysis Confidence:** {article['confidence_score']}/10\n\n"
             md_content += f"**Model Used:** {article['model_used']}\n\n"
 
             md_content += "### Methodology\n\n"
@@ -196,14 +194,8 @@ def generate_comprehensive_markdown(articles: list[dict[str, Any]], output_dir: 
     md_content += f"**Total Articles:** {len(articles)}\n\n"
 
     # Statistics
-    confidence_scores = [article['confidence_score'] for article in articles]
-    avg_confidence = sum(confidence_scores) / len(confidence_scores) if confidence_scores else 0
-    high_conf = sum(1 for score in confidence_scores if score >= 8)
-    med_conf = sum(1 for score in confidence_scores if 5 <= score < 8)
-    low_conf = sum(1 for score in confidence_scores if score < 5)
 
     md_content += "## Processing Statistics\n\n"
-    md_content += f"- **Average Confidence Score:** {avg_confidence:.1f}/10\n"
     md_content += f"- **High Confidence (8-10):** {high_conf} articles\n"
     md_content += f"- **Medium Confidence (5-7):** {med_conf} articles\n"
     md_content += f"- **Low Confidence (1-4):** {low_conf} articles\n\n"
@@ -226,7 +218,6 @@ def generate_comprehensive_markdown(articles: list[dict[str, Any]], output_dir: 
             md_content += f"**Source:** [{article['url']}]({article['url']})\n\n"
             md_content += f"**Publication Date:** {article['publication_date']}\n\n"
             md_content += f"**Processed:** {article['processed_date']}\n\n"
-            md_content += f"**Analysis Confidence:** {article['confidence_score']}/10\n\n"
             md_content += f"**Model Used:** {article['model_used']}\n\n"
 
             md_content += "#### Methodology\n\n"

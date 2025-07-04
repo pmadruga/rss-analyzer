@@ -82,7 +82,7 @@ OPENAI_API_KEY=sk-your-openai-key-here
 
 SQLite database (`data/articles.db`) with tables:
 - `articles`: Article metadata (id, title, url, status, processed_date)
-- `content`: Full content and AI analysis (article_id, content, analysis, confidence_score)
+- `content`: Full content and AI analysis (article_id, content, analysis)
 - `processing_log`: Execution history and errors
 
 ### Useful Database Queries
@@ -93,8 +93,8 @@ SELECT id, title, url, status, processed_date FROM articles;
 -- Count articles by status  
 SELECT status, COUNT(*) FROM articles GROUP BY status;
 
--- View recent analyses with confidence scores
-SELECT a.title, c.confidence_score, a.processed_date 
+-- View recent analyses
+SELECT a.title, a.processed_date 
 FROM articles a 
 JOIN content c ON a.id = c.article_id 
 ORDER BY a.processed_date DESC LIMIT 10;

@@ -67,7 +67,6 @@ class DatabaseManager:
                         key_findings TEXT,
                         research_design TEXT,
                         metadata JSON,
-                        confidence_score INTEGER DEFAULT 0,
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         FOREIGN KEY (article_id) REFERENCES articles (id) ON DELETE CASCADE
                     )
@@ -178,8 +177,8 @@ class DatabaseManager:
                     INSERT INTO content (
                         article_id, original_content, methodology_detailed,
                         technical_approach, key_findings, research_design, 
-                        metadata, confidence_score
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                        metadata
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?)
                 ''', (
                     article_id,
                     original_content,
@@ -187,8 +186,7 @@ class DatabaseManager:
                     analysis.get('technical_approach', ''),
                     analysis.get('key_findings', ''),
                     analysis.get('research_design', ''),
-                    json.dumps(analysis.get('metadata', {})),
-                    analysis.get('confidence_score', 0)
+                    json.dumps(analysis.get('metadata', {}))
                 ))
 
                 content_id = cursor.lastrowid
@@ -304,7 +302,7 @@ class DatabaseManager:
                         a.id, a.title, a.url, a.publication_date, a.processed_date,
                         c.original_content, c.summary, c.methodology_focus,
                         c.key_findings, c.technical_approach, c.practical_applications,
-                        c.novel_contributions, c.significance, c.metadata, c.confidence_score
+                        c.novel_contributions, c.significance, c.metadata
                     FROM articles a
                     JOIN content c ON a.id = c.article_id
                     WHERE a.status = 'completed'
@@ -362,14 +360,6 @@ class DatabaseManager:
                 ''')
                 stats['recent_activity'] = [dict(row) for row in cursor.fetchall()]
 
-                # Average confidence score
-                cursor = conn.execute('''
-                    SELECT AVG(confidence_score) as avg_confidence
-                    FROM content
-                    WHERE confidence_score > 0
-                ''')
-                result = cursor.fetchone()
-                stats['average_confidence'] = result['avg_confidence'] if result['avg_confidence'] else 0
 
                 return stats
 

@@ -95,7 +95,6 @@ Please provide your analysis in the following JSON structure:
     
     "research_design": "A brief overview of the experimental setup or study design. Keep this short and focused.",
     
-    "confidence_score": "A score from 1-10 indicating how well the content could be analyzed (10 = very clear academic paper, 1 = unclear or insufficient content)"
 }}
 
 Make sure your response is valid JSON. Prioritize methodology and technical approach explanations - these should be much more detailed than key findings and research design. If certain sections cannot be determined from the content, use "Not clearly specified in the content" or similar phrases."""
@@ -216,7 +215,6 @@ Make sure your response is valid JSON. Prioritize methodology and technical appr
                 'parsing_error': str(e),
                 'analyzed_at': time.time(),
                 'model_used': self.model,
-                'confidence_score': 1
             }
         except Exception as e:
             logger.error(f"Unexpected error parsing Mistral response: {e}")
@@ -226,7 +224,6 @@ Make sure your response is valid JSON. Prioritize methodology and technical appr
                 'error': str(e),
                 'analyzed_at': time.time(),
                 'model_used': self.model,
-                'confidence_score': 1
             }
 
     def batch_analyze(self, articles: list[dict], progress_callback=None) -> list[dict]:
