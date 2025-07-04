@@ -372,13 +372,6 @@ class AppState {
         document.getElementById('total-articles').textContent = this.data.articles.length;
         document.getElementById('today-articles').textContent = todayArticles;
         
-        // Get AI provider from first article
-        if (this.data.articles.length > 0 && this.data.articles[0].ai_provider) {
-            document.getElementById('ai-provider').textContent = 
-                this.data.articles[0].ai_provider.charAt(0).toUpperCase() + 
-                this.data.articles[0].ai_provider.slice(1);
-        }
-        
         // Update system status
         this.updateSystemStatus();
     }
@@ -834,6 +827,7 @@ class App {
             this.state.update({
                 articles: data.articles,
                 lastUpdated: data.generated_at,
+                processingStatus: data.processing_status,
                 isLoading: false,
                 hasError: false
             });

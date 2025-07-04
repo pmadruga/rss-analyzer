@@ -98,7 +98,7 @@ The dashboard expects JSON data in the following format:
       "processed_date": "2025-01-01T00:00:00Z",
       "status": "completed",
       "analysis": "AI analysis text...",
-      "ai_provider": "anthropic",
+      "ai_provider": "ai",
       "linked_articles": []
     }
   ],
@@ -232,8 +232,7 @@ This project is part of the RSS Analyzer suite and follows the same licensing te
 ## 🔗 Related Projects
 
 - **RSS Analyzer**: Main Python application for processing RSS feeds
-- **Claude Code**: AI-powered development assistant used for creation
 
 ---
 
-Built with ❤️ using [Claude Code](https://claude.ai/code)
+Built with ❤️ for RSS Analysis
