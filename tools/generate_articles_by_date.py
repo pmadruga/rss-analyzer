@@ -64,8 +64,6 @@ def generate_markdown(articles_by_date, output_path="output/articles_by_date.md"
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
     total_articles = sum(len(articles) for articles in articles_by_date.values())
-        for articles in articles_by_date.values()
-    ) / total_articles if total_articles > 0 else 0
 
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write("# Articles Analysis by Date\n\n")
