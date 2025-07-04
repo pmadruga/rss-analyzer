@@ -1,0 +1,59 @@
+# Ruff configuration for RSS Analyzer
+# https://docs.astral.sh/ruff/configuration/
+
+# Target Python version
+target-version = "py311"
+
+[lint]
+# Enable these rule categories
+select = [
+    "E",      # pycodestyle errors
+    "W",      # pycodestyle warnings  
+    "F",      # Pyflakes
+    "UP",     # pyupgrade
+    "B",      # flake8-bugbear
+    "SIM",    # flake8-simplify
+    "I",      # isort
+    "N",      # pep8-naming
+    "C4",     # flake8-comprehensions
+    "PIE",    # flake8-pie
+    "T20",    # flake8-print
+    "RUF",    # Ruff-specific rules
+]
+
+# Disable specific rules that might be too strict
+ignore = [
+    "E501",   # Line too long (handled by formatter)
+    "T201",   # Print statements allowed
+    "B008",   # Do not perform function calls in argument defaults
+]
+
+# Files to exclude from linting
+exclude = [
+    ".git",
+    "__pycache__",
+    ".venv",
+    "venv",
+    "build",
+    "dist",
+    "*.egg-info",
+]
+
+[format]
+# Use double quotes for strings
+quote-style = "double"
+
+# Indent with 4 spaces
+indent-style = "space"
+
+# Maximum line length
+line-ending = "auto"
+
+[lint.isort]
+# Import sorting configuration
+known-first-party = ["src"]
+force-single-line = false
+
+[lint.mccabe]
+# Maximum cyclomatic complexity
+max-complexity = 10

@@ -14,7 +14,7 @@ Automatically fetches and analyzes academic papers from RSS feeds using AI APIs 
 # 2. Run the setup script
 ./setup_github_action.sh
 # 3. Configure your API key
-# 4. Push to GitHub - starts running automatically every hour!
+# 4. Push to GitHub - starts running automatically once daily at 2 AM UTC!
 ```
 
 📚 **[Full GitHub Actions Setup Guide →](GITHUB_ACTION_SETUP.md)**

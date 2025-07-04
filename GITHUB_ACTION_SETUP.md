@@ -14,7 +14,7 @@ This guide will help you set up the RSS analyzer to run automatically on GitHub 
    - Mistral AI  
    - OpenAI
 
-3. **Push to GitHub** and the analyzer will start running automatically every hour!
+3. **Push to GitHub** and the analyzer will start running automatically once daily at 2 AM UTC!
 
 ## 📋 Manual Setup
 

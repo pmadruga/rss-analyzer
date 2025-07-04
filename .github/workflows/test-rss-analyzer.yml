@@ -38,6 +38,18 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         
+    - name: Lint with Ruff
+      run: |
+        echo "🔍 Running Ruff linter..."
+        ruff check . --output-format=github
+        echo "✅ Linting completed"
+        
+    - name: Check formatting with Ruff
+      run: |
+        echo "📝 Checking code formatting..."
+        ruff format --check .
+        echo "✅ Formatting check completed"
+        
     - name: Create test directories
       run: |
         mkdir -p data logs output

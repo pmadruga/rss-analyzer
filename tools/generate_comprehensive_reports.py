@@ -2,11 +2,12 @@
 """
 Generate comprehensive reports organized by paper titles
 """
-import sqlite3
 import json
 import os
+import sqlite3
 from datetime import datetime
-from typing import List, Dict, Any
+from typing import Any
+
 
 def extract_paper_title_from_url(url: str) -> str:
     """Extract paper title from various URL patterns"""
@@ -45,11 +46,11 @@ def extract_paper_title_from_url(url: str) -> str:
     else:
         return f"Research Paper ({url.split('/')[-2] if '/' in url else 'Unknown'})"
 
-def get_all_articles(db_path: str) -> List[Dict[str, Any]]:
+def get_all_articles(db_path: str) -> list[dict[str, Any]]:
     """Get all completed articles from database"""
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
-    
+
     query = """
     SELECT a.id, a.title, a.url, a.publication_date, a.processed_date, 
            c.methodology_detailed, c.technical_approach, c.key_findings, 
@@ -59,16 +60,16 @@ def get_all_articles(db_path: str) -> List[Dict[str, Any]]:
     WHERE a.status = 'completed' 
     ORDER BY a.processed_date ASC
     """
-    
+
     cursor.execute(query)
     rows = cursor.fetchall()
     conn.close()
-    
+
     articles = []
     for row in rows:
         metadata = json.loads(row[10]) if row[10] else {}
         paper_title = extract_paper_title_from_url(row[2])
-        
+
         article = {
             'id': row[0],
             'title': row[1],
@@ -85,10 +86,10 @@ def get_all_articles(db_path: str) -> List[Dict[str, Any]]:
             'model_used': metadata.get('model_used', 'Unknown')
         }
         articles.append(article)
-    
+
     return articles
 
-def generate_comprehensive_json(articles: List[Dict[str, Any]], output_dir: str):
+def generate_comprehensive_json(articles: list[dict[str, Any]], output_dir: str):
     """Generate comprehensive JSON export with all articles"""
     # Group by paper title
     papers_by_title = {}
@@ -97,7 +98,7 @@ def generate_comprehensive_json(articles: List[Dict[str, Any]], output_dir: str)
         if title not in papers_by_title:
             papers_by_title[title] = []
         papers_by_title[title].append(article)
-    
+
     # Create comprehensive export
     export_data = {
         "generated_at": datetime.now().isoformat(),
@@ -105,21 +106,21 @@ def generate_comprehensive_json(articles: List[Dict[str, Any]], output_dir: str)
         "total_articles": len(articles),
         "papers": {}
     }
-    
+
     for paper_title, paper_articles in papers_by_title.items():
         export_data["papers"][paper_title] = {
             "article_count": len(paper_articles),
             "articles": paper_articles
         }
-    
+
     # Write comprehensive JSON
     json_path = os.path.join(output_dir, "comprehensive_articles_export.json")
     with open(json_path, 'w', encoding='utf-8') as f:
         json.dump(export_data, f, indent=2, ensure_ascii=False)
-    
+
     print(f"Generated comprehensive JSON: {json_path}")
 
-def generate_paper_specific_files(articles: List[Dict[str, Any]], output_dir: str):
+def generate_paper_specific_files(articles: list[dict[str, Any]], output_dir: str):
     """Generate individual files for each paper"""
     # Group by paper title
     papers_by_title = {}
@@ -128,12 +129,12 @@ def generate_paper_specific_files(articles: List[Dict[str, Any]], output_dir: st
         if title not in papers_by_title:
             papers_by_title[title] = []
         papers_by_title[title].append(article)
-    
+
     for paper_title, paper_articles in papers_by_title.items():
         # Sanitize filename
         safe_filename = "".join(c for c in paper_title if c.isalnum() or c in (' ', '-', '_')).rstrip()
         safe_filename = safe_filename.replace(' ', '_')
-        
+
         # Generate JSON for this paper
         paper_data = {
             "paper_title": paper_title,
@@ -141,16 +142,16 @@ def generate_paper_specific_files(articles: List[Dict[str, Any]], output_dir: st
             "article_count": len(paper_articles),
             "articles": paper_articles
         }
-        
+
         json_path = os.path.join(output_dir, f"{safe_filename}.json")
         with open(json_path, 'w', encoding='utf-8') as f:
             json.dump(paper_data, f, indent=2, ensure_ascii=False)
-        
+
         # Generate Markdown for this paper
         md_content = f"# {paper_title}\n\n"
         md_content += f"**Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n"
         md_content += f"**Total Articles:** {len(paper_articles)}\n\n"
-        
+
         for i, article in enumerate(paper_articles, 1):
             md_content += f"## Analysis {i}\n\n"
             md_content += f"**Source:** [{article['url']}]({article['url']})\n\n"
@@ -158,28 +159,28 @@ def generate_paper_specific_files(articles: List[Dict[str, Any]], output_dir: st
             md_content += f"**Processed:** {article['processed_date']}\n\n"
             md_content += f"**Analysis Confidence:** {article['confidence_score']}/10\n\n"
             md_content += f"**Model Used:** {article['model_used']}\n\n"
-            
+
             md_content += "### Methodology\n\n"
             md_content += f"{article['methodology_detailed']}\n\n"
-            
+
             md_content += "### Key Findings\n\n"
             md_content += f"{article['key_findings']}\n\n"
-            
+
             md_content += "### Technical Approach\n\n"
             md_content += f"{article['technical_approach']}\n\n"
-            
+
             md_content += "### Research Design\n\n"
             md_content += f"{article['research_design']}\n\n"
-            
+
             md_content += "---\n\n"
-        
+
         md_path = os.path.join(output_dir, f"{safe_filename}.md")
         with open(md_path, 'w', encoding='utf-8') as f:
             f.write(md_content)
-        
+
         print(f"Generated files for '{paper_title}': {safe_filename}.json, {safe_filename}.md")
 
-def generate_comprehensive_markdown(articles: List[Dict[str, Any]], output_dir: str):
+def generate_comprehensive_markdown(articles: list[dict[str, Any]], output_dir: str):
     """Generate comprehensive markdown report"""
     # Group by paper title
     papers_by_title = {}
@@ -188,38 +189,38 @@ def generate_comprehensive_markdown(articles: List[Dict[str, Any]], output_dir: 
         if title not in papers_by_title:
             papers_by_title[title] = []
         papers_by_title[title].append(article)
-    
+
     md_content = "# Comprehensive RSS Feed Article Analysis Report\n\n"
     md_content += f"**Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n"
     md_content += f"**Total Papers:** {len(papers_by_title)}\n\n"
     md_content += f"**Total Articles:** {len(articles)}\n\n"
-    
+
     # Statistics
     confidence_scores = [article['confidence_score'] for article in articles]
     avg_confidence = sum(confidence_scores) / len(confidence_scores) if confidence_scores else 0
     high_conf = sum(1 for score in confidence_scores if score >= 8)
     med_conf = sum(1 for score in confidence_scores if 5 <= score < 8)
     low_conf = sum(1 for score in confidence_scores if score < 5)
-    
+
     md_content += "## Processing Statistics\n\n"
     md_content += f"- **Average Confidence Score:** {avg_confidence:.1f}/10\n"
     md_content += f"- **High Confidence (8-10):** {high_conf} articles\n"
     md_content += f"- **Medium Confidence (5-7):** {med_conf} articles\n"
     md_content += f"- **Low Confidence (1-4):** {low_conf} articles\n\n"
-    
+
     # Table of Contents
     md_content += "## Table of Contents\n\n"
     for i, paper_title in enumerate(papers_by_title.keys(), 1):
         safe_anchor = paper_title.lower().replace(' ', '-').replace(':', '').replace(',', '')
         md_content += f"{i}. [{paper_title}](#{safe_anchor})\n"
     md_content += "\n---\n\n"
-    
+
     # Paper sections
     for paper_title, paper_articles in papers_by_title.items():
         safe_anchor = paper_title.lower().replace(' ', '-').replace(':', '').replace(',', '')
         md_content += f"## {paper_title} {{#{safe_anchor}}}\n\n"
         md_content += f"**Articles Analyzed:** {len(paper_articles)}\n\n"
-        
+
         for i, article in enumerate(paper_articles, 1):
             md_content += f"### Analysis {i}\n\n"
             md_content += f"**Source:** [{article['url']}]({article['url']})\n\n"
@@ -227,46 +228,46 @@ def generate_comprehensive_markdown(articles: List[Dict[str, Any]], output_dir: 
             md_content += f"**Processed:** {article['processed_date']}\n\n"
             md_content += f"**Analysis Confidence:** {article['confidence_score']}/10\n\n"
             md_content += f"**Model Used:** {article['model_used']}\n\n"
-            
+
             md_content += "#### Methodology\n\n"
             md_content += f"{article['methodology_detailed']}\n\n"
-            
+
             md_content += "#### Key Findings\n\n"
             md_content += f"{article['key_findings']}\n\n"
-            
+
             md_content += "#### Technical Approach\n\n"
             md_content += f"{article['technical_approach']}\n\n"
-            
+
             md_content += "#### Research Design\n\n"
             md_content += f"{article['research_design']}\n\n"
-            
+
             if i < len(paper_articles):
                 md_content += "---\n\n"
-        
+
         md_content += "\n---\n\n"
-    
-    md_content += f"*This comprehensive report was generated automatically by the RSS Article Analyzer.*\n"
+
+    md_content += "*This comprehensive report was generated automatically by the RSS Article Analyzer.*\n"
     md_content += f"*Report generated on: {datetime.now().strftime('%Y-%m-%d at %H:%M:%S')}*\n"
-    
+
     md_path = os.path.join(output_dir, "comprehensive_analysis_report.md")
     with open(md_path, 'w', encoding='utf-8') as f:
         f.write(md_content)
-    
+
     print(f"Generated comprehensive markdown: {md_path}")
 
 def main():
     db_path = "/app/data/articles.db"
     output_dir = "/app/output"
-    
+
     # Get all articles
     articles = get_all_articles(db_path)
     print(f"Found {len(articles)} completed articles")
-    
+
     # Generate comprehensive reports
     generate_comprehensive_json(articles, output_dir)
     generate_comprehensive_markdown(articles, output_dir)
     generate_paper_specific_files(articles, output_dir)
-    
+
     print("All comprehensive reports generated successfully!")
 
 if __name__ == "__main__":

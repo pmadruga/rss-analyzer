@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# RSS Analyzer Hourly Runner
+# RSS Analyzer Daily Runner
 # This script runs the RSS analyzer and generates only the articles by date file
 
 set -e
@@ -9,7 +9,7 @@ set -e
 cd "$(dirname "$0")"
 
 # Log file for tracking runs
-LOG_FILE="logs/hourly_runs.log"
+LOG_FILE="logs/daily_runs.log"
 
 # Ensure log directory exists
 mkdir -p logs
@@ -19,7 +19,7 @@ log() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" | tee -a "$LOG_FILE"
 }
 
-log "Starting hourly RSS analyzer run"
+log "Starting daily RSS analyzer run"
 
 # Run the analyzer
 log "Running RSS analyzer..."
@@ -43,5 +43,5 @@ fi
 log "Cleaning up orphaned containers..."
 docker container prune -f > /dev/null 2>&1 || true
 
-log "Hourly run completed successfully"
+log "Daily run completed successfully"
 log "----------------------------------------"

@@ -135,5 +135,9 @@ coverage.xml
 
 # mypy
 .mypy_cache/
-.dmypy.json
+.dmypi.json
 dmypy.json
+
+# Claude Code Files
+CLAUDE.md
+.claude/

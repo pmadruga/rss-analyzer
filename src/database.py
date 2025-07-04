@@ -5,39 +5,37 @@ Handles SQLite database operations for articles, content, and processing logs.
 Includes duplicate detection, migrations, and efficient querying.
 """
 
-import sqlite3
+import json
 import logging
 import os
-import json
-from typing import List, Dict, Optional, Set, Tuple
+import sqlite3
 from datetime import datetime
-import hashlib
 
 logger = logging.getLogger(__name__)
 
 
 class DatabaseManager:
     """SQLite database manager for RSS article analyzer"""
-    
+
     def __init__(self, db_path: str = "data/articles.db"):
         self.db_path = db_path
         self.ensure_directory_exists()
         self.init_database()
-    
+
     def ensure_directory_exists(self):
         """Ensure the database directory exists"""
         db_dir = os.path.dirname(self.db_path)
         if db_dir and not os.path.exists(db_dir):
             os.makedirs(db_dir, exist_ok=True)
             logger.info(f"Created database directory: {db_dir}")
-    
+
     def get_connection(self) -> sqlite3.Connection:
         """Get database connection with proper settings"""
         conn = sqlite3.connect(self.db_path)
         conn.row_factory = sqlite3.Row  # Enable dict-like access
         conn.execute("PRAGMA foreign_keys = ON")  # Enable foreign key constraints
         return conn
-    
+
     def init_database(self):
         """Initialize database with required tables"""
         try:
@@ -57,7 +55,7 @@ class DatabaseManager:
                         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                     )
                 ''')
-                
+
                 # Create content table
                 conn.execute('''
                     CREATE TABLE IF NOT EXISTS content (
@@ -74,7 +72,7 @@ class DatabaseManager:
                         FOREIGN KEY (article_id) REFERENCES articles (id) ON DELETE CASCADE
                     )
                 ''')
-                
+
                 # Create processing log table
                 conn.execute('''
                     CREATE TABLE IF NOT EXISTS processing_log (
@@ -88,43 +86,43 @@ class DatabaseManager:
                         FOREIGN KEY (article_id) REFERENCES articles (id) ON DELETE CASCADE
                     )
                 ''')
-                
+
                 # Create indices for better performance
                 conn.execute('CREATE INDEX IF NOT EXISTS idx_articles_content_hash ON articles (content_hash)')
                 conn.execute('CREATE INDEX IF NOT EXISTS idx_articles_url ON articles (url)')
                 conn.execute('CREATE INDEX IF NOT EXISTS idx_articles_status ON articles (status)')
                 conn.execute('CREATE INDEX IF NOT EXISTS idx_processing_log_timestamp ON processing_log (timestamp)')
                 conn.execute('CREATE INDEX IF NOT EXISTS idx_content_article_id ON content (article_id)')
-                
+
                 # Run migrations to handle schema changes
                 self._run_migrations(conn)
-                
+
                 conn.commit()
                 logger.info("Database initialized successfully")
-                
+
         except Exception as e:
             logger.error(f"Failed to initialize database: {e}")
             raise
-    
+
     def _run_migrations(self, conn: sqlite3.Connection):
         """Run database migrations to handle schema changes"""
         try:
             # Check if old columns exist and migrate to new schema
             cursor = conn.execute("PRAGMA table_info(content)")
             columns = [row[1] for row in cursor.fetchall()]
-            
+
             old_columns = ['summary', 'methodology_focus', 'practical_applications', 'novel_contributions', 'significance']
             new_columns = ['methodology_detailed', 'research_design']
-            
+
             if any(col in columns for col in old_columns):
                 logger.info("Migrating content table to new schema...")
-                
+
                 # Add new columns if they don't exist
                 if 'methodology_detailed' not in columns:
                     conn.execute('ALTER TABLE content ADD COLUMN methodology_detailed TEXT')
                 if 'research_design' not in columns:
                     conn.execute('ALTER TABLE content ADD COLUMN research_design TEXT')
-                
+
                 # Migrate data from old columns to new ones
                 conn.execute('''
                     UPDATE content 
@@ -132,15 +130,15 @@ class DatabaseManager:
                         research_design = ''
                     WHERE methodology_detailed IS NULL
                 ''')
-                
+
                 logger.info("Content table migration completed")
-                
+
         except Exception as e:
             logger.warning(f"Migration warning (non-critical): {e}")
-    
-    def insert_article(self, title: str, url: str, content_hash: str, 
-                      rss_guid: Optional[str] = None, 
-                      publication_date: Optional[datetime] = None) -> int:
+
+    def insert_article(self, title: str, url: str, content_hash: str,
+                      rss_guid: str | None = None,
+                      publication_date: datetime | None = None) -> int:
         """
         Insert new article into database
         
@@ -153,11 +151,11 @@ class DatabaseManager:
                     INSERT INTO articles (title, url, content_hash, rss_guid, publication_date)
                     VALUES (?, ?, ?, ?, ?)
                 ''', (title, url, content_hash, rss_guid, publication_date))
-                
+
                 article_id = cursor.lastrowid
                 logger.debug(f"Inserted article with ID {article_id}: {title}")
                 return article_id
-                
+
         except sqlite3.IntegrityError as e:
             if "UNIQUE constraint failed: articles.url" in str(e):
                 logger.debug(f"Article with URL already exists: {url}")
@@ -170,9 +168,9 @@ class DatabaseManager:
         except Exception as e:
             logger.error(f"Failed to insert article: {e}")
             raise
-    
-    def insert_content(self, article_id: int, original_content: str, 
-                      analysis: Dict) -> int:
+
+    def insert_content(self, article_id: int, original_content: str,
+                      analysis: dict) -> int:
         """Insert content and analysis for an article"""
         try:
             with self.get_connection() as conn:
@@ -192,19 +190,19 @@ class DatabaseManager:
                     json.dumps(analysis.get('metadata', {})),
                     analysis.get('confidence_score', 0)
                 ))
-                
+
                 content_id = cursor.lastrowid
                 logger.debug(f"Inserted content with ID {content_id} for article {article_id}")
                 return content_id
-                
+
         except Exception as e:
             logger.error(f"Failed to insert content for article {article_id}: {e}")
             raise
-    
-    def log_processing(self, article_id: Optional[int], status: str, 
-                      error_message: Optional[str] = None, 
-                      processing_step: Optional[str] = None,
-                      duration_seconds: Optional[float] = None):
+
+    def log_processing(self, article_id: int | None, status: str,
+                      error_message: str | None = None,
+                      processing_step: str | None = None,
+                      duration_seconds: float | None = None):
         """Log processing information"""
         try:
             with self.get_connection() as conn:
@@ -212,22 +210,22 @@ class DatabaseManager:
                     INSERT INTO processing_log (article_id, status, error_message, processing_step, duration_seconds)
                     VALUES (?, ?, ?, ?, ?)
                 ''', (article_id, status, error_message, processing_step, duration_seconds))
-                
+
         except Exception as e:
             logger.error(f"Failed to log processing: {e}")
-    
-    def get_existing_content_hashes(self) -> Set[str]:
+
+    def get_existing_content_hashes(self) -> set[str]:
         """Get set of existing content hashes for duplicate detection"""
         try:
             with self.get_connection() as conn:
                 cursor = conn.execute('SELECT content_hash FROM articles')
                 return {row['content_hash'] for row in cursor.fetchall()}
-                
+
         except Exception as e:
             logger.error(f"Failed to get existing content hashes: {e}")
             return set()
-    
-    def get_analyzed_content_hashes(self) -> Set[str]:
+
+    def get_analyzed_content_hashes(self) -> set[str]:
         """Get set of content hashes for articles that have been fully analyzed"""
         try:
             with self.get_connection() as conn:
@@ -238,33 +236,33 @@ class DatabaseManager:
                     WHERE a.status = 'completed'
                 ''')
                 return {row['content_hash'] for row in cursor.fetchall()}
-                
+
         except Exception as e:
             logger.error(f"Failed to get analyzed content hashes: {e}")
             return set()
-    
-    def get_article_by_url(self, url: str) -> Optional[sqlite3.Row]:
+
+    def get_article_by_url(self, url: str) -> sqlite3.Row | None:
         """Get article by URL"""
         try:
             with self.get_connection() as conn:
                 cursor = conn.execute('SELECT * FROM articles WHERE url = ?', (url,))
                 return cursor.fetchone()
-                
+
         except Exception as e:
             logger.error(f"Failed to get article by URL: {e}")
             return None
-    
-    def get_article_by_content_hash(self, content_hash: str) -> Optional[sqlite3.Row]:
+
+    def get_article_by_content_hash(self, content_hash: str) -> sqlite3.Row | None:
         """Get article by content hash"""
         try:
             with self.get_connection() as conn:
                 cursor = conn.execute('SELECT * FROM articles WHERE content_hash = ?', (content_hash,))
                 return cursor.fetchone()
-                
+
         except Exception as e:
             logger.error(f"Failed to get article by content hash: {e}")
             return None
-    
+
     def update_article_status(self, article_id: int, status: str):
         """Update article processing status"""
         try:
@@ -274,30 +272,30 @@ class DatabaseManager:
                     SET status = ?, updated_at = CURRENT_TIMESTAMP 
                     WHERE id = ?
                 ''', (status, article_id))
-                
+
         except Exception as e:
             logger.error(f"Failed to update article status: {e}")
-    
-    def get_articles_for_processing(self, limit: Optional[int] = None, 
-                                  status: str = 'pending') -> List[sqlite3.Row]:
+
+    def get_articles_for_processing(self, limit: int | None = None,
+                                  status: str = 'pending') -> list[sqlite3.Row]:
         """Get articles that need processing"""
         try:
             with self.get_connection() as conn:
                 query = 'SELECT * FROM articles WHERE status = ? ORDER BY created_at DESC'
                 params = [status]
-                
+
                 if limit:
                     query += ' LIMIT ?'
                     params.append(limit)
-                
+
                 cursor = conn.execute(query, params)
                 return cursor.fetchall()
-                
+
         except Exception as e:
             logger.error(f"Failed to get articles for processing: {e}")
             return []
-    
-    def get_completed_articles_with_content(self, limit: Optional[int] = None) -> List[Dict]:
+
+    def get_completed_articles_with_content(self, limit: int | None = None) -> list[dict]:
         """Get completed articles with their content and analysis"""
         try:
             with self.get_connection() as conn:
@@ -312,13 +310,13 @@ class DatabaseManager:
                     WHERE a.status = 'completed'
                     ORDER BY a.processed_date DESC
                 '''
-                
+
                 if limit:
                     query += ' LIMIT ?'
                     cursor = conn.execute(query, [limit])
                 else:
                     cursor = conn.execute(query)
-                
+
                 articles = []
                 for row in cursor.fetchall():
                     article = dict(row)
@@ -327,25 +325,25 @@ class DatabaseManager:
                         article['metadata'] = json.loads(article['metadata']) if article['metadata'] else {}
                     except json.JSONDecodeError:
                         article['metadata'] = {}
-                    
+
                     articles.append(article)
-                
+
                 return articles
-                
+
         except Exception as e:
             logger.error(f"Failed to get completed articles: {e}")
             return []
-    
-    def get_processing_statistics(self) -> Dict:
+
+    def get_processing_statistics(self) -> dict:
         """Get processing statistics"""
         try:
             with self.get_connection() as conn:
                 stats = {}
-                
+
                 # Total articles
                 cursor = conn.execute('SELECT COUNT(*) as count FROM articles')
                 stats['total_articles'] = cursor.fetchone()['count']
-                
+
                 # Articles by status
                 cursor = conn.execute('''
                     SELECT status, COUNT(*) as count 
@@ -353,7 +351,7 @@ class DatabaseManager:
                     GROUP BY status
                 ''')
                 stats['by_status'] = {row['status']: row['count'] for row in cursor.fetchall()}
-                
+
                 # Recent processing activity
                 cursor = conn.execute('''
                     SELECT DATE(timestamp) as date, COUNT(*) as count
@@ -363,7 +361,7 @@ class DatabaseManager:
                     ORDER BY date DESC
                 ''')
                 stats['recent_activity'] = [dict(row) for row in cursor.fetchall()]
-                
+
                 # Average confidence score
                 cursor = conn.execute('''
                     SELECT AVG(confidence_score) as avg_confidence
@@ -372,41 +370,41 @@ class DatabaseManager:
                 ''')
                 result = cursor.fetchone()
                 stats['average_confidence'] = result['avg_confidence'] if result['avg_confidence'] else 0
-                
+
                 return stats
-                
+
         except Exception as e:
             logger.error(f"Failed to get processing statistics: {e}")
             return {}
-    
+
     def cleanup_old_logs(self, days_to_keep: int = 30):
         """Clean up old processing logs"""
         try:
             with self.get_connection() as conn:
-                cursor = conn.execute('''
+                cursor = conn.execute(f'''
                     DELETE FROM processing_log 
-                    WHERE timestamp < datetime('now', '-{} days')
-                '''.format(days_to_keep))
-                
+                    WHERE timestamp < datetime('now', '-{days_to_keep} days')
+                ''')
+
                 deleted_count = cursor.rowcount
                 if deleted_count > 0:
                     logger.info(f"Cleaned up {deleted_count} old processing log entries")
-                
+
         except Exception as e:
             logger.error(f"Failed to cleanup old logs: {e}")
-    
+
     def backup_database(self, backup_path: str):
         """Create a backup of the database"""
         try:
             import shutil
             shutil.copy2(self.db_path, backup_path)
             logger.info(f"Database backed up to: {backup_path}")
-            
+
         except Exception as e:
             logger.error(f"Failed to backup database: {e}")
             raise
-    
-    def get_database_info(self) -> Dict:
+
+    def get_database_info(self) -> dict:
         """Get information about the database"""
         try:
             info = {
@@ -414,16 +412,16 @@ class DatabaseManager:
                 'file_size_mb': os.path.getsize(self.db_path) / (1024 * 1024) if os.path.exists(self.db_path) else 0,
                 'exists': os.path.exists(self.db_path)
             }
-            
+
             with self.get_connection() as conn:
                 cursor = conn.execute("SELECT name FROM sqlite_master WHERE type='table'")
                 info['tables'] = [row['name'] for row in cursor.fetchall()]
-                
+
                 cursor = conn.execute("PRAGMA user_version")
                 info['user_version'] = cursor.fetchone()[0]
-            
+
             return info
-            
+
         except Exception as e:
             logger.error(f"Failed to get database info: {e}")
             return {'error': str(e)}

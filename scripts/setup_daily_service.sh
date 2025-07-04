@@ -1,26 +1,26 @@
 #!/bin/bash
 
-# Setup script for hourly RSS analyzer service
+# Setup script for daily RSS analyzer service
 
 PROJECT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-echo "Setting up hourly RSS analyzer service..."
+echo "Setting up daily RSS analyzer service..."
 echo "Project directory: $PROJECT_DIR"
 
 # Option 1: Cron job setup
 setup_cron() {
-    echo "Setting up cron job to run every hour..."
+    echo "Setting up cron job to run once daily at 2 AM..."
     
     # Create cron job entry
-    CRON_JOB="0 * * * * cd $PROJECT_DIR && ./run_hourly.sh >> logs/cron.log 2>&1"
+    CRON_JOB="0 2 * * * cd $PROJECT_DIR && ./run_daily.sh >> logs/cron.log 2>&1"
     
     # Add to crontab
     (crontab -l 2>/dev/null; echo "$CRON_JOB") | crontab -
     
     echo "Cron job added successfully!"
-    echo "The RSS analyzer will now run every hour at the top of the hour."
+    echo "The RSS analyzer will now run once daily at 2 AM."
     echo "Logs will be written to:"
-    echo "  - $PROJECT_DIR/logs/hourly_runs.log"
+    echo "  - $PROJECT_DIR/logs/daily_runs.log"
     echo "  - $PROJECT_DIR/logs/cron.log"
     
     # Show current crontab
@@ -31,7 +31,7 @@ setup_cron() {
 
 # Option 2: macOS launchd service (better for macOS)
 setup_launchd() {
-    SERVICE_NAME="com.rss-analyzer.hourly"
+    SERVICE_NAME="com.rss-analyzer.daily"
     PLIST_FILE="$HOME/Library/LaunchAgents/$SERVICE_NAME.plist"
     
     echo "Setting up macOS LaunchAgent..."
@@ -46,12 +46,17 @@ setup_launchd() {
     <string>$SERVICE_NAME</string>
     <key>ProgramArguments</key>
     <array>
-        <string>$PROJECT_DIR/run_hourly.sh</string>
+        <string>$PROJECT_DIR/run_daily.sh</string>
     </array>
     <key>WorkingDirectory</key>
     <string>$PROJECT_DIR</string>
-    <key>StartInterval</key>
-    <integer>3600</integer>
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>2</integer>
+        <key>Minute</key>
+        <integer>0</integer>
+    </dict>
     <key>RunAtLoad</key>
     <true/>
     <key>StandardOutPath</key>
@@ -67,9 +72,9 @@ EOF
     
     echo "LaunchAgent created and loaded successfully!"
     echo "Service file: $PLIST_FILE"
-    echo "The RSS analyzer will run every hour (3600 seconds)."
+    echo "The RSS analyzer will run once daily at 2 AM."
     echo "Logs will be written to:"
-    echo "  - $PROJECT_DIR/logs/hourly_runs.log"
+    echo "  - $PROJECT_DIR/logs/daily_runs.log"
     echo "  - $PROJECT_DIR/logs/launchd.log"
     echo "  - $PROJECT_DIR/logs/launchd_error.log"
     
@@ -105,5 +110,5 @@ else
 fi
 
 echo ""
-echo "Setup complete! The RSS analyzer will now run automatically every hour."
-echo "You can test the setup by running: ./run_hourly.sh"
+echo "Setup complete! The RSS analyzer will now run automatically once daily at 2 AM."
+echo "You can test the setup by running: ./run_daily.sh"

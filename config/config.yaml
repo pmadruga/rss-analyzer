@@ -43,7 +43,7 @@ scraper:
 
 # Processing Configuration
 processing:
-  max_articles_per_run: 10
+  max_articles_per_run: 30
   batch_size: 5
   concurrent_requests: 1
 

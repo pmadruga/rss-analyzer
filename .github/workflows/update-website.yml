@@ -1,0 +1,239 @@
+name: Update Website Data
+
+on:
+  workflow_dispatch:
+    inputs:
+      force_regenerate:
+        description: 'Force regenerate website data even if no changes'
+        required: false
+        default: false
+        type: boolean
+  workflow_run:
+    workflows: ["RSS Analyzer"]
+    types:
+      - completed
+  schedule:
+    - cron: '30 */3 * * *'  # Run 30 minutes after RSS analyzer (every 3 hours)
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  update-website:
+    name: Update Website Data
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
+    
+    steps:
+    - name: 🔄 Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0  # Fetch full history for proper git operations
+    
+    - name: 🐍 Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        cache: 'pip'
+    
+    - name: 📦 Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: 📁 Create required directories
+      run: |
+        mkdir -p logs docs data
+    
+    - name: 🔍 Check for database changes
+      id: check_changes
+      run: |
+        # Check if database exists and has been modified recently
+        if [ -f "data/articles.db" ]; then
+          # Get last modification time of database
+          DB_MTIME=$(stat -c %Y data/articles.db 2>/dev/null || echo "0")
+          
+          # Get last commit time of data.json if it exists
+          if [ -f "docs/data.json" ]; then
+            JSON_MTIME=$(stat -c %Y docs/data.json 2>/dev/null || echo "0")
+          else
+            JSON_MTIME=0
+          fi
+          
+          # Check if database is newer than JSON or if force regenerate is requested
+          if [ "$DB_MTIME" -gt "$JSON_MTIME" ] || [ "${{ github.event.inputs.force_regenerate }}" = "true" ]; then
+            echo "needs_update=true" >> $GITHUB_OUTPUT
+            echo "Database has changes or force regenerate requested"
+          else
+            echo "needs_update=false" >> $GITHUB_OUTPUT
+            echo "No database changes detected"
+          fi
+        else
+          echo "needs_update=false" >> $GITHUB_OUTPUT
+          echo "Database not found"
+        fi
+    
+    - name: 🚀 Generate website data
+      if: steps.check_changes.outputs.needs_update == 'true'
+      run: |
+        echo "Generating website data..."
+        python tools/generate_website_data.py --verbose
+        
+        # Validate generated JSON
+        if [ -f "docs/data.json" ]; then
+          echo "Validating generated JSON..."
+          python -m json.tool docs/data.json > /dev/null
+          echo "JSON validation successful"
+          
+          # Show file size
+          SIZE=$(stat -c%s docs/data.json)
+          echo "Generated data.json size: $SIZE bytes"
+        else
+          echo "ERROR: data.json was not generated"
+          exit 1
+        fi
+    
+    - name: 📊 Generate summary report
+      if: steps.check_changes.outputs.needs_update == 'true'
+      run: |
+        echo "Generating summary report..."
+        python -c "
+        import json
+        from datetime import datetime
+        
+        with open('docs/data.json', 'r') as f:
+            data = json.load(f)
+        
+        articles = data.get('articles', [])
+        total = len(articles)
+        
+        if total > 0:
+            # Count by confidence level
+            high_confidence = sum(1 for a in articles if a.get('confidence_score', 0) >= 0.8)
+            medium_confidence = sum(1 for a in articles if 0.5 <= a.get('confidence_score', 0) < 0.8)
+            low_confidence = sum(1 for a in articles if a.get('confidence_score', 0) < 0.5)
+            
+            # Get date range
+            dates = [a.get('processed_date', '') for a in articles if a.get('processed_date')]
+            if dates:
+                earliest = min(dates)
+                latest = max(dates)
+            else:
+                earliest = latest = 'Unknown'
+            
+            summary = f'''📊 Website Data Update Summary
+        
+        **Articles:** {total}
+        **Date Range:** {earliest[:10]} to {latest[:10]}
+        **Confidence Distribution:**
+        - High (≥80%): {high_confidence}
+        - Medium (50-79%): {medium_confidence}  
+        - Low (<50%): {low_confidence}
+        
+        **Generated:** {data.get('generated_at', 'Unknown')}
+        '''
+        else:
+            summary = '📊 Website Data Update Summary\n\n**No articles found**'
+        
+        print(summary)
+        
+        # Write to GitHub summary
+        with open('summary.md', 'w') as f:
+            f.write(summary)
+        "
+        
+        # Add to GitHub step summary
+        cat summary.md >> $GITHUB_STEP_SUMMARY
+    
+    - name: 🔍 Check for changes to commit
+      if: steps.check_changes.outputs.needs_update == 'true'
+      id: git_changes
+      run: |
+        git add docs/data.json
+        
+        if git diff --staged --quiet; then
+          echo "has_changes=false" >> $GITHUB_OUTPUT
+          echo "No changes to commit"
+        else
+          echo "has_changes=true" >> $GITHUB_OUTPUT
+          echo "Changes detected, will commit"
+          
+          # Show what changed
+          echo "Files to be committed:"
+          git diff --staged --name-only
+        fi
+    
+    - name: 💾 Commit and push changes
+      if: steps.check_changes.outputs.needs_update == 'true' && steps.git_changes.outputs.has_changes == 'true'
+      run: |
+        # Configure git
+        git config --local user.email "action@github.com"
+        git config --local user.name "Website Data Updater"
+        
+        # Get article count for commit message
+        ARTICLE_COUNT=$(python -c "
+        import json
+        try:
+            with open('docs/data.json', 'r') as f:
+                data = json.load(f)
+            print(len(data.get('articles', [])))
+        except:
+            print('0')
+        ")
+        
+        # Create commit message
+        COMMIT_MSG="Update website data - $(date -u +'%Y-%m-%d %H:%M UTC') 🌐
+        
+        Articles: $ARTICLE_COUNT
+        
+        🤖 Generated with Claude Code
+        
+        Co-Authored-By: Website-Data-Updater <noreply@github.com>"
+        
+        # Commit and push
+        git commit -m "$COMMIT_MSG"
+        git push
+        
+        echo "✅ Website data updated and pushed successfully"
+    
+    - name: 📤 Upload logs as artifacts
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: website-update-logs-${{ github.run_number }}
+        path: logs/
+        retention-days: 7
+        if-no-files-found: ignore
+    
+    - name: 📈 Post status update
+      if: always()
+      run: |
+        if [ "${{ job.status }}" = "success" ]; then
+          if [ "${{ steps.check_changes.outputs.needs_update }}" = "true" ]; then
+            if [ "${{ steps.git_changes.outputs.has_changes }}" = "true" ]; then
+              STATUS="✅ Website data updated successfully"
+              EMOJI="🟢"
+            else
+              STATUS="ℹ️ Website data generated but no changes to commit"
+              EMOJI="🔵"
+            fi
+          else
+            STATUS="ℹ️ No website data update needed"
+            EMOJI="🔵"
+          fi
+        else
+          STATUS="❌ Website data update failed"
+          EMOJI="🔴"
+        fi
+        
+        echo "## $EMOJI Website Data Update Status" >> $GITHUB_STEP_SUMMARY
+        echo "$STATUS" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Workflow run:** ${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Timestamp:** $(date -u +'%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
+        
+        # Add link to website if data was updated
+        if [ "${{ steps.git_changes.outputs.has_changes }}" = "true" ]; then
+          echo "**Website:** https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/" >> $GITHUB_STEP_SUMMARY
+        fi

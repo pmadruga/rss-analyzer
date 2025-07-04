@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI-powered RSS analysis dashboard displaying academic papers and technical articles with advanced filtering and search capabilities.">
+    <meta name="keywords" content="RSS, AI analysis, academic papers, technical articles, research, machine learning">
+    <meta name="author" content="RSS Analyzer">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="RSS Article Analysis Dashboard">
+    <meta property="og:description" content="AI-powered analysis of academic papers and technical articles from RSS feeds">
+    <meta property="og:url" content="https://yourusername.github.io/rss-analyzer/">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="RSS Article Analysis Dashboard">
+    <meta property="twitter:description" content="AI-powered analysis of academic papers and technical articles from RSS feeds">
+    
+    <title>RSS Article Analysis Dashboard</title>
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" as="style">
+    <link rel="preload" href="styles.css" as="style">
+    <link rel="preload" href="script.js" as="script">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232563eb'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z'/%3E%3C/svg%3E">
+</head>
+<body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Main container -->
+    <div class="app-container">
+        <!-- Header section -->
+        <header class="app-header" role="banner">
+            <div class="header-content">
+                <div class="header-text">
+                    <h1 class="header-title">RSS Article Analysis</h1>
+                    <p class="header-subtitle">AI-powered analysis of academic papers and technical articles</p>
+                </div>
+                <div class="header-badge">
+                    <span class="badge-icon">🤖</span>
+                    <span class="badge-text">AI Powered</span>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Statistics section -->
+        <section class="stats-section" aria-labelledby="stats-heading">
+            <h2 id="stats-heading" class="visually-hidden">Statistics</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="total-articles" aria-label="Total articles">0</div>
+                    <div class="stat-label">Total Articles</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="today-articles" aria-label="Today's articles">0</div>
+                    <div class="stat-label">Today's Articles</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="ai-provider" aria-label="AI provider">—</div>
+                    <div class="stat-label">AI Provider</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="avg-confidence" aria-label="Average confidence">—</div>
+                    <div class="stat-label">Avg Confidence</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Controls section -->
+        <section class="controls-section" aria-labelledby="controls-heading">
+            <h2 id="controls-heading" class="visually-hidden">Search and Filter Controls</h2>
+            <div class="controls-grid">
+                <div class="search-container">
+                    <label for="search-input" class="visually-hidden">Search articles</label>
+                    <input 
+                        type="text" 
+                        id="search-input" 
+                        class="search-input" 
+                        placeholder="Search articles, topics, or keywords..."
+                        aria-describedby="search-help"
+                        autocomplete="off"
+                        spellcheck="false"
+                    >
+                    <div class="search-icon" aria-hidden="true">🔍</div>
+                    <div id="search-help" class="visually-hidden">Search through article titles and content</div>
+                </div>
+                
+                <div class="filter-container">
+                    <label for="confidence-filter" class="filter-label">Confidence Level</label>
+                    <select id="confidence-filter" class="filter-select" aria-describedby="filter-help">
+                        <option value="">All Levels</option>
+                        <option value="high">High (80%+)</option>
+                        <option value="medium">Medium (50-79%)</option>
+                        <option value="low">Low (<50%)</option>
+                    </select>
+                    <div id="filter-help" class="visually-hidden">Filter articles by AI confidence level</div>
+                </div>
+                
+                <div class="view-controls">
+                    <button id="expand-all" class="control-btn" aria-label="Expand all sections">
+                        <span class="btn-icon">📂</span>
+                        <span class="btn-text">Expand All</span>
+                    </button>
+                    <button id="collapse-all" class="control-btn" aria-label="Collapse all sections">
+                        <span class="btn-icon">📁</span>
+                        <span class="btn-text">Collapse All</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main content area -->
+        <main id="main-content" class="main-content" role="main">
+            <!-- Loading state -->
+            <div id="loading-container" class="loading-container" aria-live="polite">
+                <div class="loading-spinner" aria-hidden="true"></div>
+                <div class="loading-text">Loading articles...</div>
+            </div>
+            
+            <!-- Error state -->
+            <div id="error-container" class="error-container" role="alert" aria-live="assertive" style="display: none;">
+                <div class="error-icon" aria-hidden="true">⚠️</div>
+                <div class="error-text">
+                    <h3 class="error-title">Unable to Load Articles</h3>
+                    <p class="error-message">Please check your connection and try again.</p>
+                </div>
+                <button id="retry-btn" class="retry-btn">Retry</button>
+            </div>
+            
+            <!-- Articles container -->
+            <div id="articles-container" class="articles-container" style="display: none;">
+                <!-- Articles will be dynamically inserted here -->
+            </div>
+            
+            <!-- Empty state -->
+            <div id="empty-container" class="empty-container" style="display: none;">
+                <div class="empty-icon" aria-hidden="true">📄</div>
+                <div class="empty-text">
+                    <h3 class="empty-title">No Articles Found</h3>
+                    <p class="empty-message">Try adjusting your search or filter criteria.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="app-footer" role="contentinfo">
+        <div class="footer-content">
+            <div class="footer-text">
+                <p>Generated with <a href="https://github.com/anthropics/claude-code" target="_blank" rel="noopener noreferrer" class="footer-link">Claude Code</a></p>
+            </div>
+            <div class="footer-meta">
+                <span id="last-updated" class="last-updated">Last updated: —</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>

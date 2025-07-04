@@ -19,7 +19,7 @@ services:
       - USER_AGENT=${USER_AGENT:-RSS-Article-Analyzer/1.0}
       
       # Processing Configuration
-      - MAX_ARTICLES_PER_RUN=${MAX_ARTICLES_PER_RUN:-10}
+      - MAX_ARTICLES_PER_RUN=${MAX_ARTICLES_PER_RUN:-30}
       - SCRAPER_DELAY=${SCRAPER_DELAY:-1.0}
       - REQUEST_TIMEOUT=${REQUEST_TIMEOUT:-30}
       - FOLLOW_LINKS=${FOLLOW_LINKS:-true}

@@ -5,41 +5,42 @@ Entry point for the RSS article analyzer with command-line interface,
 orchestrating the entire pipeline from RSS parsing to report generation.
 """
 
-import click
 import logging
-import time
-from typing import Optional, List
-from tqdm import tqdm
-import sys
 import os
+import sys
+import time
 
-# Import our modules
-from .utils import setup_logging, load_config, validate_config, format_timestamp
-from .rss_parser import RSSParser
-from .scraper import WebScraper
+import click
+from tqdm import tqdm
+
 from .claude_client import ClaudeClient
+from .database import DatabaseManager
 from .mistral_client import MistralClient
 from .openai_client import OpenAIClient
-from .database import DatabaseManager
 from .report_generator import ReportGenerator
+from .rss_parser import RSSParser
+from .scraper import WebScraper
+
+# Import our modules
+from .utils import format_timestamp, load_config, setup_logging, validate_config
 
 logger = logging.getLogger(__name__)
 
 
 class ArticleProcessor:
     """Main application orchestrator"""
-    
+
     def __init__(self, config: dict):
         self.config = config
-        
+
         # Initialize components
         self.db = DatabaseManager(config['db_path'])
         self.rss_parser = RSSParser(config.get('user_agent', 'RSS-Article-Analyzer/1.0'))
         self.scraper = WebScraper(config.get('scraper_delay', 1.0))
-        
+
         # Initialize API client based on provider
         api_provider = config.get('api_provider', 'anthropic')
-        
+
         if api_provider == 'anthropic':
             self.api_client = ClaudeClient(
                 api_key=config['anthropic_api_key'],
@@ -60,13 +61,13 @@ class ArticleProcessor:
             logger.info("Using OpenAI API")
         else:
             raise ValueError(f"Unsupported API provider: {api_provider}")
-        
+
         # Keep reference for compatibility
         self.claude_client = self.api_client
-        
+
         self.report_generator = ReportGenerator(config['output_dir'])
-    
-    def run(self, force_refresh: bool = False, limit: Optional[int] = None) -> dict:
+
+    def run(self, force_refresh: bool = False, limit: int | None = None) -> dict:
         """
         Run the complete processing pipeline
         
@@ -87,23 +88,23 @@ class ArticleProcessor:
             'report_generated': False,
             'errors': []
         }
-        
+
         try:
             logger.info("Starting RSS article analysis pipeline")
-            
+
             # Step 1: Test API connection
             if not self.api_client.test_connection():
                 raise Exception("API connection test failed")
-            
+
             # Step 2: Fetch RSS feed
             logger.info("Fetching RSS feed...")
             rss_entries = self.rss_parser.fetch_feed(self.config['rss_feed_url'])
             results['rss_entries_found'] = len(rss_entries)
-            
+
             if not rss_entries:
                 logger.warning("No entries found in RSS feed")
                 return results
-            
+
             # Step 3: Filter new articles (unless force refresh)
             if not force_refresh:
                 # Only skip articles that have been fully analyzed
@@ -113,45 +114,45 @@ class ArticleProcessor:
             else:
                 new_entries = rss_entries
                 logger.info("Force refresh enabled - processing all articles")
-            
+
             # Apply limit if specified
             if limit and len(new_entries) > limit:
                 new_entries = new_entries[:limit]
                 logger.info(f"Limited processing to {limit} articles")
-            
+
             results['new_articles'] = len(new_entries)
-            
+
             if not new_entries:
                 logger.info("No new articles to process")
                 return results
-            
+
             # Step 4: Process articles
             processed_articles = self._process_articles(new_entries, results)
-            
+
             # Step 5: Generate reports
             if processed_articles:
                 self._generate_reports(processed_articles, results)
-            
+
             # Step 6: Cleanup
             self.db.cleanup_old_logs()
-            
+
             results['duration'] = time.time() - start_time
             logger.info(f"Pipeline completed in {results['duration']:.2f} seconds")
-            
+
             return results
-            
+
         except Exception as e:
             logger.error(f"Pipeline failed: {e}")
             results['errors'].append(str(e))
             self.db.log_processing(None, 'pipeline_failed', str(e))
             return results
-    
-    def _process_articles(self, entries: List, results: dict) -> List[dict]:
+
+    def _process_articles(self, entries: list, results: dict) -> list[dict]:
         """Process articles through scraping and analysis"""
         processed_articles = []
-        
+
         logger.info(f"Processing {len(entries)} articles...")
-        
+
         with tqdm(total=len(entries), desc="Processing articles") as pbar:
             for entry in entries:
                 try:
@@ -163,10 +164,10 @@ class ArticleProcessor:
                         rss_guid=entry.guid,
                         publication_date=entry.publication_date
                     )
-                    
+
                     self.db.log_processing(article_id, 'started', processing_step='scraping')
                     self.db.update_article_status(article_id, 'processing')
-                    
+
                     # Scrape article content
                     scrape_start = time.time()
                     scraped_content = self.scraper.scrape_article(
@@ -175,21 +176,21 @@ class ArticleProcessor:
                         max_linked_articles=self.config.get('max_linked_articles', 3)
                     )
                     scrape_duration = time.time() - scrape_start
-                    
+
                     if not scraped_content:
                         logger.warning(f"Failed to scrape article: {entry.title}")
-                        self.db.log_processing(article_id, 'scraping_failed', 
-                                             processing_step='scraping', 
+                        self.db.log_processing(article_id, 'scraping_failed',
+                                             processing_step='scraping',
                                              duration_seconds=scrape_duration)
                         self.db.update_article_status(article_id, 'scraping_failed')
                         pbar.update(1)
                         continue
-                    
+
                     results['scraped_articles'] += 1
-                    self.db.log_processing(article_id, 'scraped', 
-                                         processing_step='scraping', 
+                    self.db.log_processing(article_id, 'scraped',
+                                         processing_step='scraping',
                                          duration_seconds=scrape_duration)
-                    
+
                     # Analyze with API client
                     analysis_start = time.time()
                     analysis = self.api_client.analyze_article(
@@ -198,25 +199,25 @@ class ArticleProcessor:
                         url=entry.link
                     )
                     analysis_duration = time.time() - analysis_start
-                    
+
                     if not analysis:
                         logger.warning(f"Failed to analyze article: {entry.title}")
-                        self.db.log_processing(article_id, 'analysis_failed', 
-                                             processing_step='analysis', 
+                        self.db.log_processing(article_id, 'analysis_failed',
+                                             processing_step='analysis',
                                              duration_seconds=analysis_duration)
                         self.db.update_article_status(article_id, 'analysis_failed')
                         pbar.update(1)
                         continue
-                    
+
                     # Store content and analysis
                     self.db.insert_content(article_id, scraped_content.content, analysis)
                     results['analyzed_articles'] += 1
-                    
-                    self.db.log_processing(article_id, 'completed', 
-                                         processing_step='analysis', 
+
+                    self.db.log_processing(article_id, 'completed',
+                                         processing_step='analysis',
                                          duration_seconds=analysis_duration)
                     self.db.update_article_status(article_id, 'completed')
-                    
+
                     # Prepare for report generation
                     article_data = {
                         'id': article_id,
@@ -227,44 +228,44 @@ class ArticleProcessor:
                         **analysis
                     }
                     processed_articles.append(article_data)
-                    
+
                     logger.info(f"Successfully processed: {entry.title}")
-                    
+
                 except Exception as e:
                     logger.error(f"Error processing article '{entry.title}': {e}")
                     results['errors'].append(f"Processing '{entry.title}': {e}")
                     if 'article_id' in locals():
                         self.db.log_processing(article_id, 'processing_failed', str(e))
                         self.db.update_article_status(article_id, 'failed')
-                
+
                 pbar.update(1)
-        
+
         return processed_articles
-    
-    def _generate_reports(self, articles: List[dict], results: dict):
+
+    def _generate_reports(self, articles: list[dict], results: dict):
         """Generate various reports"""
         try:
             logger.info("Generating reports...")
-            
+
             # Generate main markdown report
             report_path = self.report_generator.generate_report(
                 articles,
                 self.config.get('report_filename', 'article_analysis_report.md')
             )
             logger.info(f"Main report generated: {report_path}")
-            
+
             # Generate summary report
             summary_path = self.report_generator.generate_summary_report(articles)
             logger.info(f"Summary report generated: {summary_path}")
-            
+
             # Generate JSON export
             json_path = self.report_generator.generate_json_export(articles)
             logger.info(f"JSON export generated: {json_path}")
-            
+
             # Generate CSV export
             csv_path = self.report_generator.generate_csv_export(articles)
             logger.info(f"CSV export generated: {csv_path}")
-            
+
             results['report_generated'] = True
             results['reports'] = {
                 'main_report': report_path,
@@ -272,7 +273,7 @@ class ArticleProcessor:
                 'json_export': json_path,
                 'csv_export': csv_path
             }
-            
+
         except Exception as e:
             logger.error(f"Failed to generate reports: {e}")
             results['errors'].append(f"Report generation: {e}")
@@ -285,27 +286,27 @@ class ArticleProcessor:
 @click.pass_context
 def cli(ctx, config, log_level, log_file):
     """RSS Article Analyzer - Fetch, scrape, and analyze articles using Claude"""
-    
+
     # Ensure context object exists
     ctx.ensure_object(dict)
-    
+
     # Load configuration
     app_config = load_config(config)
-    
+
     # Override with CLI options
     if log_level:
         app_config['log_level'] = log_level
     if log_file:
         app_config['log_file'] = log_file
-    
+
     # Setup logging
     setup_logging(app_config['log_level'], app_config.get('log_file'))
-    
+
     # Validate configuration
     if not validate_config(app_config):
         click.echo("Configuration validation failed. Please check your settings.", err=True)
         sys.exit(1)
-    
+
     ctx.obj['config'] = app_config
 
 
@@ -316,22 +317,22 @@ def cli(ctx, config, log_level, log_file):
 @click.pass_context
 def run(ctx, force_refresh, limit, output_dir):
     """Run the complete article analysis pipeline"""
-    
+
     config = ctx.obj['config']
-    
+
     # Override configuration options
     if output_dir:
         config['output_dir'] = output_dir
-    
-    
+
+
     # Apply limits from config if not specified
     if not limit:
         limit = config.get('max_articles_per_run')
-    
+
     try:
         processor = ArticleProcessor(config)
         results = processor.run(force_refresh=force_refresh, limit=limit)
-        
+
         # Display results
         click.echo("\n" + "="*50)
         click.echo("PROCESSING RESULTS")
@@ -341,22 +342,22 @@ def run(ctx, force_refresh, limit, output_dir):
         click.echo(f"Successfully scraped: {results['scraped_articles']}")
         click.echo(f"Successfully analyzed: {results['analyzed_articles']}")
         click.echo(f"Processing time: {results.get('duration', 0):.2f} seconds")
-        
+
         if results.get('report_generated'):
             click.echo(f"\nReports generated in: {config['output_dir']}")
             if 'reports' in results:
                 for report_type, path in results['reports'].items():
                     click.echo(f"  - {report_type}: {os.path.basename(path)}")
-        
+
         if results.get('errors'):
             click.echo(f"\nErrors encountered: {len(results['errors'])}")
             for error in results['errors'][:5]:  # Show first 5 errors
                 click.echo(f"  - {error}")
             if len(results['errors']) > 5:
                 click.echo(f"  ... and {len(results['errors']) - 5} more")
-        
+
         click.echo("="*50)
-        
+
     except KeyboardInterrupt:
         click.echo("\nProcess interrupted by user", err=True)
         sys.exit(1)
@@ -371,10 +372,10 @@ def run(ctx, force_refresh, limit, output_dir):
 def test_api(ctx):
     """Test API connection"""
     config = ctx.obj['config']
-    
+
     try:
         api_provider = config.get('api_provider', 'anthropic')
-        
+
         if api_provider == 'anthropic':
             api_client = ClaudeClient(
                 api_key=config['anthropic_api_key'],
@@ -396,13 +397,13 @@ def test_api(ctx):
         else:
             click.echo(f"❌ Unsupported API provider: {api_provider}", err=True)
             sys.exit(1)
-        
+
         if api_client.test_connection():
             click.echo(f"✅ {provider_name} connection successful")
         else:
             click.echo(f"❌ {provider_name} connection failed", err=True)
             sys.exit(1)
-            
+
     except Exception as e:
         click.echo(f"❌ Connection test failed: {e}", err=True)
         sys.exit(1)
@@ -415,16 +416,16 @@ def test_api(ctx):
 def test_rss(ctx):
     """Test RSS feed parsing"""
     config = ctx.obj['config']
-    
+
     try:
         rss_parser = RSSParser()
         feed_info = rss_parser.get_feed_info(config['rss_feed_url'])
-        
+
         click.echo("✅ RSS feed information:")
         click.echo(f"  Title: {feed_info['title']}")
         click.echo(f"  Description: {feed_info['description'][:100]}...")
         click.echo(f"  Entries: {feed_info['entry_count']}")
-        
+
     except Exception as e:
         click.echo(f"❌ RSS test failed: {e}", err=True)
         sys.exit(1)
@@ -435,25 +436,25 @@ def test_rss(ctx):
 def stats(ctx):
     """Show processing statistics"""
     config = ctx.obj['config']
-    
+
     try:
         db = DatabaseManager(config['db_path'])
         stats = db.get_processing_statistics()
-        
+
         click.echo("Database Statistics:")
         click.echo(f"  Total articles: {stats.get('total_articles', 0)}")
-        
+
         if 'by_status' in stats:
             for status, count in stats['by_status'].items():
                 click.echo(f"  {status}: {count}")
-        
+
         click.echo(f"  Average confidence: {stats.get('average_confidence', 0):.1f}/10")
-        
+
         if 'recent_activity' in stats:
             click.echo("\nRecent activity:")
             for activity in stats['recent_activity'][:5]:
                 click.echo(f"  {activity['date']}: {activity['count']} operations")
-        
+
     except Exception as e:
         click.echo(f"❌ Failed to get statistics: {e}", err=True)
         sys.exit(1)
@@ -464,15 +465,15 @@ def stats(ctx):
 def list_reports(ctx):
     """List generated reports"""
     config = ctx.obj['config']
-    
+
     try:
         report_gen = ReportGenerator(config['output_dir'])
         reports = report_gen.list_reports()
-        
+
         if not reports:
             click.echo("No reports found")
             return
-        
+
         click.echo("Generated Reports:")
         for report in reports:
             size_mb = report['size_bytes'] / (1024 * 1024)
@@ -480,7 +481,7 @@ def list_reports(ctx):
             click.echo(f"    Size: {size_mb:.1f} MB")
             click.echo(f"    Modified: {report['modified_time']}")
             click.echo()
-        
+
     except Exception as e:
         click.echo(f"❌ Failed to list reports: {e}", err=True)
 
