@@ -1,0 +1,7 @@
+# Global owners
+* @pmadruga
+
+# Website-specific files
+docs/ @pmadruga
+.github/workflows/deploy-pages.yml @pmadruga
+.github/workflows/update-website.yml @pmadruga

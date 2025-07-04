@@ -1,5 +1,5 @@
 {
-  "generated_at": "2025-07-04T12:19:46.898982Z",
+  "generated_at": "2025-07-04T14:49:25.762807+00:00",
   "total_articles": 14,
   "articles": [
     {
@@ -156,5 +156,23 @@
       "ai_provider": "anthropic",
       "linked_articles": []
     }
-  ]
+  ],
+  "metadata": {
+    "date_range": {
+      "earliest": "2025-07-02T09:24:21",
+      "latest": "2025-07-02T13:39:03"
+    },
+    "ai_providers": {
+      "anthropic": 14
+    },
+    "confidence_stats": {
+      "average": 0.75,
+      "high_count": 10,
+      "medium_count": 3,
+      "low_count": 1
+    },
+    "status_counts": {
+      "completed": 14
+    }
+  }
 }
