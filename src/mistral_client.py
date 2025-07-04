@@ -23,6 +23,8 @@ class MistralClient:
         self.base_url = "https://api.mistral.ai/v1"
         self.max_retries = 3
         self.base_delay = 1.0
+        self.rate_limit_delay = 3.0  # 3 seconds between API calls to respect rate limits
+        self.last_api_call_time = 0.0  # Track last API call time
 
         # System prompt for article analysis
         self.system_prompt = """You are an expert technical communicator who specializes in explaining complex research methodologies and technical approaches in simple, understandable terms. Your primary task is to analyze academic papers and articles, focusing on making technical concepts accessible to a general audience.
@@ -102,11 +104,23 @@ Make sure your response is valid JSON. Prioritize methodology and technical appr
         return prompt
 
     def _make_api_call(self, prompt: str) -> str | None:
-        """Make API call to Mistral with retry logic"""
+        """Make API call to Mistral with retry logic and rate limiting"""
+
+        # Enforce rate limiting: wait 3 seconds between API calls
+        current_time = time.time()
+        time_since_last_call = current_time - self.last_api_call_time
+        
+        if time_since_last_call < self.rate_limit_delay:
+            sleep_time = self.rate_limit_delay - time_since_last_call
+            logger.info(f"Rate limiting: waiting {sleep_time:.1f} seconds before API call")
+            time.sleep(sleep_time)
 
         for attempt in range(self.max_retries):
             try:
                 logger.debug(f"Making Mistral API call (attempt {attempt + 1}/{self.max_retries})")
+                
+                # Update last API call time
+                self.last_api_call_time = time.time()
 
                 headers = {
                     "Authorization": f"Bearer {self.api_key}",
@@ -259,6 +273,9 @@ Make sure your response is valid JSON. Prioritize methodology and technical appr
                 else:
                     logger.warning(f"Failed to analyze article {i}/{total}: {article.get('title', 'Unknown')}")
 
+                # Note: Rate limiting is handled in _make_api_call method
+                # No additional delay needed here as analyze_article calls _make_api_call
+
             except Exception as e:
                 logger.error(f"Error in batch analysis for article {i}/{total}: {e}")
                 continue
@@ -272,6 +289,18 @@ Make sure your response is valid JSON. Prioritize methodology and technical appr
         """Test connection to Mistral API"""
         try:
             logger.info("Testing Mistral API connection...")
+
+            # Enforce rate limiting for test connection too
+            current_time = time.time()
+            time_since_last_call = current_time - self.last_api_call_time
+            
+            if time_since_last_call < self.rate_limit_delay:
+                sleep_time = self.rate_limit_delay - time_since_last_call
+                logger.info(f"Rate limiting: waiting {sleep_time:.1f} seconds before test API call")
+                time.sleep(sleep_time)
+
+            # Update last API call time
+            self.last_api_call_time = time.time()
 
             headers = {
                 "Authorization": f"Bearer {self.api_key}",
