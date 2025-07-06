@@ -12,14 +12,14 @@
    CSS Custom Properties (Design System)
    ======================================== */
 :root {
-    /* Color Palette - Blog Inspired */
+    /* Color Palette - Light Mode */
     --color-primary: #1d4ed8;
     --color-primary-light: #3b82f6;
     --color-primary-dark: #1e40af;
     --color-accent: #7c3aed;
     --color-accent-light: #8b5cf6;
 
-    /* Neutral Colors - Warmer for blog feel */
+    /* Light Mode Colors */
     --color-white: #ffffff;
     --color-cream: #fefefe;
     --color-gray-50: #f9fafb;
@@ -118,6 +118,48 @@
     /* Blog specific spacing */
     --content-max-width: 768px;
     --content-padding: var(--spacing-xl);
+}
+
+/* ========================================
+   Dark Mode Colors
+   ======================================== */
+@media (prefers-color-scheme: dark) {
+    :root {
+        /* Dark Mode Primary Colors */
+        --color-primary: #60a5fa;
+        --color-primary-light: #93c5fd;
+        --color-primary-dark: #3b82f6;
+        --color-accent: #a78bfa;
+        --color-accent-light: #c4b5fd;
+
+        /* Dark Mode Neutral Colors */
+        --color-white: #0f172a;
+        --color-cream: #1e293b;
+        --color-gray-50: #1e293b;
+        --color-gray-100: #334155;
+        --color-gray-200: #475569;
+        --color-gray-300: #64748b;
+        --color-gray-400: #94a3b8;
+        --color-gray-500: #cbd5e1;
+        --color-gray-600: #e2e8f0;
+        --color-gray-700: #f1f5f9;
+        --color-gray-800: #f8fafc;
+        --color-gray-900: #ffffff;
+
+        /* Dark Mode Status Colors */
+        --color-success: #22c55e;
+        --color-success-light: #4ade80;
+        --color-success-bg: #14532d;
+        --color-warning: #eab308;
+        --color-warning-light: #facc15;
+        --color-warning-bg: #422006;
+        --color-danger: #ef4444;
+        --color-danger-light: #f87171;
+        --color-danger-bg: #7f1d1d;
+        --color-info: #3b82f6;
+        --color-info-light: #60a5fa;
+        --color-info-bg: #1e3a8a;
+    }
 }
 
 /* ========================================
