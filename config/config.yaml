@@ -3,12 +3,7 @@
 
 # API Configuration
 api:
-  provider: "anthropic"  # Options: anthropic, mistral, openai
-  anthropic:
-    model: "claude-3-5-sonnet-20241022"
-    max_retries: 3
-    base_delay: 1.0
-    timeout: 60
+  provider: "mistral"  # Options: mistral, openai
   mistral:
     model: "mistral-large-latest"
     max_retries: 3
