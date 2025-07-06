@@ -49,13 +49,13 @@ def test_link_following():
                     for i, link in enumerate(linked_articles, 1):
                         logger.info(f"  {i}. {link}")
                 else:
-                    logger.info("ℹ️ No interesting links found to follow")
+                    logger.info("Info: No interesting links found to follow")
 
                 # Check if content was enhanced
                 if "Referenced Articles and Links" in result.content:
                     logger.info("✅ Content was enhanced with linked article summaries")
                 else:
-                    logger.info("ℹ️ No linked content summaries added")
+                    logger.info("Info: No linked content summaries added")
 
             else:
                 logger.error(f"❌ Failed to scrape: {url}")

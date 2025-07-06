@@ -179,7 +179,7 @@ class WebsiteDataGenerator:
                 return True
 
         except sqlite3.Error as e:
-            raise DatabaseError(f"Database validation error: {e}")
+            raise DatabaseError(f"Database validation error: {e}") from e
 
     def get_articles_from_db(self) -> list[Article]:
         """
@@ -234,7 +234,7 @@ class WebsiteDataGenerator:
                 return articles
 
         except sqlite3.Error as e:
-            raise DatabaseError(f"Failed to fetch articles from database: {e}")
+            raise DatabaseError(f"Failed to fetch articles from database: {e}") from e
 
     def _process_article_row(self, row: sqlite3.Row) -> Article:
         """
@@ -418,7 +418,7 @@ class WebsiteDataGenerator:
             return output_path
 
         except (OSError, json.JSONEncodeError) as e:
-            raise DataValidationError(f"Failed to save JSON data: {e}")
+            raise DataValidationError(f"Failed to save JSON data: {e}") from e
 
     def print_summary(self, website_data: WebsiteData) -> None:
         """

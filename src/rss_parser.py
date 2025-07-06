@@ -125,10 +125,10 @@ class RSSParser:
 
         except requests.RequestException as e:
             logger.error(f"Network error fetching RSS feed: {e}")
-            raise Exception(f"Failed to fetch RSS feed: {e}")
+            raise Exception(f"Failed to fetch RSS feed: {e}") from e
         except Exception as e:
             logger.error(f"Error parsing RSS feed: {e}")
-            raise Exception(f"Failed to parse RSS feed: {e}")
+            raise Exception(f"Failed to parse RSS feed: {e}") from e
 
     def _parse_entry(self, entry) -> RSSEntry:
         """Parse a single feed entry"""

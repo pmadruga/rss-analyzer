@@ -374,20 +374,18 @@ class WebScraper:
         for div in divs:
             text = div.get_text().strip()
             # Look for divs with substantial text that might be the post
-            if len(text) > 20 and len(text) < 2000:  # Reasonable post length
-                # Check if it looks like a post (contains common academic keywords)
-                if any(
-                    keyword in text.lower()
-                    for keyword in [
-                        "paper",
-                        "research",
-                        "arxiv",
-                        "study",
-                        "analysis",
-                        "method",
-                    ]
-                ):
-                    return text
+            if 20 < len(text) < 2000 and any(  # Reasonable post length
+                keyword in text.lower()
+                for keyword in [
+                    "paper",
+                    "research",
+                    "arxiv",
+                    "study",
+                    "analysis",
+                    "method",
+                ]
+            ):
+                return text
 
         return "Could not extract post text from Bluesky"
 
@@ -928,10 +926,7 @@ class WebScraper:
 
         # Skip common non-article extensions
         skip_extensions = [".pdf", ".doc", ".ppt", ".zip", ".tar", ".gz"]
-        if any(url_lower.endswith(ext) for ext in skip_extensions):
-            return False
-
-        return True
+        return not any(url_lower.endswith(ext) for ext in skip_extensions)
 
     def _scrape_linked_article(self, url: str, timeout: int) -> ArticleContent | None:
         """Scrape content from a linked article without following further links"""

@@ -351,9 +351,8 @@ class ReportGenerator:
                             "key_findings",
                             "technical_approach",
                             "research_design",
-                        ]:
-                            if len(str(value)) > 500:
-                                value = str(value)[:497] + "..."
+                        ] and len(str(value)) > 500:
+                            value = str(value)[:497] + "..."
                         row[col] = value
 
                     writer.writerow(row)
