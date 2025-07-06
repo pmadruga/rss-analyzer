@@ -117,7 +117,7 @@ jobs:
       if: github.event.inputs.test_only != 'true'
       run: |
         echo "📊 Running full RSS analysis..."
-        uv run python -m src.main run --limit ${{ env.MAX_ARTICLES_PER_RUN }}
+        uv run python -m src.main run
 
     - name: 📝 Generate articles by date
       if: github.event.inputs.test_only != 'true'
