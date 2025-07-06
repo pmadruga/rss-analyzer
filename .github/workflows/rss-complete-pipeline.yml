@@ -1,0 +1,288 @@
+name: RSS Complete Pipeline
+
+on:
+  schedule:
+    # Run daily at 8:00 AM UTC
+    - cron: '0 8 * * *'
+  workflow_dispatch:
+    inputs:
+      max_articles:
+        description: 'Maximum number of articles to process'
+        required: false
+        default: '10'
+        type: string
+      test_only:
+        description: 'Run in test mode (1 article only)'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  # API Configuration
+  API_PROVIDER: 'mistral'
+  MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
+  # Processing Configuration
+  MAX_ARTICLES_PER_RUN: ${{ github.event.inputs.test_only == 'true' && '1' || github.event.inputs.max_articles || '10' }}
+  FOLLOW_LINKS: ${{ github.event.inputs.test_only == 'true' && 'false' || 'true' }}
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "rss-pipeline"
+  cancel-in-progress: false
+
+jobs:
+  rss-complete-pipeline:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+    # ========================================
+    # SETUP PHASE
+    # ========================================
+    - name: 🔄 Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: 🐍 Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: ⚡ Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        version: "latest"
+
+    - name: 📦 Install dependencies
+      run: |
+        uv sync
+
+    - name: 📁 Create directories
+      run: |
+        mkdir -p data logs output docs
+
+    # ========================================
+    # TEST PHASE
+    # ========================================
+    - name: 🔍 Test RSS parsing
+      run: |
+        echo "🔍 Testing RSS feed connectivity..."
+        uv run python -c "
+        from src.rss_parser import RSSParser
+        parser = RSSParser()
+        entries = parser.fetch_feed('https://bg.raindrop.io/rss/public/57118738')
+        print(f'✅ RSS parsing test: Found {len(entries)} entries')
+        "
+
+    - name: 🌐 Test web scraping
+      run: |
+        echo "🌐 Testing web scraping..."
+        uv run python -c "
+        from src.scraper import WebScraper
+        scraper = WebScraper()
+        result = scraper.scrape_article('https://jina.ai/news/quantization-aware-training-of-jina-embeddings-v4/', follow_links=False)
+        print(f'✅ Scraper test: {\"Success\" if result else \"Failed\"}')
+        if result:
+            print(f'   Content length: {len(result.content)} characters')
+        "
+
+    - name: 🗄️ Test database operations
+      run: |
+        echo "🗄️ Testing database..."
+        uv run python -c "
+        from src.database import DatabaseManager
+        db = DatabaseManager('data/test.db')
+        print('✅ Database test: Initialized successfully')
+        "
+
+    - name: 🧪 Run test analysis (1 article)
+      if: github.event.inputs.test_only == 'true'
+      run: |
+        echo "🧪 Running test analysis with 1 article..."
+        uv run python -m src.main run --limit 1 || true
+
+    # ========================================
+    # ANALYSIS PHASE (Skip if test_only)
+    # ========================================
+    - name: 📊 Run full RSS analysis
+      if: github.event.inputs.test_only != 'true'
+      run: |
+        echo "📊 Running full RSS analysis..."
+        uv run python -m src.main run --limit ${{ env.MAX_ARTICLES_PER_RUN }}
+
+    - name: 📝 Generate articles by date
+      if: github.event.inputs.test_only != 'true'
+      run: |
+        echo "📝 Generating articles by date..."
+        uv run python tools/generate_articles_by_date.py
+
+    - name: 📈 Generate analysis summary
+      if: github.event.inputs.test_only != 'true'
+      run: |
+        echo "📈 Generating analysis summary..."
+        uv run python -c "
+        import sqlite3
+        import json
+        from datetime import datetime
+        import os
+
+        if os.path.exists('data/articles.db'):
+            conn = sqlite3.connect('data/articles.db')
+            cursor = conn.cursor()
+
+            cursor.execute('SELECT COUNT(*) FROM articles WHERE status = \"completed\"')
+            completed = cursor.fetchone()[0]
+
+            cursor.execute('SELECT COUNT(*) FROM articles')
+            total = cursor.fetchone()[0]
+
+            cursor.execute('SELECT MAX(processed_date) FROM articles WHERE status = \"completed\"')
+            last_processed = cursor.fetchone()[0]
+
+            conn.close()
+
+            summary = {
+                'run_date': datetime.now().isoformat(),
+                'total_articles': total,
+                'completed_articles': completed,
+                'last_processed': last_processed
+            }
+
+            with open('output/run_summary.json', 'w') as f:
+                json.dump(summary, f, indent=2)
+
+            print(f'📊 Analysis complete: {completed}/{total} articles processed')
+        else:
+            print('ℹ️ No database found, skipping summary generation')
+        "
+
+    # ========================================
+    # WEBSITE DATA UPDATE PHASE
+    # ========================================
+    - name: 🌐 Generate website data
+      run: |
+        echo "🌐 Generating website data..."
+        uv run python tools/generate_website_data.py --verbose || true
+
+    - name: ✅ Validate website data
+      run: |
+        if [ -f "docs/data.json" ]; then
+          echo "✅ Validating generated JSON..."
+          python -m json.tool docs/data.json > /dev/null
+          echo "✅ JSON validation successful"
+
+          SIZE=$(stat -c%s docs/data.json 2>/dev/null || stat -f%z docs/data.json)
+          echo "📊 Generated data.json size: $SIZE bytes"
+        else
+          echo "⚠️ No data.json generated (no articles to process)"
+        fi
+
+    # ========================================
+    # WEBSITE LAYOUT UPDATE PHASE
+    # ========================================
+    - name: 🎨 Setup GitHub Pages
+      uses: actions/configure-pages@v4
+
+    - name: 📤 Upload website files
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: 'docs'
+
+    - name: 🚀 Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
+
+    # ========================================
+    # COMMIT CHANGES PHASE
+    # ========================================
+    - name: 💾 Commit and push changes
+      if: github.event.inputs.test_only != 'true'
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "RSS Complete Pipeline"
+
+        # Add generated files
+        git add docs/data.json output/ -f || true
+
+        # Check if there are changes to commit
+        if git diff --staged --quiet; then
+          echo "ℹ️ No changes to commit"
+        else
+          # Create commit message
+          if [ -f "output/run_summary.json" ]; then
+            SUMMARY=$(cat output/run_summary.json | jq -r '"Articles: " + (.completed_articles | tostring) + "/" + (.total_articles | tostring)' 2>/dev/null || echo "Analysis completed")
+          else
+            SUMMARY="Website data updated"
+          fi
+
+          git commit -m "🔄 RSS Complete Pipeline - $(date -u '+%Y-%m-%d %H:%M UTC')
+
+          $SUMMARY
+
+          🤖 Generated with RSS Complete Pipeline
+
+          Co-Authored-By: RSS-Pipeline-Bot <noreply@github.com>"
+
+          git push
+          echo "✅ Changes committed and pushed"
+        fi
+
+    # ========================================
+    # ARTIFACTS AND REPORTING PHASE
+    # ========================================
+    - name: 📤 Upload database backup
+      if: github.event.inputs.test_only != 'true'
+      uses: actions/upload-artifact@v4
+      with:
+        name: database-backup-${{ github.run_number }}
+        path: data/articles.db
+        retention-days: 30
+        if-no-files-found: ignore
+
+    - name: 📤 Upload logs
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: pipeline-logs-${{ github.run_number }}
+        path: |
+          logs/
+          output/
+        retention-days: 7
+        if-no-files-found: ignore
+
+    - name: 📊 Generate pipeline summary
+      if: always()
+      run: |
+        if [ "${{ job.status }}" = "success" ]; then
+          STATUS="✅ RSS Complete Pipeline completed successfully"
+          EMOJI="🟢"
+        else
+          STATUS="❌ RSS Complete Pipeline failed"
+          EMOJI="🔴"
+        fi
+
+        echo "## $EMOJI RSS Complete Pipeline Status" >> $GITHUB_STEP_SUMMARY
+        echo "$STATUS" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+
+        if [ -f "output/run_summary.json" ]; then
+          SUMMARY=$(cat output/run_summary.json | jq -r '"Articles: " + (.completed_articles | tostring) + "/" + (.total_articles | tostring)' 2>/dev/null || echo "Analysis data unavailable")
+          echo "**Summary:** $SUMMARY" >> $GITHUB_STEP_SUMMARY
+        fi
+
+        echo "**Test Mode:** ${{ github.event.inputs.test_only || 'false' }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Pipeline run:** ${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Timestamp:** $(date -u '+%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
+
+        if [ "${{ steps.deployment.outputs.page_url }}" ]; then
+          echo "**Website:** ${{ steps.deployment.outputs.page_url }}" >> $GITHUB_STEP_SUMMARY
+        fi
