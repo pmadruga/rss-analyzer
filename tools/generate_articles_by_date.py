@@ -35,27 +35,33 @@ def get_articles_from_db(db_path="data/articles.db"):
 
     return articles
 
+
 def format_article_data(articles):
     """Format articles by date"""
     articles_by_date = defaultdict(list)
 
     for article in articles:
-        title, url, processed_date, methodology, technical_approach, key_findings = article
+        title, url, processed_date, methodology, technical_approach, key_findings = (
+            article
+        )
 
         # Parse date
-        date_obj = datetime.fromisoformat(processed_date.replace('Z', '+00:00'))
+        date_obj = datetime.fromisoformat(processed_date.replace("Z", "+00:00"))
         date_key = date_obj.strftime("%B %d, %Y")
 
-        articles_by_date[date_key].append({
-            'title': title,
-            'url': url,
-            'processed_date': processed_date,
-            'methodology': methodology or "Not specified",
-            'technical_approach': technical_approach or "Not specified",
-            'key_findings': key_findings or "Not specified",
-        })
+        articles_by_date[date_key].append(
+            {
+                "title": title,
+                "url": url,
+                "processed_date": processed_date,
+                "methodology": methodology or "Not specified",
+                "technical_approach": technical_approach or "Not specified",
+                "key_findings": key_findings or "Not specified",
+            }
+        )
 
     return articles_by_date
+
 
 def generate_markdown(articles_by_date, output_path="output/articles_by_date.md"):
     """Generate markdown file"""
@@ -65,9 +71,11 @@ def generate_markdown(articles_by_date, output_path="output/articles_by_date.md"
 
     total_articles = sum(len(articles) for articles in articles_by_date.values())
 
-    with open(output_path, 'w', encoding='utf-8') as f:
+    with open(output_path, "w", encoding="utf-8") as f:
         f.write("# Articles Analysis by Date\n\n")
-        f.write("This document contains all analyzed articles organized by their processing date.\n\n")
+        f.write(
+            "This document contains all analyzed articles organized by their processing date.\n\n"
+        )
 
         for date, articles in articles_by_date.items():
             f.write(f"## {date}\n\n")
@@ -91,7 +99,10 @@ def generate_markdown(articles_by_date, output_path="output/articles_by_date.md"
         f.write("## Summary Statistics\n")
         f.write(f"- **Total Articles Analyzed:** {total_articles}\n")
         f.write("- **Sources:** ArXiv papers, Jina.ai articles, Bluesky posts\n")
-        f.write("- **Topics:** AI/ML, Embeddings, Quantization, LLM Routing, Knowledge Graphs, Document Retrieval, Recommendation Systems\n")
+        f.write(
+            "- **Topics:** AI/ML, Embeddings, Quantization, LLM Routing, Knowledge Graphs, Document Retrieval, Recommendation Systems\n"
+        )
+
 
 def cleanup_other_reports():
     """Remove other report files, keep only articles_by_date.md"""
@@ -100,7 +111,7 @@ def cleanup_other_reports():
         "output/article_analysis_report.md",
         "output/summary_report.md",
         "output/articles_export.json",
-        "output/articles_export.csv"
+        "output/articles_export.csv",
     ]
 
     for file_path in files_to_remove:
@@ -110,6 +121,7 @@ def cleanup_other_reports():
                 print(f"Removed {file_path}")
         except Exception as e:
             print(f"Warning: Could not remove {file_path}: {e}")
+
 
 if __name__ == "__main__":
     print("Generating articles by date file...")

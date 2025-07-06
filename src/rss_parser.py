@@ -21,8 +21,14 @@ logger = logging.getLogger(__name__)
 class RSSEntry:
     """Represents a single RSS feed entry"""
 
-    def __init__(self, title: str, link: str, description: str,
-                 publication_date: datetime | None = None, guid: str | None = None):
+    def __init__(
+        self,
+        title: str,
+        link: str,
+        description: str,
+        publication_date: datetime | None = None,
+        guid: str | None = None,
+    ):
         self.title = title
         self.link = link
         self.description = description
@@ -33,17 +39,19 @@ class RSSEntry:
     def _generate_content_hash(self) -> str:
         """Generate a hash of the entry content for duplicate detection"""
         content = f"{self.title}{self.link}{self.description}"
-        return hashlib.md5(content.encode('utf-8')).hexdigest()
+        return hashlib.md5(content.encode("utf-8")).hexdigest()
 
     def to_dict(self) -> dict:
         """Convert entry to dictionary"""
         return {
-            'title': self.title,
-            'link': self.link,
-            'description': self.description,
-            'publication_date': self.publication_date.isoformat() if self.publication_date else None,
-            'guid': self.guid,
-            'content_hash': self.content_hash
+            "title": self.title,
+            "link": self.link,
+            "description": self.description,
+            "publication_date": self.publication_date.isoformat()
+            if self.publication_date
+            else None,
+            "guid": self.guid,
+            "content_hash": self.content_hash,
         }
 
 
@@ -65,20 +73,20 @@ class RSSParser:
         adapter = HTTPAdapter(max_retries=retry_strategy)
         session.mount("http://", adapter)
         session.mount("https://", adapter)
-        session.headers.update({'User-Agent': self.user_agent})
+        session.headers.update({"User-Agent": self.user_agent})
         return session
 
     def fetch_feed(self, feed_url: str, timeout: int = 30) -> list[RSSEntry]:
         """
         Fetch and parse RSS feed from URL
-        
+
         Args:
             feed_url: RSS feed URL
             timeout: Request timeout in seconds
-            
+
         Returns:
             List of RSSEntry objects
-            
+
         Raises:
             Exception: If feed cannot be fetched or parsed
         """
@@ -95,7 +103,7 @@ class RSSParser:
             if feed.bozo and feed.bozo_exception:
                 logger.warning(f"Feed parsing warning: {feed.bozo_exception}")
 
-            if not hasattr(feed, 'entries') or not feed.entries:
+            if not hasattr(feed, "entries") or not feed.entries:
                 raise Exception("No entries found in RSS feed")
 
             logger.info(f"Found {len(feed.entries)} entries in RSS feed")
@@ -107,7 +115,9 @@ class RSSParser:
                     rss_entry = self._parse_entry(entry)
                     entries.append(rss_entry)
                 except Exception as e:
-                    logger.warning(f"Failed to parse entry '{entry.get('title', 'Unknown')}': {e}")
+                    logger.warning(
+                        f"Failed to parse entry '{entry.get('title', 'Unknown')}': {e}"
+                    )
                     continue
 
             logger.info(f"Successfully parsed {len(entries)} entries")
@@ -123,19 +133,19 @@ class RSSParser:
     def _parse_entry(self, entry) -> RSSEntry:
         """Parse a single feed entry"""
         # Extract title
-        title = entry.get('title', 'Untitled').strip()
+        title = entry.get("title", "Untitled").strip()
 
         # Extract link
-        link = entry.get('link', '').strip()
+        link = entry.get("link", "").strip()
         if not link:
             raise Exception("Entry missing required link")
 
         # Extract description/summary
-        description = entry.get('summary', entry.get('description', '')).strip()
+        description = entry.get("summary", entry.get("description", "")).strip()
 
         # Extract publication date
         publication_date = None
-        for date_field in ['published', 'updated', 'created']:
+        for date_field in ["published", "updated", "created"]:
             if date_field in entry:
                 try:
                     publication_date = date_parser.parse(entry[date_field])
@@ -145,25 +155,26 @@ class RSSParser:
                     continue
 
         # Extract GUID
-        guid = entry.get('id', entry.get('guid', link))
+        guid = entry.get("id", entry.get("guid", link))
 
         return RSSEntry(
             title=title,
             link=link,
             description=description,
             publication_date=publication_date,
-            guid=guid
+            guid=guid,
         )
 
-    def filter_new_entries(self, entries: list[RSSEntry],
-                          existing_hashes: set) -> list[RSSEntry]:
+    def filter_new_entries(
+        self, entries: list[RSSEntry], existing_hashes: set
+    ) -> list[RSSEntry]:
         """
         Filter out entries that already exist based on content hash
-        
+
         Args:
             entries: List of RSS entries
             existing_hashes: Set of existing content hashes
-            
+
         Returns:
             List of new entries
         """
@@ -180,10 +191,10 @@ class RSSParser:
     def get_feed_info(self, feed_url: str) -> dict:
         """
         Get basic information about the RSS feed
-        
+
         Args:
             feed_url: RSS feed URL
-            
+
         Returns:
             Dictionary with feed information
         """
@@ -194,21 +205,21 @@ class RSSParser:
             feed = feedparser.parse(response.content)
 
             return {
-                'title': feed.feed.get('title', 'Unknown'),
-                'description': feed.feed.get('description', ''),
-                'link': feed.feed.get('link', ''),
-                'language': feed.feed.get('language', ''),
-                'updated': feed.feed.get('updated', ''),
-                'entry_count': len(feed.entries) if hasattr(feed, 'entries') else 0
+                "title": feed.feed.get("title", "Unknown"),
+                "description": feed.feed.get("description", ""),
+                "link": feed.feed.get("link", ""),
+                "language": feed.feed.get("language", ""),
+                "updated": feed.feed.get("updated", ""),
+                "entry_count": len(feed.entries) if hasattr(feed, "entries") else 0,
             }
 
         except Exception as e:
             logger.error(f"Failed to get feed info: {e}")
             return {
-                'title': 'Unknown',
-                'description': '',
-                'link': feed_url,
-                'language': '',
-                'updated': '',
-                'entry_count': 0
+                "title": "Unknown",
+                "description": "",
+                "link": feed_url,
+                "language": "",
+                "updated": "",
+                "entry_count": 0,
             }

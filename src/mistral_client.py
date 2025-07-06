@@ -23,7 +23,9 @@ class MistralClient:
         self.base_url = "https://api.mistral.ai/v1"
         self.max_retries = 3
         self.base_delay = 1.0
-        self.rate_limit_delay = 3.0  # 3 seconds between API calls to respect rate limits
+        self.rate_limit_delay = (
+            3.0  # 3 seconds between API calls to respect rate limits
+        )
         self.last_api_call_time = 0.0  # Track last API call time
 
         # System prompt for article analysis
@@ -40,12 +42,12 @@ Focus heavily on methodology and technical approach explanations. Provide less d
     def analyze_article(self, title: str, content: str, url: str = "") -> dict | None:
         """
         Analyze article content and generate structured summary
-        
+
         Args:
             title: Article title
             content: Article content
             url: Article URL (optional)
-            
+
         Returns:
             Dictionary with structured analysis or None if failed
         """
@@ -75,7 +77,9 @@ Focus heavily on methodology and technical approach explanations. Provide less d
         # Truncate content if too long
         max_content_length = 50000
         if len(content) > max_content_length:
-            content = content[:max_content_length] + "\n\n[Content truncated due to length]"
+            content = (
+                content[:max_content_length] + "\n\n[Content truncated due to length]"
+            )
 
         url_section = f"\n**Original URL:** {url}" if url else ""
 
@@ -109,45 +113,43 @@ Make sure your response is valid JSON. Prioritize methodology and technical appr
         # Enforce rate limiting: wait 3 seconds between API calls
         current_time = time.time()
         time_since_last_call = current_time - self.last_api_call_time
-        
+
         if time_since_last_call < self.rate_limit_delay:
             sleep_time = self.rate_limit_delay - time_since_last_call
-            logger.info(f"Rate limiting: waiting {sleep_time:.1f} seconds before API call")
+            logger.info(
+                f"Rate limiting: waiting {sleep_time:.1f} seconds before API call"
+            )
             time.sleep(sleep_time)
 
         for attempt in range(self.max_retries):
             try:
-                logger.debug(f"Making Mistral API call (attempt {attempt + 1}/{self.max_retries})")
-                
+                logger.debug(
+                    f"Making Mistral API call (attempt {attempt + 1}/{self.max_retries})"
+                )
+
                 # Update last API call time
                 self.last_api_call_time = time.time()
 
                 headers = {
                     "Authorization": f"Bearer {self.api_key}",
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
                 }
 
                 payload = {
                     "model": self.model,
                     "messages": [
-                        {
-                            "role": "system",
-                            "content": self.system_prompt
-                        },
-                        {
-                            "role": "user",
-                            "content": prompt
-                        }
+                        {"role": "system", "content": self.system_prompt},
+                        {"role": "user", "content": prompt},
                     ],
                     "max_tokens": 4000,
-                    "temperature": 0.3
+                    "temperature": 0.3,
                 }
 
                 response = requests.post(
                     f"{self.base_url}/chat/completions",
                     headers=headers,
                     json=payload,
-                    timeout=60
+                    timeout=60,
                 )
 
                 if response.status_code == 200:
@@ -158,7 +160,9 @@ Make sure your response is valid JSON. Prioritize methodology and technical appr
                         logger.warning("Empty response from Mistral API")
                         return None
                 else:
-                    logger.warning(f"Mistral API returned status {response.status_code}: {response.text}")
+                    logger.warning(
+                        f"Mistral API returned status {response.status_code}: {response.text}"
+                    )
                     return None
 
             except Exception as e:
@@ -166,7 +170,7 @@ Make sure your response is valid JSON. Prioritize methodology and technical appr
 
                 if attempt < self.max_retries - 1:
                     # Exponential backoff
-                    delay = self.base_delay * (2 ** attempt)
+                    delay = self.base_delay * (2**attempt)
                     logger.info(f"Retrying in {delay} seconds...")
                     time.sleep(delay)
                 else:
@@ -183,12 +187,12 @@ Make sure your response is valid JSON. Prioritize methodology and technical appr
             response_clean = response.strip()
 
             # Remove markdown code block formatting if present
-            if response_clean.startswith('```json'):
+            if response_clean.startswith("```json"):
                 response_clean = response_clean[7:]
-            elif response_clean.startswith('```'):
+            elif response_clean.startswith("```"):
                 response_clean = response_clean[3:]
 
-            if response_clean.endswith('```'):
+            if response_clean.endswith("```"):
                 response_clean = response_clean[:-3]
 
             response_clean = response_clean.strip()
@@ -197,14 +201,17 @@ Make sure your response is valid JSON. Prioritize methodology and technical appr
             analysis_data = json.loads(response_clean)
 
             # Add metadata
-            analysis_data['title'] = title
-            analysis_data['url'] = url
-            analysis_data['analyzed_at'] = time.time()
-            analysis_data['model_used'] = self.model
+            analysis_data["title"] = title
+            analysis_data["url"] = url
+            analysis_data["analyzed_at"] = time.time()
+            analysis_data["model_used"] = self.model
 
             # Validate required fields
             required_fields = [
-                'methodology_detailed', 'technical_approach', 'key_findings', 'research_design'
+                "methodology_detailed",
+                "technical_approach",
+                "key_findings",
+                "research_design",
             ]
 
             for field in required_fields:
@@ -219,35 +226,35 @@ Make sure your response is valid JSON. Prioritize methodology and technical appr
 
             # Fallback: create basic structure with raw response
             return {
-                'title': title,
-                'url': url,
-                'methodology_detailed': "Analysis parsing failed",
-                'technical_approach': "Analysis parsing failed",
-                'key_findings': "Analysis parsing failed",
-                'research_design': "Analysis parsing failed",
-                'raw_response': response,
-                'parsing_error': str(e),
-                'analyzed_at': time.time(),
-                'model_used': self.model,
+                "title": title,
+                "url": url,
+                "methodology_detailed": "Analysis parsing failed",
+                "technical_approach": "Analysis parsing failed",
+                "key_findings": "Analysis parsing failed",
+                "research_design": "Analysis parsing failed",
+                "raw_response": response,
+                "parsing_error": str(e),
+                "analyzed_at": time.time(),
+                "model_used": self.model,
             }
         except Exception as e:
             logger.error(f"Unexpected error parsing Mistral response: {e}")
             return {
-                'title': title,
-                'url': url,
-                'error': str(e),
-                'analyzed_at': time.time(),
-                'model_used': self.model,
+                "title": title,
+                "url": url,
+                "error": str(e),
+                "analyzed_at": time.time(),
+                "model_used": self.model,
             }
 
     def batch_analyze(self, articles: list[dict], progress_callback=None) -> list[dict]:
         """
         Analyze multiple articles with progress tracking
-        
+
         Args:
             articles: List of article dictionaries with 'title', 'content', 'url'
             progress_callback: Optional callback function for progress updates
-            
+
         Returns:
             List of analysis results
         """
@@ -259,19 +266,23 @@ Make sure your response is valid JSON. Prioritize methodology and technical appr
         for i, article in enumerate(articles, 1):
             try:
                 if progress_callback:
-                    progress_callback(i, total, article.get('title', 'Unknown'))
+                    progress_callback(i, total, article.get("title", "Unknown"))
 
                 analysis = self.analyze_article(
-                    title=article.get('title', 'Untitled'),
-                    content=article.get('content', ''),
-                    url=article.get('url', '')
+                    title=article.get("title", "Untitled"),
+                    content=article.get("content", ""),
+                    url=article.get("url", ""),
                 )
 
                 if analysis:
                     results.append(analysis)
-                    logger.info(f"Analyzed article {i}/{total}: {article.get('title', 'Unknown')}")
+                    logger.info(
+                        f"Analyzed article {i}/{total}: {article.get('title', 'Unknown')}"
+                    )
                 else:
-                    logger.warning(f"Failed to analyze article {i}/{total}: {article.get('title', 'Unknown')}")
+                    logger.warning(
+                        f"Failed to analyze article {i}/{total}: {article.get('title', 'Unknown')}"
+                    )
 
                 # Note: Rate limiting is handled in _make_api_call method
                 # No additional delay needed here as analyze_article calls _make_api_call
@@ -281,7 +292,9 @@ Make sure your response is valid JSON. Prioritize methodology and technical appr
                 continue
 
         success_rate = len(results) / total * 100 if total > 0 else 0
-        logger.info(f"Batch analysis completed: {len(results)}/{total} articles analyzed ({success_rate:.1f}% success rate)")
+        logger.info(
+            f"Batch analysis completed: {len(results)}/{total} articles analyzed ({success_rate:.1f}% success rate)"
+        )
 
         return results
 
@@ -293,10 +306,12 @@ Make sure your response is valid JSON. Prioritize methodology and technical appr
             # Enforce rate limiting for test connection too
             current_time = time.time()
             time_since_last_call = current_time - self.last_api_call_time
-            
+
             if time_since_last_call < self.rate_limit_delay:
                 sleep_time = self.rate_limit_delay - time_since_last_call
-                logger.info(f"Rate limiting: waiting {sleep_time:.1f} seconds before test API call")
+                logger.info(
+                    f"Rate limiting: waiting {sleep_time:.1f} seconds before test API call"
+                )
                 time.sleep(sleep_time)
 
             # Update last API call time
@@ -304,7 +319,7 @@ Make sure your response is valid JSON. Prioritize methodology and technical appr
 
             headers = {
                 "Authorization": f"Bearer {self.api_key}",
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
             }
 
             payload = {
@@ -312,17 +327,17 @@ Make sure your response is valid JSON. Prioritize methodology and technical appr
                 "messages": [
                     {
                         "role": "user",
-                        "content": "Hello, please respond with 'API connection successful'"
+                        "content": "Hello, please respond with 'API connection successful'",
                     }
                 ],
-                "max_tokens": 50
+                "max_tokens": 50,
             }
 
             response = requests.post(
                 f"{self.base_url}/chat/completions",
                 headers=headers,
                 json=payload,
-                timeout=30
+                timeout=30,
             )
 
             if response.status_code == 200:
@@ -335,7 +350,9 @@ Make sure your response is valid JSON. Prioritize methodology and technical appr
                     logger.error("Empty response from Mistral API test")
                     return False
             else:
-                logger.error(f"Mistral API connection test failed with status {response.status_code}: {response.text}")
+                logger.error(
+                    f"Mistral API connection test failed with status {response.status_code}: {response.text}"
+                )
                 return False
 
         except Exception as e:

@@ -22,8 +22,9 @@ logger = logging.getLogger(__name__)
 class ArticleContent:
     """Represents scraped article content"""
 
-    def __init__(self, url: str, title: str = "", content: str = "",
-                 metadata: dict | None = None):
+    def __init__(
+        self, url: str, title: str = "", content: str = "", metadata: dict | None = None
+    ):
         self.url = url
         self.title = title
         self.content = content
@@ -33,11 +34,11 @@ class ArticleContent:
     def to_dict(self) -> dict:
         """Convert to dictionary"""
         return {
-            'url': self.url,
-            'title': self.title,
-            'content': self.content,
-            'metadata': self.metadata,
-            'scraped_at': self.scraped_at
+            "url": self.url,
+            "title": self.title,
+            "content": self.content,
+            "metadata": self.metadata,
+            "scraped_at": self.scraped_at,
         }
 
 
@@ -52,31 +53,49 @@ class WebScraper:
         # Common selectors for different content types
         self.content_selectors = [
             # Academic papers
-            'div.ltx_page_main',  # arXiv
-            'div.abstract-content', 'div.article-body',  # Various journals
-            'div.fulltext-view',  # IEEE
-            'div#body', 'div.body',  # Generic body
-
+            "div.ltx_page_main",  # arXiv
+            "div.abstract-content",
+            "div.article-body",  # Various journals
+            "div.fulltext-view",  # IEEE
+            "div#body",
+            "div.body",  # Generic body
             # Blog posts and articles
-            'article', 'main',
-            'div.post-content', 'div.entry-content',
-            'div.article-content', 'div.content',
-            'div#content', 'div.main-content',
-
+            "article",
+            "main",
+            "div.post-content",
+            "div.entry-content",
+            "div.article-content",
+            "div.content",
+            "div#content",
+            "div.main-content",
             # Fallback selectors
-            'div[role="main"]', 'div.primary',
-            'div.text', 'div.story-body'
+            'div[role="main"]',
+            "div.primary",
+            "div.text",
+            "div.story-body",
         ]
 
         # Selectors to remove (navigation, ads, etc.)
         self.remove_selectors = [
-            'nav', 'header', 'footer', 'aside',
-            'div.navigation', 'div.nav', 'div.menu',
-            'div.sidebar', 'div.ads', 'div.advertisement',
-            'div.social-share', 'div.comments',
-            'script', 'style', 'noscript',
-            'div.cookie-notice', 'div.newsletter',
-            'div.related-articles', 'div.recommended'
+            "nav",
+            "header",
+            "footer",
+            "aside",
+            "div.navigation",
+            "div.nav",
+            "div.menu",
+            "div.sidebar",
+            "div.ads",
+            "div.advertisement",
+            "div.social-share",
+            "div.comments",
+            "script",
+            "style",
+            "noscript",
+            "div.cookie-notice",
+            "div.newsletter",
+            "div.related-articles",
+            "div.recommended",
         ]
 
     def _create_session(self) -> requests.Session:
@@ -94,14 +113,16 @@ class WebScraper:
         session.mount("https://", adapter)
 
         # Headers to appear as a legitimate browser
-        session.headers.update({
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-            'Accept-Language': 'en-US,en;q=0.5',
-            'Accept-Encoding': 'gzip, deflate',
-            'Connection': 'keep-alive',
-            'Upgrade-Insecure-Requests': '1'
-        })
+        session.headers.update(
+            {
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+                "Accept-Language": "en-US,en;q=0.5",
+                "Accept-Encoding": "gzip, deflate",
+                "Connection": "keep-alive",
+                "Upgrade-Insecure-Requests": "1",
+            }
+        )
 
         return session
 
@@ -115,16 +136,22 @@ class WebScraper:
             time.sleep(sleep_time)
         self.last_request_time = time.time()
 
-    def scrape_article(self, url: str, timeout: int = 30, follow_links: bool = True, max_linked_articles: int = 3) -> ArticleContent | None:
+    def scrape_article(
+        self,
+        url: str,
+        timeout: int = 30,
+        follow_links: bool = True,
+        max_linked_articles: int = 3,
+    ) -> ArticleContent | None:
         """
         Scrape article content from URL with optional link following
-        
+
         Args:
             url: Article URL
             timeout: Request timeout in seconds
             follow_links: Whether to follow and analyze links found in the content
             max_linked_articles: Maximum number of linked articles to analyze
-            
+
         Returns:
             ArticleContent object or None if scraping fails
         """
@@ -137,13 +164,15 @@ class WebScraper:
             if self._is_arxiv_url(url):
                 return self._scrape_arxiv(url, timeout)
             elif self._is_bluesky_url(url):
-                return self._scrape_bluesky_post(url, timeout, follow_links, max_linked_articles)
+                return self._scrape_bluesky_post(
+                    url, timeout, follow_links, max_linked_articles
+                )
 
             # General scraping approach
             response = self.session.get(url, timeout=timeout)
             response.raise_for_status()
 
-            soup = BeautifulSoup(response.content, 'html.parser')
+            soup = BeautifulSoup(response.content, "html.parser")
 
             # Extract title
             title = self._extract_title(soup)
@@ -160,18 +189,19 @@ class WebScraper:
 
             # Follow and analyze links if requested
             if follow_links:
-                linked_content = self._analyze_embedded_links(soup, url, max_linked_articles, timeout)
+                linked_content = self._analyze_embedded_links(
+                    soup, url, max_linked_articles, timeout
+                )
                 if linked_content:
                     content = self._merge_content_with_links(content, linked_content)
-                    metadata['linked_articles'] = [link['url'] for link in linked_content]
+                    metadata["linked_articles"] = [
+                        link["url"] for link in linked_content
+                    ]
 
             logger.info(f"Successfully scraped {len(content)} characters from {url}")
 
             return ArticleContent(
-                url=url,
-                title=title,
-                content=content,
-                metadata=metadata
+                url=url, title=title, content=content, metadata=metadata
             )
 
         except requests.RequestException as e:
@@ -183,41 +213,45 @@ class WebScraper:
 
     def _is_arxiv_url(self, url: str) -> bool:
         """Check if URL is from arXiv"""
-        return 'arxiv.org' in url.lower()
+        return "arxiv.org" in url.lower()
 
     def _is_bluesky_url(self, url: str) -> bool:
         """Check if URL is from Bluesky"""
-        return 'bsky.app' in url.lower() or 'bsky.social' in url.lower()
+        return "bsky.app" in url.lower() or "bsky.social" in url.lower()
 
     def _scrape_arxiv(self, url: str, timeout: int) -> ArticleContent | None:
         """Special handling for arXiv papers"""
         try:
             # Convert to abstract page if it's a PDF link
-            if '/pdf/' in url:
-                url = url.replace('/pdf/', '/abs/')
+            if "/pdf/" in url:
+                url = url.replace("/pdf/", "/abs/")
 
             response = self.session.get(url, timeout=timeout)
             response.raise_for_status()
 
-            soup = BeautifulSoup(response.content, 'html.parser')
+            soup = BeautifulSoup(response.content, "html.parser")
 
             # Extract title
-            title_elem = soup.find('h1', class_='title')
-            title = title_elem.get_text().replace('Title:', '').strip() if title_elem else ""
+            title_elem = soup.find("h1", class_="title")
+            title = (
+                title_elem.get_text().replace("Title:", "").strip()
+                if title_elem
+                else ""
+            )
 
             # Extract abstract
-            abstract_elem = soup.find('blockquote', class_='abstract')
+            abstract_elem = soup.find("blockquote", class_="abstract")
             abstract = ""
             if abstract_elem:
                 abstract_text = abstract_elem.get_text()
-                abstract = abstract_text.replace('Abstract:', '').strip()
+                abstract = abstract_text.replace("Abstract:", "").strip()
 
             # Extract authors
-            authors_elem = soup.find('div', class_='authors')
+            authors_elem = soup.find("div", class_="authors")
             authors = authors_elem.get_text().strip() if authors_elem else ""
 
             # Extract subjects
-            subjects_elem = soup.find('td', class_='tablecell subjects')
+            subjects_elem = soup.find("td", class_="tablecell subjects")
             subjects = subjects_elem.get_text().strip() if subjects_elem else ""
 
             content = f"# {title}\n\n"
@@ -229,24 +263,27 @@ class WebScraper:
                 content += f"## Abstract\n\n{abstract}\n\n"
 
             metadata = {
-                'source': 'arXiv',
-                'authors': authors,
-                'subjects': subjects,
-                'paper_type': 'academic'
+                "source": "arXiv",
+                "authors": authors,
+                "subjects": subjects,
+                "paper_type": "academic",
             }
 
             return ArticleContent(
-                url=url,
-                title=title,
-                content=content,
-                metadata=metadata
+                url=url, title=title, content=content, metadata=metadata
             )
 
         except Exception as e:
             logger.error(f"Error scraping arXiv paper {url}: {e}")
             return None
 
-    def _scrape_bluesky_post(self, url: str, timeout: int, follow_links: bool = True, max_linked_articles: int = 3) -> ArticleContent | None:
+    def _scrape_bluesky_post(
+        self,
+        url: str,
+        timeout: int,
+        follow_links: bool = True,
+        max_linked_articles: int = 3,
+    ) -> ArticleContent | None:
         """Special handling for Bluesky posts that may contain academic paper links"""
         try:
             logger.info(f"Scraping Bluesky post: {url}")
@@ -254,7 +291,7 @@ class WebScraper:
             response = self.session.get(url, timeout=timeout)
             response.raise_for_status()
 
-            soup = BeautifulSoup(response.content, 'html.parser')
+            soup = BeautifulSoup(response.content, "html.parser")
 
             # Extract post content/text
             post_text = self._extract_bluesky_post_text(soup)
@@ -266,14 +303,18 @@ class WebScraper:
             academic_link = self._find_academic_link(embedded_links)
 
             if academic_link:
-                logger.info(f"Found academic paper link in Bluesky post: {academic_link}")
+                logger.info(
+                    f"Found academic paper link in Bluesky post: {academic_link}"
+                )
 
                 # Scrape the actual academic paper
                 if self._is_arxiv_url(academic_link):
                     paper_content = self._scrape_arxiv(academic_link, timeout)
                 else:
                     # Try general scraping for other academic sources
-                    paper_content = self._scrape_general_academic_link(academic_link, timeout)
+                    paper_content = self._scrape_general_academic_link(
+                        academic_link, timeout
+                    )
 
                 if paper_content:
                     # Enhance the content with Bluesky context
@@ -298,17 +339,14 @@ class WebScraper:
                 content += "\n"
 
             metadata = {
-                'source': 'Bluesky',
-                'original_post_url': url,
-                'post_type': 'social_media',
-                'embedded_links': embedded_links
+                "source": "Bluesky",
+                "original_post_url": url,
+                "post_type": "social_media",
+                "embedded_links": embedded_links,
             }
 
             return ArticleContent(
-                url=url,
-                title=title,
-                content=content,
-                metadata=metadata
+                url=url, title=title, content=content, metadata=metadata
             )
 
         except Exception as e:
@@ -320,10 +358,10 @@ class WebScraper:
         # Bluesky post content selectors
         post_selectors = [
             'div[data-testid="postText"]',
-            'div.post-content',
-            'div.thread-post-content',
+            "div.post-content",
+            "div.thread-post-content",
             '[data-testid="postContent"]',
-            'div[data-word-wrap="1"]'
+            'div[data-word-wrap="1"]',
         ]
 
         for selector in post_selectors:
@@ -332,14 +370,23 @@ class WebScraper:
                 return elem.get_text().strip()
 
         # Fallback: look for any div with substantial text content
-        divs = soup.find_all('div')
+        divs = soup.find_all("div")
         for div in divs:
             text = div.get_text().strip()
             # Look for divs with substantial text that might be the post
             if len(text) > 20 and len(text) < 2000:  # Reasonable post length
                 # Check if it looks like a post (contains common academic keywords)
-                if any(keyword in text.lower() for keyword in
-                       ['paper', 'research', 'arxiv', 'study', 'analysis', 'method']):
+                if any(
+                    keyword in text.lower()
+                    for keyword in [
+                        "paper",
+                        "research",
+                        "arxiv",
+                        "study",
+                        "analysis",
+                        "method",
+                    ]
+                ):
                     return text
 
         return "Could not extract post text from Bluesky"
@@ -349,13 +396,14 @@ class WebScraper:
         links = []
 
         # Extract from HTML links
-        for link in soup.find_all('a', href=True):
-            href = link['href']
-            if href.startswith('http'):
+        for link in soup.find_all("a", href=True):
+            href = link["href"]
+            if href.startswith("http"):
                 links.append(href)
 
         # Extract URLs from text using regex
         import re
+
         url_pattern = r'https?://[^\s<>"\']+(?:[^\s<>"\'.,;!?])'
         urls_in_text = re.findall(url_pattern, post_text)
         links.extend(urls_in_text)
@@ -373,18 +421,18 @@ class WebScraper:
     def _find_academic_link(self, links: list[str]) -> str | None:
         """Find the first academic paper link from a list of links"""
         academic_domains = [
-            'arxiv.org',
-            'ieee.org',
-            'acm.org',
-            'springer.com',
-            'nature.com',
-            'science.org',
-            'pnas.org',
-            'biorxiv.org',
-            'medrxiv.org',
-            'researchgate.net',
-            'semanticscholar.org',
-            'doi.org'
+            "arxiv.org",
+            "ieee.org",
+            "acm.org",
+            "springer.com",
+            "nature.com",
+            "science.org",
+            "pnas.org",
+            "biorxiv.org",
+            "medrxiv.org",
+            "researchgate.net",
+            "semanticscholar.org",
+            "doi.org",
         ]
 
         for link in links:
@@ -394,13 +442,15 @@ class WebScraper:
 
         return None
 
-    def _scrape_general_academic_link(self, url: str, timeout: int) -> ArticleContent | None:
+    def _scrape_general_academic_link(
+        self, url: str, timeout: int
+    ) -> ArticleContent | None:
         """Scrape academic content from non-arXiv sources"""
         try:
             response = self.session.get(url, timeout=timeout)
             response.raise_for_status()
 
-            soup = BeautifulSoup(response.content, 'html.parser')
+            soup = BeautifulSoup(response.content, "html.parser")
 
             # Extract title
             title = self._extract_title(soup)
@@ -410,15 +460,12 @@ class WebScraper:
 
             # Extract metadata
             metadata = self._extract_metadata(soup, url)
-            metadata['paper_type'] = 'academic'
-            metadata['source'] = 'academic_link'
+            metadata["paper_type"] = "academic"
+            metadata["source"] = "academic_link"
 
             if content:
                 return ArticleContent(
-                    url=url,
-                    title=title,
-                    content=content,
-                    metadata=metadata
+                    url=url, title=title, content=content, metadata=metadata
                 )
 
         except Exception as e:
@@ -426,9 +473,13 @@ class WebScraper:
 
         return None
 
-    def _enhance_with_bluesky_context(self, paper_content: ArticleContent,
-                                     bluesky_url: str, post_text: str,
-                                     paper_url: str) -> ArticleContent:
+    def _enhance_with_bluesky_context(
+        self,
+        paper_content: ArticleContent,
+        bluesky_url: str,
+        post_text: str,
+        paper_url: str,
+    ) -> ArticleContent:
         """Enhance academic paper content with Bluesky post context"""
 
         # Add Bluesky context to the content
@@ -446,23 +497,23 @@ class WebScraper:
 
         # Update metadata
         enhanced_metadata = paper_content.metadata.copy()
-        enhanced_metadata['shared_via'] = 'Bluesky'
-        enhanced_metadata['bluesky_post_url'] = bluesky_url
-        enhanced_metadata['bluesky_post_text'] = post_text
-        enhanced_metadata['discovery_method'] = 'social_media_sharing'
+        enhanced_metadata["shared_via"] = "Bluesky"
+        enhanced_metadata["bluesky_post_url"] = bluesky_url
+        enhanced_metadata["bluesky_post_text"] = post_text
+        enhanced_metadata["discovery_method"] = "social_media_sharing"
 
         return ArticleContent(
             url=paper_url,  # Use the paper URL as primary
             title=paper_content.title,
             content=enhanced_content,
-            metadata=enhanced_metadata
+            metadata=enhanced_metadata,
         )
 
     def _extract_bluesky_title(self, soup: BeautifulSoup, post_text: str) -> str:
         """Extract or generate a title for Bluesky post"""
 
         # Try to extract from page title
-        title_elem = soup.find('title')
+        title_elem = soup.find("title")
         if title_elem:
             title = title_elem.get_text().strip()
             if title and title != "Bluesky":
@@ -471,7 +522,7 @@ class WebScraper:
         # Generate title from post text
         if post_text and len(post_text) > 10:
             # Take first sentence or first 50 characters
-            first_sentence = post_text.split('.')[0].strip()
+            first_sentence = post_text.split(".")[0].strip()
             if len(first_sentence) > 10 and len(first_sentence) < 100:
                 return f"Bluesky Post: {first_sentence}"
             else:
@@ -483,8 +534,12 @@ class WebScraper:
         """Extract article title"""
         # Try various title selectors
         title_selectors = [
-            'h1.title', 'h1.article-title', 'h1.entry-title',
-            'h1.post-title', 'h1', 'title'
+            "h1.title",
+            "h1.article-title",
+            "h1.entry-title",
+            "h1.post-title",
+            "h1",
+            "title",
         ]
 
         for selector in title_selectors:
@@ -512,7 +567,7 @@ class WebScraper:
 
         # Fallback to body if no specific content found
         if not content_elem:
-            content_elem = soup.find('body')
+            content_elem = soup.find("body")
 
         if not content_elem:
             return ""
@@ -529,82 +584,84 @@ class WebScraper:
     def _clean_markdown(self, content: str) -> str:
         """Clean up markdown content"""
         # Remove excessive whitespace
-        content = re.sub(r'\n\s*\n\s*\n', '\n\n', content)
+        content = re.sub(r"\n\s*\n\s*\n", "\n\n", content)
 
         # Remove empty links
-        content = re.sub(r'\[\]\([^)]*\)', '', content)
+        content = re.sub(r"\[\]\([^)]*\)", "", content)
 
         # Remove standalone brackets
-        content = re.sub(r'^\s*\[\s*\]\s*$', '', content, flags=re.MULTILINE)
+        content = re.sub(r"^\s*\[\s*\]\s*$", "", content, flags=re.MULTILINE)
 
         # Clean up list items
-        content = re.sub(r'^\s*\*\s*$', '', content, flags=re.MULTILINE)
+        content = re.sub(r"^\s*\*\s*$", "", content, flags=re.MULTILINE)
 
         # Remove excessive spaces
-        content = re.sub(r' +', ' ', content)
+        content = re.sub(r" +", " ", content)
 
         return content.strip()
 
     def _extract_metadata(self, soup: BeautifulSoup, url: str) -> dict:
         """Extract metadata from the page"""
-        metadata = {
-            'domain': urlparse(url).netloc,
-            'scraped_timestamp': time.time()
-        }
+        metadata = {"domain": urlparse(url).netloc, "scraped_timestamp": time.time()}
 
         # Try to extract publication date
         date_selectors = [
-            'time[datetime]', 'span.date', 'div.date',
+            "time[datetime]",
+            "span.date",
+            "div.date",
             'meta[name="article:published_time"]',
-            'meta[property="article:published_time"]'
+            'meta[property="article:published_time"]',
         ]
 
         for selector in date_selectors:
             elem = soup.select_one(selector)
             if elem:
-                date_text = elem.get('datetime') or elem.get('content') or elem.get_text()
+                date_text = (
+                    elem.get("datetime") or elem.get("content") or elem.get_text()
+                )
                 if date_text:
-                    metadata['publication_date'] = date_text.strip()
+                    metadata["publication_date"] = date_text.strip()
                     break
 
         # Try to extract author
         author_selectors = [
-            'span.author', 'div.author', 'meta[name="author"]',
-            'meta[property="article:author"]'
+            "span.author",
+            "div.author",
+            'meta[name="author"]',
+            'meta[property="article:author"]',
         ]
 
         for selector in author_selectors:
             elem = soup.select_one(selector)
             if elem:
-                author = elem.get('content') or elem.get_text()
+                author = elem.get("content") or elem.get_text()
                 if author:
-                    metadata['author'] = author.strip()
+                    metadata["author"] = author.strip()
                     break
 
         # Extract description/summary
-        desc_selectors = [
-            'meta[name="description"]',
-            'meta[property="og:description"]'
-        ]
+        desc_selectors = ['meta[name="description"]', 'meta[property="og:description"]']
 
         for selector in desc_selectors:
             elem = soup.select_one(selector)
             if elem:
-                desc = elem.get('content')
+                desc = elem.get("content")
                 if desc:
-                    metadata['description'] = desc.strip()
+                    metadata["description"] = desc.strip()
                     break
 
         return metadata
 
-    def batch_scrape(self, urls: list[str], max_articles: int | None = None) -> list[ArticleContent]:
+    def batch_scrape(
+        self, urls: list[str], max_articles: int | None = None
+    ) -> list[ArticleContent]:
         """
         Scrape multiple articles with progress tracking
-        
+
         Args:
             urls: List of URLs to scrape
             max_articles: Maximum number of articles to scrape
-            
+
         Returns:
             List of successfully scraped ArticleContent objects
         """
@@ -632,20 +689,24 @@ class WebScraper:
                 continue
 
         success_rate = len(results) / total * 100 if total > 0 else 0
-        logger.info(f"Batch scraping completed: {len(results)}/{total} articles scraped ({success_rate:.1f}% success rate)")
+        logger.info(
+            f"Batch scraping completed: {len(results)}/{total} articles scraped ({success_rate:.1f}% success rate)"
+        )
 
         return results
 
-    def _analyze_embedded_links(self, soup: BeautifulSoup, base_url: str, max_links: int, timeout: int) -> list[dict]:
+    def _analyze_embedded_links(
+        self, soup: BeautifulSoup, base_url: str, max_links: int, timeout: int
+    ) -> list[dict]:
         """
         Extract and analyze links found in the main content
-        
+
         Args:
             soup: BeautifulSoup object of the main page
             base_url: Base URL for resolving relative links
             max_links: Maximum number of links to analyze
             timeout: Request timeout for each link
-            
+
         Returns:
             List of dictionaries containing analyzed link content
         """
@@ -673,13 +734,19 @@ class WebScraper:
                     linked_content = self._scrape_linked_article(link_url, timeout)
 
                     if linked_content:
-                        analyzed_links.append({
-                            'url': link_url,
-                            'title': linked_content.title,
-                            'content': linked_content.content[:2000],  # Limit content for summary
-                            'metadata': linked_content.metadata
-                        })
-                        logger.info(f"Successfully analyzed linked content: {linked_content.title}")
+                        analyzed_links.append(
+                            {
+                                "url": link_url,
+                                "title": linked_content.title,
+                                "content": linked_content.content[
+                                    :2000
+                                ],  # Limit content for summary
+                                "metadata": linked_content.metadata,
+                            }
+                        )
+                        logger.info(
+                            f"Successfully analyzed linked content: {linked_content.title}"
+                        )
                     else:
                         logger.warning(f"Failed to analyze linked content: {link_url}")
 
@@ -709,14 +776,14 @@ class WebScraper:
             content_area = soup
 
         # Extract all links from the content area
-        for link in content_area.find_all('a', href=True):
-            href = link['href']
+        for link in content_area.find_all("a", href=True):
+            href = link["href"]
 
             # Convert relative URLs to absolute
-            if href.startswith('/'):
+            if href.startswith("/"):
                 parsed_base = urlparse(base_url)
                 absolute_url = f"{parsed_base.scheme}://{parsed_base.netloc}{href}"
-            elif href.startswith('http'):
+            elif href.startswith("http"):
                 absolute_url = href
             else:
                 # Skip other types of links (mailto, javascript, etc.)
@@ -741,27 +808,57 @@ class WebScraper:
         # Domains that are likely to contain interesting content
         priority_domains = [
             # Academic and research
-            'arxiv.org', 'ieee.org', 'acm.org', 'springer.com', 'nature.com',
-            'science.org', 'pnas.org', 'biorxiv.org', 'medrxiv.org',
-            'researchgate.net', 'semanticscholar.org', 'doi.org',
-
+            "arxiv.org",
+            "ieee.org",
+            "acm.org",
+            "springer.com",
+            "nature.com",
+            "science.org",
+            "pnas.org",
+            "biorxiv.org",
+            "medrxiv.org",
+            "researchgate.net",
+            "semanticscholar.org",
+            "doi.org",
             # Tech and AI companies
-            'openai.com', 'anthropic.com', 'deepmind.com', 'ai.google',
-            'research.microsoft.com', 'research.facebook.com', 'ai.meta.com',
-
+            "openai.com",
+            "anthropic.com",
+            "deepmind.com",
+            "ai.google",
+            "research.microsoft.com",
+            "research.facebook.com",
+            "ai.meta.com",
             # Tech blogs and news
-            'medium.com', 'substack.com', 'towards-data-science', 'hackernews',
-            'techcrunch.com', 'venturebeat.com', 'wired.com', 'arstechnica.com',
-
+            "medium.com",
+            "substack.com",
+            "towards-data-science",
+            "hackernews",
+            "techcrunch.com",
+            "venturebeat.com",
+            "wired.com",
+            "arstechnica.com",
             # Documentation and tutorials
-            'github.com', 'huggingface.co', 'kaggle.com', 'colab.research.google.com'
+            "github.com",
+            "huggingface.co",
+            "kaggle.com",
+            "colab.research.google.com",
         ]
 
         # Skip domains that are unlikely to be interesting
         skip_domains = [
-            'twitter.com', 'x.com', 'facebook.com', 'instagram.com', 'linkedin.com',
-            'youtube.com', 'amazon.com', 'ebay.com', 'ads.', 'analytics.',
-            'google.com/search', 'bing.com', 'duckduckgo.com'
+            "twitter.com",
+            "x.com",
+            "facebook.com",
+            "instagram.com",
+            "linkedin.com",
+            "youtube.com",
+            "amazon.com",
+            "ebay.com",
+            "ads.",
+            "analytics.",
+            "google.com/search",
+            "bing.com",
+            "duckduckgo.com",
         ]
 
         base_domain = urlparse(base_url).netloc
@@ -771,7 +868,9 @@ class WebScraper:
             domain = parsed_url.netloc.lower()
 
             # Skip links to the same domain (unless it's a priority domain)
-            if domain == base_domain and not any(priority in domain for priority in priority_domains):
+            if domain == base_domain and not any(
+                priority in domain for priority in priority_domains
+            ):
                 continue
 
             # Skip unwanted domains
@@ -794,9 +893,19 @@ class WebScraper:
 
         # Common article/blog patterns
         article_patterns = [
-            '/blog/', '/article/', '/post/', '/news/', '/research/',
-            '/paper/', '/publication/', '/tutorial/', '/guide/',
-            '/analysis/', '/review/', '/report/', '/study/'
+            "/blog/",
+            "/article/",
+            "/post/",
+            "/news/",
+            "/research/",
+            "/paper/",
+            "/publication/",
+            "/tutorial/",
+            "/guide/",
+            "/analysis/",
+            "/review/",
+            "/report/",
+            "/study/",
         ]
 
         # Look for article-like patterns in the URL
@@ -805,16 +914,20 @@ class WebScraper:
 
         # Check for date patterns that might indicate blog posts
         import re
+
         date_patterns = [
-            r'/\d{4}/', r'/\d{4}/\d{2}/', r'/\d{4}-\d{2}/',
-            r'-\d{4}-', r'_\d{4}_'
+            r"/\d{4}/",
+            r"/\d{4}/\d{2}/",
+            r"/\d{4}-\d{2}/",
+            r"-\d{4}-",
+            r"_\d{4}_",
         ]
 
         if any(re.search(pattern, url) for pattern in date_patterns):
             return True
 
         # Skip common non-article extensions
-        skip_extensions = ['.pdf', '.doc', '.ppt', '.zip', '.tar', '.gz']
+        skip_extensions = [".pdf", ".doc", ".ppt", ".zip", ".tar", ".gz"]
         if any(url_lower.endswith(ext) for ext in skip_extensions):
             return False
 
@@ -829,7 +942,9 @@ class WebScraper:
             logger.error(f"Error scraping linked article {url}: {e}")
             return None
 
-    def _merge_content_with_links(self, main_content: str, linked_content: list[dict]) -> str:
+    def _merge_content_with_links(
+        self, main_content: str, linked_content: list[dict]
+    ) -> str:
         """Merge main content with summaries of linked articles"""
         if not linked_content:
             return main_content
@@ -837,14 +952,16 @@ class WebScraper:
         # Add linked content section
         enhanced_content = main_content + "\n\n"
         enhanced_content += "## Referenced Articles and Links\n\n"
-        enhanced_content += "The following articles and resources were referenced in this content:\n\n"
+        enhanced_content += (
+            "The following articles and resources were referenced in this content:\n\n"
+        )
 
         for i, link_data in enumerate(linked_content, 1):
             enhanced_content += f"### {i}. {link_data['title']}\n"
             enhanced_content += f"**Source:** {link_data['url']}\n\n"
 
             # Add a summary of the linked content
-            content_preview = link_data['content']
+            content_preview = link_data["content"]
             if len(content_preview) > 500:
                 content_preview = content_preview[:500] + "..."
 

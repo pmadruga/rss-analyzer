@@ -6,15 +6,18 @@ Test script for link following functionality
 import os
 import sys
 
-sys.path.append('/app' if os.path.exists('/app') else '.')
+sys.path.append("/app" if os.path.exists("/app") else ".")
 
 import logging
 
 from src.scraper import WebScraper
 
 # Setup logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
 logger = logging.getLogger(__name__)
+
 
 def test_link_following():
     """Test the enhanced scraper with link following"""
@@ -22,7 +25,7 @@ def test_link_following():
 
     # Test URLs that likely contain interesting links
     test_urls = [
-        'https://jina.ai/news/quantization-aware-training-of-jina-embeddings-v4/',
+        "https://jina.ai/news/quantization-aware-training-of-jina-embeddings-v4/",
         # Add more test URLs as needed
     ]
 
@@ -31,14 +34,16 @@ def test_link_following():
 
         try:
             # Test with link following enabled
-            result = scraper.scrape_article(url, follow_links=True, max_linked_articles=2)
+            result = scraper.scrape_article(
+                url, follow_links=True, max_linked_articles=2
+            )
 
             if result:
                 logger.info(f"✅ Successfully scraped: {result.title}")
                 logger.info(f"Content length: {len(result.content)} characters")
 
                 # Check if links were followed
-                linked_articles = result.metadata.get('linked_articles', [])
+                linked_articles = result.metadata.get("linked_articles", [])
                 if linked_articles:
                     logger.info(f"🔗 Found {len(linked_articles)} linked articles:")
                     for i, link in enumerate(linked_articles, 1):
@@ -59,6 +64,7 @@ def test_link_following():
             logger.error(f"❌ Error testing {url}: {e}")
 
         logger.info("-" * 50)
+
 
 if __name__ == "__main__":
     print("Testing enhanced link following functionality...")

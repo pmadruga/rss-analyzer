@@ -41,7 +41,7 @@ class DatabaseManager:
         try:
             with self.get_connection() as conn:
                 # Create articles table
-                conn.execute('''
+                conn.execute("""
                     CREATE TABLE IF NOT EXISTS articles (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
                         title TEXT NOT NULL,
@@ -54,10 +54,10 @@ class DatabaseManager:
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                     )
-                ''')
+                """)
 
                 # Create content table
-                conn.execute('''
+                conn.execute("""
                     CREATE TABLE IF NOT EXISTS content (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
                         article_id INTEGER NOT NULL,
@@ -70,10 +70,10 @@ class DatabaseManager:
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         FOREIGN KEY (article_id) REFERENCES articles (id) ON DELETE CASCADE
                     )
-                ''')
+                """)
 
                 # Create processing log table
-                conn.execute('''
+                conn.execute("""
                     CREATE TABLE IF NOT EXISTS processing_log (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
                         timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -84,14 +84,24 @@ class DatabaseManager:
                         duration_seconds REAL,
                         FOREIGN KEY (article_id) REFERENCES articles (id) ON DELETE CASCADE
                     )
-                ''')
+                """)
 
                 # Create indices for better performance
-                conn.execute('CREATE INDEX IF NOT EXISTS idx_articles_content_hash ON articles (content_hash)')
-                conn.execute('CREATE INDEX IF NOT EXISTS idx_articles_url ON articles (url)')
-                conn.execute('CREATE INDEX IF NOT EXISTS idx_articles_status ON articles (status)')
-                conn.execute('CREATE INDEX IF NOT EXISTS idx_processing_log_timestamp ON processing_log (timestamp)')
-                conn.execute('CREATE INDEX IF NOT EXISTS idx_content_article_id ON content (article_id)')
+                conn.execute(
+                    "CREATE INDEX IF NOT EXISTS idx_articles_content_hash ON articles (content_hash)"
+                )
+                conn.execute(
+                    "CREATE INDEX IF NOT EXISTS idx_articles_url ON articles (url)"
+                )
+                conn.execute(
+                    "CREATE INDEX IF NOT EXISTS idx_articles_status ON articles (status)"
+                )
+                conn.execute(
+                    "CREATE INDEX IF NOT EXISTS idx_processing_log_timestamp ON processing_log (timestamp)"
+                )
+                conn.execute(
+                    "CREATE INDEX IF NOT EXISTS idx_content_article_id ON content (article_id)"
+                )
 
                 # Run migrations to handle schema changes
                 self._run_migrations(conn)
@@ -110,46 +120,60 @@ class DatabaseManager:
             cursor = conn.execute("PRAGMA table_info(content)")
             columns = [row[1] for row in cursor.fetchall()]
 
-            old_columns = ['summary', 'methodology_focus', 'practical_applications', 'novel_contributions', 'significance']
-            new_columns = ['methodology_detailed', 'research_design']
-
+            old_columns = [
+                "summary",
+                "methodology_focus",
+                "practical_applications",
+                "novel_contributions",
+                "significance",
+            ]
             if any(col in columns for col in old_columns):
                 logger.info("Migrating content table to new schema...")
 
                 # Add new columns if they don't exist
-                if 'methodology_detailed' not in columns:
-                    conn.execute('ALTER TABLE content ADD COLUMN methodology_detailed TEXT')
-                if 'research_design' not in columns:
-                    conn.execute('ALTER TABLE content ADD COLUMN research_design TEXT')
+                if "methodology_detailed" not in columns:
+                    conn.execute(
+                        "ALTER TABLE content ADD COLUMN methodology_detailed TEXT"
+                    )
+                if "research_design" not in columns:
+                    conn.execute("ALTER TABLE content ADD COLUMN research_design TEXT")
 
                 # Migrate data from old columns to new ones
-                conn.execute('''
+                conn.execute("""
                     UPDATE content 
                     SET methodology_detailed = COALESCE(methodology_focus, ''),
                         research_design = ''
                     WHERE methodology_detailed IS NULL
-                ''')
+                """)
 
                 logger.info("Content table migration completed")
 
         except Exception as e:
             logger.warning(f"Migration warning (non-critical): {e}")
 
-    def insert_article(self, title: str, url: str, content_hash: str,
-                      rss_guid: str | None = None,
-                      publication_date: datetime | None = None) -> int:
+    def insert_article(
+        self,
+        title: str,
+        url: str,
+        content_hash: str,
+        rss_guid: str | None = None,
+        publication_date: datetime | None = None,
+    ) -> int:
         """
         Insert new article into database
-        
+
         Returns:
             Article ID of inserted article
         """
         try:
             with self.get_connection() as conn:
-                cursor = conn.execute('''
+                cursor = conn.execute(
+                    """
                     INSERT INTO articles (title, url, content_hash, rss_guid, publication_date)
                     VALUES (?, ?, ?, ?, ?)
-                ''', (title, url, content_hash, rss_guid, publication_date))
+                """,
+                    (title, url, content_hash, rss_guid, publication_date),
+                )
 
                 article_id = cursor.lastrowid
                 logger.debug(f"Inserted article with ID {article_id}: {title}")
@@ -158,56 +182,77 @@ class DatabaseManager:
         except sqlite3.IntegrityError as e:
             if "UNIQUE constraint failed: articles.url" in str(e):
                 logger.debug(f"Article with URL already exists: {url}")
-                return self.get_article_by_url(url)['id']
+                return self.get_article_by_url(url)["id"]
             elif "UNIQUE constraint failed: articles.content_hash" in str(e):
-                logger.debug(f"Article with content hash already exists: {content_hash}")
-                return self.get_article_by_content_hash(content_hash)['id']
+                logger.debug(
+                    f"Article with content hash already exists: {content_hash}"
+                )
+                return self.get_article_by_content_hash(content_hash)["id"]
             else:
                 raise
         except Exception as e:
             logger.error(f"Failed to insert article: {e}")
             raise
 
-    def insert_content(self, article_id: int, original_content: str,
-                      analysis: dict) -> int:
+    def insert_content(
+        self, article_id: int, original_content: str, analysis: dict
+    ) -> int:
         """Insert content and analysis for an article"""
         try:
             with self.get_connection() as conn:
-                cursor = conn.execute('''
+                cursor = conn.execute(
+                    """
                     INSERT INTO content (
                         article_id, original_content, methodology_detailed,
                         technical_approach, key_findings, research_design, 
                         metadata
                     ) VALUES (?, ?, ?, ?, ?, ?, ?)
-                ''', (
-                    article_id,
-                    original_content,
-                    analysis.get('methodology_detailed', ''),
-                    analysis.get('technical_approach', ''),
-                    analysis.get('key_findings', ''),
-                    analysis.get('research_design', ''),
-                    json.dumps(analysis.get('metadata', {}))
-                ))
+                """,
+                    (
+                        article_id,
+                        original_content,
+                        analysis.get("methodology_detailed", ""),
+                        analysis.get("technical_approach", ""),
+                        analysis.get("key_findings", ""),
+                        analysis.get("research_design", ""),
+                        json.dumps(analysis.get("metadata", {})),
+                    ),
+                )
 
                 content_id = cursor.lastrowid
-                logger.debug(f"Inserted content with ID {content_id} for article {article_id}")
+                logger.debug(
+                    f"Inserted content with ID {content_id} for article {article_id}"
+                )
                 return content_id
 
         except Exception as e:
             logger.error(f"Failed to insert content for article {article_id}: {e}")
             raise
 
-    def log_processing(self, article_id: int | None, status: str,
-                      error_message: str | None = None,
-                      processing_step: str | None = None,
-                      duration_seconds: float | None = None):
+    def log_processing(
+        self,
+        article_id: int | None,
+        status: str,
+        error_message: str | None = None,
+        processing_step: str | None = None,
+        duration_seconds: float | None = None,
+    ):
         """Log processing information"""
         try:
             with self.get_connection() as conn:
-                conn.execute('''
+                conn.execute(
+                    """
                     INSERT INTO processing_log (article_id, status, error_message, processing_step, duration_seconds)
                     VALUES (?, ?, ?, ?, ?)
-                ''', (article_id, status, error_message, processing_step, duration_seconds))
+                """,
+                    (
+                        article_id,
+                        status,
+                        error_message,
+                        processing_step,
+                        duration_seconds,
+                    ),
+                )
 
         except Exception as e:
             logger.error(f"Failed to log processing: {e}")
@@ -216,8 +261,8 @@ class DatabaseManager:
         """Get set of existing content hashes for duplicate detection"""
         try:
             with self.get_connection() as conn:
-                cursor = conn.execute('SELECT content_hash FROM articles')
-                return {row['content_hash'] for row in cursor.fetchall()}
+                cursor = conn.execute("SELECT content_hash FROM articles")
+                return {row["content_hash"] for row in cursor.fetchall()}
 
         except Exception as e:
             logger.error(f"Failed to get existing content hashes: {e}")
@@ -227,13 +272,13 @@ class DatabaseManager:
         """Get set of content hashes for articles that have been fully analyzed"""
         try:
             with self.get_connection() as conn:
-                cursor = conn.execute('''
+                cursor = conn.execute("""
                     SELECT a.content_hash 
                     FROM articles a 
                     JOIN content c ON a.id = c.article_id 
                     WHERE a.status = 'completed'
-                ''')
-                return {row['content_hash'] for row in cursor.fetchall()}
+                """)
+                return {row["content_hash"] for row in cursor.fetchall()}
 
         except Exception as e:
             logger.error(f"Failed to get analyzed content hashes: {e}")
@@ -243,7 +288,7 @@ class DatabaseManager:
         """Get article by URL"""
         try:
             with self.get_connection() as conn:
-                cursor = conn.execute('SELECT * FROM articles WHERE url = ?', (url,))
+                cursor = conn.execute("SELECT * FROM articles WHERE url = ?", (url,))
                 return cursor.fetchone()
 
         except Exception as e:
@@ -254,7 +299,9 @@ class DatabaseManager:
         """Get article by content hash"""
         try:
             with self.get_connection() as conn:
-                cursor = conn.execute('SELECT * FROM articles WHERE content_hash = ?', (content_hash,))
+                cursor = conn.execute(
+                    "SELECT * FROM articles WHERE content_hash = ?", (content_hash,)
+                )
                 return cursor.fetchone()
 
         except Exception as e:
@@ -265,25 +312,31 @@ class DatabaseManager:
         """Update article processing status"""
         try:
             with self.get_connection() as conn:
-                conn.execute('''
+                conn.execute(
+                    """
                     UPDATE articles 
                     SET status = ?, updated_at = CURRENT_TIMESTAMP 
                     WHERE id = ?
-                ''', (status, article_id))
+                """,
+                    (status, article_id),
+                )
 
         except Exception as e:
             logger.error(f"Failed to update article status: {e}")
 
-    def get_articles_for_processing(self, limit: int | None = None,
-                                  status: str = 'pending') -> list[sqlite3.Row]:
+    def get_articles_for_processing(
+        self, limit: int | None = None, status: str = "pending"
+    ) -> list[sqlite3.Row]:
         """Get articles that need processing"""
         try:
             with self.get_connection() as conn:
-                query = 'SELECT * FROM articles WHERE status = ? ORDER BY created_at DESC'
+                query = (
+                    "SELECT * FROM articles WHERE status = ? ORDER BY created_at DESC"
+                )
                 params = [status]
 
                 if limit:
-                    query += ' LIMIT ?'
+                    query += " LIMIT ?"
                     params.append(limit)
 
                 cursor = conn.execute(query, params)
@@ -293,11 +346,13 @@ class DatabaseManager:
             logger.error(f"Failed to get articles for processing: {e}")
             return []
 
-    def get_completed_articles_with_content(self, limit: int | None = None) -> list[dict]:
+    def get_completed_articles_with_content(
+        self, limit: int | None = None
+    ) -> list[dict]:
         """Get completed articles with their content and analysis"""
         try:
             with self.get_connection() as conn:
-                query = '''
+                query = """
                     SELECT 
                         a.id, a.title, a.url, a.publication_date, a.processed_date,
                         c.original_content, c.summary, c.methodology_focus,
@@ -307,10 +362,10 @@ class DatabaseManager:
                     JOIN content c ON a.id = c.article_id
                     WHERE a.status = 'completed'
                     ORDER BY a.processed_date DESC
-                '''
+                """
 
                 if limit:
-                    query += ' LIMIT ?'
+                    query += " LIMIT ?"
                     cursor = conn.execute(query, [limit])
                 else:
                     cursor = conn.execute(query)
@@ -320,9 +375,13 @@ class DatabaseManager:
                     article = dict(row)
                     # Parse JSON metadata
                     try:
-                        article['metadata'] = json.loads(article['metadata']) if article['metadata'] else {}
+                        article["metadata"] = (
+                            json.loads(article["metadata"])
+                            if article["metadata"]
+                            else {}
+                        )
                     except json.JSONDecodeError:
-                        article['metadata'] = {}
+                        article["metadata"] = {}
 
                     articles.append(article)
 
@@ -339,27 +398,28 @@ class DatabaseManager:
                 stats = {}
 
                 # Total articles
-                cursor = conn.execute('SELECT COUNT(*) as count FROM articles')
-                stats['total_articles'] = cursor.fetchone()['count']
+                cursor = conn.execute("SELECT COUNT(*) as count FROM articles")
+                stats["total_articles"] = cursor.fetchone()["count"]
 
                 # Articles by status
-                cursor = conn.execute('''
+                cursor = conn.execute("""
                     SELECT status, COUNT(*) as count 
                     FROM articles 
                     GROUP BY status
-                ''')
-                stats['by_status'] = {row['status']: row['count'] for row in cursor.fetchall()}
+                """)
+                stats["by_status"] = {
+                    row["status"]: row["count"] for row in cursor.fetchall()
+                }
 
                 # Recent processing activity
-                cursor = conn.execute('''
+                cursor = conn.execute("""
                     SELECT DATE(timestamp) as date, COUNT(*) as count
                     FROM processing_log
                     WHERE timestamp >= datetime('now', '-7 days')
                     GROUP BY DATE(timestamp)
                     ORDER BY date DESC
-                ''')
-                stats['recent_activity'] = [dict(row) for row in cursor.fetchall()]
-
+                """)
+                stats["recent_activity"] = [dict(row) for row in cursor.fetchall()]
 
                 return stats
 
@@ -371,14 +431,16 @@ class DatabaseManager:
         """Clean up old processing logs"""
         try:
             with self.get_connection() as conn:
-                cursor = conn.execute(f'''
+                cursor = conn.execute(f"""
                     DELETE FROM processing_log 
                     WHERE timestamp < datetime('now', '-{days_to_keep} days')
-                ''')
+                """)
 
                 deleted_count = cursor.rowcount
                 if deleted_count > 0:
-                    logger.info(f"Cleaned up {deleted_count} old processing log entries")
+                    logger.info(
+                        f"Cleaned up {deleted_count} old processing log entries"
+                    )
 
         except Exception as e:
             logger.error(f"Failed to cleanup old logs: {e}")
@@ -387,6 +449,7 @@ class DatabaseManager:
         """Create a backup of the database"""
         try:
             import shutil
+
             shutil.copy2(self.db_path, backup_path)
             logger.info(f"Database backed up to: {backup_path}")
 
@@ -398,20 +461,24 @@ class DatabaseManager:
         """Get information about the database"""
         try:
             info = {
-                'database_path': self.db_path,
-                'file_size_mb': os.path.getsize(self.db_path) / (1024 * 1024) if os.path.exists(self.db_path) else 0,
-                'exists': os.path.exists(self.db_path)
+                "database_path": self.db_path,
+                "file_size_mb": os.path.getsize(self.db_path) / (1024 * 1024)
+                if os.path.exists(self.db_path)
+                else 0,
+                "exists": os.path.exists(self.db_path),
             }
 
             with self.get_connection() as conn:
-                cursor = conn.execute("SELECT name FROM sqlite_master WHERE type='table'")
-                info['tables'] = [row['name'] for row in cursor.fetchall()]
+                cursor = conn.execute(
+                    "SELECT name FROM sqlite_master WHERE type='table'"
+                )
+                info["tables"] = [row["name"] for row in cursor.fetchall()]
 
                 cursor = conn.execute("PRAGMA user_version")
-                info['user_version'] = cursor.fetchone()[0]
+                info["user_version"] = cursor.fetchone()[0]
 
             return info
 
         except Exception as e:
             logger.error(f"Failed to get database info: {e}")
-            return {'error': str(e)}
+            return {"error": str(e)}

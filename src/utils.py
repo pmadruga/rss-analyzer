@@ -18,14 +18,16 @@ import yaml
 from dotenv import load_dotenv
 
 
-def setup_logging(log_level: str = "INFO", log_file: str | None = None) -> logging.Logger:
+def setup_logging(
+    log_level: str = "INFO", log_file: str | None = None
+) -> logging.Logger:
     """
     Setup logging configuration
-    
+
     Args:
         log_level: Logging level (DEBUG, INFO, WARNING, ERROR)
         log_file: Optional log file path
-        
+
     Returns:
         Configured logger
     """
@@ -34,8 +36,8 @@ def setup_logging(log_level: str = "INFO", log_file: str | None = None) -> loggi
 
     # Create formatter
     formatter = logging.Formatter(
-        '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        datefmt='%Y-%m-%d %H:%M:%S'
+        "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
     )
 
     # Setup root logger
@@ -74,10 +76,10 @@ def setup_logging(log_level: str = "INFO", log_file: str | None = None) -> loggi
 def load_config(config_path: str | None = None) -> dict[str, Any]:
     """
     Load configuration from environment variables and config file
-    
+
     Args:
         config_path: Path to YAML config file
-        
+
     Returns:
         Configuration dictionary
     """
@@ -87,38 +89,34 @@ def load_config(config_path: str | None = None) -> dict[str, Any]:
     # Default configuration
     config = {
         # API Configuration
-        'api_provider': os.getenv('API_PROVIDER', 'anthropic'),
-        'anthropic_api_key': os.getenv('ANTHROPIC_API_KEY', ''),
-        'mistral_api_key': os.getenv('MISTRAL_API_KEY', ''),
-        'openai_api_key': os.getenv('OPENAI_API_KEY', ''),
-        'claude_model': os.getenv('CLAUDE_MODEL', 'claude-3-5-sonnet-20241022'),
-        'mistral_model': os.getenv('MISTRAL_MODEL', 'mistral-large-latest'),
-        'openai_model': os.getenv('OPENAI_MODEL', 'gpt-4'),
-
+        "api_provider": os.getenv("API_PROVIDER", "anthropic"),
+        "anthropic_api_key": os.getenv("ANTHROPIC_API_KEY", ""),
+        "mistral_api_key": os.getenv("MISTRAL_API_KEY", ""),
+        "openai_api_key": os.getenv("OPENAI_API_KEY", ""),
+        "claude_model": os.getenv("CLAUDE_MODEL", "claude-3-5-sonnet-20241022"),
+        "mistral_model": os.getenv("MISTRAL_MODEL", "mistral-large-latest"),
+        "openai_model": os.getenv("OPENAI_MODEL", "gpt-4"),
         # RSS Configuration
-        'rss_feed_url': os.getenv('RSS_FEED_URL', 'https://bg.raindrop.io/rss/public/57118738'),
-        'user_agent': os.getenv('USER_AGENT', 'RSS-Article-Analyzer/1.0'),
-
+        "rss_feed_url": os.getenv(
+            "RSS_FEED_URL", "https://bg.raindrop.io/rss/public/57118738"
+        ),
+        "user_agent": os.getenv("USER_AGENT", "RSS-Article-Analyzer/1.0"),
         # Database Configuration
-        'db_path': os.getenv('DB_PATH', 'data/articles.db'),
-
+        "db_path": os.getenv("DB_PATH", "data/articles.db"),
         # Processing Configuration
-        'max_articles_per_run': int(os.getenv('MAX_ARTICLES_PER_RUN', '10')),
-        'scraper_delay': float(os.getenv('SCRAPER_DELAY', '1.0')),
-        'request_timeout': int(os.getenv('REQUEST_TIMEOUT', '30')),
-
+        "max_articles_per_run": int(os.getenv("MAX_ARTICLES_PER_RUN", "10")),
+        "scraper_delay": float(os.getenv("SCRAPER_DELAY", "1.0")),
+        "request_timeout": int(os.getenv("REQUEST_TIMEOUT", "30")),
         # Output Configuration
-        'output_dir': os.getenv('OUTPUT_DIR', 'output'),
-        'report_filename': os.getenv('REPORT_FILENAME', 'article_analysis_report.md'),
-
+        "output_dir": os.getenv("OUTPUT_DIR", "output"),
+        "report_filename": os.getenv("REPORT_FILENAME", "article_analysis_report.md"),
         # Logging Configuration
-        'log_level': os.getenv('LOG_LEVEL', 'INFO'),
-        'log_file': os.getenv('LOG_FILE', None),
-
+        "log_level": os.getenv("LOG_LEVEL", "INFO"),
+        "log_file": os.getenv("LOG_FILE", None),
         # Processing Options
-        'force_refresh': os.getenv('FORCE_REFRESH', 'false').lower() == 'true',
-        'skip_scraping': os.getenv('SKIP_SCRAPING', 'false').lower() == 'true',
-        'skip_analysis': os.getenv('SKIP_ANALYSIS', 'false').lower() == 'true',
+        "force_refresh": os.getenv("FORCE_REFRESH", "false").lower() == "true",
+        "skip_scraping": os.getenv("SKIP_SCRAPING", "false").lower() == "true",
+        "skip_analysis": os.getenv("SKIP_ANALYSIS", "false").lower() == "true",
     }
 
     # Load from config file if provided
@@ -128,17 +126,23 @@ def load_config(config_path: str | None = None) -> dict[str, Any]:
                 file_config = yaml.safe_load(f)
                 if file_config:
                     # Handle nested API configuration
-                    if 'api' in file_config:
-                        api_config = file_config['api']
-                        if 'provider' in api_config:
-                            config['api_provider'] = api_config['provider']
-                        if 'anthropic' in api_config:
-                            config['claude_model'] = api_config['anthropic'].get('model', config['claude_model'])
-                        if 'mistral' in api_config:
-                            config['mistral_model'] = api_config['mistral'].get('model', config['mistral_model'])
-                        if 'openai' in api_config:
-                            config['openai_model'] = api_config['openai'].get('model', config['openai_model'])
-                        del file_config['api']
+                    if "api" in file_config:
+                        api_config = file_config["api"]
+                        if "provider" in api_config:
+                            config["api_provider"] = api_config["provider"]
+                        if "anthropic" in api_config:
+                            config["claude_model"] = api_config["anthropic"].get(
+                                "model", config["claude_model"]
+                            )
+                        if "mistral" in api_config:
+                            config["mistral_model"] = api_config["mistral"].get(
+                                "model", config["mistral_model"]
+                            )
+                        if "openai" in api_config:
+                            config["openai_model"] = api_config["openai"].get(
+                                "model", config["openai_model"]
+                            )
+                        del file_config["api"]
 
                     config.update(file_config)
         except Exception as e:
@@ -150,23 +154,23 @@ def load_config(config_path: str | None = None) -> dict[str, Any]:
 def validate_config(config: dict[str, Any]) -> bool:
     """
     Validate configuration and check for required values
-    
+
     Args:
         config: Configuration dictionary
-        
+
     Returns:
         True if configuration is valid
     """
     # Validate based on API provider
-    api_provider = config.get('api_provider', 'anthropic')
-    required_fields = ['rss_feed_url']
+    api_provider = config.get("api_provider", "anthropic")
+    required_fields = ["rss_feed_url"]
 
-    if api_provider == 'anthropic':
-        required_fields.append('anthropic_api_key')
-    elif api_provider == 'mistral':
-        required_fields.append('mistral_api_key')
-    elif api_provider == 'openai':
-        required_fields.append('openai_api_key')
+    if api_provider == "anthropic":
+        required_fields.append("anthropic_api_key")
+    elif api_provider == "mistral":
+        required_fields.append("mistral_api_key")
+    elif api_provider == "openai":
+        required_fields.append("openai_api_key")
     else:
         logging.error(f"Unsupported API provider: {api_provider}")
         return False
@@ -178,32 +182,38 @@ def validate_config(config: dict[str, Any]) -> bool:
             missing_fields.append(field)
 
     if missing_fields:
-        logging.error(f"Missing required configuration fields: {', '.join(missing_fields)}")
+        logging.error(
+            f"Missing required configuration fields: {', '.join(missing_fields)}"
+        )
         return False
 
     # Validate API key format
-    api_provider = config.get('api_provider', 'anthropic')
+    api_provider = config.get("api_provider", "anthropic")
 
-    if api_provider == 'anthropic':
-        api_key = config['anthropic_api_key']
-        if not api_key.startswith('sk-'):
-            logging.error("Anthropic API key appears to be invalid (should start with 'sk-')")
+    if api_provider == "anthropic":
+        api_key = config["anthropic_api_key"]
+        if not api_key.startswith("sk-"):
+            logging.error(
+                "Anthropic API key appears to be invalid (should start with 'sk-')"
+            )
             return False
-    elif api_provider == 'mistral':
-        api_key = config['mistral_api_key']
+    elif api_provider == "mistral":
+        api_key = config["mistral_api_key"]
         # Mistral API keys don't have a specific prefix pattern
         if len(api_key) < 10:
             logging.error("Mistral API key appears to be too short")
             return False
-    elif api_provider == 'openai':
-        api_key = config['openai_api_key']
-        if not api_key.startswith('sk-'):
-            logging.error("OpenAI API key appears to be invalid (should start with 'sk-')")
+    elif api_provider == "openai":
+        api_key = config["openai_api_key"]
+        if not api_key.startswith("sk-"):
+            logging.error(
+                "OpenAI API key appears to be invalid (should start with 'sk-')"
+            )
             return False
 
     # Validate RSS URL
     try:
-        parsed = urlparse(config['rss_feed_url'])
+        parsed = urlparse(config["rss_feed_url"])
         if not parsed.scheme or not parsed.netloc:
             logging.error("RSS feed URL appears to be invalid")
             return False
@@ -217,46 +227,46 @@ def validate_config(config: dict[str, Any]) -> bool:
 def create_content_hash(content: str) -> str:
     """
     Create MD5 hash of content for duplicate detection
-    
+
     Args:
         content: Content to hash
-        
+
     Returns:
         MD5 hash string
     """
-    return hashlib.md5(content.encode('utf-8')).hexdigest()
+    return hashlib.md5(content.encode("utf-8")).hexdigest()
 
 
 def sanitize_filename(filename: str) -> str:
     """
     Sanitize filename for safe file system usage
-    
+
     Args:
         filename: Original filename
-        
+
     Returns:
         Sanitized filename
     """
     # Remove or replace problematic characters
-    filename = re.sub(r'[<>:"/\\|?*]', '_', filename)
-    filename = re.sub(r'[^\w\s\-_\.]', '', filename)
-    filename = re.sub(r'[-\s]+', '-', filename)
+    filename = re.sub(r'[<>:"/\\|?*]', "_", filename)
+    filename = re.sub(r"[^\w\s\-_\.]", "", filename)
+    filename = re.sub(r"[-\s]+", "-", filename)
 
     # Limit length
     if len(filename) > 100:
         name, ext = os.path.splitext(filename)
         filename = name[:96] + ext
 
-    return filename.strip('-_')
+    return filename.strip("-_")
 
 
 def format_timestamp(timestamp: float | None = None) -> str:
     """
     Format timestamp for display
-    
+
     Args:
         timestamp: Unix timestamp, defaults to current time
-        
+
     Returns:
         Formatted timestamp string
     """
@@ -264,16 +274,16 @@ def format_timestamp(timestamp: float | None = None) -> str:
         timestamp = datetime.now().timestamp()
 
     dt = datetime.fromtimestamp(timestamp)
-    return dt.strftime('%Y-%m-%d %H:%M:%S')
+    return dt.strftime("%Y-%m-%d %H:%M:%S")
 
 
 def format_file_size(size_bytes: int) -> str:
     """
     Format file size in human readable format
-    
+
     Args:
         size_bytes: Size in bytes
-        
+
     Returns:
         Formatted size string
     """
@@ -292,28 +302,28 @@ def format_file_size(size_bytes: int) -> str:
 def truncate_text(text: str, max_length: int = 100, suffix: str = "...") -> str:
     """
     Truncate text to specified length
-    
+
     Args:
         text: Text to truncate
         max_length: Maximum length
         suffix: Suffix to add if truncated
-        
+
     Returns:
         Truncated text
     """
     if len(text) <= max_length:
         return text
 
-    return text[:max_length - len(suffix)] + suffix
+    return text[: max_length - len(suffix)] + suffix
 
 
 def ensure_directory(path: str) -> bool:
     """
     Ensure directory exists, create if necessary
-    
+
     Args:
         path: Directory path
-        
+
     Returns:
         True if directory exists or was created successfully
     """
@@ -328,10 +338,10 @@ def ensure_directory(path: str) -> bool:
 def is_valid_url(url: str) -> bool:
     """
     Check if URL is valid
-    
+
     Args:
         url: URL to validate
-        
+
     Returns:
         True if URL is valid
     """
@@ -345,10 +355,10 @@ def is_valid_url(url: str) -> bool:
 def extract_domain(url: str) -> str:
     """
     Extract domain from URL
-    
+
     Args:
         url: URL
-        
+
     Returns:
         Domain name
     """
@@ -362,10 +372,10 @@ def extract_domain(url: str) -> str:
 def clean_text(text: str) -> str:
     """
     Clean text by removing excessive whitespace and normalizing
-    
+
     Args:
         text: Text to clean
-        
+
     Returns:
         Cleaned text
     """
@@ -373,7 +383,7 @@ def clean_text(text: str) -> str:
         return ""
 
     # Remove excessive whitespace
-    text = re.sub(r'\s+', ' ', text)
+    text = re.sub(r"\s+", " ", text)
 
     # Remove leading/trailing whitespace
     text = text.strip()
@@ -384,12 +394,12 @@ def clean_text(text: str) -> str:
 def progress_bar(current: int, total: int, width: int = 50) -> str:
     """
     Create a simple progress bar string
-    
+
     Args:
         current: Current progress
         total: Total items
         width: Width of progress bar
-        
+
     Returns:
         Progress bar string
     """
@@ -407,10 +417,10 @@ def progress_bar(current: int, total: int, width: int = 50) -> str:
 def get_file_age_days(file_path: str) -> int | None:
     """
     Get file age in days
-    
+
     Args:
         file_path: Path to file
-        
+
     Returns:
         Age in days or None if file doesn't exist
     """
@@ -431,35 +441,38 @@ def get_file_age_days(file_path: str) -> int | None:
 def safe_json_loads(json_str: str, default: Any = None) -> Any:
     """
     Safely load JSON string with fallback
-    
+
     Args:
         json_str: JSON string
         default: Default value if parsing fails
-        
+
     Returns:
         Parsed JSON or default value
     """
     try:
         import json
+
         return json.loads(json_str)
     except Exception:
         return default
 
 
-def retry_on_exception(func, max_retries: int = 3, delay: float = 1.0,
-                      exceptions: tuple = (Exception,)):
+def retry_on_exception(
+    func, max_retries: int = 3, delay: float = 1.0, exceptions: tuple = (Exception,)
+):
     """
     Decorator for retrying function calls on exceptions
-    
+
     Args:
         func: Function to retry
         max_retries: Maximum number of retries
         delay: Delay between retries
         exceptions: Tuple of exceptions to catch
-        
+
     Returns:
         Decorated function
     """
+
     def wrapper(*args, **kwargs):
         import time
 
@@ -469,7 +482,9 @@ def retry_on_exception(func, max_retries: int = 3, delay: float = 1.0,
             except exceptions as e:
                 if attempt == max_retries - 1:
                     raise
-                logging.warning(f"Attempt {attempt + 1} failed: {e}. Retrying in {delay} seconds...")
+                logging.warning(
+                    f"Attempt {attempt + 1} failed: {e}. Retrying in {delay} seconds..."
+                )
                 time.sleep(delay)
 
     return wrapper

@@ -13,17 +13,18 @@ from pathlib import Path
 # Add src to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
+
 def check_env_vars():
     """Check which API keys are set"""
     print("🔑 Environment Variables Check:")
     print("-" * 40)
-    
+
     apis = {
         "ANTHROPIC_API_KEY": "Anthropic Claude",
-        "MISTRAL_API_KEY": "Mistral AI", 
-        "OPENAI_API_KEY": "OpenAI"
+        "MISTRAL_API_KEY": "Mistral AI",
+        "OPENAI_API_KEY": "OpenAI",
     }
-    
+
     for env_var, name in apis.items():
         key = os.getenv(env_var)
         if key:
@@ -34,28 +35,29 @@ def check_env_vars():
             print(f"❌ {name}: Not set")
     print()
 
+
 def quick_test_anthropic():
     """Quick test of Anthropic API"""
     try:
         api_key = os.getenv("ANTHROPIC_API_KEY")
         if not api_key:
             return "❌", "No API key"
-        
+
         import anthropic
-        
+
         start_time = time.time()
         client = anthropic.Anthropic(api_key=api_key)
-        
+
         # Simple test message
-        response = client.messages.create(
+        client.messages.create(
             model="claude-3-5-sonnet-20241022",
             max_tokens=10,
-            messages=[{"role": "user", "content": "Hi"}]
+            messages=[{"role": "user", "content": "Hi"}],
         )
-        
+
         response_time = (time.time() - start_time) * 1000
         return "✅", f"OK ({response_time:.0f}ms)"
-        
+
     except Exception as e:
         error_msg = str(e)
         if "credit balance" in error_msg.lower():
@@ -67,37 +69,38 @@ def quick_test_anthropic():
         else:
             return "❌", f"Error: {error_msg[:50]}..."
 
+
 def quick_test_mistral():
     """Quick test of Mistral API"""
     try:
         api_key = os.getenv("MISTRAL_API_KEY")
         if not api_key:
             return "❌", "No API key"
-        
+
         import requests
-        
+
         start_time = time.time()
-        
+
         headers = {
             "Authorization": f"Bearer {api_key}",
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
         }
-        
+
         data = {
             "model": "mistral-large-latest",
             "messages": [{"role": "user", "content": "Hi"}],
-            "max_tokens": 10
+            "max_tokens": 10,
         }
-        
+
         response = requests.post(
             "https://api.mistral.ai/v1/chat/completions",
             headers=headers,
             json=data,
-            timeout=10
+            timeout=10,
         )
-        
+
         response_time = (time.time() - start_time) * 1000
-        
+
         if response.status_code == 200:
             return "✅", f"OK ({response_time:.0f}ms)"
         elif response.status_code == 429:
@@ -110,10 +113,11 @@ def quick_test_mistral():
             return "🔐", "Invalid API key"
         else:
             return "❌", f"HTTP {response.status_code}"
-            
+
     except Exception as e:
         error_msg = str(e)
         return "❌", f"Error: {error_msg[:50]}..."
+
 
 def quick_test_openai():
     """Quick test of OpenAI API"""
@@ -121,21 +125,19 @@ def quick_test_openai():
         api_key = os.getenv("OPENAI_API_KEY")
         if not api_key:
             return "❌", "No API key"
-        
+
         import openai
-        
+
         start_time = time.time()
         client = openai.OpenAI(api_key=api_key)
-        
-        response = client.chat.completions.create(
-            model="gpt-4",
-            messages=[{"role": "user", "content": "Hi"}],
-            max_tokens=10
+
+        client.chat.completions.create(
+            model="gpt-4", messages=[{"role": "user", "content": "Hi"}], max_tokens=10
         )
-        
+
         response_time = (time.time() - start_time) * 1000
         return "✅", f"OK ({response_time:.0f}ms)"
-        
+
     except Exception as e:
         error_msg = str(e)
         if "insufficient" in error_msg.lower() and "quota" in error_msg.lower():
@@ -147,27 +149,28 @@ def quick_test_openai():
         else:
             return "❌", f"Error: {error_msg[:50]}..."
 
+
 def main():
     """Main function"""
     print("⚡ Quick API Status Check")
     print("=" * 50)
     print()
-    
+
     # Check environment variables
     check_env_vars()
-    
+
     # Test APIs
     print("🧪 API Connection Tests:")
     print("-" * 40)
-    
+
     apis = [
         ("Anthropic Claude", quick_test_anthropic),
         ("Mistral AI", quick_test_mistral),
-        ("OpenAI", quick_test_openai)
+        ("OpenAI", quick_test_openai),
     ]
-    
+
     working_count = 0
-    
+
     for name, test_func in apis:
         print(f"Testing {name}... ", end="", flush=True)
         try:
@@ -179,12 +182,12 @@ def main():
             print(f"❌ Missing dependency: {e}")
         except Exception as e:
             print(f"❌ Unexpected error: {e}")
-    
+
     print()
     print("📊 Summary:")
     print("-" * 40)
     print(f"Working APIs: {working_count}/{len(apis)}")
-    
+
     if working_count == 0:
         print("⚠️  No APIs are currently working!")
         print("💡 Recommendations:")
@@ -195,6 +198,7 @@ def main():
     else:
         print(f"✅ {working_count} API(s) available for processing")
         return 0
+
 
 if __name__ == "__main__":
     sys.exit(main())

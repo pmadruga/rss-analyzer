@@ -22,26 +22,29 @@ class ReportGenerator:
         self.output_dir = output_dir
         ensure_directory(output_dir)
 
-    def generate_report(self, articles: list[dict[str, Any]],
-                       report_filename: str = "article_analysis_report.md",
-                       include_stats: bool = True,
-                       include_toc: bool = True) -> str:
+    def generate_report(
+        self,
+        articles: list[dict[str, Any]],
+        report_filename: str = "article_analysis_report.md",
+        include_stats: bool = True,
+        include_toc: bool = True,
+    ) -> str:
         """
         Generate comprehensive markdown report
-        
+
         Args:
             articles: List of analyzed articles
             report_filename: Output filename
             include_stats: Whether to include processing statistics
             include_toc: Whether to include table of contents
-            
+
         Returns:
             Path to generated report file
         """
         try:
             report_path = os.path.join(self.output_dir, report_filename)
 
-            with open(report_path, 'w', encoding='utf-8') as f:
+            with open(report_path, "w", encoding="utf-8") as f:
                 # Write header
                 self._write_header(f, len(articles))
 
@@ -86,7 +89,7 @@ class ReportGenerator:
         # Count by domain
         domains = {}
         for article in articles:
-            domain = article.get('metadata', {}).get('domain', 'Unknown')
+            domain = article.get("metadata", {}).get("domain", "Unknown")
             domains[domain] = domains.get(domain, 0) + 1
 
         # Write statistics
@@ -95,7 +98,9 @@ class ReportGenerator:
         # Domain breakdown
         if domains:
             f.write("### Articles by Domain\n\n")
-            for domain, count in sorted(domains.items(), key=lambda x: x[1], reverse=True):
+            for domain, count in sorted(
+                domains.items(), key=lambda x: x[1], reverse=True
+            ):
                 f.write(f"- **{domain}:** {count} articles\n")
             f.write("\n")
 
@@ -109,7 +114,7 @@ class ReportGenerator:
         f.write("## Table of Contents\n\n")
 
         for i, article in enumerate(articles, 1):
-            title = article.get('title', 'Untitled')
+            title = article.get("title", "Untitled")
             # Create anchor link
             anchor = self._create_anchor(title, i)
             f.write(f"{i}. [{title}](#{anchor})\n")
@@ -129,8 +134,8 @@ class ReportGenerator:
 
     def _write_single_article(self, f, article: dict[str, Any], index: int):
         """Write summary for a single article"""
-        title = article.get('title', 'Untitled')
-        url = article.get('url', '')
+        title = article.get("title", "Untitled")
+        url = article.get("url", "")
 
         # Create anchor for table of contents
         anchor = self._create_anchor(title, index)
@@ -144,96 +149,113 @@ class ReportGenerator:
             f.write(f"**Source:** [{url}]({url})\n\n")
 
         # Publication date
-        pub_date = article.get('publication_date')
+        pub_date = article.get("publication_date")
         if pub_date:
             f.write(f"**Publication Date:** {pub_date}\n\n")
 
         # Processing metadata
-        if article.get('processed_date'):
+        if article.get("processed_date"):
             f.write(f"**Processed:** {article.get('processed_date')}\n\n")
 
-
         # Methodology Section
-        methodology = article.get('methodology_detailed', '').strip()
+        methodology = article.get("methodology_detailed", "").strip()
         if methodology and methodology != "Not clearly specified in the content":
             f.write("#### Methodology\n\n")
             f.write(f"{methodology}\n\n")
 
         # Key Findings Section
-        key_findings = article.get('key_findings', '').strip()
+        key_findings = article.get("key_findings", "").strip()
         if key_findings and key_findings != "Not clearly specified in the content":
             f.write("#### Key Findings\n\n")
             f.write(f"{key_findings}\n\n")
 
         # Technical Approach Section
-        technical_approach = article.get('technical_approach', '').strip()
-        if technical_approach and technical_approach != "Not clearly specified in the content":
+        technical_approach = article.get("technical_approach", "").strip()
+        if (
+            technical_approach
+            and technical_approach != "Not clearly specified in the content"
+        ):
             f.write("#### Technical Approach\n\n")
             f.write(f"{technical_approach}\n\n")
 
         # Research Design Section
-        research_design = article.get('research_design', '').strip()
-        if research_design and research_design != "Not clearly specified in the content":
+        research_design = article.get("research_design", "").strip()
+        if (
+            research_design
+            and research_design != "Not clearly specified in the content"
+        ):
             f.write("#### Research Design\n\n")
             f.write(f"{research_design}\n\n")
 
         # Additional metadata
-        metadata = article.get('metadata', {})
+        metadata = article.get("metadata", {})
         if metadata:
-            interesting_fields = ['author', 'subjects', 'paper_type', 'source']
-            metadata_to_show = {k: v for k, v in metadata.items() if k in interesting_fields and v}
+            interesting_fields = ["author", "subjects", "paper_type", "source"]
+            metadata_to_show = {
+                k: v for k, v in metadata.items() if k in interesting_fields and v
+            }
 
             if metadata_to_show:
                 f.write("#### Additional Information\n\n")
                 for key, value in metadata_to_show.items():
-                    formatted_key = key.replace('_', ' ').title()
+                    formatted_key = key.replace("_", " ").title()
                     f.write(f"**{formatted_key}:** {value}\n\n")
 
     def _write_footer(self, f):
         """Write report footer"""
         f.write("\n---\n\n")
-        f.write("*This report was generated automatically by the RSS Article Analyzer using Claude Sonnet.*\n")
-        f.write(f"*Report generated on: {datetime.now().strftime('%Y-%m-%d at %H:%M:%S')}*\n")
+        f.write(
+            "*This report was generated automatically by the RSS Article Analyzer using Claude Sonnet.*\n"
+        )
+        f.write(
+            f"*Report generated on: {datetime.now().strftime('%Y-%m-%d at %H:%M:%S')}*\n"
+        )
 
     def _create_anchor(self, title: str, index: int) -> str:
         """Create anchor link for table of contents"""
         # Sanitize title for anchor
         anchor = title.lower()
-        anchor = anchor.replace(' ', '-')
-        anchor = ''.join(c for c in anchor if c.isalnum() or c == '-')
+        anchor = anchor.replace(" ", "-")
+        anchor = "".join(c for c in anchor if c.isalnum() or c == "-")
         anchor = f"article-{index}-{anchor}"
         return anchor[:50]  # Limit length
 
-    def generate_summary_report(self, articles: list[dict[str, Any]],
-                              filename: str = "summary_report.md") -> str:
+    def generate_summary_report(
+        self, articles: list[dict[str, Any]], filename: str = "summary_report.md"
+    ) -> str:
         """
         Generate a shorter summary report
-        
+
         Args:
             articles: List of analyzed articles
             filename: Output filename
-            
+
         Returns:
             Path to generated summary report
         """
         try:
             report_path = os.path.join(self.output_dir, filename)
 
-            with open(report_path, 'w', encoding='utf-8') as f:
+            with open(report_path, "w", encoding="utf-8") as f:
                 f.write("# Article Analysis Summary\n\n")
-                f.write(f"**Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
+                f.write(
+                    f"**Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n"
+                )
                 f.write(f"**Articles Analyzed:** {len(articles)}\n\n")
 
                 for i, article in enumerate(articles, 1):
-                    title = article.get('title', 'Untitled')
-                    url = article.get('url', '')
-                    key_findings = article.get('key_findings', '').strip()
+                    title = article.get("title", "Untitled")
+                    url = article.get("url", "")
+                    key_findings = article.get("key_findings", "").strip()
 
                     f.write(f"## {i}. {title}\n\n")
                     if url:
                         f.write(f"**Source:** [{url}]({url})\n\n")
 
-                    if key_findings and key_findings != "Not clearly specified in the content":
+                    if (
+                        key_findings
+                        and key_findings != "Not clearly specified in the content"
+                    ):
                         f.write(f"**Key Findings:** {key_findings}\n\n")
 
                     f.write("---\n\n")
@@ -245,15 +267,16 @@ class ReportGenerator:
             logger.error(f"Failed to generate summary report: {e}")
             raise
 
-    def generate_json_export(self, articles: list[dict[str, Any]],
-                           filename: str = "articles_export.json") -> str:
+    def generate_json_export(
+        self, articles: list[dict[str, Any]], filename: str = "articles_export.json"
+    ) -> str:
         """
         Generate JSON export of analyzed articles
-        
+
         Args:
             articles: List of analyzed articles
             filename: Output filename
-            
+
         Returns:
             Path to generated JSON file
         """
@@ -264,12 +287,12 @@ class ReportGenerator:
 
             # Prepare export data
             export_data = {
-                'generated_at': datetime.now().isoformat(),
-                'total_articles': len(articles),
-                'articles': articles
+                "generated_at": datetime.now().isoformat(),
+                "total_articles": len(articles),
+                "articles": articles,
             }
 
-            with open(export_path, 'w', encoding='utf-8') as f:
+            with open(export_path, "w", encoding="utf-8") as f:
                 json.dump(export_data, f, indent=2, ensure_ascii=False)
 
             logger.info(f"JSON export generated: {export_path}")
@@ -279,15 +302,16 @@ class ReportGenerator:
             logger.error(f"Failed to generate JSON export: {e}")
             raise
 
-    def generate_csv_export(self, articles: list[dict[str, Any]],
-                          filename: str = "articles_export.csv") -> str:
+    def generate_csv_export(
+        self, articles: list[dict[str, Any]], filename: str = "articles_export.csv"
+    ) -> str:
         """
         Generate CSV export of analyzed articles
-        
+
         Args:
             articles: List of analyzed articles
             filename: Output filename
-            
+
         Returns:
             Path to generated CSV file
         """
@@ -302,12 +326,17 @@ class ReportGenerator:
 
             # Define CSV columns
             columns = [
-                'title', 'url', 'publication_date', 'processed_date',
-                'methodology_detailed', 'key_findings',
-                'technical_approach', 'research_design'
+                "title",
+                "url",
+                "publication_date",
+                "processed_date",
+                "methodology_detailed",
+                "key_findings",
+                "technical_approach",
+                "research_design",
             ]
 
-            with open(export_path, 'w', newline='', encoding='utf-8') as f:
+            with open(export_path, "w", newline="", encoding="utf-8") as f:
                 writer = csv.DictWriter(f, fieldnames=columns)
                 writer.writeheader()
 
@@ -315,10 +344,14 @@ class ReportGenerator:
                     # Prepare row data
                     row = {}
                     for col in columns:
-                        value = article.get(col, '')
+                        value = article.get(col, "")
                         # Truncate long text fields for CSV
-                        if col in ['methodology_detailed', 'key_findings', 'technical_approach',
-                                 'research_design']:
+                        if col in [
+                            "methodology_detailed",
+                            "key_findings",
+                            "technical_approach",
+                            "research_design",
+                        ]:
                             if len(str(value)) > 500:
                                 value = str(value)[:497] + "..."
                         row[col] = value
@@ -335,7 +368,7 @@ class ReportGenerator:
     def list_reports(self) -> list[dict[str, Any]]:
         """
         List all generated reports in the output directory
-        
+
         Returns:
             List of report information dictionaries
         """
@@ -348,16 +381,18 @@ class ReportGenerator:
                 filepath = os.path.join(self.output_dir, filename)
                 if os.path.isfile(filepath):
                     stat = os.stat(filepath)
-                    reports.append({
-                        'filename': filename,
-                        'filepath': filepath,
-                        'size_bytes': stat.st_size,
-                        'modified_time': datetime.fromtimestamp(stat.st_mtime),
-                        'extension': os.path.splitext(filename)[1]
-                    })
+                    reports.append(
+                        {
+                            "filename": filename,
+                            "filepath": filepath,
+                            "size_bytes": stat.st_size,
+                            "modified_time": datetime.fromtimestamp(stat.st_mtime),
+                            "extension": os.path.splitext(filename)[1],
+                        }
+                    )
 
             # Sort by modification time (newest first)
-            reports.sort(key=lambda x: x['modified_time'], reverse=True)
+            reports.sort(key=lambda x: x["modified_time"], reverse=True)
             return reports
 
         except Exception as e:
