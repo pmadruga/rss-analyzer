@@ -6,6 +6,10 @@ on:
     paths:
       - 'docs/**'
   workflow_dispatch:
+  workflow_run:
+    workflows: ["Test RSS Analyzer"]
+    types:
+      - completed
 
 permissions:
   contents: read
@@ -22,6 +26,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
