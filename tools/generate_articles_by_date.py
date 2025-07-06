@@ -21,8 +21,7 @@ def get_articles_from_db(db_path="data/articles.db"):
         a.processed_date,
         c.methodology_detailed,
         c.technical_approach,
-        c.key_findings,
-
+        c.key_findings
     FROM articles a
     LEFT JOIN content c ON a.id = c.article_id
     WHERE a.status = 'completed'
