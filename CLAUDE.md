@@ -148,6 +148,55 @@ The scraper can automatically follow and analyze links found in blog posts and a
 - Adds referenced content summaries to main article
 - Prevents infinite recursion with depth limits
 
+## Code Style
+
+- Follow PEP 8 with descriptive snake_case names
+- Use Path objects for cross-platform path handling
+- Class names: CamelCase, functions/variables: snake_case
+- Import order: standard library → third-party → local modules
+- Error handling: Use try/except with specific exceptions
+- Provide descriptive error messages with traceback when appropriate
+- Document functions with docstrings and comment complex sections
+
+## Core Principles
+
+The implementation must strictly adhere to these non-negotiable principles:
+
+### DRY (Don't Repeat Yourself)
+- Zero code duplication will be tolerated
+- Each functionality must exist in exactly one place
+- No duplicate files or alternative implementations allowed
+
+### KISS (Keep It Simple, Stupid)
+- Implement the simplest solution that works
+- No over-engineering or unnecessary complexity
+- Straightforward, maintainable code patterns
+
+### Clean File System
+- All existing files must be either used or removed
+- No orphaned, redundant, or unused files
+- Clear, logical organization of the file structure
+
+### Transparent Error Handling
+- No error hiding or fallback mechanisms that mask issues
+- All errors must be properly displayed to the user
+- Errors must be clear, actionable, and honest
+
+## Success Criteria
+
+The implementation will be successful if:
+
+- **Zero Duplication**: No duplicate code or files exist in the codebase
+- **Single Implementation**: Each feature has exactly one implementation
+- **Complete Template System**: All HTML is generated via the template system
+- **No Fallbacks**: No fallback systems that hide or mask errors
+- **Transparent Errors**: All errors are properly displayed to users
+- **External Assets**: All CSS and JavaScript is in external files
+- **Component Architecture**: UI is built from reusable, modular components
+- **Consistent Standards**: Implementation follows established standards
+- **Full Functionality**: All features work correctly through template UI
+- **Complete Documentation**: Implementation details are properly documented
+
 ## Development Notes
 
 - All API clients inherit from base interface for consistent error handling
