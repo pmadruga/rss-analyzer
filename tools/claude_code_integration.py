@@ -118,7 +118,7 @@ class ClaudeCodeClient:
         3. Security vulnerabilities
         4. Performance considerations
         5. Suggestions for improvement
-        
+
         Provide a concise summary of findings.
         """
         return self.analyze_code(prompt, changed_files)
@@ -131,7 +131,7 @@ class ClaudeCodeClient:
         2. Specific steps to fix the issues
         3. Prevention strategies
         4. Code examples if applicable
-        
+
         Focus on actionable solutions.
         """
 
@@ -154,7 +154,7 @@ class ClaudeCodeClient:
         3. Memory usage optimization
         4. Better algorithms or data structures
         5. Refactoring suggestions
-        
+
         Provide specific, actionable recommendations.
         """
         return self.analyze_code(prompt, file_paths)
@@ -168,7 +168,7 @@ class ClaudeCodeClient:
         3. Parameter explanations
         4. Return value documentation
         5. Dependencies and requirements
-        
+
         Format as markdown documentation.
         """
         return self.analyze_code(prompt, file_paths)

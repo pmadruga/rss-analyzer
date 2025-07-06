@@ -15,17 +15,17 @@ def get_articles_from_db(db_path="data/articles.db"):
     cursor = conn.cursor()
 
     query = """
-    SELECT 
-        a.title, 
-        a.url, 
-        a.processed_date, 
-        c.methodology_detailed, 
-        c.technical_approach, 
-        c.key_findings, 
- 
-    FROM articles a 
-    LEFT JOIN content c ON a.id = c.article_id 
-    WHERE a.status = 'completed' 
+    SELECT
+        a.title,
+        a.url,
+        a.processed_date,
+        c.methodology_detailed,
+        c.technical_approach,
+        c.key_findings,
+
+    FROM articles a
+    LEFT JOIN content c ON a.id = c.article_id
+    WHERE a.status = 'completed'
     ORDER BY a.processed_date;
     """
 

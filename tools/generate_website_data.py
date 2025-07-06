@@ -136,7 +136,7 @@ class WebsiteDataGenerator:
 
                 # Check if required tables exist
                 cursor.execute("""
-                    SELECT name FROM sqlite_master 
+                    SELECT name FROM sqlite_master
                     WHERE type='table' AND name IN ('articles', 'content')
                 """)
                 tables = [row[0] for row in cursor.fetchall()]
@@ -198,7 +198,7 @@ class WebsiteDataGenerator:
                 cursor = conn.cursor()
 
                 query = """
-                SELECT 
+                SELECT
                     a.id,
                     a.title,
                     a.url,

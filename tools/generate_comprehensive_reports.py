@@ -54,12 +54,12 @@ def get_all_articles(db_path: str) -> list[dict[str, Any]]:
     cursor = conn.cursor()
 
     query = """
-    SELECT a.id, a.title, a.url, a.publication_date, a.processed_date, 
-           c.methodology_detailed, c.technical_approach, c.key_findings, 
+    SELECT a.id, a.title, a.url, a.publication_date, a.processed_date,
+           c.methodology_detailed, c.technical_approach, c.key_findings,
            c.research_design, c.metadata
-    FROM articles a 
-    JOIN content c ON a.id = c.article_id 
-    WHERE a.status = 'completed' 
+    FROM articles a
+    JOIN content c ON a.id = c.article_id
+    WHERE a.status = 'completed'
     ORDER BY a.processed_date ASC
     """
 

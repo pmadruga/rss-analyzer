@@ -140,7 +140,7 @@ class DatabaseManager:
 
                 # Migrate data from old columns to new ones
                 conn.execute("""
-                    UPDATE content 
+                    UPDATE content
                     SET methodology_detailed = COALESCE(methodology_focus, ''),
                         research_design = ''
                     WHERE methodology_detailed IS NULL
@@ -204,7 +204,7 @@ class DatabaseManager:
                     """
                     INSERT INTO content (
                         article_id, original_content, methodology_detailed,
-                        technical_approach, key_findings, research_design, 
+                        technical_approach, key_findings, research_design,
                         metadata
                     ) VALUES (?, ?, ?, ?, ?, ?, ?)
                 """,
@@ -273,9 +273,9 @@ class DatabaseManager:
         try:
             with self.get_connection() as conn:
                 cursor = conn.execute("""
-                    SELECT a.content_hash 
-                    FROM articles a 
-                    JOIN content c ON a.id = c.article_id 
+                    SELECT a.content_hash
+                    FROM articles a
+                    JOIN content c ON a.id = c.article_id
                     WHERE a.status = 'completed'
                 """)
                 return {row["content_hash"] for row in cursor.fetchall()}
@@ -314,8 +314,8 @@ class DatabaseManager:
             with self.get_connection() as conn:
                 conn.execute(
                     """
-                    UPDATE articles 
-                    SET status = ?, updated_at = CURRENT_TIMESTAMP 
+                    UPDATE articles
+                    SET status = ?, updated_at = CURRENT_TIMESTAMP
                     WHERE id = ?
                 """,
                     (status, article_id),
@@ -353,7 +353,7 @@ class DatabaseManager:
         try:
             with self.get_connection() as conn:
                 query = """
-                    SELECT 
+                    SELECT
                         a.id, a.title, a.url, a.publication_date, a.processed_date,
                         c.original_content, c.summary, c.methodology_focus,
                         c.key_findings, c.technical_approach, c.practical_applications,
@@ -403,8 +403,8 @@ class DatabaseManager:
 
                 # Articles by status
                 cursor = conn.execute("""
-                    SELECT status, COUNT(*) as count 
-                    FROM articles 
+                    SELECT status, COUNT(*) as count
+                    FROM articles
                     GROUP BY status
                 """)
                 stats["by_status"] = {
@@ -432,7 +432,7 @@ class DatabaseManager:
         try:
             with self.get_connection() as conn:
                 cursor = conn.execute(f"""
-                    DELETE FROM processing_log 
+                    DELETE FROM processing_log
                     WHERE timestamp < datetime('now', '-{days_to_keep} days')
                 """)
 

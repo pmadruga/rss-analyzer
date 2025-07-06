@@ -90,13 +90,13 @@ Please provide your analysis in the following JSON structure:
 
 {{
     "methodology_detailed": "A comprehensive, step-by-step explanation of the research methodology in simple terms. Break down the complete research process into easy-to-understand steps. Explain HOW the research was conducted as if explaining to someone without technical background. Focus extensively on the methodology and make it accessible.",
-    
+
     "technical_approach": "A detailed, in-depth explanation of the technical methods, tools, algorithms, frameworks, software, or systems used. Explain all technical components in plain language, how they work together, why they were chosen, and their implementation details. This should be the most detailed section - explain every technical aspect clearly.",
-    
+
     "key_findings": "A brief summary of the main discoveries or results from the research. Keep this concise.",
-    
+
     "research_design": "A brief overview of the experimental setup or study design. Keep this short and focused.",
-    
+
 }}
 
 Make sure your response is valid JSON. Prioritize methodology and technical approach explanations - these should be much more detailed than key findings and research design. If certain sections cannot be determined from the content, use "Not clearly specified in the content" or similar phrases."""
