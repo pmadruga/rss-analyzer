@@ -1,7 +1,6 @@
 {
-  "run_date": "2025-07-04T14:05:52.288942",
-  "total_articles": 0,
-  "completed_articles": 0,
-  "last_processed": null,
-  "average_confidence": 0
+  "run_date": "2025-07-06T22:24:54.991308",
+  "total_articles": 3,
+  "completed_articles": 3,
+  "last_processed": "2025-07-06 22:24:40"
 }
