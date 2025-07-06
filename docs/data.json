@@ -1,5 +1,5 @@
 {
-  "generated_at": "2025-07-06T22:42:45.042740+00:00",
+  "generated_at": "2025-07-06T22:49:40.563447+00:00",
   "total_articles": 19,
   "articles": [
     {
@@ -236,7 +236,7 @@
       ]
     },
     "health_check": {
-      "timestamp": "2025-07-06T22:42:45.042735+00:00",
+      "timestamp": "2025-07-06T22:49:40.563438+00:00",
       "apis_working": 0,
       "rss_feed_accessible": true,
       "database_accessible": true
