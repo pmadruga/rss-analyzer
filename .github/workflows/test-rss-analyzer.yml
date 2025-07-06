@@ -1,6 +1,9 @@
 name: Test RSS Analyzer
 
 on:
+  schedule:
+    # Run daily at 8:00 AM UTC
+    - cron: '0 8 * * *'
   workflow_dispatch:
     inputs:
       test_mode:
@@ -15,7 +18,7 @@ env:
   FOLLOW_LINKS: 'false'  # Disable for faster testing
   
   # API Configuration (same as main workflow)
-  API_PROVIDER: ${{ secrets.API_PROVIDER || 'anthropic' }}
+  API_PROVIDER: 'mistral'
   ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
   MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -33,21 +36,25 @@ jobs:
       with:
         python-version: '3.11'
         
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        version: "latest"
+        
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        uv sync
         
     - name: Lint with Ruff
       run: |
         echo "🔍 Running Ruff linter..."
-        ruff check . --output-format=github
+        uv run ruff check . --output-format=github
         echo "✅ Linting completed"
         
     - name: Check formatting with Ruff
       run: |
         echo "📝 Checking code formatting..."
-        ruff format --check .
+        uv run ruff format --check .
         echo "✅ Formatting check completed"
         
     - name: Create test directories
@@ -56,7 +63,7 @@ jobs:
         
     - name: Test RSS parsing only
       run: |
-        python -c "
+        uv run python -c "
         from src.rss_parser import RSSParser
         parser = RSSParser()
         entries = parser.fetch_feed('https://bg.raindrop.io/rss/public/57118738')
@@ -65,7 +72,7 @@ jobs:
         
     - name: Test scraper only  
       run: |
-        python -c "
+        uv run python -c "
         from src.scraper import WebScraper
         scraper = WebScraper()
         # Test with a known working URL
@@ -77,7 +84,7 @@ jobs:
         
     - name: Test database operations
       run: |
-        python -c "
+        uv run python -c "
         from src.database import DatabaseManager
         db = DatabaseManager('data/test.db')
         print('✅ Database test: Initialized successfully')
@@ -86,11 +93,11 @@ jobs:
     - name: Run limited analysis
       run: |
         echo '📊 Running limited RSS analysis...'
-        python -m src.main run --limit ${{ env.MAX_ARTICLES_PER_RUN }} || true
+        uv run python -m src.main run --limit ${{ env.MAX_ARTICLES_PER_RUN }} || true
         
     - name: Generate test summary
       run: |
-        python -c "
+        uv run python -c "
         import os
         import sqlite3
         
