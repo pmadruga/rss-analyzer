@@ -346,12 +346,16 @@ class ReportGenerator:
                     for col in columns:
                         value = article.get(col, "")
                         # Truncate long text fields for CSV
-                        if col in [
-                            "methodology_detailed",
-                            "key_findings",
-                            "technical_approach",
-                            "research_design",
-                        ] and len(str(value)) > 500:
+                        if (
+                            col
+                            in [
+                                "methodology_detailed",
+                                "key_findings",
+                                "technical_approach",
+                                "research_design",
+                            ]
+                            and len(str(value)) > 500
+                        ):
                             value = str(value)[:497] + "..."
                         row[col] = value
 
