@@ -13,7 +13,7 @@ PLIST_FILE="$HOME/Library/LaunchAgents/$SERVICE_NAME.plist"
 
 if [[ -f "$PLIST_FILE" ]]; then
     echo "LaunchAgent service found: $SERVICE_NAME"
-    
+
     # Check if service is loaded
     if launchctl list | grep -q "$SERVICE_NAME"; then
         echo "✅ Service is loaded and active"
@@ -23,13 +23,13 @@ if [[ -f "$PLIST_FILE" ]]; then
         echo "❌ Service exists but is not loaded"
         echo "To start: launchctl load $PLIST_FILE"
     fi
-    
+
 elif crontab -l 2>/dev/null | grep -q "run_hourly.sh"; then
     echo "Cron job found for RSS analyzer"
     echo "✅ Cron service is active"
     echo "Cron entry:"
     crontab -l | grep "run_hourly.sh"
-    
+
 else
     echo "❌ No hourly service found"
     echo "Run ./setup_hourly_service.sh to set up the service"

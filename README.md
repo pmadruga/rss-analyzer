@@ -100,19 +100,19 @@ SELECT id, title, url, status, processed_date FROM articles;
 SELECT status, COUNT(*) FROM articles GROUP BY status;
 
 -- View recent analyses with confidence scores
-SELECT a.title, c.confidence_score, a.processed_date 
-FROM articles a 
-JOIN content c ON a.id = c.article_id 
-ORDER BY a.processed_date DESC 
+SELECT a.title, c.confidence_score, a.processed_date
+FROM articles a
+JOIN content c ON a.id = c.article_id
+ORDER BY a.processed_date DESC
 LIMIT 10;
 
 -- Find articles from specific sources
 SELECT title, url FROM articles WHERE url LIKE '%arxiv%';
 
 -- View processing errors
-SELECT timestamp, status, error_message 
-FROM processing_log 
-WHERE status LIKE '%failed%' 
+SELECT timestamp, status, error_message
+FROM processing_log
+WHERE status LIKE '%failed%'
 ORDER BY timestamp DESC;
 ```
 

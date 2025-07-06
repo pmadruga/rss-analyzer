@@ -69,7 +69,7 @@ Create `.env` file with one of:
 API_PROVIDER=anthropic
 ANTHROPIC_API_KEY=sk-your-api-key-here
 
-# Mistral AI  
+# Mistral AI
 API_PROVIDER=mistral
 MISTRAL_API_KEY=your-mistral-key-here
 
@@ -90,13 +90,13 @@ SQLite database (`data/articles.db`) with tables:
 -- View all processed articles
 SELECT id, title, url, status, processed_date FROM articles;
 
--- Count articles by status  
+-- Count articles by status
 SELECT status, COUNT(*) FROM articles GROUP BY status;
 
 -- View recent analyses
-SELECT a.title, a.processed_date 
-FROM articles a 
-JOIN content c ON a.id = c.article_id 
+SELECT a.title, a.processed_date
+FROM articles a
+JOIN content c ON a.id = c.article_id
 ORDER BY a.processed_date DESC LIMIT 10;
 ```
 
@@ -118,7 +118,7 @@ ORDER BY a.processed_date DESC LIMIT 10;
 Reports generated in `output/` directory:
 - `article_analysis_report.md`: Detailed analysis with methodology explanations
 - `summary_report.md`: Quick overview
-- `articles_export.json`: Machine-readable format  
+- `articles_export.json`: Machine-readable format
 - `articles_export.csv`: Spreadsheet format
 
 ## Academic Publisher Support

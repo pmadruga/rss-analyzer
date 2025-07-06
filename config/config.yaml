@@ -55,7 +55,7 @@ output:
     summary_filename: "summary_report.md"
     json_filename: "articles_export.json"
     csv_filename: "articles_export.csv"
-  
+
   formats:
     include_toc: true
     include_stats: true
@@ -66,18 +66,18 @@ logging:
   level: "INFO"
   format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
   date_format: "%Y-%m-%d %H:%M:%S"
-  
+
 # Content Processing
 content:
   max_content_length: 50000
   min_content_length: 100
-  
+
 # Filtering
 filters:
   min_confidence_score: 1
   exclude_domains: []
   include_domains: []
-  
+
 # Performance
 performance:
   enable_caching: true

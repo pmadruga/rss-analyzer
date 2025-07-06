@@ -10,19 +10,19 @@ echo "Project directory: $PROJECT_DIR"
 # Option 1: Cron job setup
 setup_cron() {
     echo "Setting up cron job to run once daily at 2 AM..."
-    
+
     # Create cron job entry
     CRON_JOB="0 2 * * * cd $PROJECT_DIR && ./run_daily.sh >> logs/cron.log 2>&1"
-    
+
     # Add to crontab
     (crontab -l 2>/dev/null; echo "$CRON_JOB") | crontab -
-    
+
     echo "Cron job added successfully!"
     echo "The RSS analyzer will now run once daily at 2 AM."
     echo "Logs will be written to:"
     echo "  - $PROJECT_DIR/logs/daily_runs.log"
     echo "  - $PROJECT_DIR/logs/cron.log"
-    
+
     # Show current crontab
     echo ""
     echo "Current crontab:"
@@ -33,9 +33,9 @@ setup_cron() {
 setup_launchd() {
     SERVICE_NAME="com.rss-analyzer.daily"
     PLIST_FILE="$HOME/Library/LaunchAgents/$SERVICE_NAME.plist"
-    
+
     echo "Setting up macOS LaunchAgent..."
-    
+
     # Create LaunchAgent plist
     cat > "$PLIST_FILE" << EOF
 <?xml version="1.0" encoding="UTF-8"?>
@@ -69,7 +69,7 @@ EOF
 
     # Load the service
     launchctl load "$PLIST_FILE"
-    
+
     echo "LaunchAgent created and loaded successfully!"
     echo "Service file: $PLIST_FILE"
     echo "The RSS analyzer will run once daily at 2 AM."
@@ -77,7 +77,7 @@ EOF
     echo "  - $PROJECT_DIR/logs/daily_runs.log"
     echo "  - $PROJECT_DIR/logs/launchd.log"
     echo "  - $PROJECT_DIR/logs/launchd_error.log"
-    
+
     echo ""
     echo "To control the service:"
     echo "  Stop:  launchctl unload $PLIST_FILE"
@@ -91,7 +91,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     echo "1) LaunchAgent (recommended for macOS)"
     echo "2) Cron job"
     read -p "Enter choice (1 or 2): " choice
-    
+
     case $choice in
         1)
             setup_launchd

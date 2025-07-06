@@ -45,7 +45,7 @@ export CLAUDE_TIMEOUT=300
 run_claude_safe() {
     local prompt="$1"
     local input_file="$2"
-    
+
     if [ -n "$input_file" ] && [ -f "$input_file" ]; then
         # Run with file input
         timeout ${CLAUDE_TIMEOUT:-300} bash -c "cat '$input_file' | claude -p '$prompt'" 2>/dev/null
@@ -53,7 +53,7 @@ run_claude_safe() {
         # Run with direct prompt
         timeout ${CLAUDE_TIMEOUT:-300} claude -p "$prompt" 2>/dev/null
     fi
-    
+
     return $?
 }
 
@@ -78,7 +78,7 @@ fi
 # Add Claude Code configuration to shell profile
 if ! grep -q "# Claude Code RSS Analyzer Configuration" "$SHELL_PROFILE" 2>/dev/null; then
     echo -e "${BLUE}Adding configuration to $SHELL_PROFILE...${NC}"
-    
+
     cat >> "$SHELL_PROFILE" << EOF
 
 # Claude Code RSS Analyzer Configuration
@@ -109,7 +109,7 @@ echo "🔍 Running Claude Code review..."
 # Check if Claude Code integration is available
 if [ -f "tools/claude_code_integration.py" ]; then
     python tools/claude_code_integration.py review
-    
+
     if [ $? -ne 0 ]; then
         echo "❌ Claude Code review failed"
         read -p "Continue with commit anyway? (y/N): " -n 1 -r

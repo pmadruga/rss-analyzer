@@ -8,7 +8,7 @@ This directory contains shell scripts for RSS Analyzer operations and deployment
 - `lint.sh` - Code linting and quality checks
 - `check_service_status.sh` - Service status monitoring
 
-### Deployment Scripts  
+### Deployment Scripts
 - `setup_daily_service.sh` - Set up daily processing service
 - `run_daily.sh` - Daily execution script
 - `setup_github_action.sh` - GitHub Actions setup

@@ -7,36 +7,36 @@
     <meta name="keywords" content="RSS, AI analysis, academic papers, technical articles, research, machine learning">
     <meta name="author" content="RSS Analyzer">
     <meta name="robots" content="index, follow">
-    
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="RSS Article Analysis Dashboard">
     <meta property="og:description" content="AI-powered analysis of academic papers and technical articles from RSS feeds">
     <meta property="og:url" content="https://yourusername.github.io/rss-analyzer/">
-    
+
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:title" content="RSS Article Analysis Dashboard">
     <meta property="twitter:description" content="AI-powered analysis of academic papers and technical articles from RSS feeds">
-    
+
     <title>RSS Article Analysis Dashboard</title>
-    
+
     <!-- Preload critical resources -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" as="style">
     <link rel="preload" href="styles.css" as="style">
     <link rel="preload" href="script.js" as="script">
-    
+
     <!-- Stylesheets -->
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232563eb'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z'/%3E%3C/svg%3E">
 </head>
 <body>
     <!-- Skip to main content for accessibility -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
-    
+
     <!-- Main container -->
     <div class="app-container">
         <!-- Header section -->
@@ -52,7 +52,7 @@
                 </div>
             </div>
         </header>
-        
+
         <!-- Statistics section -->
         <section class="stats-section" aria-labelledby="stats-heading">
             <h2 id="stats-heading" class="visually-hidden">Statistics</h2>
@@ -78,10 +78,10 @@
             <div class="controls-grid">
                 <div class="search-container">
                     <label for="search-input" class="visually-hidden">Search articles</label>
-                    <input 
-                        type="text" 
-                        id="search-input" 
-                        class="search-input" 
+                    <input
+                        type="text"
+                        id="search-input"
+                        class="search-input"
                         placeholder="Search articles, topics, or keywords..."
                         aria-describedby="search-help"
                         autocomplete="off"
@@ -90,8 +90,8 @@
                     <div class="search-icon" aria-hidden="true">🔍</div>
                     <div id="search-help" class="visually-hidden">Search through article titles and content</div>
                 </div>
-                
-                
+
+
                 <div class="view-controls">
                     <button id="expand-all" class="control-btn" aria-label="Expand all sections">
                         <span class="btn-icon">📂</span>
@@ -112,7 +112,7 @@
                 <div class="loading-spinner" aria-hidden="true"></div>
                 <div class="loading-text">Loading articles...</div>
             </div>
-            
+
             <!-- Error state -->
             <div id="error-container" class="error-container" role="alert" aria-live="assertive" style="display: none;">
                 <div class="error-icon" aria-hidden="true">⚠️</div>
@@ -122,12 +122,12 @@
                 </div>
                 <button id="retry-btn" class="retry-btn">Retry</button>
             </div>
-            
+
             <!-- Articles container -->
             <div id="articles-container" class="articles-container" style="display: none;">
                 <!-- Articles will be dynamically inserted here -->
             </div>
-            
+
             <!-- Empty state -->
             <div id="empty-container" class="empty-container" style="display: none;">
                 <div class="empty-icon" aria-hidden="true">📄</div>

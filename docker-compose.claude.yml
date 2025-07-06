@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   rss-analyzer-claude:
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile.claude
     container_name: rss-analyzer-claude
@@ -12,51 +12,51 @@ services:
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
       - MISTRAL_API_KEY=${MISTRAL_API_KEY}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
-      
+
       # Claude Code Configuration
       - CLAUDE_TIMEOUT=${CLAUDE_TIMEOUT:-300}
       - CLAUDE_NON_INTERACTIVE=true
-      
+
       # RSS Configuration
       - RSS_FEED_URL=${RSS_FEED_URL:-https://bg.raindrop.io/rss/public/57118738}
       - USER_AGENT=${USER_AGENT:-RSS-Article-Analyzer/1.0}
-      
+
       # Processing Configuration
       - MAX_ARTICLES_PER_RUN=${MAX_ARTICLES_PER_RUN:-30}
       - SCRAPER_DELAY=${SCRAPER_DELAY:-1.0}
       - REQUEST_TIMEOUT=${REQUEST_TIMEOUT:-30}
-      
+
       # Database Configuration
       - DB_PATH=/app/data/articles.db
-      
+
       # Output Configuration
       - OUTPUT_DIR=/app/output
-      
+
       # Logging Configuration
       - LOG_LEVEL=${LOG_LEVEL:-INFO}
       - LOG_FILE=/app/logs/analyzer.log
-    
+
     volumes:
       # Data persistence
       - ./data:/app/data
       - ./output:/app/output
       - ./logs:/app/logs
-      
+
       # Configuration
       - ./config:/app/config:ro
       - ./.env:/app/.env:ro
-      
+
       # Claude Code integration
       - ./tools:/app/tools
-    
+
     # Commands for Claude Code integration
     # Use: docker compose -f docker-compose.claude.yml run rss-analyzer-claude <command>
     profiles:
       - claude-integration
-    
+
     # Restart policy
     restart: unless-stopped
-    
+
     # Resource limits
     deploy:
       resources:
@@ -66,7 +66,7 @@ services:
         reservations:
           memory: 512M
           cpus: '0.5'
-    
+
     # Networking
     networks:
       - rss-analyzer-network

@@ -16,7 +16,7 @@ env:
   # Use minimal settings for testing
   MAX_ARTICLES_PER_RUN: ${{ github.event.inputs.test_mode == 'true' && '2' || '5' }}
   FOLLOW_LINKS: 'false'  # Disable for faster testing
-  
+
   # API Configuration (same as main workflow)
   API_PROVIDER: 'mistral'
   ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -26,41 +26,41 @@ env:
 jobs:
   test-analyzer:
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      
+
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.11'
-        
+
     - name: Install uv
       uses: astral-sh/setup-uv@v3
       with:
         version: "latest"
-        
+
     - name: Install dependencies
       run: |
         uv sync
-        
+
     - name: Lint with Ruff
       run: |
         echo "🔍 Running Ruff linter..."
         uv run ruff check . --output-format=github
         echo "✅ Linting completed"
-        
+
     - name: Check formatting with Ruff
       run: |
         echo "📝 Checking code formatting..."
         uv run ruff format --check .
         echo "✅ Formatting check completed"
-        
+
     - name: Create test directories
       run: |
         mkdir -p data logs output
-        
+
     - name: Test RSS parsing only
       run: |
         uv run python -c "
@@ -69,8 +69,8 @@ jobs:
         entries = parser.fetch_feed('https://bg.raindrop.io/rss/public/57118738')
         print(f'✅ RSS parsing test: Found {len(entries)} entries')
         "
-        
-    - name: Test scraper only  
+
+    - name: Test scraper only
       run: |
         uv run python -c "
         from src.scraper import WebScraper
@@ -81,7 +81,7 @@ jobs:
         if result:
             print(f'   Content length: {len(result.content)} characters')
         "
-        
+
     - name: Test database operations
       run: |
         uv run python -c "
@@ -89,18 +89,18 @@ jobs:
         db = DatabaseManager('data/test.db')
         print('✅ Database test: Initialized successfully')
         "
-        
+
     - name: Run limited analysis
       run: |
         echo '📊 Running limited RSS analysis...'
         uv run python -m src.main run --limit ${{ env.MAX_ARTICLES_PER_RUN }} || true
-        
+
     - name: Generate test summary
       run: |
         uv run python -c "
         import os
         import sqlite3
-        
+
         if os.path.exists('data/articles.db'):
             conn = sqlite3.connect('data/articles.db')
             cursor = conn.cursor()
@@ -113,18 +113,18 @@ jobs:
         else:
             print('ℹ️ No database created (API limits or errors)')
         "
-        
+
     - name: Validate outputs
       run: |
         echo '🔍 Checking output files...'
-        
+
         if [ -f 'output/articles_by_date.md' ]; then
             echo '✅ articles_by_date.md exists'
             wc -l output/articles_by_date.md
         else
             echo 'ℹ️ articles_by_date.md not created'
         fi
-        
+
     - name: Upload test artifacts
       uses: actions/upload-artifact@v4
       if: always()

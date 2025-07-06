@@ -11,7 +11,7 @@ This guide will help you set up the RSS analyzer to run automatically on GitHub 
 
 2. **Configure your API key** (choose one):
    - Anthropic Claude (recommended)
-   - Mistral AI  
+   - Mistral AI
    - OpenAI
 
 3. **Push to GitHub** and the analyzer will start running automatically once daily at 2 AM UTC!
@@ -34,7 +34,7 @@ ANTHROPIC_API_KEY = sk-your-anthropic-key-here
 
 **For Mistral AI:**
 ```
-API_PROVIDER = mistral  
+API_PROVIDER = mistral
 MISTRAL_API_KEY = your-mistral-key-here
 ```
 
@@ -161,16 +161,16 @@ Set the `RSS_FEED_URL` variable to your feed URL.
 ## 💡 Tips
 
 - **Start with defaults** before customizing
-- **Monitor first few runs** to ensure stability  
+- **Monitor first few runs** to ensure stability
 - **Use manual triggers** for testing
 - **Check rate limits** for your API provider
 - **Set reasonable delays** to respect target sites
 
 ## 🎉 Benefits
 
-✅ **Zero maintenance** - runs automatically  
-✅ **Always available** - no local machine required  
-✅ **Version controlled** - all outputs tracked in git  
-✅ **Collaborative** - team can access results  
-✅ **Reliable** - GitHub's infrastructure  
+✅ **Zero maintenance** - runs automatically
+✅ **Always available** - no local machine required
+✅ **Version controlled** - all outputs tracked in git
+✅ **Collaborative** - team can access results
+✅ **Reliable** - GitHub's infrastructure
 ✅ **Scalable** - easy to modify and extend

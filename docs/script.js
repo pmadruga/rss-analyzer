@@ -1,7 +1,7 @@
 /**
  * RSS Article Analysis Dashboard
  * Professional JavaScript Architecture
- * 
+ *
  * @author RSS Analyzer Team
  * @version 2.0.0
  */
@@ -38,17 +38,17 @@ class AppState {
             lastUpdated: null,
             processingStatus: null
         };
-        
+
         this.filters = {
             searchTerm: ''
         };
-        
+
         this.ui = {
             expandedSections: new Set(),
             preferences: this.loadPreferences()
         };
     }
-    
+
     /**
      * Load user preferences from localStorage
      * @returns {Object} User preferences
@@ -62,7 +62,7 @@ class AppState {
             return { expandedSections: [] };
         }
     }
-    
+
     /**
      * Save user preferences to localStorage
      */
@@ -76,7 +76,7 @@ class AppState {
             console.warn('Failed to save preferences:', error);
         }
     }
-    
+
     /**
      * Update application state
      * @param {Object} updates - State updates
@@ -85,7 +85,7 @@ class AppState {
         Object.assign(this.data, updates);
         this.render();
     }
-    
+
     /**
      * Update filters and trigger re-render
      * @param {Object} filterUpdates - Filter updates
@@ -94,7 +94,7 @@ class AppState {
         Object.assign(this.filters, filterUpdates);
         this.filterAndRender();
     }
-    
+
     /**
      * Filter articles based on current filters
      */
@@ -102,11 +102,11 @@ class AppState {
         this.data.filteredArticles = this.data.articles.filter(article => {
             return this.matchesSearch(article);
         });
-        
+
         this.data.groupedArticles = this.groupArticlesByDate(this.data.filteredArticles);
         this.render();
     }
-    
+
     /**
      * Check if article matches search term
      * @param {Object} article - Article to check
@@ -114,20 +114,20 @@ class AppState {
      */
     matchesSearch(article) {
         if (!this.filters.searchTerm) return true;
-        
+
         const searchTerm = this.filters.searchTerm.toLowerCase();
         const searchableFields = [
             article.title,
             article.analysis,
             ...(article.linked_articles?.map(la => la.title) || [])
         ];
-        
-        return searchableFields.some(field => 
+
+        return searchableFields.some(field =>
             field?.toLowerCase().includes(searchTerm)
         );
     }
-    
-    
+
+
     /**
      * Group articles by date
      * @param {Array} articles - Articles to group
@@ -136,14 +136,14 @@ class AppState {
     groupArticlesByDate(articles) {
         const grouped = {};
         const today = new Date().toDateString();
-        
+
         articles.forEach(article => {
             const date = new Date(article.processed_date);
             const dateString = date.toDateString();
             const isToday = dateString === today;
-            
+
             const dateKey = isToday ? 'Today' : Utils.formatDate(date);
-            
+
             if (!grouped[dateKey]) {
                 grouped[dateKey] = {
                     articles: [],
@@ -152,11 +152,11 @@ class AppState {
                     count: 0
                 };
             }
-            
+
             grouped[dateKey].articles.push(article);
             grouped[dateKey].count++;
         });
-        
+
         // Sort groups by date (newest first)
         return Object.keys(grouped)
             .sort((a, b) => grouped[b].date - grouped[a].date)
@@ -165,7 +165,7 @@ class AppState {
                 return acc;
             }, {});
     }
-    
+
     /**
      * Render the application
      */
@@ -179,11 +179,11 @@ class AppState {
         } else {
             this.showArticles();
         }
-        
+
         this.updateStats();
         this.updateLastUpdated();
     }
-    
+
     /**
      * Show loading state
      */
@@ -193,7 +193,7 @@ class AppState {
         UI.hideElement('empty-container');
         UI.hideElement('articles-container');
     }
-    
+
     /**
      * Show error state
      */
@@ -203,7 +203,7 @@ class AppState {
         UI.hideElement('empty-container');
         UI.hideElement('articles-container');
     }
-    
+
     /**
      * Show empty state
      */
@@ -213,7 +213,7 @@ class AppState {
         UI.showElement('empty-container');
         UI.hideElement('articles-container');
     }
-    
+
     /**
      * Show articles
      */
@@ -222,23 +222,23 @@ class AppState {
         UI.hideElement('error-container');
         UI.hideElement('empty-container');
         UI.showElement('articles-container');
-        
+
         this.renderArticleGroups();
     }
-    
+
     /**
      * Render article groups
      */
     renderArticleGroups() {
         const container = document.getElementById('articles-container');
         container.innerHTML = '';
-        
+
         Object.entries(this.data.groupedArticles).forEach(([dateKey, group]) => {
             const dateGroupElement = this.createDateGroup(dateKey, group);
             container.appendChild(dateGroupElement);
         });
     }
-    
+
     /**
      * Create date group element
      * @param {string} dateKey - Date key
@@ -249,13 +249,13 @@ class AppState {
         const dateGroup = document.createElement('div');
         dateGroup.className = 'date-group';
         dateGroup.setAttribute('data-date', dateKey);
-        
+
         const isExpanded = group.isToday || this.ui.expandedSections.has(dateKey);
-        
+
         dateGroup.innerHTML = `
-            <div class="date-header ${isExpanded ? 'expanded' : ''}" 
-                 role="button" 
-                 tabindex="0" 
+            <div class="date-header ${isExpanded ? 'expanded' : ''}"
+                 role="button"
+                 tabindex="0"
                  aria-expanded="${isExpanded}"
                  aria-controls="articles-${Utils.sanitizeId(dateKey)}">
                 <h3 class="date-title">${dateKey}</h3>
@@ -264,13 +264,13 @@ class AppState {
                     <span class="expand-icon" aria-hidden="true">▼</span>
                 </div>
             </div>
-            <div id="articles-${Utils.sanitizeId(dateKey)}" 
+            <div id="articles-${Utils.sanitizeId(dateKey)}"
                  class="articles-list ${isExpanded ? 'expanded' : ''}"
                  aria-hidden="${!isExpanded}">
                 ${group.articles.map(article => this.createArticleCard(article)).join('')}
             </div>
         `;
-        
+
         // Add click event listener
         const header = dateGroup.querySelector('.date-header');
         header.addEventListener('click', () => this.toggleSection(dateKey));
@@ -280,10 +280,10 @@ class AppState {
                 this.toggleSection(dateKey);
             }
         });
-        
+
         return dateGroup;
     }
-    
+
     /**
      * Create article card HTML
      * @param {Object} article - Article data
@@ -291,14 +291,14 @@ class AppState {
      */
     createArticleCard(article) {
         const processedDate = Utils.formatDateTime(article.processed_date);
-        
+
         const linkedArticlesHtml = article.linked_articles?.length > 0 ? `
             <div class="linked-articles">
                 <h4 class="linked-articles-title">Referenced Articles (${article.linked_articles.length})</h4>
                 ${article.linked_articles.map(linked => `
                     <div class="linked-article">
-                        <a href="${Utils.escapeHtml(linked.url)}" 
-                           target="_blank" 
+                        <a href="${Utils.escapeHtml(linked.url)}"
+                           target="_blank"
                            rel="noopener noreferrer">
                             ${Utils.escapeHtml(linked.title)}
                         </a>
@@ -306,13 +306,13 @@ class AppState {
                 `).join('')}
             </div>
         ` : '';
-        
+
         return `
             <article class="article-card">
                 <header class="article-header">
                     <h4 class="article-title">
-                        <a href="${Utils.escapeHtml(article.url)}" 
-                           target="_blank" 
+                        <a href="${Utils.escapeHtml(article.url)}"
+                           target="_blank"
                            rel="noopener noreferrer">
                             ${Utils.escapeHtml(article.title)}
                         </a>
@@ -330,7 +330,7 @@ class AppState {
             </article>
         `;
     }
-    
+
     /**
      * Toggle section expanded state
      * @param {string} dateKey - Date key to toggle
@@ -338,11 +338,11 @@ class AppState {
     toggleSection(dateKey) {
         const dateGroup = document.querySelector(`[data-date="${dateKey}"]`);
         if (!dateGroup) return;
-        
+
         const header = dateGroup.querySelector('.date-header');
         const list = dateGroup.querySelector('.articles-list');
         const isExpanded = header.classList.contains('expanded');
-        
+
         if (isExpanded) {
             header.classList.remove('expanded');
             list.classList.remove('expanded');
@@ -356,45 +356,45 @@ class AppState {
             list.setAttribute('aria-hidden', 'false');
             this.ui.expandedSections.add(dateKey);
         }
-        
+
         this.savePreferences();
     }
-    
+
     /**
      * Update statistics display
      */
     updateStats() {
         const today = new Date().toDateString();
-        const todayArticles = this.data.articles.filter(article => 
+        const todayArticles = this.data.articles.filter(article =>
             new Date(article.processed_date).toDateString() === today
         ).length;
-        
+
         document.getElementById('total-articles').textContent = this.data.articles.length;
         document.getElementById('today-articles').textContent = todayArticles;
-        
+
         // Update system status
         this.updateSystemStatus();
     }
-    
+
     /**
      * Update system status display
      */
     updateSystemStatus() {
         const statusElement = document.getElementById('system-status');
         if (!statusElement) return;
-        
+
         const status = this.data.processingStatus;
         if (!status) {
             statusElement.textContent = 'Unknown';
             statusElement.className = 'stat-value system-status status-unknown';
             return;
         }
-        
+
         const systemStatus = status.system_status || 'unknown';
-        
+
         // Update status text and class
         statusElement.className = `stat-value system-status status-${systemStatus}`;
-        
+
         switch (systemStatus) {
             case 'success':
                 statusElement.textContent = 'Healthy';
@@ -414,7 +414,7 @@ class AppState {
                 statusElement.title = 'Status unknown';
         }
     }
-    
+
     /**
      * Show recent errors as alerts
      */
@@ -422,15 +422,15 @@ class AppState {
         const recentErrors = status.recent_errors_by_date || {};
         const today = new Date().toISOString().split('T')[0];
         const todayErrors = recentErrors[today] || [];
-        
+
         if (todayErrors.length > 0) {
             // Find a good place to show errors (after the stats section)
             const statsSection = document.querySelector('.stats-section');
-            
+
             // Remove any existing error alerts
             const existingAlerts = document.querySelectorAll('.error-alert');
             existingAlerts.forEach(alert => alert.remove());
-            
+
             // Create error alert
             const errorAlert = document.createElement('div');
             errorAlert.className = 'error-alert';
@@ -446,14 +446,14 @@ class AppState {
                     `).join('')}
                 </div>
             `;
-            
+
             // Insert after stats section
             if (statsSection && statsSection.nextSibling) {
                 statsSection.parentNode.insertBefore(errorAlert, statsSection.nextSibling);
             }
         }
     }
-    
+
     /**
      * Update last updated timestamp
      */
@@ -469,7 +469,7 @@ class AppState {
  * Utility Functions
  */
 class Utils {
-    
+
     /**
      * Format date for display
      * @param {Date} date - Date to format
@@ -478,7 +478,7 @@ class Utils {
     static formatDate(date) {
         return date.toLocaleDateString('en-US', CONFIG.DATE_FORMAT_OPTIONS);
     }
-    
+
     /**
      * Format date and time for display
      * @param {string} dateString - ISO date string
@@ -494,7 +494,7 @@ class Utils {
             minute: '2-digit'
         });
     }
-    
+
     /**
      * Escape HTML to prevent XSS
      * @param {string} text - Text to escape
@@ -505,7 +505,7 @@ class Utils {
         div.textContent = text;
         return div.innerHTML;
     }
-    
+
     /**
      * Sanitize string for use as ID
      * @param {string} str - String to sanitize
@@ -514,7 +514,7 @@ class Utils {
     static sanitizeId(str) {
         return str.replace(/[^a-zA-Z0-9-_]/g, '-').toLowerCase();
     }
-    
+
     /**
      * Format analysis text with proper HTML
      * @param {string} analysis - Analysis text
@@ -528,7 +528,7 @@ class Utils {
             .replace(/^/, '<p>')
             .replace(/$/, '</p>');
     }
-    
+
     /**
      * Debounce function calls
      * @param {Function} func - Function to debounce
@@ -546,7 +546,7 @@ class Utils {
             timeout = setTimeout(later, wait);
         };
     }
-    
+
     /**
      * Show loading toast notification
      * @param {string} message - Message to show
@@ -568,12 +568,12 @@ class Utils {
             opacity: 0;
             transition: opacity 0.3s ease;
         `;
-        
+
         document.body.appendChild(toast);
-        
+
         // Fade in
         setTimeout(() => toast.style.opacity = '1', 10);
-        
+
         // Remove after 3 seconds
         setTimeout(() => {
             toast.style.opacity = '0';
@@ -594,7 +594,7 @@ class UI {
         const element = document.getElementById(id);
         if (element) element.style.display = 'block';
     }
-    
+
     /**
      * Hide element by ID
      * @param {string} id - Element ID
@@ -603,7 +603,7 @@ class UI {
         const element = document.getElementById(id);
         if (element) element.style.display = 'none';
     }
-    
+
     /**
      * Toggle element visibility
      * @param {string} id - Element ID
@@ -630,21 +630,21 @@ class DataService {
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status}: ${response.statusText}`);
             }
-            
+
             const data = await response.json();
-            
+
             // Validate data structure
             if (!data.articles || !Array.isArray(data.articles)) {
                 throw new Error('Invalid data format: missing articles array');
             }
-            
+
             return data;
         } catch (error) {
             console.error('Failed to fetch articles:', error);
             throw error;
         }
     }
-    
+
     /**
      * Retry fetch with exponential backoff
      * @param {number} maxRetries - Maximum number of retries
@@ -652,7 +652,7 @@ class DataService {
      */
     static async fetchWithRetry(maxRetries = 3) {
         let lastError;
-        
+
         for (let i = 0; i < maxRetries; i++) {
             try {
                 return await this.fetchArticles();
@@ -664,7 +664,7 @@ class DataService {
                 }
             }
         }
-        
+
         throw lastError;
     }
 }
@@ -677,7 +677,7 @@ class EventHandlers {
         this.appState = appState;
         this.setupEventListeners();
     }
-    
+
     /**
      * Setup all event listeners
      */
@@ -687,7 +687,7 @@ class EventHandlers {
         this.setupRetryButton();
         this.setupKeyboardNavigation();
     }
-    
+
     /**
      * Setup search input handler
      */
@@ -697,34 +697,34 @@ class EventHandlers {
             const debouncedSearch = Utils.debounce((value) => {
                 this.appState.updateFilters({ searchTerm: value });
             }, CONFIG.DEBOUNCE_DELAY);
-            
+
             searchInput.addEventListener('input', (e) => {
                 debouncedSearch(e.target.value);
             });
         }
     }
-    
-    
+
+
     /**
      * Setup control button handlers
      */
     setupControlButtons() {
         const expandAllBtn = document.getElementById('expand-all');
         const collapseAllBtn = document.getElementById('collapse-all');
-        
+
         if (expandAllBtn) {
             expandAllBtn.addEventListener('click', () => {
                 this.expandAllSections();
             });
         }
-        
+
         if (collapseAllBtn) {
             collapseAllBtn.addEventListener('click', () => {
                 this.collapseAllSections();
             });
         }
     }
-    
+
     /**
      * Setup retry button handler
      */
@@ -736,7 +736,7 @@ class EventHandlers {
             });
         }
     }
-    
+
     /**
      * Setup keyboard navigation
      */
@@ -753,7 +753,7 @@ class EventHandlers {
             }
         });
     }
-    
+
     /**
      * Expand all sections
      */
@@ -767,7 +767,7 @@ class EventHandlers {
         });
         Utils.showToast('All sections expanded');
     }
-    
+
     /**
      * Collapse all sections
      */
@@ -781,13 +781,13 @@ class EventHandlers {
         });
         Utils.showToast('All sections collapsed');
     }
-    
+
     /**
      * Retry loading data
      */
     async retryLoad() {
         this.appState.update({ isLoading: true, hasError: false });
-        
+
         try {
             const data = await DataService.fetchWithRetry();
             this.appState.update({
@@ -814,16 +814,16 @@ class App {
         this.state = new AppState();
         this.eventHandlers = new EventHandlers(this.state);
     }
-    
+
     /**
      * Initialize the application
      */
     async init() {
         try {
             this.state.update({ isLoading: true, hasError: false });
-            
+
             const data = await DataService.fetchWithRetry();
-            
+
             this.state.update({
                 articles: data.articles,
                 lastUpdated: data.generated_at,
@@ -831,12 +831,12 @@ class App {
                 isLoading: false,
                 hasError: false
             });
-            
+
             // Initialize UI state from preferences
             this.state.ui.expandedSections = new Set(this.state.ui.preferences.expandedSections);
-            
+
             this.state.filterAndRender();
-            
+
         } catch (error) {
             console.error('Failed to initialize application:', error);
             this.state.update({ isLoading: false, hasError: true });
@@ -850,7 +850,7 @@ class App {
 document.addEventListener('DOMContentLoaded', () => {
     const app = new App();
     app.init();
-    
+
     // Make app globally available for debugging
     if (typeof window !== 'undefined') {
         window.RSSAnalyzer = app;

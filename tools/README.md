@@ -20,7 +20,7 @@ Run tools from the project root directory:
 # Generate website data
 python tools/generate_website_data.py
 
-# Generate reports  
+# Generate reports
 python tools/generate_comprehensive_reports.py
 
 # Test link following

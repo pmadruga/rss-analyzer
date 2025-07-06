@@ -40,7 +40,7 @@ echo ""
 
 echo "   🤖 API_PROVIDER (optional, defaults to 'anthropic'):"
 echo "       - 'anthropic' for Claude"
-echo "       - 'mistral' for Mistral AI"  
+echo "       - 'mistral' for Mistral AI"
 echo "       - 'openai' for OpenAI"
 echo ""
 
@@ -71,25 +71,25 @@ echo ""
 if [ "$MANUAL_SETUP" = false ]; then
     echo "5. 🛠️ Automated Setup with GitHub CLI"
     echo ""
-    
+
     read -p "Would you like to set up secrets automatically with GitHub CLI? (y/n): " setup_auto
-    
+
     if [[ $setup_auto == [Yy]* ]]; then
         echo ""
         echo "Setting up repository secrets..."
-        
+
         # Check if user is logged in
         if ! gh auth status &> /dev/null; then
             echo "Please log in to GitHub CLI first:"
             gh auth login
         fi
-        
+
         # API Provider
         read -p "Enter API provider (anthropic/mistral/openai) [anthropic]: " api_provider
         api_provider=${api_provider:-anthropic}
         gh secret set API_PROVIDER --body "$api_provider"
         echo "✅ Set API_PROVIDER"
-        
+
         # API Key based on provider
         case $api_provider in
             anthropic)
@@ -111,14 +111,14 @@ if [ "$MANUAL_SETUP" = false ]; then
                 echo "✅ Set OPENAI_API_KEY"
                 ;;
         esac
-        
+
         # Optional: RSS Feed URL
         read -p "Enter RSS feed URL [use default]: " rss_url
         if [[ -n "$rss_url" ]]; then
             gh variable set RSS_FEED_URL --body "$rss_url"
             echo "✅ Set RSS_FEED_URL"
         fi
-        
+
         echo ""
         echo "✅ Secrets configured successfully!"
     fi
@@ -136,7 +136,7 @@ if [ -n "$(git status --porcelain)" ]; then
     echo "Committing GitHub Action workflow..."
     git add .github/workflows/rss-analyzer.yml
     git add setup_github_action.sh
-    
+
     if git diff --staged --quiet; then
         echo "No changes to commit"
     else
@@ -148,14 +148,14 @@ if [ -n "$(git status --porcelain)" ]; then
 - Creates releases for significant updates
 
 🤖 Generated with Claude Code"
-        
+
         echo "✅ Committed workflow files"
-        
+
         read -p "Push to GitHub now? (y/n): " push_now
         if [[ $push_now == [Yy]* ]]; then
             git push
             echo "✅ Pushed to GitHub"
-            
+
             if command -v gh &> /dev/null; then
                 REPO_URL=$(gh repo view --json url -q .url)
                 echo ""

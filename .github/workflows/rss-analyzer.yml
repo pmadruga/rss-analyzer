@@ -24,10 +24,10 @@ env:
   ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
   MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-  
+
   # RSS Configuration
   RSS_FEED_URL: ${{ vars.RSS_FEED_URL || 'https://bg.raindrop.io/rss/public/57118738' }}
-  
+
   # Processing Configuration
   MAX_ARTICLES_PER_RUN: ${{ github.event.inputs.max_articles || '30' }}
   FOLLOW_LINKS: ${{ github.event.inputs.follow_links || 'true' }}
@@ -38,21 +38,21 @@ env:
 jobs:
   analyze-rss:
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      
+
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.11'
-        
+
     - name: Install uv
       uses: astral-sh/setup-uv@v3
       with:
         version: "latest"
-        
+
     - name: Cache uv dependencies
       uses: actions/cache@v3
       with:
@@ -60,15 +60,15 @@ jobs:
         key: ${{ runner.os }}-uv-${{ hashFiles('pyproject.toml', 'uv.lock') }}
         restore-keys: |
           ${{ runner.os }}-uv-
-          
+
     - name: Install dependencies
       run: |
         uv sync
-        
+
     - name: Create necessary directories
       run: |
         mkdir -p data logs output
-        
+
     - name: Download previous database (if exists)
       continue-on-error: true
       run: |
@@ -78,41 +78,41 @@ jobs:
         xargs -I {} gh run download {} --name database-backup --dir ./data/ || true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        
+
     - name: Run RSS analyzer
       run: |
         uv run python -m src.main run --limit ${{ env.MAX_ARTICLES_PER_RUN }}
-        
+
     - name: Generate articles by date file
       run: |
         uv run python tools/generate_articles_by_date.py
-        
+
     - name: Generate analysis summary
       run: |
         uv run python -c "
         import sqlite3
         import json
         from datetime import datetime
-        
+
         # Generate run summary
         conn = sqlite3.connect('data/articles.db')
         cursor = conn.cursor()
-        
+
         # Get statistics
         cursor.execute('SELECT COUNT(*) FROM articles WHERE status = \"completed\"')
         completed = cursor.fetchone()[0]
-        
+
         cursor.execute('SELECT COUNT(*) FROM articles')
         total = cursor.fetchone()[0]
-        
+
         cursor.execute('SELECT MAX(processed_date) FROM articles WHERE status = \"completed\"')
         last_processed = cursor.fetchone()[0]
-        
+
         cursor.execute('SELECT AVG(confidence_score) FROM content')
         avg_confidence = cursor.fetchone()[0] or 0
-        
+
         conn.close()
-        
+
         summary = {
             'run_date': datetime.now().isoformat(),
             'total_articles': total,
@@ -120,42 +120,42 @@ jobs:
             'last_processed': last_processed,
             'average_confidence': round(avg_confidence, 1)
         }
-        
+
         with open('output/run_summary.json', 'w') as f:
             json.dump(summary, f, indent=2)
-            
+
         print(f'Run completed: {completed}/{total} articles processed')
         "
-        
+
     - name: Commit and push changes
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "RSS Analyzer Action"
-        
+
         # Add all output files
         git add output/articles_by_date.md output/run_summary.json
-        
+
         # Check if there are changes to commit
         if git diff --staged --quiet; then
           echo "No changes to commit"
         else
           SUMMARY=$(cat output/run_summary.json | jq -r '"Articles: " + (.completed_articles | tostring) + "/" + (.total_articles | tostring) + " | Avg Confidence: " + (.average_confidence | tostring) + "/10"')
           git commit -m "Update RSS analysis - $(date -u '+%Y-%m-%d %H:%M UTC') 🤖
-          
+
           $SUMMARY
-          
+
           Co-Authored-By: RSS-Analyzer-Bot <noreply@github.com>"
-          
+
           git push
         fi
-        
+
     - name: Upload database backup
       uses: actions/upload-artifact@v4
       with:
         name: database-backup
         path: data/articles.db
         retention-days: 30
-        
+
     - name: Upload logs
       uses: actions/upload-artifact@v4
       if: always()
@@ -163,13 +163,13 @@ jobs:
         name: logs-${{ github.run_number }}
         path: logs/
         retention-days: 7
-        
+
     - name: Create release on significant updates
       if: github.event_name == 'schedule'
       run: |
         # Check if we should create a release (e.g., every 24 hours or significant changes)
         ARTICLES_COUNT=$(cat output/run_summary.json | jq -r '.completed_articles')
-        
+
         # Create a release every 50 articles or daily
         if [ $((ARTICLES_COUNT % 50)) -eq 0 ] || [ $(date +%H) -eq 0 ]; then
           gh release create "analysis-$(date +%Y%m%d-%H%M)" \
@@ -180,7 +180,7 @@ jobs:
         fi
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        
+
     - name: Post status to commit
       if: always()
       run: |
@@ -191,9 +191,9 @@ jobs:
           STATUS="❌ RSS analysis failed"
           EMOJI="🔴"
         fi
-        
+
         SUMMARY=$(cat output/run_summary.json 2>/dev/null | jq -r '"Articles: " + (.completed_articles | tostring) + "/" + (.total_articles | tostring) + " | Confidence: " + (.average_confidence | tostring) + "/10"' || echo "No summary available")
-        
+
         echo "## $EMOJI RSS Analyzer Status" >> $GITHUB_STEP_SUMMARY
         echo "$STATUS" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
