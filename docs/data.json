@@ -1,7 +1,17 @@
 {
-  "generated_at": "2025-07-06T22:49:40.563447+00:00",
-  "total_articles": 19,
+  "generated_at": "2025-07-07T10:21:33.523298+00:00",
+  "total_articles": 20,
   "articles": [
+    {
+      "id": 21,
+      "title": "Context Engineering",
+      "url": "https://blog.langchain.com/context-engineering-for-agents/",
+      "processed_date": "2025-07-07 10:16:19",
+      "status": "completed",
+      "analysis": "**Key Findings:** The main findings are that context engineering is crucial for improving AI agent performance. Techniques like writing, selecting, compressing, and isolating context help manage the agent’s memory effectively. Tools like LangGraph and LangSmith are instrumental in implementing and testing these strategies.\n\n**Technical Approach:** The technical approach involves several key components and tools working together:\n\n1. **LangGraph**: A framework that helps manage the agent’s memory and context. It supports both short-term and long-term memory, allowing agents to save and retrieve information as needed.\n\n2. **Scratchpads and Memories**: Scratchpads are used to save information temporarily, while memories store information across sessions. These can be implemented as tool calls or fields in a runtime state object.\n\n3. **Retrieval-Augmented Generation (RAG)**: A technique used to fetch only the most relevant tools or knowledge for a task. This helps in selecting the right context and improves the agent’s performance.\n\n4. **Summarization and Trimming**: Techniques used to compress context. Summarization distills the most important information, while trimming removes older or less relevant data.\n\n5. **Multi-Agent Systems**: Using multiple agents to isolate context. Each agent has its own memory and tools, allowing them to handle specific sub-tasks.\n\n6. **Sandboxes**: Environments that isolate context from the agent’s main memory. These are used to handle token-heavy objects and run specific tasks.\n\n7. **State Objects**: Used to store and manage the agent’s runtime state. These objects have fields that can be exposed to the agent’s memory as needed.\n\n8. **LangSmith**: A tool used for agent tracing and observability. It helps track token usage and evaluate the impact of context engineering efforts.\n\nThese components work together to ensure that the agent has just the right information at each step, improving its performance and efficiency.\n\n**Methodology:** The research methodology involves a process called 'context engineering,' which is about managing the information that an AI agent needs to perform tasks effectively. Here’s a step-by-step breakdown of how this is done:\n\n1. **Identify Context Types**: The first step is to understand the different types of context that an AI agent needs. These include instructions (like prompts and tool descriptions), knowledge (facts and memories), and feedback from tools.\n\n2. **Write Context**: Save important information outside the agent’s immediate memory (context window) so it can be used later. This is like taking notes. For example, an agent might save its plan in a 'scratchpad' or create 'memories' that persist across sessions.\n\n3. **Select Context**: Pull relevant information into the agent’s immediate memory when needed. This could be from the scratchpad, memories, or tools. The goal is to provide the agent with just the right information at each step.\n\n4. **Compress Context**: Reduce the amount of information to fit within the agent’s memory limits. This can be done through summarization or trimming less important details.\n\n5. **Isolate Context**: Split the context into smaller, manageable parts. This can be done by using multiple agents, each with its own memory, or by using environments that handle specific tasks.\n\n6. **Implement and Test**: Use tools like LangGraph and LangSmith to implement these context engineering strategies and test their effectiveness.",
+      "ai_provider": "anthropic",
+      "linked_articles": []
+    },
     {
       "id": 20,
       "title": "Harnessing Multiple Large Language Models: A Survey on LLM Ensemble",
@@ -196,13 +206,13 @@
   "metadata": {
     "date_range": {
       "earliest": "2025-07-02T09:24:21",
-      "latest": "2025-07-06T22:42:07"
+      "latest": "2025-07-07T10:16:19"
     },
     "ai_providers": {
-      "anthropic": 19
+      "anthropic": 20
     },
     "status_counts": {
-      "completed": 19
+      "completed": 20
     }
   },
   "processing_status": {
@@ -236,7 +246,7 @@
       ]
     },
     "health_check": {
-      "timestamp": "2025-07-06T22:49:40.563438+00:00",
+      "timestamp": "2025-07-07T10:21:33.523293+00:00",
       "apis_working": 0,
       "rss_feed_accessible": true,
       "database_accessible": true
