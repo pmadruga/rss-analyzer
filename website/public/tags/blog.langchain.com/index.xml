@@ -1,0 +1,61 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>RSS Article Analysis Dashboard – Blog.langchain.com</title>
+    <link>/tags/blog.langchain.com/</link>
+    <description>Recent content in Blog.langchain.com on RSS Article Analysis Dashboard</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 07 Jul 2025 00:00:00 +0000</lastBuildDate>
+
+	  <atom:link href="/tags/blog.langchain.com/index.xml" rel="self" type="application/rss+xml" />
+
+
+
+
+
+
+
+    <item>
+      <title>Context Engineering for LLM Agents</title>
+      <link>/articles/context-engineering-for-llm-agents/</link>
+      <pubDate>Mon, 07 Jul 2025 00:00:00 +0000</pubDate>
+
+      <guid>/articles/context-engineering-for-llm-agents/</guid>
+      <description>
+
+
+        &lt;h1&gt;Context Engineering for LLM Agents&lt;/h1&gt;&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;div class=&#34;hx:select-none hx:text-xl&#34; style=&#34;font-family: &#39;Apple Color Emoji&#39;, &#39;Segoe UI Emoji&#39;, &#39;Segoe UI Symbol&#39;;&#34;&gt;ℹ️&lt;/div&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;&lt;strong&gt;Original Source:&lt;/strong&gt; &lt;a href=&#34;https://blog.langchain.com/context-engineering-for-agents/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;blog.langchain.com&lt;/a&gt;&lt;br&gt;
+&lt;strong&gt;Analyzed:&lt;/strong&gt; 2025-07-07&lt;br&gt;
+&lt;strong&gt;AI Provider:&lt;/strong&gt; claude&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The Central Metaphor: Think of Large Language Models as a new kind of operating system, where the LLM is like the CPU and its context window is like RAM. Just as your computer slows down when RAM is full, LLMs struggle when their context windows are overloaded.&lt;/p&gt;
+&lt;p&gt;The Four Pillars of Context Engineering:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Write Context: Just as you take notes while solving problems, agents need scratchpads and memories&lt;/li&gt;
+&lt;li&gt;Select Context: Not everything in your notes is relevant - context selection is like having a smart assistant who knows which files to pull&lt;/li&gt;
+&lt;li&gt;Compress Context: Sometimes you need to summarize War and Peace into a paragraph&lt;/li&gt;
+&lt;li&gt;Isolate Context: Complex tasks benefit from splitting context across specialized sub-agents&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Why This Matters Now: As we build agents that can work for hours or days on complex tasks, context management becomes THE critical bottleneck. It&amp;rsquo;s not about having the smartest model - it&amp;rsquo;s about using its intelligence efficiently.&lt;/p&gt;
+&lt;p&gt;The Key Insight: Context engineering isn&amp;rsquo;t just an optimization - it&amp;rsquo;s fundamental to agent capability. We&amp;rsquo;re moving from &amp;ldquo;prompt engineering&amp;rdquo; (what to say) to &amp;ldquo;context engineering&amp;rdquo; (what to remember and when).&lt;/p&gt;
+&lt;hr&gt;
+&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-orange-100 hx:bg-orange-50 hx:text-orange-800 hx:dark:border-orange-400/30 hx:dark:bg-orange-400/20 hx:dark:text-orange-300&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;This analysis was generated using the Feynman technique, where the AI takes on the role of the paper&amp;rsquo;s author and explains the research using simple language and analogies to make complex concepts accessible.&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+      </description>
+    </item>
+
+  </channel>
+</rss>

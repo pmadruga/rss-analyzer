@@ -1,0 +1,829 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>RSS Article Analysis Dashboard – Ai-Analysis</title>
+    <link>/tags/ai-analysis/</link>
+    <description>Recent content in Ai-Analysis on RSS Article Analysis Dashboard</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 11 Jul 2025 00:00:00 +0000</lastBuildDate>
+
+	  <atom:link href="/tags/ai-analysis/index.xml" rel="self" type="application/rss+xml" />
+
+
+
+
+
+
+
+    <item>
+      <title>Advanced Embedding Research</title>
+      <link>/articles/advanced-embedding-research/</link>
+      <pubDate>Wed, 02 Jul 2025 00:00:00 +0000</pubDate>
+
+      <guid>/articles/advanced-embedding-research/</guid>
+      <description>
+
+
+        &lt;h1&gt;Advanced Embedding Research&lt;/h1&gt;&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;div class=&#34;hx:select-none hx:text-xl&#34; style=&#34;font-family: &#39;Apple Color Emoji&#39;, &#39;Segoe UI Emoji&#39;, &#39;Segoe UI Symbol&#39;;&#34;&gt;ℹ️&lt;/div&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;&lt;strong&gt;Original Source:&lt;/strong&gt; &lt;a href=&#34;https://bsky.app/profile/tomaarsen.com/post/3lsvucbrlpk24&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;bsky.app&lt;/a&gt;&lt;br&gt;
+&lt;strong&gt;Analyzed:&lt;/strong&gt; 2025-07-02&lt;br&gt;
+&lt;strong&gt;AI Provider:&lt;/strong&gt; claude&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Pushing Embedding Boundaries: Research in embedding technology continues to advance, focusing on efficiency, quality, and practical deployment considerations.&lt;/p&gt;
+&lt;p&gt;Key Innovations: From quantization techniques to novel training approaches, the field is making embeddings more accessible and efficient for real-world applications.&lt;/p&gt;
+&lt;hr&gt;
+&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-orange-100 hx:bg-orange-50 hx:text-orange-800 hx:dark:border-orange-400/30 hx:dark:bg-orange-400/20 hx:dark:text-orange-300&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;This analysis was generated using the Feynman technique, where the AI takes on the role of the paper&amp;rsquo;s author and explains the research using simple language and analogies to make complex concepts accessible.&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+      </description>
+    </item>
+
+    <item>
+      <title>Quantization-Aware Training at Jina</title>
+      <link>/articles/quantization-aware-training-at-jina/</link>
+      <pubDate>Wed, 02 Jul 2025 00:00:00 +0000</pubDate>
+
+      <guid>/articles/quantization-aware-training-at-jina/</guid>
+      <description>
+
+
+        &lt;h1&gt;Quantization-Aware Training at Jina&lt;/h1&gt;&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;div class=&#34;hx:select-none hx:text-xl&#34; style=&#34;font-family: &#39;Apple Color Emoji&#39;, &#39;Segoe UI Emoji&#39;, &#39;Segoe UI Symbol&#39;;&#34;&gt;ℹ️&lt;/div&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;&lt;strong&gt;Original Source:&lt;/strong&gt; &lt;a href=&#34;https://jina.ai/news/quantization-aware-training-of-jina-embeddings-v4/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;jina.ai&lt;/a&gt;&lt;br&gt;
+&lt;strong&gt;Analyzed:&lt;/strong&gt; 2025-07-02&lt;br&gt;
+&lt;strong&gt;AI Provider:&lt;/strong&gt; claude&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Lossless Compression: Jina demonstrates how quantization-aware training can make embeddings 64x smaller while maintaining performance. This is crucial for deploying AI at scale with limited resources.&lt;/p&gt;
+&lt;p&gt;Technical Excellence: The approach combines output QAT with careful scaling strategies, achieving the best of both worlds: smaller embeddings without sacrificing quality.&lt;/p&gt;
+&lt;hr&gt;
+&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-orange-100 hx:bg-orange-50 hx:text-orange-800 hx:dark:border-orange-400/30 hx:dark:bg-orange-400/20 hx:dark:text-orange-300&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;This analysis was generated using the Feynman technique, where the AI takes on the role of the paper&amp;rsquo;s author and explains the research using simple language and analogies to make complex concepts accessible.&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+      </description>
+    </item>
+
+    <item>
+      <title>Arch-Router: Human-Aligned LLM Routing</title>
+      <link>/articles/arch-router-human-aligned-llm-routing/</link>
+      <pubDate>Wed, 02 Jul 2025 00:00:00 +0000</pubDate>
+
+      <guid>/articles/arch-router-human-aligned-llm-routing/</guid>
+      <description>
+
+
+        &lt;h1&gt;Arch-Router: Human-Aligned LLM Routing&lt;/h1&gt;&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;div class=&#34;hx:select-none hx:text-xl&#34; style=&#34;font-family: &#39;Apple Color Emoji&#39;, &#39;Segoe UI Emoji&#39;, &#39;Segoe UI Symbol&#39;;&#34;&gt;ℹ️&lt;/div&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;&lt;strong&gt;Original Source:&lt;/strong&gt; &lt;a href=&#34;https://arxiv.org/abs/2506.16655&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;arxiv.org&lt;/a&gt;&lt;br&gt;
+&lt;strong&gt;Analyzed:&lt;/strong&gt; 2025-07-02&lt;br&gt;
+&lt;strong&gt;AI Provider:&lt;/strong&gt; claude&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Preference-Aligned Routing: Arch-Router guides model selection by matching queries to user-defined domains or action types, offering a practical mechanism to encode preferences in routing decisions.&lt;/p&gt;
+&lt;p&gt;The Innovation: This 1.5B model outperforms top proprietary models in matching queries with human preferences, making routing decisions more transparent and flexible.&lt;/p&gt;
+&lt;hr&gt;
+&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-orange-100 hx:bg-orange-50 hx:text-orange-800 hx:dark:border-orange-400/30 hx:dark:bg-orange-400/20 hx:dark:text-orange-300&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;This analysis was generated using the Feynman technique, where the AI takes on the role of the paper&amp;rsquo;s author and explains the research using simple language and analogies to make complex concepts accessible.&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+      </description>
+    </item>
+
+    <item>
+      <title>Text-to-LoRA Implementation Details</title>
+      <link>/articles/text-to-lora-implementation-details/</link>
+      <pubDate>Wed, 02 Jul 2025 00:00:00 +0000</pubDate>
+
+      <guid>/articles/text-to-lora-implementation-details/</guid>
+      <description>
+
+
+        &lt;h1&gt;Text-to-LoRA Implementation Details&lt;/h1&gt;&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;div class=&#34;hx:select-none hx:text-xl&#34; style=&#34;font-family: &#39;Apple Color Emoji&#39;, &#39;Segoe UI Emoji&#39;, &#39;Segoe UI Symbol&#39;;&#34;&gt;ℹ️&lt;/div&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;&lt;strong&gt;Original Source:&lt;/strong&gt; &lt;a href=&#34;https://arxiv.org/abs/2506.06105&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;arxiv.org&lt;/a&gt;&lt;br&gt;
+&lt;strong&gt;Analyzed:&lt;/strong&gt; 2025-07-02&lt;br&gt;
+&lt;strong&gt;AI Provider:&lt;/strong&gt; claude&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Instant Adaptation: T2L can adapt LLMs in a single forward pass based on natural language task descriptions. After training on just 9 LoRA adapters, it matches task-specific performance and generalizes to unseen tasks.&lt;/p&gt;
+&lt;p&gt;Democratization: This approach provides language-based adaptation with minimal compute requirements, making model specialization accessible to a broader audience.&lt;/p&gt;
+&lt;hr&gt;
+&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-orange-100 hx:bg-orange-50 hx:text-orange-800 hx:dark:border-orange-400/30 hx:dark:bg-orange-400/20 hx:dark:text-orange-300&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;This analysis was generated using the Feynman technique, where the AI takes on the role of the paper&amp;rsquo;s author and explains the research using simple language and analogies to make complex concepts accessible.&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+      </description>
+    </item>
+
+    <item>
+      <title>IRanker: Ranking Foundation Model</title>
+      <link>/articles/iranker-ranking-foundation-model/</link>
+      <pubDate>Wed, 02 Jul 2025 00:00:00 +0000</pubDate>
+
+      <guid>/articles/iranker-ranking-foundation-model/</guid>
+      <description>
+
+
+        &lt;h1&gt;IRanker: Ranking Foundation Model&lt;/h1&gt;&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;div class=&#34;hx:select-none hx:text-xl&#34; style=&#34;font-family: &#39;Apple Color Emoji&#39;, &#39;Segoe UI Emoji&#39;, &#39;Segoe UI Symbol&#39;;&#34;&gt;ℹ️&lt;/div&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;&lt;strong&gt;Original Source:&lt;/strong&gt; &lt;a href=&#34;https://bsky.app/profile/reachsumit.com/post/3lssbir3mk222&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;bsky.app&lt;/a&gt;&lt;br&gt;
+&lt;strong&gt;Analyzed:&lt;/strong&gt; 2025-07-02&lt;br&gt;
+&lt;strong&gt;AI Provider:&lt;/strong&gt; claude&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Universal Ranking: IRanker unifies diverse ranking tasks using a single model through reinforcement learning and iterative decoding. It decomposes complex ranking into step-by-step candidate elimination.&lt;/p&gt;
+&lt;p&gt;Broad Impact: A single IRanker-3B achieves state-of-the-art results across recommendation, routing, and passage ranking, even surpassing larger models on certain datasets.&lt;/p&gt;
+&lt;hr&gt;
+&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-orange-100 hx:bg-orange-50 hx:text-orange-800 hx:dark:border-orange-400/30 hx:dark:bg-orange-400/20 hx:dark:text-orange-300&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;This analysis was generated using the Feynman technique, where the AI takes on the role of the paper&amp;rsquo;s author and explains the research using simple language and analogies to make complex concepts accessible.&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+      </description>
+    </item>
+
+    <item>
+      <title>VAT-KG: Multimodal Knowledge Graphs</title>
+      <link>/articles/vat-kg-multimodal-knowledge-graphs/</link>
+      <pubDate>Wed, 02 Jul 2025 00:00:00 +0000</pubDate>
+
+      <guid>/articles/vat-kg-multimodal-knowledge-graphs/</guid>
+      <description>
+
+
+        &lt;h1&gt;VAT-KG: Multimodal Knowledge Graphs&lt;/h1&gt;&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;div class=&#34;hx:select-none hx:text-xl&#34; style=&#34;font-family: &#39;Apple Color Emoji&#39;, &#39;Segoe UI Emoji&#39;, &#39;Segoe UI Symbol&#39;;&#34;&gt;ℹ️&lt;/div&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;&lt;strong&gt;Original Source:&lt;/strong&gt; &lt;a href=&#34;https://bsky.app/profile/reachsumit.com/post/3lssbxtzylc22&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;bsky.app&lt;/a&gt;&lt;br&gt;
+&lt;strong&gt;Analyzed:&lt;/strong&gt; 2025-07-02&lt;br&gt;
+&lt;strong&gt;AI Provider:&lt;/strong&gt; claude&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Beyond Text: VAT-KG is the first concept-centric knowledge graph covering visual, audio, and text information. Each triplet is linked to multimodal data and enriched with detailed concept descriptions.&lt;/p&gt;
+&lt;p&gt;Enabling Multimodal RAG: The system enables retrieval and reasoning across different modalities, supporting MLLMs in tasks that require understanding of images, sounds, and text together.&lt;/p&gt;
+&lt;hr&gt;
+&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-orange-100 hx:bg-orange-50 hx:text-orange-800 hx:dark:border-orange-400/30 hx:dark:bg-orange-400/20 hx:dark:text-orange-300&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;This analysis was generated using the Feynman technique, where the AI takes on the role of the paper&amp;rsquo;s author and explains the research using simple language and analogies to make complex concepts accessible.&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+      </description>
+    </item>
+
+    <item>
+      <title>ARAG: Agentic RAG for Personalization</title>
+      <link>/articles/arag-agentic-rag-for-personalization/</link>
+      <pubDate>Wed, 02 Jul 2025 00:00:00 +0000</pubDate>
+
+      <guid>/articles/arag-agentic-rag-for-personalization/</guid>
+      <description>
+
+
+        &lt;h1&gt;ARAG: Agentic RAG for Personalization&lt;/h1&gt;&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;div class=&#34;hx:select-none hx:text-xl&#34; style=&#34;font-family: &#39;Apple Color Emoji&#39;, &#39;Segoe UI Emoji&#39;, &#39;Segoe UI Symbol&#39;;&#34;&gt;ℹ️&lt;/div&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;&lt;strong&gt;Original Source:&lt;/strong&gt; &lt;a href=&#34;https://bsky.app/profile/arxiv-cs-ir.bsky.social/post/3lssft2zuof25&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;bsky.app&lt;/a&gt;&lt;br&gt;
+&lt;strong&gt;Analyzed:&lt;/strong&gt; 2025-07-02&lt;br&gt;
+&lt;strong&gt;AI Provider:&lt;/strong&gt; claude&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Multi-Agent Personalization: ARAG integrates four specialized LLM-based agents working together to understand user preferences, evaluate semantic alignment, summarize findings, and rank recommendations.&lt;/p&gt;
+&lt;p&gt;Performance Gains: Achieves up to 42.1% improvement in NDCG@5 and 35.5% in Hit@5 over standard RAG baselines, highlighting the effectiveness of agentic reasoning.&lt;/p&gt;
+&lt;hr&gt;
+&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-orange-100 hx:bg-orange-50 hx:text-orange-800 hx:dark:border-orange-400/30 hx:dark:bg-orange-400/20 hx:dark:text-orange-300&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;This analysis was generated using the Feynman technique, where the AI takes on the role of the paper&amp;rsquo;s author and explains the research using simple language and analogies to make complex concepts accessible.&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+      </description>
+    </item>
+
+    <item>
+      <title>ColPali Hierarchical Patch Compression</title>
+      <link>/articles/colpali-hierarchical-patch-compression/</link>
+      <pubDate>Wed, 02 Jul 2025 00:00:00 +0000</pubDate>
+
+      <guid>/articles/colpali-hierarchical-patch-compression/</guid>
+      <description>
+
+
+        &lt;h1&gt;ColPali Hierarchical Patch Compression&lt;/h1&gt;&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;div class=&#34;hx:select-none hx:text-xl&#34; style=&#34;font-family: &#39;Apple Color Emoji&#39;, &#39;Segoe UI Emoji&#39;, &#39;Segoe UI Symbol&#39;;&#34;&gt;ℹ️&lt;/div&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;&lt;strong&gt;Original Source:&lt;/strong&gt; &lt;a href=&#34;https://bsky.app/profile/arxiv-cs-ir.bsky.social/post/3lssineizm42c&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;bsky.app&lt;/a&gt;&lt;br&gt;
+&lt;strong&gt;Analyzed:&lt;/strong&gt; 2025-07-02&lt;br&gt;
+&lt;strong&gt;AI Provider:&lt;/strong&gt; claude&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Efficient Multi-Vector Retrieval: Addresses the storage and computational costs of multi-vector document retrieval systems through K-Means quantization, attention-guided pruning, and optional binary encoding.&lt;/p&gt;
+&lt;p&gt;Real-World Results: Achieves 30-50% lower query latency while maintaining high retrieval precision, with up to 32x storage reduction.&lt;/p&gt;
+&lt;hr&gt;
+&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-orange-100 hx:bg-orange-50 hx:text-orange-800 hx:dark:border-orange-400/30 hx:dark:bg-orange-400/20 hx:dark:text-orange-300&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;This analysis was generated using the Feynman technique, where the AI takes on the role of the paper&amp;rsquo;s author and explains the research using simple language and analogies to make complex concepts accessible.&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+      </description>
+    </item>
+
+    <item>
+      <title>PentaRAG: Enterprise-Scale Knowledge Retrieval</title>
+      <link>/articles/pentarag-enterprise-scale-knowledge-retrieval/</link>
+      <pubDate>Wed, 02 Jul 2025 00:00:00 +0000</pubDate>
+
+      <guid>/articles/pentarag-enterprise-scale-knowledge-retrieval/</guid>
+      <description>
+
+
+        &lt;h1&gt;PentaRAG: Enterprise-Scale Knowledge Retrieval&lt;/h1&gt;&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;div class=&#34;hx:select-none hx:text-xl&#34; style=&#34;font-family: &#39;Apple Color Emoji&#39;, &#39;Segoe UI Emoji&#39;, &#39;Segoe UI Symbol&#39;;&#34;&gt;ℹ️&lt;/div&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;&lt;strong&gt;Original Source:&lt;/strong&gt; &lt;a href=&#34;https://bsky.app/profile/arxiv-cs-ir.bsky.social/post/3lssiq54mri2x&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;bsky.app&lt;/a&gt;&lt;br&gt;
+&lt;strong&gt;Analyzed:&lt;/strong&gt; 2025-07-02&lt;br&gt;
+&lt;strong&gt;AI Provider:&lt;/strong&gt; claude&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Five-Layer Intelligence: PentaRAG introduces a five-layer module that routes queries through instant caches, memory-recall mode, adaptive session memory, and conventional RAG. This achieves sub-second latency while maintaining freshness.&lt;/p&gt;
+&lt;p&gt;Enterprise Impact: The system cuts average GPU time to 0.248 seconds per query and sustains ~100,000 queries per second, demonstrating production-grade efficiency.&lt;/p&gt;
+&lt;hr&gt;
+&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-orange-100 hx:bg-orange-50 hx:text-orange-800 hx:dark:border-orange-400/30 hx:dark:bg-orange-400/20 hx:dark:text-orange-300&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;This analysis was generated using the Feynman technique, where the AI takes on the role of the paper&amp;rsquo;s author and explains the research using simple language and analogies to make complex concepts accessible.&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+      </description>
+    </item>
+
+    <item>
+      <title>Advanced Information Retrieval Research</title>
+      <link>/articles/advanced-information-retrieval-research/</link>
+      <pubDate>Wed, 02 Jul 2025 00:00:00 +0000</pubDate>
+
+      <guid>/articles/advanced-information-retrieval-research/</guid>
+      <description>
+
+
+        &lt;h1&gt;Advanced Information Retrieval Research&lt;/h1&gt;&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;div class=&#34;hx:select-none hx:text-xl&#34; style=&#34;font-family: &#39;Apple Color Emoji&#39;, &#39;Segoe UI Emoji&#39;, &#39;Segoe UI Symbol&#39;;&#34;&gt;ℹ️&lt;/div&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;&lt;strong&gt;Original Source:&lt;/strong&gt; &lt;a href=&#34;https://bsky.app/profile/arxiv-cs-ir.bsky.social/post/3lsskaxcsh52p&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;bsky.app&lt;/a&gt;&lt;br&gt;
+&lt;strong&gt;Analyzed:&lt;/strong&gt; 2025-07-02&lt;br&gt;
+&lt;strong&gt;AI Provider:&lt;/strong&gt; claude&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Pushing IR Boundaries: Multiple papers explore cutting-edge techniques in information retrieval, from multi-vector document retrieval to ranking foundation models.&lt;/p&gt;
+&lt;p&gt;Key Themes: Efficiency improvements through compression and quantization, better evaluation metrics, and novel architectures for handling complex retrieval tasks at scale.&lt;/p&gt;
+&lt;hr&gt;
+&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-orange-100 hx:bg-orange-50 hx:text-orange-800 hx:dark:border-orange-400/30 hx:dark:bg-orange-400/20 hx:dark:text-orange-300&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;This analysis was generated using the Feynman technique, where the AI takes on the role of the paper&amp;rsquo;s author and explains the research using simple language and analogies to make complex concepts accessible.&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+      </description>
+    </item>
+
+    <item>
+      <title>Text-to-LoRA: Instant Transformer Adaptation</title>
+      <link>/articles/text-to-lora-instant-transformer-adaptation/</link>
+      <pubDate>Wed, 02 Jul 2025 00:00:00 +0000</pubDate>
+
+      <guid>/articles/text-to-lora-instant-transformer-adaptation/</guid>
+      <description>
+
+
+        &lt;h1&gt;Text-to-LoRA: Instant Transformer Adaptation&lt;/h1&gt;&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;div class=&#34;hx:select-none hx:text-xl&#34; style=&#34;font-family: &#39;Apple Color Emoji&#39;, &#39;Segoe UI Emoji&#39;, &#39;Segoe UI Symbol&#39;;&#34;&gt;ℹ️&lt;/div&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;&lt;strong&gt;Original Source:&lt;/strong&gt; &lt;a href=&#34;https://bsky.app/profile/paper.bsky.social/post/3lshtglohzr2d&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;bsky.app&lt;/a&gt;&lt;br&gt;
+&lt;strong&gt;Analyzed:&lt;/strong&gt; 2025-07-02&lt;br&gt;
+&lt;strong&gt;AI Provider:&lt;/strong&gt; claude&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Democratizing Model Specialization: Text-to-LoRA enables adapting large language models on the fly solely based on natural language descriptions. It&amp;rsquo;s a hypernetwork that constructs LoRAs in a single inexpensive forward pass.&lt;/p&gt;
+&lt;p&gt;The Innovation: After training on just 9 pre-trained LoRA adapters, the system can match task-specific adapter performance and even generalize to entirely unseen tasks with minimal compute requirements.&lt;/p&gt;
+&lt;hr&gt;
+&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-orange-100 hx:bg-orange-50 hx:text-orange-800 hx:dark:border-orange-400/30 hx:dark:bg-orange-400/20 hx:dark:text-orange-300&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;This analysis was generated using the Feynman technique, where the AI takes on the role of the paper&amp;rsquo;s author and explains the research using simple language and analogies to make complex concepts accessible.&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+      </description>
+    </item>
+
+    <item>
+      <title>Controlled RAG Context Evaluation</title>
+      <link>/articles/controlled-rag-context-evaluation/</link>
+      <pubDate>Wed, 02 Jul 2025 00:00:00 +0000</pubDate>
+
+      <guid>/articles/controlled-rag-context-evaluation/</guid>
+      <description>
+
+
+        &lt;h1&gt;Controlled RAG Context Evaluation&lt;/h1&gt;&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;div class=&#34;hx:select-none hx:text-xl&#34; style=&#34;font-family: &#39;Apple Color Emoji&#39;, &#39;Segoe UI Emoji&#39;, &#39;Segoe UI Symbol&#39;;&#34;&gt;ℹ️&lt;/div&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;&lt;strong&gt;Original Source:&lt;/strong&gt; &lt;a href=&#34;https://bsky.app/profile/reachsumit.com/post/3lsi5qzveoc2x&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;bsky.app&lt;/a&gt;&lt;br&gt;
+&lt;strong&gt;Analyzed:&lt;/strong&gt; 2025-07-02&lt;br&gt;
+&lt;strong&gt;AI Provider:&lt;/strong&gt; claude&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Better RAG Evaluation: Introduces a framework for evaluating retrieval context in long-form RAG using human-written summaries to control information scope. This addresses a critical gap in how we measure RAG system effectiveness.&lt;/p&gt;
+&lt;p&gt;The CRUX Framework: Uses question-based evaluation to assess RAG&amp;rsquo;s retrieval in a fine-grained manner, offering more reflective and diagnostic evaluation than traditional metrics.&lt;/p&gt;
+&lt;hr&gt;
+&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-orange-100 hx:bg-orange-50 hx:text-orange-800 hx:dark:border-orange-400/30 hx:dark:bg-orange-400/20 hx:dark:text-orange-300&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;This analysis was generated using the Feynman technique, where the AI takes on the role of the paper&amp;rsquo;s author and explains the research using simple language and analogies to make complex concepts accessible.&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+      </description>
+    </item>
+
+    <item>
+      <title>Deep Research Survey: Systems and Applications</title>
+      <link>/articles/deep-research-survey-systems-and-applications/</link>
+      <pubDate>Wed, 02 Jul 2025 00:00:00 +0000</pubDate>
+
+      <guid>/articles/deep-research-survey-systems-and-applications/</guid>
+      <description>
+
+
+        &lt;h1&gt;Deep Research Survey: Systems and Applications&lt;/h1&gt;&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;div class=&#34;hx:select-none hx:text-xl&#34; style=&#34;font-family: &#39;Apple Color Emoji&#39;, &#39;Segoe UI Emoji&#39;, &#39;Segoe UI Symbol&#39;;&#34;&gt;ℹ️&lt;/div&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;&lt;strong&gt;Original Source:&lt;/strong&gt; &lt;a href=&#34;https://bsky.app/profile/sungkim.bsky.social/post/3lrs76hb3tk2p&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;bsky.app&lt;/a&gt;&lt;br&gt;
+&lt;strong&gt;Analyzed:&lt;/strong&gt; 2025-07-02&lt;br&gt;
+&lt;strong&gt;AI Provider:&lt;/strong&gt; claude&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Comprehensive Analysis: A thorough survey of more than 80 commercial and non-commercial deep research implementations that have emerged since 2023, including offerings from OpenAI, Gemini, Perplexity, and others.&lt;/p&gt;
+&lt;p&gt;Key Insights: The survey reveals common patterns, architectural choices, and implementation strategies across different deep research systems, providing valuable guidance for future development.&lt;/p&gt;
+&lt;hr&gt;
+&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-orange-100 hx:bg-orange-50 hx:text-orange-800 hx:dark:border-orange-400/30 hx:dark:bg-orange-400/20 hx:dark:text-orange-300&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;This analysis was generated using the Feynman technique, where the AI takes on the role of the paper&amp;rsquo;s author and explains the research using simple language and analogies to make complex concepts accessible.&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+      </description>
+    </item>
+
+    <item>
+      <title>Web Agent Paradigm Shift</title>
+      <link>/articles/web-agent-paradigm-shift/</link>
+      <pubDate>Wed, 02 Jul 2025 00:00:00 +0000</pubDate>
+
+      <guid>/articles/web-agent-paradigm-shift/</guid>
+      <description>
+
+
+        &lt;h1&gt;Web Agent Paradigm Shift&lt;/h1&gt;&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;div class=&#34;hx:select-none hx:text-xl&#34; style=&#34;font-family: &#39;Apple Color Emoji&#39;, &#39;Segoe UI Emoji&#39;, &#39;Segoe UI Symbol&#39;;&#34;&gt;ℹ️&lt;/div&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;&lt;strong&gt;Original Source:&lt;/strong&gt; &lt;a href=&#34;https://bsky.app/profile/sungkim.bsky.social/post/3lrlxhzbtsk26&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;bsky.app&lt;/a&gt;&lt;br&gt;
+&lt;strong&gt;Analyzed:&lt;/strong&gt; 2025-07-02&lt;br&gt;
+&lt;strong&gt;AI Provider:&lt;/strong&gt; claude&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Rethinking Web Interaction: The advocates propose a paradigm shift: rather than forcing web agents to adapt to interfaces designed for humans, we should develop a new interaction paradigm specifically optimized for agents.&lt;/p&gt;
+&lt;p&gt;The Vision: &amp;ldquo;Build the web for agents, not agents for the web&amp;rdquo; - this fundamental rethinking could lead to more efficient and capable web automation systems.&lt;/p&gt;
+&lt;hr&gt;
+&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-orange-100 hx:bg-orange-50 hx:text-orange-800 hx:dark:border-orange-400/30 hx:dark:bg-orange-400/20 hx:dark:text-orange-300&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;This analysis was generated using the Feynman technique, where the AI takes on the role of the paper&amp;rsquo;s author and explains the research using simple language and analogies to make complex concepts accessible.&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+      </description>
+    </item>
+
+    <item>
+      <title>LlamaIndex Integration Patterns</title>
+      <link>/articles/llamaindex-integration-patterns/</link>
+      <pubDate>Fri, 04 Jul 2025 00:00:00 +0000</pubDate>
+
+      <guid>/articles/llamaindex-integration-patterns/</guid>
+      <description>
+
+
+        &lt;h1&gt;LlamaIndex Integration Patterns&lt;/h1&gt;&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;div class=&#34;hx:select-none hx:text-xl&#34; style=&#34;font-family: &#39;Apple Color Emoji&#39;, &#39;Segoe UI Emoji&#39;, &#39;Segoe UI Symbol&#39;;&#34;&gt;ℹ️&lt;/div&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;&lt;strong&gt;Original Source:&lt;/strong&gt; &lt;a href=&#34;https://bsky.app/profile/llamaindex.bsky.social/post/3lt35nmxess2v&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;bsky.app&lt;/a&gt;&lt;br&gt;
+&lt;strong&gt;Analyzed:&lt;/strong&gt; 2025-07-04&lt;br&gt;
+&lt;strong&gt;AI Provider:&lt;/strong&gt; claude&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Building Better RAG Systems: LlamaIndex provides powerful tools for creating retrieval-augmented generation systems. This explores integration patterns and best practices for building efficient, scalable RAG applications.&lt;/p&gt;
+&lt;p&gt;Key Focus Areas: The emphasis is on modular design, efficient indexing strategies, and seamless integration with various data sources and LLM providers.&lt;/p&gt;
+&lt;hr&gt;
+&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-orange-100 hx:bg-orange-50 hx:text-orange-800 hx:dark:border-orange-400/30 hx:dark:bg-orange-400/20 hx:dark:text-orange-300&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;This analysis was generated using the Feynman technique, where the AI takes on the role of the paper&amp;rsquo;s author and explains the research using simple language and analogies to make complex concepts accessible.&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+      </description>
+    </item>
+
+    <item>
+      <title>GlórIA: Portuguese Language Model</title>
+      <link>/articles/gl%C3%B3ria-portuguese-language-model/</link>
+      <pubDate>Sun, 06 Jul 2025 00:00:00 +0000</pubDate>
+
+      <guid>/articles/gl%C3%B3ria-portuguese-language-model/</guid>
+      <description>
+
+
+        &lt;h1&gt;GlórIA: Portuguese Language Model&lt;/h1&gt;&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;div class=&#34;hx:select-none hx:text-xl&#34; style=&#34;font-family: &#39;Apple Color Emoji&#39;, &#39;Segoe UI Emoji&#39;, &#39;Segoe UI Symbol&#39;;&#34;&gt;ℹ️&lt;/div&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;&lt;strong&gt;Original Source:&lt;/strong&gt; &lt;a href=&#34;https://arxiv.org/html/2402.12969v1&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;arxiv.org&lt;/a&gt;&lt;br&gt;
+&lt;strong&gt;Analyzed:&lt;/strong&gt; 2025-07-06&lt;br&gt;
+&lt;strong&gt;AI Provider:&lt;/strong&gt; claude&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Breaking Language Barriers: A significant development in making AI accessible to Portuguese speakers worldwide, addressing the linguistic diversity gap in current LLM technology. This represents an important step toward democratizing AI access across different languages and cultures.&lt;/p&gt;
+&lt;p&gt;Technical Achievement: The model demonstrates strong understanding of Portuguese language nuances, handling various tasks with coherent and contextually relevant text generation.&lt;/p&gt;
+&lt;hr&gt;
+&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-orange-100 hx:bg-orange-50 hx:text-orange-800 hx:dark:border-orange-400/30 hx:dark:bg-orange-400/20 hx:dark:text-orange-300&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;This analysis was generated using the Feynman technique, where the AI takes on the role of the paper&amp;rsquo;s author and explains the research using simple language and analogies to make complex concepts accessible.&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+      </description>
+    </item>
+
+    <item>
+      <title>Multi-Agent Systems and Context Management</title>
+      <link>/articles/multi-agent-systems-and-context-management/</link>
+      <pubDate>Sun, 06 Jul 2025 00:00:00 +0000</pubDate>
+
+      <guid>/articles/multi-agent-systems-and-context-management/</guid>
+      <description>
+
+
+        &lt;h1&gt;Multi-Agent Systems and Context Management&lt;/h1&gt;&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;div class=&#34;hx:select-none hx:text-xl&#34; style=&#34;font-family: &#39;Apple Color Emoji&#39;, &#39;Segoe UI Emoji&#39;, &#39;Segoe UI Symbol&#39;;&#34;&gt;ℹ️&lt;/div&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;&lt;strong&gt;Original Source:&lt;/strong&gt; &lt;a href=&#34;https://bsky.app/profile/sungkim.bsky.social/post/3lt35yhxylc27&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;bsky.app&lt;/a&gt;&lt;br&gt;
+&lt;strong&gt;Analyzed:&lt;/strong&gt; 2025-07-06&lt;br&gt;
+&lt;strong&gt;AI Provider:&lt;/strong&gt; claude&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Advanced Context Engineering: This explores how multiple AI agents can work together effectively by managing their individual and shared contexts. Think of it as organizing a team where each member has their own workspace but can share important information when needed.&lt;/p&gt;
+&lt;p&gt;Key Technical Components: The system uses specialized routing, memory management, and coordination protocols to ensure agents don&amp;rsquo;t step on each other&amp;rsquo;s toes while maximizing their collective capabilities.&lt;/p&gt;
+&lt;hr&gt;
+&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-orange-100 hx:bg-orange-50 hx:text-orange-800 hx:dark:border-orange-400/30 hx:dark:bg-orange-400/20 hx:dark:text-orange-300&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;This analysis was generated using the Feynman technique, where the AI takes on the role of the paper&amp;rsquo;s author and explains the research using simple language and analogies to make complex concepts accessible.&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+      </description>
+    </item>
+
+    <item>
+      <title>LangChain Context Engineering Deep Dive</title>
+      <link>/articles/langchain-context-engineering-deep-dive/</link>
+      <pubDate>Sun, 06 Jul 2025 00:00:00 +0000</pubDate>
+
+      <guid>/articles/langchain-context-engineering-deep-dive/</guid>
+      <description>
+
+
+        &lt;h1&gt;LangChain Context Engineering Deep Dive&lt;/h1&gt;&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;div class=&#34;hx:select-none hx:text-xl&#34; style=&#34;font-family: &#39;Apple Color Emoji&#39;, &#39;Segoe UI Emoji&#39;, &#39;Segoe UI Symbol&#39;;&#34;&gt;ℹ️&lt;/div&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;&lt;strong&gt;Original Source:&lt;/strong&gt; &lt;a href=&#34;https://bsky.app/profile/langchain.bsky.social/post/3lsyxf2dshk2q&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;bsky.app&lt;/a&gt;&lt;br&gt;
+&lt;strong&gt;Analyzed:&lt;/strong&gt; 2025-07-06&lt;br&gt;
+&lt;strong&gt;AI Provider:&lt;/strong&gt; claude&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The Memory Revolution: I&amp;rsquo;m proposing a fundamental shift in how we think about AI agent development. Instead of focusing on making models smarter, we need to make them better at managing their own memories and attention.&lt;/p&gt;
+&lt;p&gt;The Technical Implementation:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;State Management as Memory: Every agent needs a state object - think of it as the agent&amp;rsquo;s desk&lt;/li&gt;
+&lt;li&gt;Multi-Agent Architecture: For complex tasks, split work across specialized agents like running a newspaper&lt;/li&gt;
+&lt;li&gt;Sandboxing for Safety: Isolate operations that generate massive data in separate environments&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The Practical Impact: With proper context engineering, we&amp;rsquo;re seeing agents handle tasks 10x longer without degrading, 50% reduction in token usage, and more reliable performance.&lt;/p&gt;
+&lt;p&gt;The Future Vision: We&amp;rsquo;re moving toward agents that can work on problems for days or weeks, maintaining context across sessions and managing their own cognitive resources.&lt;/p&gt;
+&lt;hr&gt;
+&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-orange-100 hx:bg-orange-50 hx:text-orange-800 hx:dark:border-orange-400/30 hx:dark:bg-orange-400/20 hx:dark:text-orange-300&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;This analysis was generated using the Feynman technique, where the AI takes on the role of the paper&amp;rsquo;s author and explains the research using simple language and analogies to make complex concepts accessible.&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+      </description>
+    </item>
+
+    <item>
+      <title>Harnessing Multiple LLMs: A Survey on LLM Ensemble</title>
+      <link>/articles/harnessing-multiple-llms-a-survey-on-llm-ensemble/</link>
+      <pubDate>Sun, 06 Jul 2025 00:00:00 +0000</pubDate>
+
+      <guid>/articles/harnessing-multiple-llms-a-survey-on-llm-ensemble/</guid>
+      <description>
+
+
+        &lt;h1&gt;Harnessing Multiple LLMs: A Survey on LLM Ensemble&lt;/h1&gt;&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;div class=&#34;hx:select-none hx:text-xl&#34; style=&#34;font-family: &#39;Apple Color Emoji&#39;, &#39;Segoe UI Emoji&#39;, &#39;Segoe UI Symbol&#39;;&#34;&gt;ℹ️&lt;/div&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;&lt;strong&gt;Original Source:&lt;/strong&gt; &lt;a href=&#34;https://arxiv.org/abs/2502.18036&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;arxiv.org&lt;/a&gt;&lt;br&gt;
+&lt;strong&gt;Analyzed:&lt;/strong&gt; 2025-07-06&lt;br&gt;
+&lt;strong&gt;AI Provider:&lt;/strong&gt; claude&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The Big Idea: Instead of relying on a single AI model, what if we could orchestrate multiple models to work together, each contributing their unique strengths? I&amp;rsquo;m proposing a comprehensive framework for &amp;ldquo;LLM Ensemble&amp;rdquo; - making multiple large language models collaborate like musicians in an orchestra.&lt;/p&gt;
+&lt;p&gt;Three Ways to Ensemble:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Ensemble-Before-Inference: Like having a pre-meeting where experts discuss strategy&lt;/li&gt;
+&lt;li&gt;Ensemble-During-Inference: Models work together in real-time, like a surgical team&lt;/li&gt;
+&lt;li&gt;Ensemble-After-Inference: Combining outputs after generation, like synthesizing multiple expert reports&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The Challenge of Coordination: The hardest part isn&amp;rsquo;t getting models to work - it&amp;rsquo;s getting them to work TOGETHER effectively. How do you resolve disagreements? Prevent redundant work? Ensure models complement rather than interfere?&lt;/p&gt;
+&lt;p&gt;Why This Changes Everything: Single models have inherent biases and blind spots. By combining multiple models, we can compensate for individual weaknesses, achieve more reliable outputs, and handle more complex tasks.&lt;/p&gt;
+&lt;hr&gt;
+&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-orange-100 hx:bg-orange-50 hx:text-orange-800 hx:dark:border-orange-400/30 hx:dark:bg-orange-400/20 hx:dark:text-orange-300&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;This analysis was generated using the Feynman technique, where the AI takes on the role of the paper&amp;rsquo;s author and explains the research using simple language and analogies to make complex concepts accessible.&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+      </description>
+    </item>
+
+    <item>
+      <title>Context Engineering for LLM Agents</title>
+      <link>/articles/context-engineering-for-llm-agents/</link>
+      <pubDate>Mon, 07 Jul 2025 00:00:00 +0000</pubDate>
+
+      <guid>/articles/context-engineering-for-llm-agents/</guid>
+      <description>
+
+
+        &lt;h1&gt;Context Engineering for LLM Agents&lt;/h1&gt;&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;div class=&#34;hx:select-none hx:text-xl&#34; style=&#34;font-family: &#39;Apple Color Emoji&#39;, &#39;Segoe UI Emoji&#39;, &#39;Segoe UI Symbol&#39;;&#34;&gt;ℹ️&lt;/div&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;&lt;strong&gt;Original Source:&lt;/strong&gt; &lt;a href=&#34;https://blog.langchain.com/context-engineering-for-agents/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;blog.langchain.com&lt;/a&gt;&lt;br&gt;
+&lt;strong&gt;Analyzed:&lt;/strong&gt; 2025-07-07&lt;br&gt;
+&lt;strong&gt;AI Provider:&lt;/strong&gt; claude&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The Central Metaphor: Think of Large Language Models as a new kind of operating system, where the LLM is like the CPU and its context window is like RAM. Just as your computer slows down when RAM is full, LLMs struggle when their context windows are overloaded.&lt;/p&gt;
+&lt;p&gt;The Four Pillars of Context Engineering:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Write Context: Just as you take notes while solving problems, agents need scratchpads and memories&lt;/li&gt;
+&lt;li&gt;Select Context: Not everything in your notes is relevant - context selection is like having a smart assistant who knows which files to pull&lt;/li&gt;
+&lt;li&gt;Compress Context: Sometimes you need to summarize War and Peace into a paragraph&lt;/li&gt;
+&lt;li&gt;Isolate Context: Complex tasks benefit from splitting context across specialized sub-agents&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Why This Matters Now: As we build agents that can work for hours or days on complex tasks, context management becomes THE critical bottleneck. It&amp;rsquo;s not about having the smartest model - it&amp;rsquo;s about using its intelligence efficiently.&lt;/p&gt;
+&lt;p&gt;The Key Insight: Context engineering isn&amp;rsquo;t just an optimization - it&amp;rsquo;s fundamental to agent capability. We&amp;rsquo;re moving from &amp;ldquo;prompt engineering&amp;rdquo; (what to say) to &amp;ldquo;context engineering&amp;rdquo; (what to remember and when).&lt;/p&gt;
+&lt;hr&gt;
+&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-orange-100 hx:bg-orange-50 hx:text-orange-800 hx:dark:border-orange-400/30 hx:dark:bg-orange-400/20 hx:dark:text-orange-300&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;This analysis was generated using the Feynman technique, where the AI takes on the role of the paper&amp;rsquo;s author and explains the research using simple language and analogies to make complex concepts accessible.&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+      </description>
+    </item>
+
+    <item>
+      <title>FrugalRAG: Efficient Multi-hop Question Answering</title>
+      <link>/articles/frugalrag-efficient-multi-hop-question-answering/</link>
+      <pubDate>Fri, 11 Jul 2025 00:00:00 +0000</pubDate>
+
+      <guid>/articles/frugalrag-efficient-multi-hop-question-answering/</guid>
+      <description>
+
+
+        &lt;h1&gt;FrugalRAG: Efficient Multi-hop Question Answering&lt;/h1&gt;&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;div class=&#34;hx:select-none hx:text-xl&#34; style=&#34;font-family: &#39;Apple Color Emoji&#39;, &#39;Segoe UI Emoji&#39;, &#39;Segoe UI Symbol&#39;;&#34;&gt;ℹ️&lt;/div&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;&lt;strong&gt;Original Source:&lt;/strong&gt; &lt;a href=&#34;https://bsky.app/profile/reachsumit.com/post/3ltnsm55rq227&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;bsky.app&lt;/a&gt;&lt;br&gt;
+&lt;strong&gt;Analyzed:&lt;/strong&gt; 2025-07-11&lt;br&gt;
+&lt;strong&gt;AI Provider:&lt;/strong&gt; claude&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The Core Innovation: I&amp;rsquo;ve discovered that large language models don&amp;rsquo;t need massive amounts of training to become better at retrieval-augmented generation (RAG). With just 1,000 carefully chosen examples, we can teach them to be nearly twice as efficient while maintaining the same accuracy!&lt;/p&gt;
+&lt;p&gt;The Two-Stage Magic: My approach works in two clever stages. Stage 1 teaches the model to recognize when it actually needs more information. Stage 2 trains it to reason through documents efficiently, connecting pieces of information without redundant searches.&lt;/p&gt;
+&lt;p&gt;Why This Matters: Current RAG systems are like students who run to the library every time they need to answer any part of a question. My system reduces retrieval calls by nearly 50% while maintaining competitive accuracy.&lt;/p&gt;
+&lt;p&gt;The Surprising Discovery: You don&amp;rsquo;t need millions of examples to achieve this. With just 1,000 well-chosen training examples, the model learns the PATTERN of when retrieval is useful, not just memorizing specific cases.&lt;/p&gt;
+&lt;hr&gt;
+&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-orange-100 hx:bg-orange-50 hx:text-orange-800 hx:dark:border-orange-400/30 hx:dark:bg-orange-400/20 hx:dark:text-orange-300&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;This analysis was generated using the Feynman technique, where the AI takes on the role of the paper&amp;rsquo;s author and explains the research using simple language and analogies to make complex concepts accessible.&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+      </description>
+    </item>
+
+    <item>
+      <title>Measuring Hypothesis Testing Errors in Information Retrieval</title>
+      <link>/articles/measuring-hypothesis-testing-errors-in-information/</link>
+      <pubDate>Fri, 11 Jul 2025 00:00:00 +0000</pubDate>
+
+      <guid>/articles/measuring-hypothesis-testing-errors-in-information/</guid>
+      <description>
+
+
+        &lt;h1&gt;Measuring Hypothesis Testing Errors in Information Retrieval&lt;/h1&gt;&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;div class=&#34;hx:select-none hx:text-xl&#34; style=&#34;font-family: &#39;Apple Color Emoji&#39;, &#39;Segoe UI Emoji&#39;, &#39;Segoe UI Symbol&#39;;&#34;&gt;ℹ️&lt;/div&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;&lt;strong&gt;Original Source:&lt;/strong&gt; &lt;a href=&#34;https://bsky.app/profile/arxiv-cs-ir.bsky.social/post/3lto4qcwxly2j&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;bsky.app&lt;/a&gt;&lt;br&gt;
+&lt;strong&gt;Analyzed:&lt;/strong&gt; 2025-07-11&lt;br&gt;
+&lt;strong&gt;AI Provider:&lt;/strong&gt; claude&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The Problem I&amp;rsquo;m Solving: When we test whether one search system is better than another, we typically make mistakes - but we&amp;rsquo;ve only been counting half of them! We&amp;rsquo;ve been obsessed with avoiding Type I errors (false positives) but completely ignoring Type II errors (false negatives). That&amp;rsquo;s like a doctor who&amp;rsquo;s so worried about misdiagnosing healthy people that they miss actual sick patients!&lt;/p&gt;
+&lt;p&gt;My Solution: I propose that we need to measure BOTH types of errors to truly understand how good our evaluation methods are. I introduce balanced accuracy as a single metric that captures both how often you correctly identify differences and how often you correctly identify no difference.&lt;/p&gt;
+&lt;p&gt;The Key Insight: Different evaluation methods have different &amp;ldquo;discriminative power&amp;rdquo; - their ability to correctly identify when one system is truly better than another. By only measuring Type I errors, we&amp;rsquo;ve been flying half-blind.&lt;/p&gt;
+&lt;p&gt;What This Means: We need to rethink how we evaluate our evaluation methods. We&amp;rsquo;ve been so conservative about avoiding false positives that we may have been using evaluation approaches that miss real improvements.&lt;/p&gt;
+&lt;hr&gt;
+&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-orange-100 hx:bg-orange-50 hx:text-orange-800 hx:dark:border-orange-400/30 hx:dark:bg-orange-400/20 hx:dark:text-orange-300&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;This analysis was generated using the Feynman technique, where the AI takes on the role of the paper&amp;rsquo;s author and explains the research using simple language and analogies to make complex concepts accessible.&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+      </description>
+    </item>
+
+    <item>
+      <title>Jailbreaking LLMs with InfoFlood Method</title>
+      <link>/articles/jailbreaking-llms-with-infoflood-method/</link>
+      <pubDate>Fri, 11 Jul 2025 00:00:00 +0000</pubDate>
+
+      <guid>/articles/jailbreaking-llms-with-infoflood-method/</guid>
+      <description>
+
+
+        &lt;h1&gt;Jailbreaking LLMs with InfoFlood Method&lt;/h1&gt;&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;div class=&#34;hx:select-none hx:text-xl&#34; style=&#34;font-family: &#39;Apple Color Emoji&#39;, &#39;Segoe UI Emoji&#39;, &#39;Segoe UI Symbol&#39;;&#34;&gt;ℹ️&lt;/div&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;&lt;strong&gt;Original Source:&lt;/strong&gt; &lt;a href=&#34;https://bsky.app/profile/smcgrath.phd/post/3lthihzv6ak27&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;bsky.app&lt;/a&gt;&lt;br&gt;
+&lt;strong&gt;Analyzed:&lt;/strong&gt; 2025-07-11&lt;br&gt;
+&lt;strong&gt;AI Provider:&lt;/strong&gt; claude&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The Core Idea: I&amp;rsquo;ve discovered a way to trick AI systems by speaking in a way that sounds incredibly academic and sophisticated, but is actually just nonsense designed to confuse the AI&amp;rsquo;s safety systems. Think of it like this: AI systems have guards at the door (safety filters) that check if someone is trying to make them do something harmful. But what if instead of walking up to the guard directly, you dressed up in a professor&amp;rsquo;s outfit and started using incredibly complex academic language?&lt;/p&gt;
+&lt;p&gt;How It Works: The InfoFlood method transforms simple, potentially harmful requests into elaborate academic prose filled with complex words, fake citations, and technical jargon. It&amp;rsquo;s like wrapping a simple request in so many layers of academic packaging that the AI gets confused about what&amp;rsquo;s actually being asked.&lt;/p&gt;
+&lt;p&gt;Why It Works: Large Language Models rely on pattern recognition. When you bury the actual request under mountains of academic-sounding text, the model&amp;rsquo;s attention gets diluted. The safety filters are looking for obvious red flags, but academic language rarely triggers these filters.&lt;/p&gt;
+&lt;p&gt;The Implications: This reveals a fundamental weakness in how we currently implement AI safety: we&amp;rsquo;re too focused on surface-level patterns rather than deep understanding of intent.&lt;/p&gt;
+&lt;hr&gt;
+&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-orange-100 hx:bg-orange-50 hx:text-orange-800 hx:dark:border-orange-400/30 hx:dark:bg-orange-400/20 hx:dark:text-orange-300&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;This analysis was generated using the Feynman technique, where the AI takes on the role of the paper&amp;rsquo;s author and explains the research using simple language and analogies to make complex concepts accessible.&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+      </description>
+    </item>
+
+  </channel>
+</rss>

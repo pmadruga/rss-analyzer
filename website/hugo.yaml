@@ -1,0 +1,49 @@
+baseURL: ""
+languageCode: en-us
+title: "RSS Article Analysis Dashboard"
+theme: hextra
+
+# Site settings
+params:
+  navbar:
+    displayTitle: true
+    displayLogo: false
+
+  page:
+    # full (100%), wide (90rem), normal (1280px)
+    width: wide
+
+  theme:
+    # light | dark | system
+    default: system
+    displayToggle: true
+
+  footer:
+    displayCopyright: true
+    displayPoweredBy: true
+
+# Menu configuration
+menu:
+  main:
+    - name: Home
+      pageRef: /
+      weight: 10
+    - name: Articles
+      pageRef: /articles
+      weight: 20
+    - name: About
+      pageRef: /about
+      weight: 30
+
+# Markup configuration
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+  highlight:
+    noClasses: false
+    lineNos: true
+
+# Build configuration
+build:
+  writeStats: true

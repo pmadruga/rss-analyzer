@@ -1,0 +1,53 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>RSS Article Analysis Dashboard – Jina.ai</title>
+    <link>/tags/jina.ai/</link>
+    <description>Recent content in Jina.ai on RSS Article Analysis Dashboard</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 02 Jul 2025 00:00:00 +0000</lastBuildDate>
+
+	  <atom:link href="/tags/jina.ai/index.xml" rel="self" type="application/rss+xml" />
+
+
+
+
+
+
+
+    <item>
+      <title>Quantization-Aware Training at Jina</title>
+      <link>/articles/quantization-aware-training-at-jina/</link>
+      <pubDate>Wed, 02 Jul 2025 00:00:00 +0000</pubDate>
+
+      <guid>/articles/quantization-aware-training-at-jina/</guid>
+      <description>
+
+
+        &lt;h1&gt;Quantization-Aware Training at Jina&lt;/h1&gt;&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;div class=&#34;hx:select-none hx:text-xl&#34; style=&#34;font-family: &#39;Apple Color Emoji&#39;, &#39;Segoe UI Emoji&#39;, &#39;Segoe UI Symbol&#39;;&#34;&gt;ℹ️&lt;/div&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;&lt;strong&gt;Original Source:&lt;/strong&gt; &lt;a href=&#34;https://jina.ai/news/quantization-aware-training-of-jina-embeddings-v4/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;jina.ai&lt;/a&gt;&lt;br&gt;
+&lt;strong&gt;Analyzed:&lt;/strong&gt; 2025-07-02&lt;br&gt;
+&lt;strong&gt;AI Provider:&lt;/strong&gt; claude&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Lossless Compression: Jina demonstrates how quantization-aware training can make embeddings 64x smaller while maintaining performance. This is crucial for deploying AI at scale with limited resources.&lt;/p&gt;
+&lt;p&gt;Technical Excellence: The approach combines output QAT with careful scaling strategies, achieving the best of both worlds: smaller embeddings without sacrificing quality.&lt;/p&gt;
+&lt;hr&gt;
+&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-orange-100 hx:bg-orange-50 hx:text-orange-800 hx:dark:border-orange-400/30 hx:dark:bg-orange-400/20 hx:dark:text-orange-300&#34;&gt;
+  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;/div&gt;
+
+  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
+    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;This analysis was generated using the Feynman technique, where the AI takes on the role of the paper&amp;rsquo;s author and explains the research using simple language and analogies to make complex concepts accessible.&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+
+      </description>
+    </item>
+
+  </channel>
+</rss>
