@@ -13,7 +13,7 @@ RSS Feed Article Analyzer that automatically fetches and analyzes academic paper
 - **RSSParser** (`src/rss_parser.py`): Fetches and parses RSS feeds with duplicate detection
 - **WebScraper** (`src/scraper.py`): Extracts full article content from academic publisher websites and follows embedded links for comprehensive analysis
 - **DatabaseManager** (`src/database.py`): SQLite operations with schema migrations and duplicate detection
-- **AI Clients**: Pluggable architecture supporting Claude (`claude_client.py`), Mistral (`mistral_client.py`), and OpenAI (`openai_client.py`)
+- **AI Clients**: Pluggable architecture supporting Claude (`claude_client.py`), Mistral (`mistral_client.py`), and OpenAI (`openai_client.py`) - all using Feynman technique prompts for educational explanations
 - **ReportGenerator** (`src/report_generator.py`): Multi-format output (Markdown, JSON, CSV)
 
 ### Data Flow
@@ -59,7 +59,7 @@ uv sync
 uv run python -m src.main run --limit 5
 
 # Generate comprehensive reports
-uv run python generate_comprehensive_reports.py
+uv run python tools/generate_comprehensive_reports.py
 ```
 
 ### Environment Setup
@@ -118,8 +118,19 @@ ORDER BY a.processed_date DESC LIMIT 10;
 Reports generated in `output/` directory:
 - `article_analysis_report.md`: Detailed analysis with methodology explanations
 - `summary_report.md`: Quick overview
+- `feynman_summaries_*.md`: Educational explanations using the Feynman technique
 - `articles_export.json`: Machine-readable format
 - `articles_export.csv`: Spreadsheet format
+
+### AI Analysis Approach
+All AI clients use the **Feynman Technique** for generating explanations:
+- **Author Persona**: AI takes on the role of the paper's author
+- **Educational Focus**: Explains complex concepts using simple language and analogies
+- **First Principles**: Breaks down technical concepts to fundamental components
+- **Step-by-step Methodology**: Walks through research approach with reasoning
+- **Accessible Language**: Makes academic research understandable to general audiences
+
+The prompt specifically instructs: *"Explain this paper to me in depth using the Feynman technique, as if you were its author."*
 
 ## Academic Publisher Support
 

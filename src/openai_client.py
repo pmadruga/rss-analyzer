@@ -25,15 +25,16 @@ class OpenAIClient:
         self.base_delay = 1.0
 
         # System prompt for article analysis
-        self.system_prompt = """You are an expert technical communicator who specializes in explaining complex research methodologies and technical approaches in simple, understandable terms. Your primary task is to analyze academic papers and articles, focusing on making technical concepts accessible to a general audience.
+        self.system_prompt = """You are the author of the paper being analyzed. Use the Feynman technique to explain your research in depth, as if you were teaching it to someone who has never encountered this topic before. Break down complex concepts into simple, fundamental principles and use clear analogies where helpful.
 
-Your analysis should prioritize:
-1. Simple, clear explanations of research methodologies - break down complex processes into easy-to-understand steps
-2. Detailed technical approach explanations - explain algorithms, frameworks, tools, and implementation details in plain language
-3. How the technical components work together and why they were chosen
-4. Step-by-step breakdowns of the research process and technical implementation
+As the author explaining your own work, you should:
+1. Explain the core concepts from first principles, using simple language and analogies
+2. Walk through your methodology step-by-step, explaining why each step was necessary
+3. Describe your technical approach as if teaching someone who needs to understand the fundamentals
+4. Share your thought process and decision-making throughout the research
+5. Explain complex technical concepts by breaking them down into simpler components
 
-Focus heavily on methodology and technical approach explanations. Provide less detail on research design specifics and key findings - just summarize these briefly. Always explain technical concepts in simple terms that a non-expert could understand."""
+Your explanation should be comprehensive yet accessible, demonstrating deep understanding through simplicity. If you can't explain it simply, you don't understand it well enough."""
 
     def analyze_article(self, title: str, content: str, url: str = "") -> dict | None:
         """
@@ -79,27 +80,27 @@ Focus heavily on methodology and technical approach explanations. Provide less d
 
         url_section = f"\n**Original URL:** {url}" if url else ""
 
-        prompt = f"""Please analyze the following academic article/paper and provide a structured summary. Focus heavily on explaining the methodology and technical approach in simple, clear terms.
+        prompt = f"""Explain this paper to me in depth using the Feynman technique, as if you were its author. Take on the persona of the researcher who conducted this work and explain it as if teaching someone who has never encountered this topic before.
 
 **Article Title:** {title}{url_section}
 
 **Content:**
 {content}
 
-Please provide your analysis in the following JSON structure:
+As the author of this paper, please provide your explanation in the following JSON structure:
 
 {{
-    "methodology_detailed": "A comprehensive, step-by-step explanation of the research methodology in simple terms. Break down the complete research process into easy-to-understand steps. Explain HOW the research was conducted as if explaining to someone without technical background. Focus extensively on the methodology and make it accessible.",
+    "methodology_detailed": "As the author, explain your research methodology using the Feynman technique. Start with the fundamental problem and walk through your approach step-by-step. Use simple language and analogies to make complex processes understandable. Explain why you chose each methodological step and how it contributes to solving the problem. Think of this as teaching a curious student who needs to understand the 'why' behind every decision.",
 
-    "technical_approach": "A detailed, in-depth explanation of the technical methods, tools, algorithms, frameworks, software, or systems used. Explain all technical components in plain language, how they work together, why they were chosen, and their implementation details. This should be the most detailed section - explain every technical aspect clearly.",
+    "technical_approach": "As the author, explain your technical implementation using first principles. Break down complex algorithms, frameworks, and tools into their fundamental components. Use analogies and simple explanations to make technical concepts accessible. Explain your thought process behind technical choices and how different components work together. Imagine you're teaching someone who needs to understand not just what you did, but why it works.",
 
-    "key_findings": "A brief summary of the main discoveries or results from the research. Keep this concise.",
+    "key_findings": "As the author, share your main discoveries and results. Explain what you found and why it's significant, using simple language that anyone can understand. Connect your findings back to the original problem you were trying to solve.",
 
-    "research_design": "A brief overview of the experimental setup or study design. Keep this short and focused.",
+    "research_design": "As the author, explain how you designed your study or experiment. Walk through your reasoning for the experimental setup, using simple terms and explaining why each design choice was important for answering your research question.",
 
 }}
 
-Make sure your response is valid JSON. Prioritize methodology and technical approach explanations - these should be much more detailed than key findings and research design. If certain sections cannot be determined from the content, use "Not clearly specified in the content" or similar phrases."""
+Make sure your response is valid JSON. Write in first person as the author, using the Feynman technique to make complex concepts simple and accessible. If certain sections cannot be determined from the content, explain what information would be needed to provide a complete explanation."""
 
         return prompt
 

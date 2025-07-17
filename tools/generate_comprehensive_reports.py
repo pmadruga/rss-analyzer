@@ -91,7 +91,9 @@ def get_all_articles(db_path: str) -> list[dict[str, Any]]:
     return articles
 
 
-def generate_comprehensive_json(articles: list[dict[str, Any]], output_dir: str):
+def generate_comprehensive_json(
+    articles: list[dict[str, Any]], output_dir: str, timestamp: str
+):
     """Generate comprehensive JSON export with all articles"""
     # Group by paper title
     papers_by_title = {}
@@ -115,15 +117,19 @@ def generate_comprehensive_json(articles: list[dict[str, Any]], output_dir: str)
             "articles": paper_articles,
         }
 
-    # Write comprehensive JSON
-    json_path = os.path.join(output_dir, "comprehensive_articles_export.json")
+    # Write comprehensive JSON with timestamp
+    json_path = os.path.join(
+        output_dir, f"comprehensive_articles_export_{timestamp}.json"
+    )
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(export_data, f, indent=2, ensure_ascii=False)
 
     print(f"Generated comprehensive JSON: {json_path}")
 
 
-def generate_paper_specific_files(articles: list[dict[str, Any]], output_dir: str):
+def generate_paper_specific_files(
+    articles: list[dict[str, Any]], output_dir: str, timestamp: str
+):
     """Generate individual files for each paper"""
     # Group by paper title
     papers_by_title = {}
@@ -148,7 +154,7 @@ def generate_paper_specific_files(articles: list[dict[str, Any]], output_dir: st
             "articles": paper_articles,
         }
 
-        json_path = os.path.join(output_dir, f"{safe_filename}.json")
+        json_path = os.path.join(output_dir, f"{safe_filename}_{timestamp}.json")
         with open(json_path, "w", encoding="utf-8") as f:
             json.dump(paper_data, f, indent=2, ensure_ascii=False)
 
@@ -180,16 +186,18 @@ def generate_paper_specific_files(articles: list[dict[str, Any]], output_dir: st
 
             md_content += "---\n\n"
 
-        md_path = os.path.join(output_dir, f"{safe_filename}.md")
+        md_path = os.path.join(output_dir, f"{safe_filename}_{timestamp}.md")
         with open(md_path, "w", encoding="utf-8") as f:
             f.write(md_content)
 
         print(
-            f"Generated files for '{paper_title}': {safe_filename}.json, {safe_filename}.md"
+            f"Generated files for '{paper_title}': {safe_filename}_{timestamp}.json, {safe_filename}_{timestamp}.md"
         )
 
 
-def generate_comprehensive_markdown(articles: list[dict[str, Any]], output_dir: str):
+def generate_comprehensive_markdown(
+    articles: list[dict[str, Any]], output_dir: str, timestamp: str
+):
     """Generate comprehensive markdown report"""
     # Group by paper title
     papers_by_title = {}
@@ -250,7 +258,8 @@ def generate_comprehensive_markdown(articles: list[dict[str, Any]], output_dir: 
         f"*Report generated on: {datetime.now().strftime('%Y-%m-%d at %H:%M:%S')}*\n"
     )
 
-    md_path = os.path.join(output_dir, "comprehensive_analysis_report.md")
+    # Write comprehensive markdown with timestamp
+    md_path = os.path.join(output_dir, f"comprehensive_analysis_report_{timestamp}.md")
     with open(md_path, "w", encoding="utf-8") as f:
         f.write(md_content)
 
@@ -265,10 +274,13 @@ def main():
     articles = get_all_articles(db_path)
     print(f"Found {len(articles)} completed articles")
 
+    # Generate single timestamp for all files
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
     # Generate comprehensive reports
-    generate_comprehensive_json(articles, output_dir)
-    generate_comprehensive_markdown(articles, output_dir)
-    generate_paper_specific_files(articles, output_dir)
+    generate_comprehensive_json(articles, output_dir, timestamp)
+    generate_comprehensive_markdown(articles, output_dir, timestamp)
+    generate_paper_specific_files(articles, output_dir, timestamp)
 
     print("All comprehensive reports generated successfully!")
 

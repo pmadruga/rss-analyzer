@@ -13,6 +13,7 @@ import time
 import click
 from tqdm import tqdm
 
+from .claude_client import ClaudeClient
 from .database import DatabaseManager
 from .mistral_client import MistralClient
 from .openai_client import OpenAIClient
@@ -40,9 +41,15 @@ class ArticleProcessor:
         self.scraper = WebScraper(config.get("scraper_delay", 1.0))
 
         # Initialize API client based on provider
-        api_provider = config.get("api_provider", "mistral")
+        api_provider = config.get("api_provider", "anthropic")
 
-        if api_provider == "mistral":
+        if api_provider == "anthropic":
+            self.api_client = ClaudeClient(
+                api_key=config["anthropic_api_key"],
+                model=config.get("claude_model", "claude-3-5-sonnet-20241022"),
+            )
+            logger.info("Using Anthropic Claude API")
+        elif api_provider == "mistral":
             self.api_client = MistralClient(
                 api_key=config["mistral_api_key"],
                 model=config.get("mistral_model", "mistral-large-latest"),
@@ -56,7 +63,7 @@ class ArticleProcessor:
             logger.info("Using OpenAI API")
         else:
             raise ValueError(
-                f"Unsupported API provider: {api_provider}. Supported providers: mistral, openai"
+                f"Unsupported API provider: {api_provider}. Supported providers: anthropic, mistral, openai"
             )
 
         self.report_generator = ReportGenerator(config["output_dir"])
@@ -263,23 +270,30 @@ class ArticleProcessor:
         try:
             logger.info("Generating reports...")
 
-            # Generate main markdown report
+            # Generate main markdown report with timestamp
             report_path = self.report_generator.generate_report(
                 articles,
                 self.config.get("report_filename", "article_analysis_report.md"),
+                use_timestamp=True,
             )
             logger.info(f"Main report generated: {report_path}")
 
-            # Generate summary report
-            summary_path = self.report_generator.generate_summary_report(articles)
+            # Generate summary report with timestamp
+            summary_path = self.report_generator.generate_summary_report(
+                articles, use_timestamp=True
+            )
             logger.info(f"Summary report generated: {summary_path}")
 
-            # Generate JSON export
-            json_path = self.report_generator.generate_json_export(articles)
+            # Generate JSON export with timestamp
+            json_path = self.report_generator.generate_json_export(
+                articles, use_timestamp=True
+            )
             logger.info(f"JSON export generated: {json_path}")
 
-            # Generate CSV export
-            csv_path = self.report_generator.generate_csv_export(articles)
+            # Generate CSV export with timestamp
+            csv_path = self.report_generator.generate_csv_export(
+                articles, use_timestamp=True
+            )
             logger.info(f"CSV export generated: {csv_path}")
 
             results["report_generated"] = True

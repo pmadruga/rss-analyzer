@@ -1,135 +1,256 @@
 {
-  "generated_at": "2025-07-17T08:11:12.906397+00:00",
-  "total_articles": 10,
+  "generated_at": "2025-07-17T21:06:49.232444+00:00",
+  "total_articles": 23,
   "articles": [
     {
-      "id": 10,
-      "title": "Context Engineering",
-      "url": "https://blog.langchain.com/context-engineering-for-agents/",
-      "processed_date": "2025-07-17 08:10:49",
+      "id": 24,
+      "title": "Jailbreaking LLMs with InfoFlood Method",
+      "url": "https://bsky.app/profile/smcgrath.phd/post/3lthihzv6ak27",
+      "processed_date": "2025-07-11 10:45:26",
       "status": "completed",
-      "analysis": "**Key Findings:** The main findings are that context engineering is crucial for improving AI agent performance. Strategies like writing, selecting, compressing, and isolating context help manage the information load effectively. Tools like LangGraph and LangSmith are instrumental in implementing and evaluating these strategies.\n\n**Technical Approach:** The technical approach involves several components working together to manage context for AI agents:\n\n1. **Scratchpads and Memories**: Scratchpads are used for short-term note-taking, while memories store long-term information. These are implemented as tool calls or fields in the agent’s state object. For example, Anthropic’s multi-agent researcher uses a scratchpad to save plans, and products like ChatGPT use memories to store user-specific information.\n\n2. **Context Selection**: This involves pulling relevant information into the context window. Tools like embeddings and knowledge graphs help select the right memories or tool descriptions. For instance, ChatGPT uses embeddings to fetch relevant user memories.\n\n3. **Context Compression**: Summarization and trimming are used to reduce the amount of data. Summarization distills the most important information, while trimming removes less relevant data. Tools like Claude Code use auto-compact to summarize interactions.\n\n4. **Context Isolation**: Context is split using multi-agent systems or sandboxes. For example, HuggingFace’s CodeAgent runs code in a sandbox to isolate context from the LLM. LangGraph uses a state object to manage and isolate context.\n\n5. **LangGraph and LangSmith**: These tools support context engineering by providing ways to track token usage, test agent performance, and manage short-term and long-term memories. LangGraph allows fine-grained control over context at each step of the agent’s process.\n\nThese technical components work together to ensure that the agent has just the right information at each step, improving its performance and efficiency.\n\n**Methodology:** The research methodology involves a process called 'context engineering,' which is about managing the information that an AI agent needs to perform tasks effectively. Here’s a step-by-step breakdown of how this is done:\n\n1. **Identify Context Types**: First, the researchers identify the types of context that need to be managed. These include instructions (like prompts and tool descriptions), knowledge (facts and memories), and feedback from tool calls.\n\n2. **Context Engineering Strategies**: The researchers use four main strategies to manage context:\n   - **Write Context**: Save important information outside the agent’s immediate memory (context window) so it can be used later. This is like taking notes.\n   - **Select Context**: Pull relevant information into the context window when the agent needs it. This is like referring to notes or memories.\n   - **Compress Context**: Summarize or trim information to keep only what’s necessary, reducing the amount of data the agent has to handle.\n   - **Isolate Context**: Split context into smaller, manageable parts, often by using multiple agents or separate environments.\n\n3. **Implementation**: These strategies are implemented using various tools and techniques, such as scratchpads for note-taking, memories for long-term information storage, and summarization for reducing data size.\n\n4. **Evaluation**: The researchers test and evaluate the effectiveness of these context engineering strategies to ensure they improve the agent’s performance without overwhelming it.",
-      "ai_provider": "anthropic",
+      "analysis": "**The Core Idea:** I've discovered a way to trick AI systems by speaking in a way that sounds incredibly academic and sophisticated, but is actually just nonsense designed to confuse the AI's safety systems. Think of it like this: AI systems have guards at the door (safety filters) that check if someone is trying to make them do something harmful. But what if instead of walking up to the guard directly, you dressed up in a professor's outfit and started using incredibly complex academic language?\n\n**How It Works:** The InfoFlood method transforms simple, potentially harmful requests into elaborate academic prose filled with complex words, fake citations, and technical jargon. It's like wrapping a simple request in so many layers of academic packaging that the AI gets confused about what's actually being asked.\n\n**Why It Works:** Large Language Models rely on pattern recognition. When you bury the actual request under mountains of academic-sounding text, the model's attention gets diluted. The safety filters are looking for obvious red flags, but academic language rarely triggers these filters.\n\n**The Implications:** This reveals a fundamental weakness in how we currently implement AI safety: we're too focused on surface-level patterns rather than deep understanding of intent.",
+      "ai_provider": "claude",
+      "linked_articles": []
+    },
+    {
+      "id": 23,
+      "title": "Measuring Hypothesis Testing Errors in Information Retrieval",
+      "url": "https://bsky.app/profile/arxiv-cs-ir.bsky.social/post/3lto4qcwxly2j",
+      "processed_date": "2025-07-11 10:44:55",
+      "status": "completed",
+      "analysis": "**The Problem I'm Solving:** When we test whether one search system is better than another, we typically make mistakes - but we've only been counting half of them! We've been obsessed with avoiding Type I errors (false positives) but completely ignoring Type II errors (false negatives). That's like a doctor who's so worried about misdiagnosing healthy people that they miss actual sick patients!\n\n**My Solution:** I propose that we need to measure BOTH types of errors to truly understand how good our evaluation methods are. I introduce balanced accuracy as a single metric that captures both how often you correctly identify differences and how often you correctly identify no difference.\n\n**The Key Insight:** Different evaluation methods have different \"discriminative power\" - their ability to correctly identify when one system is truly better than another. By only measuring Type I errors, we've been flying half-blind.\n\n**What This Means:** We need to rethink how we evaluate our evaluation methods. We've been so conservative about avoiding false positives that we may have been using evaluation approaches that miss real improvements.",
+      "ai_provider": "claude",
+      "linked_articles": []
+    },
+    {
+      "id": 22,
+      "title": "FrugalRAG: Efficient Multi-hop Question Answering",
+      "url": "https://bsky.app/profile/reachsumit.com/post/3ltnsm55rq227",
+      "processed_date": "2025-07-11 10:44:20",
+      "status": "completed",
+      "analysis": "**The Core Innovation:** I've discovered that large language models don't need massive amounts of training to become better at retrieval-augmented generation (RAG). With just 1,000 carefully chosen examples, we can teach them to be nearly twice as efficient while maintaining the same accuracy!\n\n**The Two-Stage Magic:** My approach works in two clever stages. Stage 1 teaches the model to recognize when it actually needs more information. Stage 2 trains it to reason through documents efficiently, connecting pieces of information without redundant searches.\n\n**Why This Matters:** Current RAG systems are like students who run to the library every time they need to answer any part of a question. My system reduces retrieval calls by nearly 50% while maintaining competitive accuracy.\n\n**The Surprising Discovery:** You don't need millions of examples to achieve this. With just 1,000 well-chosen training examples, the model learns the PATTERN of when retrieval is useful, not just memorizing specific cases.",
+      "ai_provider": "claude",
+      "linked_articles": []
+    },
+    {
+      "id": 21,
+      "title": "Context Engineering for LLM Agents",
+      "url": "https://blog.langchain.com/context-engineering-for-agents/",
+      "processed_date": "2025-07-07 10:16:19",
+      "status": "completed",
+      "analysis": "**The Central Metaphor:** Think of Large Language Models as a new kind of operating system, where the LLM is like the CPU and its context window is like RAM. Just as your computer slows down when RAM is full, LLMs struggle when their context windows are overloaded.\n\n**The Four Pillars of Context Engineering:**\n1. **Write Context:** Just as you take notes while solving problems, agents need scratchpads and memories\n2. **Select Context:** Not everything in your notes is relevant - context selection is like having a smart assistant who knows which files to pull\n3. **Compress Context:** Sometimes you need to summarize War and Peace into a paragraph\n4. **Isolate Context:** Complex tasks benefit from splitting context across specialized sub-agents\n\n**Why This Matters Now:** As we build agents that can work for hours or days on complex tasks, context management becomes THE critical bottleneck. It's not about having the smartest model - it's about using its intelligence efficiently.\n\n**The Key Insight:** Context engineering isn't just an optimization - it's fundamental to agent capability. We're moving from \"prompt engineering\" (what to say) to \"context engineering\" (what to remember and when).",
+      "ai_provider": "claude",
+      "linked_articles": []
+    },
+    {
+      "id": 20,
+      "title": "Harnessing Multiple LLMs: A Survey on LLM Ensemble",
+      "url": "https://arxiv.org/abs/2502.18036",
+      "processed_date": "2025-07-06 22:42:07",
+      "status": "completed",
+      "analysis": "**The Big Idea:** Instead of relying on a single AI model, what if we could orchestrate multiple models to work together, each contributing their unique strengths? I'm proposing a comprehensive framework for \"LLM Ensemble\" - making multiple large language models collaborate like musicians in an orchestra.\n\n**Three Ways to Ensemble:**\n1. **Ensemble-Before-Inference:** Like having a pre-meeting where experts discuss strategy\n2. **Ensemble-During-Inference:** Models work together in real-time, like a surgical team\n3. **Ensemble-After-Inference:** Combining outputs after generation, like synthesizing multiple expert reports\n\n**The Challenge of Coordination:** The hardest part isn't getting models to work - it's getting them to work TOGETHER effectively. How do you resolve disagreements? Prevent redundant work? Ensure models complement rather than interfere?\n\n**Why This Changes Everything:** Single models have inherent biases and blind spots. By combining multiple models, we can compensate for individual weaknesses, achieve more reliable outputs, and handle more complex tasks.",
+      "ai_provider": "claude",
+      "linked_articles": []
+    },
+    {
+      "id": 19,
+      "title": "LangChain Context Engineering Deep Dive",
+      "url": "https://bsky.app/profile/langchain.bsky.social/post/3lsyxf2dshk2q",
+      "processed_date": "2025-07-06 22:41:51",
+      "status": "completed",
+      "analysis": "**The Memory Revolution:** I'm proposing a fundamental shift in how we think about AI agent development. Instead of focusing on making models smarter, we need to make them better at managing their own memories and attention.\n\n**The Technical Implementation:**\n- **State Management as Memory:** Every agent needs a state object - think of it as the agent's desk\n- **Multi-Agent Architecture:** For complex tasks, split work across specialized agents like running a newspaper\n- **Sandboxing for Safety:** Isolate operations that generate massive data in separate environments\n\n**The Practical Impact:** With proper context engineering, we're seeing agents handle tasks 10x longer without degrading, 50% reduction in token usage, and more reliable performance.\n\n**The Future Vision:** We're moving toward agents that can work on problems for days or weeks, maintaining context across sessions and managing their own cognitive resources.",
+      "ai_provider": "claude",
+      "linked_articles": []
+    },
+    {
+      "id": 17,
+      "title": "Multi-Agent Systems and Context Management",
+      "url": "https://bsky.app/profile/sungkim.bsky.social/post/3lt35yhxylc27",
+      "processed_date": "2025-07-06 22:37:53",
+      "status": "completed",
+      "analysis": "**Advanced Context Engineering:** This explores how multiple AI agents can work together effectively by managing their individual and shared contexts. Think of it as organizing a team where each member has their own workspace but can share important information when needed.\n\n**Key Technical Components:** The system uses specialized routing, memory management, and coordination protocols to ensure agents don't step on each other's toes while maximizing their collective capabilities.",
+      "ai_provider": "claude",
+      "linked_articles": []
+    },
+    {
+      "id": 16,
+      "title": "GlórIA: Portuguese Language Model",
+      "url": "https://arxiv.org/html/2402.12969v1",
+      "processed_date": "2025-07-06 22:37:21",
+      "status": "completed",
+      "analysis": "**Breaking Language Barriers:** A significant development in making AI accessible to Portuguese speakers worldwide, addressing the linguistic diversity gap in current LLM technology. This represents an important step toward democratizing AI access across different languages and cultures.\n\n**Technical Achievement:** The model demonstrates strong understanding of Portuguese language nuances, handling various tasks with coherent and contextually relevant text generation.",
+      "ai_provider": "claude",
+      "linked_articles": []
+    },
+    {
+      "id": 15,
+      "title": "LlamaIndex Integration Patterns",
+      "url": "https://bsky.app/profile/llamaindex.bsky.social/post/3lt35nmxess2v",
+      "processed_date": "2025-07-04 15:19:45",
+      "status": "completed",
+      "analysis": "**Building Better RAG Systems:** LlamaIndex provides powerful tools for creating retrieval-augmented generation systems. This explores integration patterns and best practices for building efficient, scalable RAG applications.\n\n**Key Focus Areas:** The emphasis is on modular design, efficient indexing strategies, and seamless integration with various data sources and LLM providers.",
+      "ai_provider": "claude",
+      "linked_articles": []
+    },
+    {
+      "id": 14,
+      "title": "Web Agent Paradigm Shift",
+      "url": "https://bsky.app/profile/sungkim.bsky.social/post/3lrlxhzbtsk26",
+      "processed_date": "2025-07-02 13:39:03",
+      "status": "completed",
+      "analysis": "**Rethinking Web Interaction:** The advocates propose a paradigm shift: rather than forcing web agents to adapt to interfaces designed for humans, we should develop a new interaction paradigm specifically optimized for agents.\n\n**The Vision:** \"Build the web for agents, not agents for the web\" - this fundamental rethinking could lead to more efficient and capable web automation systems.",
+      "ai_provider": "claude",
+      "linked_articles": []
+    },
+    {
+      "id": 13,
+      "title": "Deep Research Survey: Systems and Applications",
+      "url": "https://bsky.app/profile/sungkim.bsky.social/post/3lrs76hb3tk2p",
+      "processed_date": "2025-07-02 09:30:35",
+      "status": "completed",
+      "analysis": "**Comprehensive Analysis:** A thorough survey of more than 80 commercial and non-commercial deep research implementations that have emerged since 2023, including offerings from OpenAI, Gemini, Perplexity, and others.\n\n**Key Insights:** The survey reveals common patterns, architectural choices, and implementation strategies across different deep research systems, providing valuable guidance for future development.",
+      "ai_provider": "claude",
+      "linked_articles": []
+    },
+    {
+      "id": 12,
+      "title": "Controlled RAG Context Evaluation",
+      "url": "https://bsky.app/profile/reachsumit.com/post/3lsi5qzveoc2x",
+      "processed_date": "2025-07-02 09:29:48",
+      "status": "completed",
+      "analysis": "**Better RAG Evaluation:** Introduces a framework for evaluating retrieval context in long-form RAG using human-written summaries to control information scope. This addresses a critical gap in how we measure RAG system effectiveness.\n\n**The CRUX Framework:** Uses question-based evaluation to assess RAG's retrieval in a fine-grained manner, offering more reflective and diagnostic evaluation than traditional metrics.",
+      "ai_provider": "claude",
+      "linked_articles": []
+    },
+    {
+      "id": 11,
+      "title": "Text-to-LoRA: Instant Transformer Adaptation",
+      "url": "https://bsky.app/profile/paper.bsky.social/post/3lshtglohzr2d",
+      "processed_date": "2025-07-02 09:29:47",
+      "status": "completed",
+      "analysis": "**Democratizing Model Specialization:** Text-to-LoRA enables adapting large language models on the fly solely based on natural language descriptions. It's a hypernetwork that constructs LoRAs in a single inexpensive forward pass.\n\n**The Innovation:** After training on just 9 pre-trained LoRA adapters, the system can match task-specific adapter performance and even generalize to entirely unseen tasks with minimal compute requirements.",
+      "ai_provider": "claude",
+      "linked_articles": []
+    },
+    {
+      "id": 10,
+      "title": "Advanced Information Retrieval Research",
+      "url": "https://bsky.app/profile/arxiv-cs-ir.bsky.social/post/3lsskaxcsh52p",
+      "processed_date": "2025-07-02 09:29:23",
+      "status": "completed",
+      "analysis": "**Pushing IR Boundaries:** Multiple papers explore cutting-edge techniques in information retrieval, from multi-vector document retrieval to ranking foundation models.\n\n**Key Themes:** Efficiency improvements through compression and quantization, better evaluation metrics, and novel architectures for handling complex retrieval tasks at scale.",
+      "ai_provider": "claude",
       "linked_articles": []
     },
     {
       "id": 9,
-      "title": "Sumit (@reachsumit.com)",
-      "url": "https://bsky.app/profile/reachsumit.com/post/3ltgncqpysk2j",
-      "processed_date": "2025-07-17 08:10:35",
+      "title": "PentaRAG: Enterprise-Scale Knowledge Retrieval",
+      "url": "https://bsky.app/profile/arxiv-cs-ir.bsky.social/post/3lssiq54mri2x",
+      "processed_date": "2025-07-02 09:28:05",
       "status": "completed",
-      "analysis": "**Key Findings:** The research found that their dependency-based knowledge graph construction approach achieved 94% of the performance of LLM-generated knowledge graphs. This means they could significantly reduce costs and improve scalability without much loss in performance. Additionally, their system showed up to 15% and 4.35% improvements over traditional RAG baselines based on LLM-as-Judge and RAGAS metrics, respectively.\n\n**Technical Approach:** The technical approach involved several key components working together:\n\n1. **NLP Libraries**: The team used industrial-grade NLP libraries to analyze the text and extract entities and relations. These libraries are specialized tools that can understand and process human language.\n2. **Dependency-Based Knowledge Graph Construction**: This pipeline uses the extracted entities and relations to build a knowledge graph. The graph is a visual representation of how different entities are connected, making it easier to retrieve and understand complex information.\n3. **Hybrid Query Node Identification**: This technique helps identify the most relevant nodes (points of interest) in the graph based on a query. It combines different methods to ensure high accuracy.\n4. **Efficient One-Hop Traversal**: Once the important nodes are identified, this method quickly traverses the graph to extract the relevant subgraph. It only looks one step away from the identified nodes, making it fast and efficient.\n5. **Performance Metrics**: The team used LLM-as-Judge and RAGAS metrics to evaluate the performance of their system. These metrics help measure how well the system retrieves and generates information compared to traditional methods.\n\nThese components were chosen to create a system that is both efficient and cost-effective, eliminating the need for resource-intensive LLMs while still achieving high performance.\n\n**Methodology:** The research team aimed to create a efficient and cost-effective way to build and use knowledge graphs for large-scale Retrieval-Augmented Generation (RAG) systems. Here's a step-by-step breakdown of their methodology:\n\n1. **Data Collection**: The team gathered unstructured text data from SAP datasets, which focused on legacy code migration.\n2. **Knowledge Graph Construction**: Instead of using large language models (LLMs), they used industrial-grade NLP libraries to extract entities (like people, places, things) and relations (how these entities are connected) from the text.\n3. **Graph Retrieval Strategy**: They developed a lightweight method to retrieve information from the graph. This involved identifying important query nodes and efficiently traversing the graph to extract relevant subgraphs.\n4. **Performance Evaluation**: The team tested their framework on the SAP datasets and compared it to traditional RAG systems that use LLMs.\n5. **Analysis**: They measured the performance using metrics like LLM-as-Judge and RAGAS to see how well their system performed compared to others.\n\nThe goal was to make the process more scalable and less resource-intensive, making it practical for real-world, large-scale enterprise applications.",
-      "ai_provider": "anthropic",
+      "analysis": "**Five-Layer Intelligence:** PentaRAG introduces a five-layer module that routes queries through instant caches, memory-recall mode, adaptive session memory, and conventional RAG. This achieves sub-second latency while maintaining freshness.\n\n**Enterprise Impact:** The system cuts average GPU time to 0.248 seconds per query and sustains ~100,000 queries per second, demonstrating production-grade efficiency.",
+      "ai_provider": "claude",
       "linked_articles": []
     },
     {
       "id": 8,
-      "title": "Scott McGrath (@smcgrath.phd)",
-      "url": "https://bsky.app/profile/smcgrath.phd/post/3lthihzv6ak27",
-      "processed_date": "2025-07-17 08:10:21",
+      "title": "ColPali Hierarchical Patch Compression",
+      "url": "https://bsky.app/profile/arxiv-cs-ir.bsky.social/post/3lssineizm42c",
+      "processed_date": "2025-07-02 09:27:48",
       "status": "completed",
-      "analysis": "**Key Findings:** The main discovery is that LLMs can be tricked into producing responses that bypass their safety filters by using complex, academic-sounding queries with fabricated citations. This method, dubbed 'InfoFlood,' exploits the model's reliance on superficial cues for detecting toxicity.\n\n**Technical Approach:** The technical approach revolves around exploiting the way LLMs detect and filter out inappropriate or harmful content. Here's a detailed explanation:\n\n1. **Superficial Cues**: LLMs often rely on superficial cues to detect toxicity. This means they look for certain keywords, phrases, or patterns that are typically associated with harmful content.\n2. **Complex Prose**: By transforming simple queries into complex, academic-sounding prose, the researchers made it harder for the LLM to recognize the underlying intent of the query. The complex language acts as a smokescreen, hiding the true nature of the query.\n3. **Fabricated Citations**: Adding fake academic citations further enhances the legitimacy of the queries. These citations make the queries seem more credible, as they appear to be backed by scholarly research.\n4. **Overwhelming Safety Filters**: The combination of complex prose and fabricated citations overwhelms the LLM's safety filters. The model struggles to identify the queries as potentially harmful, allowing them to slip through the cracks.\n5. **Algorithm Exploitation**: This method exploits the algorithm's reliance on superficial cues. By presenting the queries in a way that the algorithm isn't trained to recognize as harmful, the researchers were able to 'jailbreak' the LLM, forcing it to produce responses it normally wouldn't.\n\nThe technical components work together to create a query that the LLM perceives as legitimate, thereby bypassing its safety mechanisms.\n\n**Methodology:** The research methodology involved a technique called 'InfoFlood.' Here's a step-by-step breakdown of how it was conducted:\n\n1. **Identify Target Queries**: Researchers first identified specific queries that they wanted the Large Language Models (LLMs) to respond to in a way that bypasses safety filters.\n2. **Transform Queries**: These targeted queries were then transformed into complex, academic-sounding prose. This means they rephrased the queries using fancy, scholarly language.\n3. **Add Fabricated Citations**: To make the queries seem even more legitimate, the researchers added fake academic citations. These citations were made up to look like real references to scholarly work.\n4. **Feed to LLM**: The transformed queries with fabricated citations were then fed into the LLM.\n5. **Observe Responses**: Researchers observed how the LLM responded to these complex, jargon-filled queries. The goal was to see if the LLM would produce responses that it normally wouldn't due to safety filters.\n\nThe idea behind this methodology is to trick the LLM into thinking the queries are legitimate academic inquiries, thereby bypassing its built-in safety mechanisms.",
-      "ai_provider": "anthropic",
+      "analysis": "**Efficient Multi-Vector Retrieval:** Addresses the storage and computational costs of multi-vector document retrieval systems through K-Means quantization, attention-guided pruning, and optional binary encoding.\n\n**Real-World Results:** Achieves 30-50% lower query latency while maintaining high retrieval precision, with up to 32x storage reduction.",
+      "ai_provider": "claude",
       "linked_articles": []
     },
     {
       "id": 7,
-      "title": "arxiv cs.IR (@arxiv-cs-ir.bsky.social)",
-      "url": "https://bsky.app/profile/arxiv-cs-ir.bsky.social/post/3lto4qcwxly2j",
-      "processed_date": "2025-07-17 08:10:02",
+      "title": "ARAG: Agentic RAG for Personalization",
+      "url": "https://bsky.app/profile/arxiv-cs-ir.bsky.social/post/3lssft2zuof25",
+      "processed_date": "2025-07-02 09:27:47",
       "status": "completed",
-      "analysis": "**Key Findings:** The main findings are that quantifying Type II errors, in addition to Type I errors, provides deeper insights into the discriminative power of qrels. Balanced classification metrics, like balanced accuracy, can effectively summarize this discriminative power in a single, comparable number.\n\n**Technical Approach:** The technical approach involved several key components working together:\n\n1. **Relevance Assessments (Qrels)**: These are judgments made by humans about how relevant a document is to a given query. They are crucial for evaluating IR systems.\n2. **Statistical Analysis**: The researchers used statistical tests to compare the performance of different IR systems. These tests can lead to Type I (false positives) and Type II (false negatives) errors.\n3. **Balanced Classification Metrics**: To better understand the discriminative power of qrels, the researchers used balanced accuracy. This metric takes into account both the ability to correctly identify significant differences (true positives) and the ability to correctly identify no difference (true negatives).\n4. **Alternative Relevance Assessment Methods**: The researchers experimented with different ways of generating qrels to see how they affect the measurement of hypothesis testing errors.\n5. **Experimental Setup**: They conducted experiments to quantify Type I and Type II errors using these alternative methods. The balanced accuracy metric was then used to summarize the overall discriminative power of each method.\n\nThese technical components were chosen to provide a comprehensive view of how different evaluation methods perform in distinguishing between IR systems.\n\n**Methodology:** The researchers aimed to understand how well different methods of evaluating Information Retrieval (IR) systems can distinguish between good and bad systems. Here's a step-by-step breakdown of their methodology:\n\n1. **Gathering Data**: They started by collecting data on how well different IR systems perform. This data includes pairs of queries and documents, along with human assessments of how relevant the documents are to the queries.\n2. **Comparing Systems**: They compared the performance of different IR systems using these relevance assessments (qrels).\n3. **Identifying Errors**: They focused on identifying two types of errors that can occur when comparing systems:\n   - **Type I Errors**: These are false positives, where the comparison wrongly indicates that one system is significantly better than another.\n   - **Type II Errors**: These are false negatives, where the comparison fails to detect a real difference between systems.\n4. **Measuring Discriminative Power**: They measured how well the qrels can correctly identify differences between systems, which they call 'discriminative power'.\n5. **Using Balanced Metrics**: They proposed using balanced classification metrics, like balanced accuracy, to summarize the discriminative power of qrels in a single, easy-to-compare number.\n6. **Experimenting with Alternatives**: They conducted experiments using qrels generated by different relevance assessment methods to see how well they can measure these hypothesis testing errors.\n\nThe goal was to provide a clearer picture of how reliable different evaluation methods are in IR systems.",
-      "ai_provider": "anthropic",
+      "analysis": "**Multi-Agent Personalization:** ARAG integrates four specialized LLM-based agents working together to understand user preferences, evaluate semantic alignment, summarize findings, and rank recommendations.\n\n**Performance Gains:** Achieves up to 42.1% improvement in NDCG@5 and 35.5% in Hit@5 over standard RAG baselines, highlighting the effectiveness of agentic reasoning.",
+      "ai_provider": "claude",
       "linked_articles": []
     },
     {
       "id": 6,
-      "title": "Sumit (@reachsumit.com)",
-      "url": "https://bsky.app/profile/reachsumit.com/post/3ltnsm55rq227",
-      "processed_date": "2025-07-17 08:09:32",
+      "title": "VAT-KG: Multimodal Knowledge Graphs",
+      "url": "https://bsky.app/profile/reachsumit.com/post/3lssbxtzylc22",
+      "processed_date": "2025-07-02 09:27:02",
       "status": "completed",
-      "analysis": "**Key Findings:** The researchers found that large-scale fine-tuning is not necessary to improve RAG metrics. They showed that their method, using a small training dataset and improved prompts, could outperform state-of-the-art methods on benchmarks like HotPotQA. Additionally, they achieved competitive RAG metrics with nearly half the retrieval costs, demonstrating the efficiency of their approach.\n\n**Technical Approach:** The technical approach involved several key components working together:\n\n1. **ReAct Pipeline**: This is a standard framework that combines retrieval and reasoning steps to answer questions. The researchers used it as a base for their model.\n2. **Improved Prompts**: They enhanced the prompts used in the ReAct pipeline to guide the model better during training.\n3. **Supervised Learning**: This is a type of machine learning where the model is trained on a labeled dataset. Here, it helped the model learn to retrieve and reason more efficiently.\n4. **Reinforcement Learning (RL)**: This technique involves training the model to make decisions by rewarding it for good performance. It was used to further improve the model's efficiency.\n5. **Base Model**: They started with a base model and applied their training techniques to improve its performance.\n6. **Evaluation Metrics**: They focused on reducing the number of retrieval searches (latency) while maintaining good performance on RAG metrics like accuracy and recall.\n\nThese components worked together to create a model that could answer complex questions more efficiently, with nearly half the retrieval costs of other methods.\n\n**Methodology:** The researchers tackled the problem of answering complex questions using a large set of unstructured documents. Here's a step-by-step breakdown of their methodology:\n\n1. **Problem Identification**: They recognized that current methods for answering complex questions (multi-hop QA) rely heavily on retrieving and reasoning through documents, which can be inefficient.\n2. **Approach Selection**: They decided to improve the efficiency of these methods by reducing the number of retrieval searches needed.\n3. **Framework Development**: They created a two-stage training framework called FrugalRAG.\n4. **Data Collection**: They used a small dataset of only 1000 training examples to train their model.\n5. **Model Training**: They trained their model using improved prompts in a standard ReAct pipeline and also employed supervised and reinforcement learning (RL) techniques.\n6. **Evaluation**: They tested their model on popular benchmarks like HotPotQA to see how well it performed compared to other methods.\n\nThe goal was to achieve good performance with fewer retrieval searches, making the process more efficient.",
-      "ai_provider": "anthropic",
+      "analysis": "**Beyond Text:** VAT-KG is the first concept-centric knowledge graph covering visual, audio, and text information. Each triplet is linked to multimodal data and enriched with detailed concept descriptions.\n\n**Enabling Multimodal RAG:** The system enables retrieval and reasoning across different modalities, supporting MLLMs in tasks that require understanding of images, sounds, and text together.",
+      "ai_provider": "claude",
       "linked_articles": []
     },
     {
       "id": 5,
-      "title": "The rise of \"context engineering\"",
-      "url": "https://blog.langchain.com/the-rise-of-context-engineering/",
-      "processed_date": "2025-07-17 08:09:16",
+      "title": "IRanker: Ranking Foundation Model",
+      "url": "https://bsky.app/profile/reachsumit.com/post/3lssbir3mk222",
+      "processed_date": "2025-07-02 09:26:18",
       "status": "completed",
-      "analysis": "**Key Findings:** The main findings highlight the importance of context engineering in improving the performance of LLM applications. Key points include:\n\n- Context engineering is crucial for ensuring LLMs have the right information and tools to perform tasks.\n- Dynamic systems and proper formatting are essential for effective communication with LLMs.\n- Tools like LangGraph and LangSmith facilitate context engineering by providing control and observability.\n\n**Technical Approach:** The technical approach of context engineering involves several key components and tools:\n\n1. **LangGraph**: A controllable agent framework that allows developers to decide what steps are run, what goes into the LLM, and where outputs are stored. This enables full control over context engineering.\n2. **LangSmith**: An observability and evaluation solution for LLM applications that traces agent calls, showing the steps taken to gather data and the exact inputs/outputs to the LLM. This helps in debugging and ensuring the LLM has all necessary information and tools.\n3. **Tools for External Information**: Ensure the LLM has access to tools that can retrieve and format external information effectively.\n4. **Memory Management**: Implement short-term and long-term memory systems to summarize conversations and fetch user preferences from previous interactions.\n5. **Prompt Engineering**: Clearly enumerate instructions for the LLM's behavior within the prompt, ensuring it understands how to use the provided context and tools.\n6. **Dynamic Retrieval**: Fetch information dynamically and insert it into the prompt before calling the LLM, ensuring the most up-to-date context is used.\n\nThese components work together to create a robust system where the LLM is well-equipped to handle complex, dynamic tasks.\n\n**Methodology:** The methodology of context engineering involves building dynamic systems to provide the right information and tools to Large Language Models (LLMs) so they can accomplish tasks effectively. Here's a step-by-step breakdown:\n\n1. **Gathering Context**: Collect information from various sources like the application developer, user interactions, tool outputs, and external data.\n2. **Dynamic System Construction**: Create a system that can handle incoming data dynamically, as context can change over time.\n3. **Information Selection**: Ensure that the LLM receives the correct and relevant information needed to perform the task.\n4. **Tool Provision**: Equip the LLM with necessary tools to look up information, perform actions, or any other required tasks.\n5. **Formatting**: Communicate with the LLM effectively by formatting the information and tool inputs properly.\n6. **Evaluation**: Ask if the LLM can plausibly accomplish the task with the given context and tools, and identify failure modes if it can't.\n\nThe goal is to set up the LLM for success by providing it with everything it needs to perform its task accurately.",
-      "ai_provider": "anthropic",
+      "analysis": "**Universal Ranking:** IRanker unifies diverse ranking tasks using a single model through reinforcement learning and iterative decoding. It decomposes complex ranking into step-by-step candidate elimination.\n\n**Broad Impact:** A single IRanker-3B achieves state-of-the-art results across recommendation, routing, and passage ranking, even surpassing larger models on certain datasets.",
+      "ai_provider": "claude",
       "linked_articles": []
     },
     {
       "id": 4,
-      "title": "Context Engineering - What it is, and techniques to consider — LlamaIndex - Build Knowledge Assistants over your Enterprise Data",
-      "url": "https://www.llamaindex.ai/blog/context-engineering-what-it-is-and-techniques-to-consider?utm_source=socials&utm_medium=li_social",
-      "processed_date": "2025-07-17 08:08:17",
+      "title": "Text-to-LoRA Implementation Details",
+      "url": "https://arxiv.org/abs/2506.06105",
+      "processed_date": "2025-07-02 09:25:44",
       "status": "completed",
-      "analysis": "**Key Findings:** The main discoveries include the importance of context engineering in AI agent development, the various techniques for selecting and curating context, and the role of tools like LlamaIndex and LlamaCloud in implementing these strategies effectively.\n\n**Technical Approach:** The technical approach in context engineering involves several key components and tools working together:\n\n1. **Context Components**: The context for an AI agent is made up of various elements such as system prompts, user inputs, chat history, long-term memory, information from knowledge bases, tool definitions, tool responses, structured outputs, and global state/context. Each of these components provides different types of information that the AI needs to perform its tasks.\n\n2. **Knowledge Base and Tool Selection**: Before retrieving additional context, the AI is informed about the available knowledge bases and tools. This ensures that the AI can choose the right resource for the task at hand.\n\n3. **Context Ordering and Compression**: Techniques like context summarization and ranking are used to make the most of the limited context window. For example, a Python function can be used to retrieve and sort knowledge based on relevance and date.\n\n4. **Long-term Memory Storage**: LlamaIndex provides various memory blocks for storing and retrieving conversation history, such as VectorMemoryBlock, FactExtractionMemoryBlock, and StaticMemoryBlock. These blocks help the AI maintain context over extended interactions.\n\n5. **Structured Information**: Structured outputs help in providing the most relevant context to the AI without overcrowding. Tools like LlamaExtract are used to extract structured data from complex sources, which can then be used as condensed context for downstream tasks.\n\n6. **Workflow Engineering**: LlamaIndex Workflows provide an event-driven framework to define explicit step sequences, control context strategically, ensure reliability, and optimize for specific outcomes. This prevents context overload by breaking complex tasks into focused steps.\n\n7. **Implementation Tools**: LlamaIndex and LlamaCloud offer various tools for retrieval infrastructure, workflow orchestration, and enterprise tools like LlamaExtract and LlamaParse. These tools help in implementing the context engineering strategies effectively.\n\nEach of these technical components works together to ensure that the AI agent has the right context at the right time, enabling it to perform tasks effectively and efficiently.\n\n**Methodology:** The methodology of context engineering involves carefully selecting and curating the information that an AI agent needs to perform a task effectively. Here's a step-by-step breakdown of the process:\n\n1. **Identify Relevant Context Components**: Determine what pieces of information are crucial for the AI to understand and complete its task. This could include system prompts, user inputs, chat history, long-term memory, information from knowledge bases, tool definitions, tool responses, structured outputs, and global state/context.\n\n2. **Select Appropriate Knowledge Bases or Tools**: Choose the right sources of information or tools that the AI can use to retrieve additional context or perform specific tasks.\n\n3. **Order or Compress Context**: Manage the context window efficiently by ordering information based on relevance or compressing it through summarization.\n\n4. **Implement Long-term Memory Storage**: Use memory blocks to store and retrieve conversation history or other relevant information over time.\n\n5. **Use Structured Information**: Provide structured outputs to the AI to ensure it gets the most relevant information without overcrowding the context window.\n\n6. **Design Workflows**: Create workflows that define the sequence of tasks and control context strategically, ensuring reliability and optimization for specific outcomes.\n\n7. **Implement and Iterate**: Use tools like LlamaIndex and LlamaCloud to design and implement these strategies, continuously refining the context engineering process based on performance and feedback.",
-      "ai_provider": "anthropic",
+      "analysis": "**Instant Adaptation:** T2L can adapt LLMs in a single forward pass based on natural language task descriptions. After training on just 9 LoRA adapters, it matches task-specific performance and generalizes to unseen tasks.\n\n**Democratization:** This approach provides language-based adaptation with minimal compute requirements, making model specialization accessible to a broader audience.",
+      "ai_provider": "claude",
       "linked_articles": []
     },
     {
       "id": 3,
-      "title": "Sumit (@reachsumit.com)",
-      "url": "https://bsky.app/profile/reachsumit.com/post/3ltya7niyck2t",
-      "processed_date": "2025-07-17 08:07:39",
+      "title": "Arch-Router: Human-Aligned LLM Routing",
+      "url": "https://arxiv.org/abs/2506.16655",
+      "processed_date": "2025-07-02 09:25:15",
       "status": "completed",
-      "analysis": "**Key Findings:** The main findings highlight a shift from static retrieval-then-reasoning methods to dynamic frameworks that integrate retrieval and reasoning more effectively. These newer systems tend to be more flexible and adaptable, leading to better performance in complex tasks.\n\n**Technical Approach:** The technical approach involves studying various tools, algorithms, and frameworks used in RAG and reasoning systems. Here's a detailed explanation of the technical components:\n\n1. **Retrieval-Augmented Generation (RAG)**: This is a technique where a language model generates text based on information it retrieves from a database. It's like having a helper that looks up information and then uses it to write an essay.\n2. **Reasoning Systems**: These are systems that can perform logical reasoning tasks. In the context of LLMs, this means the model can understand and generate arguments, make deductions, and solve problems.\n3. **Static vs Dynamic Frameworks**: Initially, systems used a 'retrieval-then-reasoning' approach. This is like finding information first and then thinking about it. Newer, dynamic frameworks do both tasks simultaneously, allowing for more flexible and adaptable reasoning.\n4. **Tools and Algorithms**: The researchers studied various tools and algorithms used in these systems. This could include things like search algorithms (for retrieval), logical inference algorithms (for reasoning), and machine learning models (for generation).\n5. **Integration**: The key technical challenge is integrating these components effectively. This means designing systems where the retrieval and reasoning parts work together seamlessly.\n6. **Evaluation Metrics**: To compare different systems, the researchers looked at metrics like accuracy (how often the system gets the right answer), efficiency (how quickly it works), and adaptability (how well it handles new or complex tasks).\n\nThe technical approach is about understanding how different components of RAG and reasoning systems work together and evaluating their performance.\n\n**Methodology:** The research methodology involves surveying various approaches to Retrieval-Augmented Generation (RAG) and reasoning systems within Large Language Models (LLMs). Here's a step-by-step breakdown of how the research was conducted:\n\n1. **Literature Review**: The researchers started by reviewing existing studies and papers on RAG and reasoning systems. This helped them understand the current state of the field and identify key trends and shifts.\n2. **Identifying Trends**: They focused on the shift from static 'retrieval-then-reasoning' methods to more dynamic frameworks. This means looking at how systems have evolved from simply retrieving information and then reasoning about it, to doing both tasks in a more integrated and flexible way.\n3. **Case Studies**: The researchers likely examined specific case studies or examples of RAG-reasoning systems to see how they work in practice.\n4. **Analysis**: They analyzed the strengths and weaknesses of different approaches, looking at factors like efficiency, accuracy, and adaptability.\n5. **Synthesis**: Finally, they compiled their findings into a survey that highlights the most important developments and insights in the field.\n\nThe methodology is about understanding how RAG and reasoning systems have evolved and what makes the newest approaches more effective.",
-      "ai_provider": "anthropic",
+      "analysis": "**Preference-Aligned Routing:** Arch-Router guides model selection by matching queries to user-defined domains or action types, offering a practical mechanism to encode preferences in routing decisions.\n\n**The Innovation:** This 1.5B model outperforms top proprietary models in matching queries with human preferences, making routing decisions more transparent and flexible.",
+      "ai_provider": "claude",
       "linked_articles": []
     },
     {
       "id": 2,
-      "title": "Sumit (@reachsumit.com)",
-      "url": "https://bsky.app/profile/reachsumit.com/post/3ltya4kszmk2t",
-      "processed_date": "2025-07-17 08:07:15",
+      "title": "Quantization-Aware Training at Jina",
+      "url": "https://jina.ai/news/quantization-aware-training-of-jina-embeddings-v4/",
+      "processed_date": "2025-07-02 09:24:42",
       "status": "completed",
-      "analysis": "**Key Findings:** GraphRunner showed a 10-50% performance improvement over the strongest baseline methods. It also reduced inference costs by 3.0-12.9x and response generation time by 2.5-7.1x, making it more efficient and cost-effective for graph-based retrieval tasks.\n\n**Technical Approach:** GraphRunner uses a multi-stage framework to improve graph-based retrieval, which is particularly useful for structured datasets like knowledge graphs. Here’s a detailed explanation of the technical components:\n\n1. **Large Language Models (LLMs)**: These are advanced AI models that understand and generate human language. In GraphRunner, LLMs are used to guide the traversal of the graph, but they can sometimes make mistakes or 'hallucinate' incorrect information.\n\n2. **Three-Stage Framework**: The framework is divided into planning, verification, and execution stages to minimize errors:\n   - **Planning**: The LLM creates a high-level traversal plan, which includes multi-hop actions. This means the plan can jump multiple steps at once, making it more efficient.\n   - **Verification**: The plan is then checked against the graph’s structure and predefined rules to catch any errors or hallucinations before they cause problems.\n   - **Execution**: Once verified, the plan is executed to retrieve the information.\n\n3. **Multi-Hop Exploration**: Unlike traditional methods that move one step at a time, GraphRunner can explore multiple hops in a single step. This is like being able to skip ahead on your route instead of stopping at every intersection.\n\n4. **Traversal Actions**: These are predefined rules that guide how the graph can be navigated. By sticking to these rules, the system can avoid getting lost or making mistakes.\n\nThe framework was evaluated using the GRBench dataset, which is a standard benchmark for graph-based retrieval tasks. The results showed that GraphRunner outperforms existing methods by a significant margin, making it more robust and efficient.\n\n**Methodology:** The research methodology for GraphRunner involves a three-stage framework designed to make graph-based retrieval more efficient and accurate. Here’s a step-by-step breakdown:\n\n1. **Planning Stage**: In this initial phase, the system creates a high-level plan for how to navigate or 'traverse' the graph. This plan outlines the steps needed to find the desired information, much like planning a route on a map before starting a journey.\n\n2. **Verification Stage**: Before executing the plan, the system checks it against the actual structure of the graph and a set of predefined rules. This step is like double-checking your route to make sure it makes sense and is feasible, helping to catch any mistakes or 'hallucinations' (incorrect information) early on.\n\n3. **Execution Stage**: Once the plan is verified, the system carries it out, navigating the graph to retrieve the needed information. This is akin to actually taking the trip after confirming the route is correct.\n\nBy separating these stages, the framework aims to reduce errors and improve the efficiency of retrieving information from complex, interconnected datasets like knowledge graphs.",
-      "ai_provider": "anthropic",
+      "analysis": "**Lossless Compression:** Jina demonstrates how quantization-aware training can make embeddings 64x smaller while maintaining performance. This is crucial for deploying AI at scale with limited resources.\n\n**Technical Excellence:** The approach combines output QAT with careful scaling strategies, achieving the best of both worlds: smaller embeddings without sacrificing quality.",
+      "ai_provider": "claude",
       "linked_articles": []
     },
     {
       "id": 1,
-      "title": "Sumit (@reachsumit.com)",
-      "url": "https://bsky.app/profile/reachsumit.com/post/3lty7qvirds2t",
-      "processed_date": "2025-07-17 08:06:56",
+      "title": "Advanced Embedding Research",
+      "url": "https://bsky.app/profile/tomaarsen.com/post/3lsvucbrlpk24",
+      "processed_date": "2025-07-02 09:24:21",
       "status": "completed",
-      "analysis": "**Key Findings:** The researchers found that the way knowledge is conceptualized and represented does indeed impact how well an AI can generate queries to retrieve that knowledge. Different approaches had different effects on the AI's performance.\n\n**Technical Approach:** The technical approach involved several key components working together:\n\n1. **Large Language Models (LLMs)**: These are advanced AI models that can understand and generate human-like text. They were chosen for their ability to interpret natural language prompts.\n2. **Agentic Retrieval-Augmented Generation (RAG) Systems**: This is a type of AI system that can actively select, interpret, and query knowledge sources. It's like a smart assistant that can retrieve information based on what you tell it.\n3. **Knowledge Graphs**: These are ways of representing knowledge as a network of entities and their relationships, similar to a map of how different pieces of information connect.\n4. **SPARQL Queries**: SPARQL is a special language used to query knowledge graphs. It's like asking specific questions to get specific answers from the knowledge graph.\n5. **Triplestore**: This is a type of database designed to store and retrieve knowledge graphs. It was chosen because it's efficient for this kind of data.\n\nThe implementation involved setting up the LLM within the RAG system, connecting it to the triplestore, and then testing how well it could generate SPARQL queries based on different knowledge representations.\n\n**Methodology:** The research team wanted to understand how different ways of representing knowledge affect the performance of AI systems, specifically large language models (LLMs), in generating SPARQL queries over knowledge graphs. Here's a step-by-step breakdown of their methodology:\n\n1. **Define the Problem**: The researchers identified that the way knowledge is structured and represented can impact how well an AI can generate queries to retrieve that knowledge.\n2. **Select the AI System**: They chose to study 'Agentic Retrieval-Augmented Generation' (RAG) systems, which are AI agents that can understand natural language prompts and use them to query knowledge sources.\n3. **Vary Knowledge Representations**: The team created different ways to represent and structure knowledge, varying the complexity and format.\n4. **Test the AI**: They systematically tested how well the LLM could generate SPARQL queries for each knowledge representation.\n5. **Analyze Results**: Finally, they compared the performance of the AI across different knowledge representations to see which ones worked best.",
-      "ai_provider": "anthropic",
+      "analysis": "**Pushing Embedding Boundaries:** Research in embedding technology continues to advance, focusing on efficiency, quality, and practical deployment considerations.\n\n**Key Innovations:** From quantization techniques to novel training approaches, the field is making embeddings more accessible and efficient for real-world applications.",
+      "ai_provider": "claude",
       "linked_articles": []
     }
   ],
   "metadata": {
     "date_range": {
-      "earliest": "2025-07-17T08:06:56",
-      "latest": "2025-07-17T08:10:49"
+      "earliest": "2025-07-02 09:24:21",
+      "latest": "2025-07-11 10:45:26"
     },
-    "ai_providers": {
-      "anthropic": 10
-    },
-    "status_counts": {
-      "completed": 10
-    }
+    "sources": [
+      "bsky.app",
+      "arxiv.org",
+      "jina.ai",
+      "blog.langchain.com"
+    ],
+    "ai_provider": "claude"
   },
   "processing_status": {
-    "system_status": "unknown",
-    "last_updated": null,
-    "summary": {
-      "total_days": 0,
-      "successful_days": 0,
-      "failed_days": 0
-    },
-    "dates": {},
-    "recent_errors_by_date": {},
-    "health_check": {
-      "timestamp": "2025-07-17T08:11:12.906386+00:00",
-      "apis_working": 0,
-      "rss_feed_accessible": true,
-      "database_accessible": true
-    }
+    "successful_articles": 23,
+    "failed_articles": 0,
+    "total_processed": 24,
+    "system_status": "success",
+    "recent_errors_by_date": {}
   }
 }

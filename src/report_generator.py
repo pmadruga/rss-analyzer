@@ -28,6 +28,7 @@ class ReportGenerator:
         report_filename: str = "article_analysis_report.md",
         include_stats: bool = True,
         include_toc: bool = True,
+        use_timestamp: bool = True,
     ) -> str:
         """
         Generate comprehensive markdown report
@@ -37,12 +38,25 @@ class ReportGenerator:
             report_filename: Output filename
             include_stats: Whether to include processing statistics
             include_toc: Whether to include table of contents
+            use_timestamp: Whether to add timestamp to filename
 
         Returns:
             Path to generated report file
         """
         try:
-            report_path = os.path.join(self.output_dir, report_filename)
+            # Add timestamp to filename if requested
+            if use_timestamp:
+                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                name_parts = report_filename.rsplit(".", 1)
+                if len(name_parts) == 2:
+                    timestamped_filename = (
+                        f"{name_parts[0]}_{timestamp}.{name_parts[1]}"
+                    )
+                else:
+                    timestamped_filename = f"{report_filename}_{timestamp}"
+                report_path = os.path.join(self.output_dir, timestamped_filename)
+            else:
+                report_path = os.path.join(self.output_dir, report_filename)
 
             with open(report_path, "w", encoding="utf-8") as f:
                 # Write header
@@ -221,7 +235,10 @@ class ReportGenerator:
         return anchor[:50]  # Limit length
 
     def generate_summary_report(
-        self, articles: list[dict[str, Any]], filename: str = "summary_report.md"
+        self,
+        articles: list[dict[str, Any]],
+        filename: str = "summary_report.md",
+        use_timestamp: bool = True,
     ) -> str:
         """
         Generate a shorter summary report
@@ -229,12 +246,25 @@ class ReportGenerator:
         Args:
             articles: List of analyzed articles
             filename: Output filename
+            use_timestamp: Whether to add timestamp to filename
 
         Returns:
             Path to generated summary report
         """
         try:
-            report_path = os.path.join(self.output_dir, filename)
+            # Add timestamp to filename if requested
+            if use_timestamp:
+                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                name_parts = filename.rsplit(".", 1)
+                if len(name_parts) == 2:
+                    timestamped_filename = (
+                        f"{name_parts[0]}_{timestamp}.{name_parts[1]}"
+                    )
+                else:
+                    timestamped_filename = f"{filename}_{timestamp}"
+                report_path = os.path.join(self.output_dir, timestamped_filename)
+            else:
+                report_path = os.path.join(self.output_dir, filename)
 
             with open(report_path, "w", encoding="utf-8") as f:
                 f.write("# Article Analysis Summary\n\n")
@@ -268,7 +298,10 @@ class ReportGenerator:
             raise
 
     def generate_json_export(
-        self, articles: list[dict[str, Any]], filename: str = "articles_export.json"
+        self,
+        articles: list[dict[str, Any]],
+        filename: str = "articles_export.json",
+        use_timestamp: bool = True,
     ) -> str:
         """
         Generate JSON export of analyzed articles
@@ -276,6 +309,7 @@ class ReportGenerator:
         Args:
             articles: List of analyzed articles
             filename: Output filename
+            use_timestamp: Whether to add timestamp to filename
 
         Returns:
             Path to generated JSON file
@@ -283,7 +317,19 @@ class ReportGenerator:
         try:
             import json
 
-            export_path = os.path.join(self.output_dir, filename)
+            # Add timestamp to filename if requested
+            if use_timestamp:
+                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                name_parts = filename.rsplit(".", 1)
+                if len(name_parts) == 2:
+                    timestamped_filename = (
+                        f"{name_parts[0]}_{timestamp}.{name_parts[1]}"
+                    )
+                else:
+                    timestamped_filename = f"{filename}_{timestamp}"
+                export_path = os.path.join(self.output_dir, timestamped_filename)
+            else:
+                export_path = os.path.join(self.output_dir, filename)
 
             # Prepare export data
             export_data = {
@@ -303,7 +349,10 @@ class ReportGenerator:
             raise
 
     def generate_csv_export(
-        self, articles: list[dict[str, Any]], filename: str = "articles_export.csv"
+        self,
+        articles: list[dict[str, Any]],
+        filename: str = "articles_export.csv",
+        use_timestamp: bool = True,
     ) -> str:
         """
         Generate CSV export of analyzed articles
@@ -311,6 +360,7 @@ class ReportGenerator:
         Args:
             articles: List of analyzed articles
             filename: Output filename
+            use_timestamp: Whether to add timestamp to filename
 
         Returns:
             Path to generated CSV file
@@ -318,7 +368,19 @@ class ReportGenerator:
         try:
             import csv
 
-            export_path = os.path.join(self.output_dir, filename)
+            # Add timestamp to filename if requested
+            if use_timestamp:
+                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                name_parts = filename.rsplit(".", 1)
+                if len(name_parts) == 2:
+                    timestamped_filename = (
+                        f"{name_parts[0]}_{timestamp}.{name_parts[1]}"
+                    )
+                else:
+                    timestamped_filename = f"{filename}_{timestamp}"
+                export_path = os.path.join(self.output_dir, timestamped_filename)
+            else:
+                export_path = os.path.join(self.output_dir, filename)
 
             if not articles:
                 logger.warning("No articles to export to CSV")

@@ -1,7 +1,7 @@
 """
-Mistral API Client Module
+Anthropic Claude API Client Module
 
-Handles integration with Mistral API for article summarization
+Handles integration with Anthropic Claude API for article summarization
 with specialized prompts for methodology explanation and key insights.
 """
 
@@ -9,24 +9,20 @@ import json
 import logging
 import time
 
-import requests
+import anthropic
 
 logger = logging.getLogger(__name__)
 
 
-class MistralClient:
-    """Mistral API client with specialized prompts for academic article analysis"""
+class ClaudeClient:
+    """Anthropic Claude API client with specialized prompts for academic article analysis"""
 
-    def __init__(self, api_key: str, model: str = "mistral-large-latest"):
+    def __init__(self, api_key: str, model: str = "claude-3-5-sonnet-20241022"):
         self.api_key = api_key
         self.model = model
-        self.base_url = "https://api.mistral.ai/v1"
+        self.client = anthropic.Anthropic(api_key=api_key)
         self.max_retries = 3
         self.base_delay = 1.0
-        self.rate_limit_delay = (
-            3.0  # 3 seconds between API calls to respect rate limits
-        )
-        self.last_api_call_time = 0.0  # Track last API call time
 
         # System prompt for article analysis
         self.system_prompt = """You are the author of the paper being analyzed. Use the Feynman technique to explain your research in depth, as if you were teaching it to someone who has never encountered this topic before. Break down complex concepts into simple, fundamental principles and use clear analogies where helpful.
@@ -109,65 +105,30 @@ Make sure your response is valid JSON. Write in first person as the author, usin
         return prompt
 
     def _make_api_call(self, prompt: str) -> str | None:
-        """Make API call to Mistral with retry logic and rate limiting"""
-
-        # Enforce rate limiting: wait 3 seconds between API calls
-        current_time = time.time()
-        time_since_last_call = current_time - self.last_api_call_time
-
-        if time_since_last_call < self.rate_limit_delay:
-            sleep_time = self.rate_limit_delay - time_since_last_call
-            logger.info(
-                f"Rate limiting: waiting {sleep_time:.1f} seconds before API call"
-            )
-            time.sleep(sleep_time)
+        """Make API call to Claude with retry logic"""
 
         for attempt in range(self.max_retries):
             try:
                 logger.debug(
-                    f"Making Mistral API call (attempt {attempt + 1}/{self.max_retries})"
+                    f"Making Claude API call (attempt {attempt + 1}/{self.max_retries})"
                 )
 
-                # Update last API call time
-                self.last_api_call_time = time.time()
-
-                headers = {
-                    "Authorization": f"Bearer {self.api_key}",
-                    "Content-Type": "application/json",
-                }
-
-                payload = {
-                    "model": self.model,
-                    "messages": [
-                        {"role": "system", "content": self.system_prompt},
-                        {"role": "user", "content": prompt},
-                    ],
-                    "max_tokens": 4000,
-                    "temperature": 0.3,
-                }
-
-                response = requests.post(
-                    f"{self.base_url}/chat/completions",
-                    headers=headers,
-                    json=payload,
-                    timeout=60,
+                response = self.client.messages.create(
+                    model=self.model,
+                    max_tokens=4000,
+                    temperature=0.3,
+                    system=self.system_prompt,
+                    messages=[{"role": "user", "content": prompt}],
                 )
 
-                if response.status_code == 200:
-                    data = response.json()
-                    if data.get("choices") and len(data["choices"]) > 0:
-                        return data["choices"][0]["message"]["content"]
-                    else:
-                        logger.warning("Empty response from Mistral API")
-                        return None
+                if response.content and len(response.content) > 0:
+                    return response.content[0].text
                 else:
-                    logger.warning(
-                        f"Mistral API returned status {response.status_code}: {response.text}"
-                    )
+                    logger.warning("Empty response from Claude API")
                     return None
 
             except Exception as e:
-                logger.warning(f"Mistral API call attempt {attempt + 1} failed: {e}")
+                logger.warning(f"Claude API call attempt {attempt + 1} failed: {e}")
 
                 if attempt < self.max_retries - 1:
                     # Exponential backoff
@@ -175,13 +136,13 @@ Make sure your response is valid JSON. Write in first person as the author, usin
                     logger.info(f"Retrying in {delay} seconds...")
                     time.sleep(delay)
                 else:
-                    logger.error("All Mistral API call attempts failed for article")
+                    logger.error("All Claude API call attempts failed for article")
                     return None
 
         return None
 
     def _parse_analysis_response(self, response: str, title: str, url: str) -> dict:
-        """Parse Mistral's response into structured format"""
+        """Parse Claude's response into structured format"""
 
         try:
             # Try to extract JSON from the response
@@ -222,7 +183,7 @@ Make sure your response is valid JSON. Write in first person as the author, usin
             return analysis_data
 
         except json.JSONDecodeError as e:
-            logger.error(f"Failed to parse Mistral response as JSON: {e}")
+            logger.error(f"Failed to parse Claude response as JSON: {e}")
             logger.debug(f"Raw response: {response}")
 
             # Fallback: create basic structure with raw response
@@ -239,7 +200,7 @@ Make sure your response is valid JSON. Write in first person as the author, usin
                 "model_used": self.model,
             }
         except Exception as e:
-            logger.error(f"Unexpected error parsing Mistral response: {e}")
+            logger.error(f"Unexpected error parsing Claude response: {e}")
             return {
                 "title": title,
                 "url": url,
@@ -285,9 +246,6 @@ Make sure your response is valid JSON. Write in first person as the author, usin
                         f"Failed to analyze article {i}/{total}: {article.get('title', 'Unknown')}"
                     )
 
-                # Note: Rate limiting is handled in _make_api_call method
-                # No additional delay needed here as analyze_article calls _make_api_call
-
             except Exception as e:
                 logger.error(f"Error in batch analysis for article {i}/{total}: {e}")
                 continue
@@ -300,62 +258,29 @@ Make sure your response is valid JSON. Write in first person as the author, usin
         return results
 
     def test_connection(self) -> bool:
-        """Test connection to Mistral API"""
+        """Test connection to Claude API"""
         try:
-            logger.info("Testing Mistral API connection...")
+            logger.info("Testing Claude API connection...")
 
-            # Enforce rate limiting for test connection too
-            current_time = time.time()
-            time_since_last_call = current_time - self.last_api_call_time
-
-            if time_since_last_call < self.rate_limit_delay:
-                sleep_time = self.rate_limit_delay - time_since_last_call
-                logger.info(
-                    f"Rate limiting: waiting {sleep_time:.1f} seconds before test API call"
-                )
-                time.sleep(sleep_time)
-
-            # Update last API call time
-            self.last_api_call_time = time.time()
-
-            headers = {
-                "Authorization": f"Bearer {self.api_key}",
-                "Content-Type": "application/json",
-            }
-
-            payload = {
-                "model": self.model,
-                "messages": [
+            response = self.client.messages.create(
+                model=self.model,
+                max_tokens=50,
+                messages=[
                     {
                         "role": "user",
                         "content": "Hello, please respond with 'API connection successful'",
                     }
                 ],
-                "max_tokens": 50,
-            }
-
-            response = requests.post(
-                f"{self.base_url}/chat/completions",
-                headers=headers,
-                json=payload,
-                timeout=30,
             )
 
-            if response.status_code == 200:
-                data = response.json()
-                if data.get("choices") and len(data["choices"]) > 0:
-                    response_text = data["choices"][0]["message"]["content"]
-                    logger.info(f"Mistral API test response: {response_text}")
-                    return True
-                else:
-                    logger.error("Empty response from Mistral API test")
-                    return False
+            if response.content and len(response.content) > 0:
+                response_text = response.content[0].text
+                logger.info(f"Claude API test response: {response_text}")
+                return True
             else:
-                logger.error(
-                    f"Mistral API connection test failed with status {response.status_code}: {response.text}"
-                )
+                logger.error("Empty response from Claude API test")
                 return False
 
         except Exception as e:
-            logger.error(f"Mistral API connection test failed: {e}")
+            logger.error(f"Claude API connection test failed: {e}")
             return False
