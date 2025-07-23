@@ -1,0 +1,86 @@
+title,url,publication_date,processed_date,methodology_detailed,key_findings,technical_approach,research_design
+Maria Antoniak (@mariaa.bsky.social),https://bsky.app/profile/mariaa.bsky.social/post/3lumkyphrok2f,2025-07-23T15:44:26+00:00,2025-07-23 17:53:30,"Imagine you're trying to teach a robot to understand something subjective, like whether a painting is beautiful. The robot can learn a lot from data, but it might still struggle because beauty is in the eye of the beholder. So, you decide to put a human in the loop to help the robot learn better. This is the core idea behind our research.
+
+Our methodology starts with a fundamental problem: How can we improve the performance of Large Language Models (LLMs) in tasks that are subjective, like se...","Our main discoveries were that putting a human in the loop significantly improves the LLM's performance on subjective tasks. Here's what we found and why it's important:
+
+1. **Improved Accuracy**: The LLM's accuracy in tasks like sentiment analysis increased when it learned from human annotations. This is like the robot becoming better at understanding emotions in text.
+
+2. **Better Generalization**: The LLM was able to generalize better to new, unseen data. This means the robot can apply wha...","Think of our technical approach like building a sophisticated tool to help the robot (LLM) learn from human teachers.
+
+1. **LLM Basics**: At the core, LLMs are like advanced calculators that can process and generate text based on patterns they've learned from large amounts of data.
+
+2. **Human Annotation Tool**: We created a tool that allows humans to annotate data. This tool is like a digital notebook where humans can write down their thoughts and judgments about the data.
+
+3. **Integration*...","Our study was designed to answer the question: Can human-assisted annotation improve LLM performance in subjective tasks? Here's how we set it up:
+
+1. **Hypothesis**: We hypothesized that human annotations would provide valuable insights that the LLM could learn from, improving its performance.
+
+2. **Control Group**: We had a control group where the LLM was trained without human annotations. This is like having a class where the robot learns on its own.
+
+3. **Experimental Group**: In the expe..."
+Maria Antoniak (@mariaa.bsky.social),https://bsky.app/profile/mariaa.bsky.social/post/3lumkyphpq22f,2025-07-23T15:44:12+00:00,2025-07-23 17:53:44,"Imagine you're trying to solve a puzzle, but some of the pieces are a bit faded and hard to see. That's similar to the problem we're tackling in our research. We want to know if we can still make confident conclusions even when some of our data (annotations from Large Language Models, or LLMs) are not very confident.
+
+Here's how we approached it step-by-step:
+
+1. **Identify the Problem**: We started by recognizing that LLMs often provide annotations with varying levels of confidence. Some ann...","Our main discovery was that even when individual annotations from LLMs are not very confident, we can still draw reliable conclusions by aggregating them. This is significant because it means we don't need to discard uncertain data; it can still be useful.
+
+Imagine you have a bunch of slightly blurry photos. Individually, they might not be clear, but when you put them all together, you can still make out the scene. That's what our findings show—even imperfect data can lead to confident conclu...","Think of our technical approach like building a house. Each part has a specific role and contributes to the overall structure.
+
+1. **Data Collection**: We used APIs to gather annotations from LLMs. This is like gathering the materials needed to build the house.
+
+2. **Confidence Scoring**: We implemented a confidence scoring mechanism. Imagine this as a tool that checks the quality of each material (annotation).
+
+3. **Aggregation Algorithm**: We developed an algorithm to combine these annotati...","Designing our study was like planning a journey. Each choice we made was crucial for reaching our destination—understanding if uncertain LLM annotations can lead to confident conclusions.
+
+1. **Selection of LLMs**: We chose a diverse set of LLMs to ensure our findings were broadly applicable. This is like choosing different modes of transport to make sure our journey is versatile.
+
+2. **Annotation Tasks**: We carefully selected the tasks for which the LLMs would provide annotations. Think of ..."
+Sung Kim (@sungkim.bsky.social),https://bsky.app/profile/sungkim.bsky.social/post/3luj3kikh6c2s,2025-07-21T23:33:12+00:00,2025-07-23 17:53:58,"Imagine you're trying to build a highly intelligent robot that can learn from its environment and make decisions on its own. This is similar to what we're doing with Kimi K2, but in the digital world. Our core problem is creating an AI system that can understand and interact with complex data efficiently.
+
+1. **Identify the Problem**: We need an AI that can handle large amounts of data and make smart decisions based on that data. Think of it like teaching a robot to sort through a massive lib...","Our main discoveries are:
+
+1. **Efficient Data Processing**: We found that MuonClip significantly improves the efficiency of data processing. It can handle large datasets quickly and accurately, which is crucial for real-time applications.
+
+2. **Scalable Data Pipeline**: Our large-scale agentic data pipeline can handle vast amounts of data without slowing down. This is important for applications that require real-time decision-making.
+
+3. **Effective Learning**: Our reinforcement learning fra...","Let's break down the technical components of Kimi K2 into simpler parts:
+
+1. **MuonClip**: Imagine MuonClip as a highly advanced camera that not only captures images but also understands what it sees. Technically, it's a sophisticated data preprocessing tool that cleans, normalizes, and structures data so that the AI can understand it. We chose specific algorithms that are efficient and scalable, ensuring that MuonClip can handle large datasets without slowing down.
+
+2. **Data Pipeline**: Thi...","Designing our study involved several key steps:
+
+1. **Defining the Research Question**: Our main question was, 'How can we create an AI system that can handle large amounts of data and make smart decisions?' This question guided our entire research process.
+
+2. **Choosing the Right Tools**: We selected tools and algorithms that are known for their efficiency and scalability. For example, we used distributed computing for our data pipeline and advanced preprocessing techniques for MuonClip.
+
+3..."
+The Big LLM Architecture Comparison,https://sebastianraschka.com/blog/2025/the-big-llm-architecture-comparison.html,2025-07-20T13:35:19+00:00,2025-07-23 17:54:34,"Alright, let's break this down step-by-step. Imagine you're trying to understand how different recipes (architectures) for making a cake (LLM) have changed over time. You have a basic recipe from a few years ago (GPT-2 from 2019) and some new recipes from this year (like DeepSeek V3 and Llama 4). Your goal is to figure out what's changed and why.
+
+First, I gathered all the recipes (architectures) I wanted to compare. I focused on the text capabilities of these models, leaving multimodal stuff...","So, what did I find? Well, first, LLMs have come a long way since GPT-2, but the core ideas are still the same. It's like having a basic cake recipe and making small tweaks to improve it.
+
+One big finding is that efficiency is key. Everyone's trying to make their models faster and cheaper to run. Techniques like MLA and MoE are all about doing more with less. For example, DeepSeek V3 uses MLA to save memory and MoE to increase capacity without blowing up the budget.
+
+Another finding is that n...","Let's dive into the technical stuff. Imagine you're building a complex machine (LLM) and you want to understand how different parts work together to make it run smoothly.
+
+First, let's talk about attention mechanisms. Think of attention as a way for the machine to focus on important parts of the input. Traditional Multi-Head Attention (MHA) is like having multiple spotlights, each focusing on different parts of the stage. But it's expensive—lots of spotlights mean lots of power (computational...","Designing this study was like planning a big cooking competition. I wanted to compare different recipes (architectures) to see which ones worked best and why.
+
+First, I had to decide which recipes to include. I chose models that were released in 2025 and had a big impact, like DeepSeek V3 and Llama 4. I also included some older models for comparison, like GPT-2.
+
+Next, I had to figure out what aspects of the recipes to compare. I focused on things like attention mechanisms, expert management,..."
+Sumit (@reachsumit.com),https://bsky.app/profile/reachsumit.com/post/3lty7qvirds2t,2025-07-15T07:49:27+00:00,2025-07-23 17:55:01,"Imagine you're trying to teach a robot to find information in a vast library. The robot needs to understand not just where to look, but also how to ask the right questions to get the information it needs. This is similar to what we're doing with Large Language Models (LLMs) in our research.
+
+Our fundamental problem is figuring out how different ways of organizing and representing knowledge (like how books are arranged in a library) affect how well an LLM can find and use that knowledge. Here'...","Our main discoveries were that the way knowledge is organized and represented significantly impacts how well an LLM can query a knowledge graph. Here's what we found:
+
+1. **Structure Matters**: The structure of the knowledge graph (like how books are arranged in the library) affects the LLM's ability to generate accurate SPARQL queries. Certain structures make it easier for the LLM to find and use the right information.
+
+2. **Complexity Matters**: The complexity of the knowledge representatio...","To understand our technical implementation, let's break it down into simple components:
+
+1. **Large Language Models (LLMs)**: Think of LLMs as very smart assistants that can understand and generate human language. They're trained on vast amounts of text data and can perform a wide range of tasks.
+
+2. **Knowledge Graphs**: These are like maps of information, where nodes represent entities (like people, places, or things) and edges represent relationships between them. Knowledge graphs are stor...","To design our study, we thought about how to best answer our research question: How does the conceptualization and representation of knowledge impact an LLM's ability to query a knowledge graph?
+
+Here's our reasoning for the experimental setup:
+
+1. **Knowledge Representations**: We created different knowledge representations to see how each one affected the LLM's performance. This is like setting up different library arrangements to see which one helps the robot find books the fastest.
+
+2. **..."

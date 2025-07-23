@@ -1,13 +1,44 @@
-# Articles Analysis by Date
+# RSS Feed Article Analysis Report
 
-This document contains all analyzed articles organized by their processing date.
+**Generated:** 2025-07-23 17:55:01
 
-## July 23, 2025
+**Total Articles Analyzed:** 5
 
-### Maria Antoniak (@mariaa.bsky.social)
-**Source:** https://bsky.app/profile/mariaa.bsky.social/post/3lumkyphrok2f  
-**Processed:** 2025-07-23 17:53:14  
-**Methodology:**
+---
+
+## Processing Statistics
+
+- **Total Articles:** 5
+### Articles by Domain
+
+- **Unknown:** 5 articles
+
+---
+
+## Table of Contents
+
+1. [Maria Antoniak (@mariaa.bsky.social)](#article-1-maria-antoniak-mariaabskysocial)
+2. [Maria Antoniak (@mariaa.bsky.social)](#article-2-maria-antoniak-mariaabskysocial)
+3. [Sung Kim (@sungkim.bsky.social)](#article-3-sung-kim-sungkimbskysocial)
+4. [The Big LLM Architecture Comparison](#article-4-the-big-llm-architecture-comparison)
+5. [Sumit (@reachsumit.com)](#article-5-sumit-reachsumitcom)
+
+---
+
+## Article Summaries
+
+### 1. Maria Antoniak (@mariaa.bsky.social) {#article-1-maria-antoniak-mariaabskysocial}
+
+#### Article Information
+
+**Source:** [https://bsky.app/profile/mariaa.bsky.social/post/3lumkyphrok2f](https://bsky.app/profile/mariaa.bsky.social/post/3lumkyphrok2f)
+
+**Publication Date:** 2025-07-23T15:44:26+00:00
+
+**Processed:** 2025-07-23 17:53:30
+
+#### Methodology
+
 Imagine you're trying to teach a robot to understand something subjective, like whether a painting is beautiful. The robot can learn a lot from data, but it might still struggle because beauty is in the eye of the beholder. So, you decide to put a human in the loop to help the robot learn better. This is the core idea behind our research.
 
 Our methodology starts with a fundamental problem: How can we improve the performance of Large Language Models (LLMs) in tasks that are subjective, like sentiment analysis or artistic critique? Here's how we approached it step-by-step:
@@ -26,7 +57,20 @@ Our methodology starts with a fundamental problem: How can we improve the perfor
 
 Each step was necessary to ensure that the LLM could benefit from human insight, making it better at understanding subjective information.
 
-**Technical Approach:**
+#### Key Findings
+
+Our main discoveries were that putting a human in the loop significantly improves the LLM's performance on subjective tasks. Here's what we found and why it's important:
+
+1. **Improved Accuracy**: The LLM's accuracy in tasks like sentiment analysis increased when it learned from human annotations. This is like the robot becoming better at understanding emotions in text.
+
+2. **Better Generalization**: The LLM was able to generalize better to new, unseen data. This means the robot can apply what it learned to new situations, just like a student applying knowledge to new problems.
+
+3. **Reduced Bias**: Human annotations helped reduce bias in the LLM's predictions. This is crucial because it makes the robot's judgments fairer and more reliable.
+
+These findings are significant because they show that combining human intuition with machine learning can lead to better performance in tasks that are inherently subjective.
+
+#### Technical Approach
+
 Think of our technical approach like building a sophisticated tool to help the robot (LLM) learn from human teachers.
 
 1. **LLM Basics**: At the core, LLMs are like advanced calculators that can process and generate text based on patterns they've learned from large amounts of data.
@@ -41,23 +85,37 @@ Think of our technical approach like building a sophisticated tool to help the r
 
 Our thought process was to create a system where the LLM could continuously learn from human feedback, improving its performance on subjective tasks over time.
 
-**Key Findings:**
-Our main discoveries were that putting a human in the loop significantly improves the LLM's performance on subjective tasks. Here's what we found and why it's important:
+#### Research Design
 
-1. **Improved Accuracy**: The LLM's accuracy in tasks like sentiment analysis increased when it learned from human annotations. This is like the robot becoming better at understanding emotions in text.
+Our study was designed to answer the question: Can human-assisted annotation improve LLM performance in subjective tasks? Here's how we set it up:
 
-2. **Better Generalization**: The LLM was able to generalize better to new, unseen data. This means the robot can apply what it learned to new situations, just like a student applying knowledge to new problems.
+1. **Hypothesis**: We hypothesized that human annotations would provide valuable insights that the LLM could learn from, improving its performance.
 
-3. **Reduced Bias**: Human annotations helped reduce bias in the LLM's predictions. This is crucial because it makes the robot's judgments fairer and more reliable.
+2. **Control Group**: We had a control group where the LLM was trained without human annotations. This is like having a class where the robot learns on its own.
 
-These findings are significant because they show that combining human intuition with machine learning can lead to better performance in tasks that are inherently subjective.
+3. **Experimental Group**: In the experimental group, the LLM was trained with human annotations. This is like having a class where the robot learns with the help of a teacher.
+
+4. **Comparison**: We compared the performance of the LLM in both groups. This helps us understand the impact of human annotations.
+
+5. **Statistical Analysis**: We used statistical tests to ensure that any improvements were significant and not just due to chance.
+
+Each design choice was important for ensuring that our findings were robust and meaningful. By comparing the control and experimental groups, we could clearly see the benefit of human-assisted annotation.
+
 
 ---
 
-### Maria Antoniak (@mariaa.bsky.social)
-**Source:** https://bsky.app/profile/mariaa.bsky.social/post/3lumkyphpq22f  
-**Processed:** 2025-07-23 17:53:30  
-**Methodology:**
+### 2. Maria Antoniak (@mariaa.bsky.social) {#article-2-maria-antoniak-mariaabskysocial}
+
+#### Article Information
+
+**Source:** [https://bsky.app/profile/mariaa.bsky.social/post/3lumkyphpq22f](https://bsky.app/profile/mariaa.bsky.social/post/3lumkyphpq22f)
+
+**Publication Date:** 2025-07-23T15:44:12+00:00
+
+**Processed:** 2025-07-23 17:53:44
+
+#### Methodology
+
 Imagine you're trying to solve a puzzle, but some of the pieces are a bit faded and hard to see. That's similar to the problem we're tackling in our research. We want to know if we can still make confident conclusions even when some of our data (annotations from Large Language Models, or LLMs) are not very confident.
 
 Here's how we approached it step-by-step:
@@ -74,7 +132,16 @@ Here's how we approached it step-by-step:
 
 Each step was necessary to understand how unreliable pieces of information can still contribute to a reliable whole.
 
-**Technical Approach:**
+#### Key Findings
+
+Our main discovery was that even when individual annotations from LLMs are not very confident, we can still draw reliable conclusions by aggregating them. This is significant because it means we don't need to discard uncertain data; it can still be useful.
+
+Imagine you have a bunch of slightly blurry photos. Individually, they might not be clear, but when you put them all together, you can still make out the scene. That's what our findings show—even imperfect data can lead to confident conclusions.
+
+This connects back to our original problem by demonstrating that we don't need to rely solely on highly confident annotations. We can use a broader range of data to make informed decisions.
+
+#### Technical Approach
+
 Think of our technical approach like building a house. Each part has a specific role and contributes to the overall structure.
 
 1. **Data Collection**: We used APIs to gather annotations from LLMs. This is like gathering the materials needed to build the house.
@@ -87,19 +154,35 @@ Think of our technical approach like building a house. Each part has a specific 
 
 Our thought process was to ensure that each component worked together seamlessly. The data collection provided the raw materials, the confidence scoring ensured we knew the quality of each material, the aggregation algorithm told us how to use these materials effectively, and the evaluation metrics confirmed that our final structure (conclusions) was sound.
 
-**Key Findings:**
-Our main discovery was that even when individual annotations from LLMs are not very confident, we can still draw reliable conclusions by aggregating them. This is significant because it means we don't need to discard uncertain data; it can still be useful.
+#### Research Design
 
-Imagine you have a bunch of slightly blurry photos. Individually, they might not be clear, but when you put them all together, you can still make out the scene. That's what our findings show—even imperfect data can lead to confident conclusions.
+Designing our study was like planning a journey. Each choice we made was crucial for reaching our destination—understanding if uncertain LLM annotations can lead to confident conclusions.
 
-This connects back to our original problem by demonstrating that we don't need to rely solely on highly confident annotations. We can use a broader range of data to make informed decisions.
+1. **Selection of LLMs**: We chose a diverse set of LLMs to ensure our findings were broadly applicable. This is like choosing different modes of transport to make sure our journey is versatile.
+
+2. **Annotation Tasks**: We carefully selected the tasks for which the LLMs would provide annotations. Think of this as choosing the right paths to take on our journey.
+
+3. **Confidence Thresholds**: We set varying confidence thresholds to see how different levels of uncertainty affected our conclusions. This is like setting checkpoints along our journey to see how well we're progressing.
+
+4. **Control Group**: We included a control group of highly confident annotations to compare against our uncertain data. This is like having a map of a well-known route to compare with our new paths.
+
+Each design choice was important because it helped us understand the impact of uncertainty in LLM annotations on the reliability of our conclusions.
+
 
 ---
 
-### Sung Kim (@sungkim.bsky.social)
-**Source:** https://bsky.app/profile/sungkim.bsky.social/post/3luj3kikh6c2s  
-**Processed:** 2025-07-23 17:53:44  
-**Methodology:**
+### 3. Sung Kim (@sungkim.bsky.social) {#article-3-sung-kim-sungkimbskysocial}
+
+#### Article Information
+
+**Source:** [https://bsky.app/profile/sungkim.bsky.social/post/3luj3kikh6c2s](https://bsky.app/profile/sungkim.bsky.social/post/3luj3kikh6c2s)
+
+**Publication Date:** 2025-07-21T23:33:12+00:00
+
+**Processed:** 2025-07-23 17:53:58
+
+#### Methodology
+
 Imagine you're trying to build a highly intelligent robot that can learn from its environment and make decisions on its own. This is similar to what we're doing with Kimi K2, but in the digital world. Our core problem is creating an AI system that can understand and interact with complex data efficiently.
 
 1. **Identify the Problem**: We need an AI that can handle large amounts of data and make smart decisions based on that data. Think of it like teaching a robot to sort through a massive library and find the most relevant books for any topic you give it.
@@ -114,18 +197,8 @@ Imagine you're trying to build a highly intelligent robot that can learn from it
 
 Each step was necessary to create a cohesive system that can learn and adapt, much like a highly intelligent robot.
 
-**Technical Approach:**
-Let's break down the technical components of Kimi K2 into simpler parts:
+#### Key Findings
 
-1. **MuonClip**: Imagine MuonClip as a highly advanced camera that not only captures images but also understands what it sees. Technically, it's a sophisticated data preprocessing tool that cleans, normalizes, and structures data so that the AI can understand it. We chose specific algorithms that are efficient and scalable, ensuring that MuonClip can handle large datasets without slowing down.
-
-2. **Data Pipeline**: Think of the data pipeline as a conveyor belt in a factory. It moves data from one stage to another, processing it along the way. We used distributed computing techniques to ensure that the pipeline can handle large-scale data efficiently. Each stage of the pipeline has a specific task, like cleaning data, extracting features, and making decisions.
-
-3. **Reinforcement Learning**: This is like teaching a dog to fetch. You reward the dog when it brings the ball back and correct it when it doesn't. Our reinforcement learning framework uses similar principles. We designed it to provide feedback to the AI based on its actions, helping it learn and improve over time. We chose algorithms that balance exploration (trying new things) and exploitation (using what it already knows) to ensure the AI learns effectively.
-
-Each component works together to create a system that can learn and adapt, much like a highly intelligent robot.
-
-**Key Findings:**
 Our main discoveries are:
 
 1. **Efficient Data Processing**: We found that MuonClip significantly improves the efficiency of data processing. It can handle large datasets quickly and accurately, which is crucial for real-time applications.
@@ -136,12 +209,49 @@ Our main discoveries are:
 
 These findings are significant because they address the core problem of creating an AI that can understand and interact with complex data efficiently. They show that our approach works and can be applied to real-world problems.
 
+#### Technical Approach
+
+Let's break down the technical components of Kimi K2 into simpler parts:
+
+1. **MuonClip**: Imagine MuonClip as a highly advanced camera that not only captures images but also understands what it sees. Technically, it's a sophisticated data preprocessing tool that cleans, normalizes, and structures data so that the AI can understand it. We chose specific algorithms that are efficient and scalable, ensuring that MuonClip can handle large datasets without slowing down.
+
+2. **Data Pipeline**: Think of the data pipeline as a conveyor belt in a factory. It moves data from one stage to another, processing it along the way. We used distributed computing techniques to ensure that the pipeline can handle large-scale data efficiently. Each stage of the pipeline has a specific task, like cleaning data, extracting features, and making decisions.
+
+3. **Reinforcement Learning**: This is like teaching a dog to fetch. You reward the dog when it brings the ball back and correct it when it doesn't. Our reinforcement learning framework uses similar principles. We designed it to provide feedback to the AI based on its actions, helping it learn and improve over time. We chose algorithms that balance exploration (trying new things) and exploitation (using what it already knows) to ensure the AI learns effectively.
+
+Each component works together to create a system that can learn and adapt, much like a highly intelligent robot.
+
+#### Research Design
+
+Designing our study involved several key steps:
+
+1. **Defining the Research Question**: Our main question was, 'How can we create an AI system that can handle large amounts of data and make smart decisions?' This question guided our entire research process.
+
+2. **Choosing the Right Tools**: We selected tools and algorithms that are known for their efficiency and scalability. For example, we used distributed computing for our data pipeline and advanced preprocessing techniques for MuonClip.
+
+3. **Setting Up Experiments**: We designed experiments to test each component of our system. For MuonClip, we tested its accuracy and speed with different types of data. For the data pipeline, we tested its ability to handle large datasets. For the reinforcement learning framework, we tested how well the AI learns over time.
+
+4. **Collecting and Analyzing Data**: We collected data from various sources to test our system. We analyzed the results to see how well each component performed and made adjustments as needed.
+
+5. **Iterative Improvement**: We used an iterative approach, continually testing and improving each component based on our findings. This helped us create a system that works well together.
+
+Each design choice was important for answering our research question and creating an effective AI system.
+
+
 ---
 
-### The Big LLM Architecture Comparison
-**Source:** https://sebastianraschka.com/blog/2025/the-big-llm-architecture-comparison.html  
-**Processed:** 2025-07-23 17:53:58  
-**Methodology:**
+### 4. The Big LLM Architecture Comparison {#article-4-the-big-llm-architecture-comparison}
+
+#### Article Information
+
+**Source:** [https://sebastianraschka.com/blog/2025/the-big-llm-architecture-comparison.html](https://sebastianraschka.com/blog/2025/the-big-llm-architecture-comparison.html)
+
+**Publication Date:** 2025-07-20T13:35:19+00:00
+
+**Processed:** 2025-07-23 17:54:34
+
+#### Methodology
+
 Alright, let's break this down step-by-step. Imagine you're trying to understand how different recipes (architectures) for making a cake (LLM) have changed over time. You have a basic recipe from a few years ago (GPT-2 from 2019) and some new recipes from this year (like DeepSeek V3 and Llama 4). Your goal is to figure out what's changed and why.
 
 First, I gathered all the recipes (architectures) I wanted to compare. I focused on the text capabilities of these models, leaving multimodal stuff for another time. I looked at things like how they handle attention (like MHA, GQA, MLA), how they manage experts (MoE), and other tricks they use to be more efficient.
@@ -154,7 +264,20 @@ I broke down each architecture into its basic components and explained how each 
 
 I chose each step because it helped me understand the evolution of these architectures and why certain design choices were made. It's like understanding why a chef adds salt at a specific time—it's all about enhancing the final result.
 
-**Technical Approach:**
+#### Key Findings
+
+So, what did I find? Well, first, LLMs have come a long way since GPT-2, but the core ideas are still the same. It's like having a basic cake recipe and making small tweaks to improve it.
+
+One big finding is that efficiency is key. Everyone's trying to make their models faster and cheaper to run. Techniques like MLA and MoE are all about doing more with less. For example, DeepSeek V3 uses MLA to save memory and MoE to increase capacity without blowing up the budget.
+
+Another finding is that normalization matters. Where you put your normalization layers (like RMSNorm) can make a big difference in how stable your training is. OLMo 2 and Gemma 3 both play with normalization to improve training.
+
+I also found that sliding window attention is a clever trick to save memory. Gemma 3 uses it to focus on local context, which is cheaper than looking at everything at once.
+
+Overall, these findings show that the devil is in the details. Small changes in architecture can lead to big improvements in performance and efficiency.
+
+#### Technical Approach
+
 Let's dive into the technical stuff. Imagine you're building a complex machine (LLM) and you want to understand how different parts work together to make it run smoothly.
 
 First, let's talk about attention mechanisms. Think of attention as a way for the machine to focus on important parts of the input. Traditional Multi-Head Attention (MHA) is like having multiple spotlights, each focusing on different parts of the stage. But it's expensive—lots of spotlights mean lots of power (computational resources).
@@ -169,23 +292,35 @@ I chose these technical approaches because they're fundamental to understanding 
 
 I broke down complex algorithms into simple components and used analogies to make them accessible. For example, thinking of MoE as a team of specialists helps understand why it's efficient. Each technical choice was made to optimize the machine's performance while keeping it manageable.
 
-**Key Findings:**
-So, what did I find? Well, first, LLMs have come a long way since GPT-2, but the core ideas are still the same. It's like having a basic cake recipe and making small tweaks to improve it.
+#### Research Design
 
-One big finding is that efficiency is key. Everyone's trying to make their models faster and cheaper to run. Techniques like MLA and MoE are all about doing more with less. For example, DeepSeek V3 uses MLA to save memory and MoE to increase capacity without blowing up the budget.
+Designing this study was like planning a big cooking competition. I wanted to compare different recipes (architectures) to see which ones worked best and why.
 
-Another finding is that normalization matters. Where you put your normalization layers (like RMSNorm) can make a big difference in how stable your training is. OLMo 2 and Gemma 3 both play with normalization to improve training.
+First, I had to decide which recipes to include. I chose models that were released in 2025 and had a big impact, like DeepSeek V3 and Llama 4. I also included some older models for comparison, like GPT-2.
 
-I also found that sliding window attention is a clever trick to save memory. Gemma 3 uses it to focus on local context, which is cheaper than looking at everything at once.
+Next, I had to figure out what aspects of the recipes to compare. I focused on things like attention mechanisms, expert management, and normalization layers. These are the key ingredients that make a big difference in how the final dish (LLM) turns out.
 
-Overall, these findings show that the devil is in the details. Small changes in architecture can lead to big improvements in performance and efficiency.
+I broke down each recipe into its basic steps and compared them side by side. I used simple language and analogies to explain why each step was important. For example, thinking of attention as spotlights helps understand why GQA and MLA save resources.
+
+I also looked at how these recipes performed in real-world tasks. Benchmarks and leaderboards helped me see which models were doing well and why.
+
+Each design choice was important for answering my research question: how have LLM architectures evolved, and what makes the new ones better? By breaking down each recipe and comparing them step by step, I could see the big picture of how LLMs have improved over time.
+
 
 ---
 
-### Sumit (@reachsumit.com)
-**Source:** https://bsky.app/profile/reachsumit.com/post/3lty7qvirds2t  
-**Processed:** 2025-07-23 17:54:34  
-**Methodology:**
+### 5. Sumit (@reachsumit.com) {#article-5-sumit-reachsumitcom}
+
+#### Article Information
+
+**Source:** [https://bsky.app/profile/reachsumit.com/post/3lty7qvirds2t](https://bsky.app/profile/reachsumit.com/post/3lty7qvirds2t)
+
+**Publication Date:** 2025-07-15T07:49:27+00:00
+
+**Processed:** 2025-07-23 17:55:01
+
+#### Methodology
+
 Imagine you're trying to teach a robot to find information in a vast library. The robot needs to understand not just where to look, but also how to ask the right questions to get the information it needs. This is similar to what we're doing with Large Language Models (LLMs) in our research.
 
 Our fundamental problem is figuring out how different ways of organizing and representing knowledge (like how books are arranged in a library) affect how well an LLM can find and use that knowledge. Here's how we approached this step-by-step:
@@ -200,7 +335,20 @@ Our fundamental problem is figuring out how different ways of organizing and rep
 
 Each step was necessary to understand how the organization of knowledge impacts the LLM's ability to retrieve and use it effectively.
 
-**Technical Approach:**
+#### Key Findings
+
+Our main discoveries were that the way knowledge is organized and represented significantly impacts how well an LLM can query a knowledge graph. Here's what we found:
+
+1. **Structure Matters**: The structure of the knowledge graph (like how books are arranged in the library) affects the LLM's ability to generate accurate SPARQL queries. Certain structures make it easier for the LLM to find and use the right information.
+
+2. **Complexity Matters**: The complexity of the knowledge representation (like how detailed the book arrangements are) also impacts performance. Too much complexity can make it harder for the LLM to navigate the knowledge graph effectively.
+
+These findings are significant because they show that the way we organize and represent knowledge can greatly influence the effectiveness of LLMs in retrieval-augmented generation tasks. It's like finding out that the way a library is organized can make a big difference in how quickly and accurately a robot can find the right books.
+
+Our results highlight the importance of designing knowledge representations that are both transferable (can be used in different contexts) and interpretable (easy for the LLM to understand and use).
+
+#### Technical Approach
+
 To understand our technical implementation, let's break it down into simple components:
 
 1. **Large Language Models (LLMs)**: Think of LLMs as very smart assistants that can understand and generate human language. They're trained on vast amounts of text data and can perform a wide range of tasks.
@@ -215,20 +363,24 @@ Our technical approach involved creating different knowledge representations (li
 
 To implement this, we used various tools and frameworks that support LLMs, knowledge graphs, and SPARQL queries. Each component works together to create a system where the LLM can actively seek and use information based on natural language prompts.
 
-**Key Findings:**
-Our main discoveries were that the way knowledge is organized and represented significantly impacts how well an LLM can query a knowledge graph. Here's what we found:
+#### Research Design
 
-1. **Structure Matters**: The structure of the knowledge graph (like how books are arranged in the library) affects the LLM's ability to generate accurate SPARQL queries. Certain structures make it easier for the LLM to find and use the right information.
+To design our study, we thought about how to best answer our research question: How does the conceptualization and representation of knowledge impact an LLM's ability to query a knowledge graph?
 
-2. **Complexity Matters**: The complexity of the knowledge representation (like how detailed the book arrangements are) also impacts performance. Too much complexity can make it harder for the LLM to navigate the knowledge graph effectively.
+Here's our reasoning for the experimental setup:
 
-These findings are significant because they show that the way we organize and represent knowledge can greatly influence the effectiveness of LLMs in retrieval-augmented generation tasks. It's like finding out that the way a library is organized can make a big difference in how quickly and accurately a robot can find the right books.
+1. **Knowledge Representations**: We created different knowledge representations to see how each one affected the LLM's performance. This is like setting up different library arrangements to see which one helps the robot find books the fastest.
 
-Our results highlight the importance of designing knowledge representations that are both transferable (can be used in different contexts) and interpretable (easy for the LLM to understand and use).
+2. **SPARQL Query Generation**: We chose SPARQL query generation as our task because it's a concrete, measurable way to see how well the LLM can find and use information in the knowledge graph. It's like asking the robot to find specific books and measuring how well it does.
+
+3. **Agentic RAG Systems**: We used agentic RAG systems because they allow the LLM to actively decide what information to retrieve and how to use it. This is like letting the robot decide which books to look at based on the questions it's asked.
+
+4. **Systematic Evaluation**: We evaluated the LLM's performance systematically, using metrics like accuracy and response time. This is like timing the robot and checking if it found the right books under each library arrangement.
+
+Each design choice was important for answering our research question because it allowed us to directly observe the impact of knowledge organization on the LLM's performance in a controlled and measurable way.
+
 
 ---
 
-## Summary Statistics
-- **Total Articles Analyzed:** 5
-- **Sources:** ArXiv papers, Jina.ai articles, Bluesky posts
-- **Topics:** AI/ML, Embeddings, Quantization, LLM Routing, Knowledge Graphs, Document Retrieval, Recommendation Systems
+*This report was generated automatically by the RSS Article Analyzer using Claude Sonnet.*
+*Report generated on: 2025-07-23 at 17:55:01*

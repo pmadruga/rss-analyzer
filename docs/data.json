@@ -1,256 +1,85 @@
 {
-  "generated_at": "2025-07-17T21:06:49.232444+00:00",
-  "total_articles": 23,
+  "generated_at": "2025-07-23T17:55:02.124252+00:00",
+  "total_articles": 5,
   "articles": [
     {
-      "id": 24,
-      "title": "Jailbreaking LLMs with InfoFlood Method",
-      "url": "https://bsky.app/profile/smcgrath.phd/post/3lthihzv6ak27",
-      "processed_date": "2025-07-11 10:45:26",
-      "status": "completed",
-      "analysis": "**The Core Idea:** I've discovered a way to trick AI systems by speaking in a way that sounds incredibly academic and sophisticated, but is actually just nonsense designed to confuse the AI's safety systems. Think of it like this: AI systems have guards at the door (safety filters) that check if someone is trying to make them do something harmful. But what if instead of walking up to the guard directly, you dressed up in a professor's outfit and started using incredibly complex academic language?\n\n**How It Works:** The InfoFlood method transforms simple, potentially harmful requests into elaborate academic prose filled with complex words, fake citations, and technical jargon. It's like wrapping a simple request in so many layers of academic packaging that the AI gets confused about what's actually being asked.\n\n**Why It Works:** Large Language Models rely on pattern recognition. When you bury the actual request under mountains of academic-sounding text, the model's attention gets diluted. The safety filters are looking for obvious red flags, but academic language rarely triggers these filters.\n\n**The Implications:** This reveals a fundamental weakness in how we currently implement AI safety: we're too focused on surface-level patterns rather than deep understanding of intent.",
-      "ai_provider": "claude",
-      "linked_articles": []
-    },
-    {
-      "id": 23,
-      "title": "Measuring Hypothesis Testing Errors in Information Retrieval",
-      "url": "https://bsky.app/profile/arxiv-cs-ir.bsky.social/post/3lto4qcwxly2j",
-      "processed_date": "2025-07-11 10:44:55",
-      "status": "completed",
-      "analysis": "**The Problem I'm Solving:** When we test whether one search system is better than another, we typically make mistakes - but we've only been counting half of them! We've been obsessed with avoiding Type I errors (false positives) but completely ignoring Type II errors (false negatives). That's like a doctor who's so worried about misdiagnosing healthy people that they miss actual sick patients!\n\n**My Solution:** I propose that we need to measure BOTH types of errors to truly understand how good our evaluation methods are. I introduce balanced accuracy as a single metric that captures both how often you correctly identify differences and how often you correctly identify no difference.\n\n**The Key Insight:** Different evaluation methods have different \"discriminative power\" - their ability to correctly identify when one system is truly better than another. By only measuring Type I errors, we've been flying half-blind.\n\n**What This Means:** We need to rethink how we evaluate our evaluation methods. We've been so conservative about avoiding false positives that we may have been using evaluation approaches that miss real improvements.",
-      "ai_provider": "claude",
-      "linked_articles": []
-    },
-    {
-      "id": 22,
-      "title": "FrugalRAG: Efficient Multi-hop Question Answering",
-      "url": "https://bsky.app/profile/reachsumit.com/post/3ltnsm55rq227",
-      "processed_date": "2025-07-11 10:44:20",
-      "status": "completed",
-      "analysis": "**The Core Innovation:** I've discovered that large language models don't need massive amounts of training to become better at retrieval-augmented generation (RAG). With just 1,000 carefully chosen examples, we can teach them to be nearly twice as efficient while maintaining the same accuracy!\n\n**The Two-Stage Magic:** My approach works in two clever stages. Stage 1 teaches the model to recognize when it actually needs more information. Stage 2 trains it to reason through documents efficiently, connecting pieces of information without redundant searches.\n\n**Why This Matters:** Current RAG systems are like students who run to the library every time they need to answer any part of a question. My system reduces retrieval calls by nearly 50% while maintaining competitive accuracy.\n\n**The Surprising Discovery:** You don't need millions of examples to achieve this. With just 1,000 well-chosen training examples, the model learns the PATTERN of when retrieval is useful, not just memorizing specific cases.",
-      "ai_provider": "claude",
-      "linked_articles": []
-    },
-    {
-      "id": 21,
-      "title": "Context Engineering for LLM Agents",
-      "url": "https://blog.langchain.com/context-engineering-for-agents/",
-      "processed_date": "2025-07-07 10:16:19",
-      "status": "completed",
-      "analysis": "**The Central Metaphor:** Think of Large Language Models as a new kind of operating system, where the LLM is like the CPU and its context window is like RAM. Just as your computer slows down when RAM is full, LLMs struggle when their context windows are overloaded.\n\n**The Four Pillars of Context Engineering:**\n1. **Write Context:** Just as you take notes while solving problems, agents need scratchpads and memories\n2. **Select Context:** Not everything in your notes is relevant - context selection is like having a smart assistant who knows which files to pull\n3. **Compress Context:** Sometimes you need to summarize War and Peace into a paragraph\n4. **Isolate Context:** Complex tasks benefit from splitting context across specialized sub-agents\n\n**Why This Matters Now:** As we build agents that can work for hours or days on complex tasks, context management becomes THE critical bottleneck. It's not about having the smartest model - it's about using its intelligence efficiently.\n\n**The Key Insight:** Context engineering isn't just an optimization - it's fundamental to agent capability. We're moving from \"prompt engineering\" (what to say) to \"context engineering\" (what to remember and when).",
-      "ai_provider": "claude",
-      "linked_articles": []
-    },
-    {
-      "id": 20,
-      "title": "Harnessing Multiple LLMs: A Survey on LLM Ensemble",
-      "url": "https://arxiv.org/abs/2502.18036",
-      "processed_date": "2025-07-06 22:42:07",
-      "status": "completed",
-      "analysis": "**The Big Idea:** Instead of relying on a single AI model, what if we could orchestrate multiple models to work together, each contributing their unique strengths? I'm proposing a comprehensive framework for \"LLM Ensemble\" - making multiple large language models collaborate like musicians in an orchestra.\n\n**Three Ways to Ensemble:**\n1. **Ensemble-Before-Inference:** Like having a pre-meeting where experts discuss strategy\n2. **Ensemble-During-Inference:** Models work together in real-time, like a surgical team\n3. **Ensemble-After-Inference:** Combining outputs after generation, like synthesizing multiple expert reports\n\n**The Challenge of Coordination:** The hardest part isn't getting models to work - it's getting them to work TOGETHER effectively. How do you resolve disagreements? Prevent redundant work? Ensure models complement rather than interfere?\n\n**Why This Changes Everything:** Single models have inherent biases and blind spots. By combining multiple models, we can compensate for individual weaknesses, achieve more reliable outputs, and handle more complex tasks.",
-      "ai_provider": "claude",
-      "linked_articles": []
-    },
-    {
-      "id": 19,
-      "title": "LangChain Context Engineering Deep Dive",
-      "url": "https://bsky.app/profile/langchain.bsky.social/post/3lsyxf2dshk2q",
-      "processed_date": "2025-07-06 22:41:51",
-      "status": "completed",
-      "analysis": "**The Memory Revolution:** I'm proposing a fundamental shift in how we think about AI agent development. Instead of focusing on making models smarter, we need to make them better at managing their own memories and attention.\n\n**The Technical Implementation:**\n- **State Management as Memory:** Every agent needs a state object - think of it as the agent's desk\n- **Multi-Agent Architecture:** For complex tasks, split work across specialized agents like running a newspaper\n- **Sandboxing for Safety:** Isolate operations that generate massive data in separate environments\n\n**The Practical Impact:** With proper context engineering, we're seeing agents handle tasks 10x longer without degrading, 50% reduction in token usage, and more reliable performance.\n\n**The Future Vision:** We're moving toward agents that can work on problems for days or weeks, maintaining context across sessions and managing their own cognitive resources.",
-      "ai_provider": "claude",
-      "linked_articles": []
-    },
-    {
-      "id": 17,
-      "title": "Multi-Agent Systems and Context Management",
-      "url": "https://bsky.app/profile/sungkim.bsky.social/post/3lt35yhxylc27",
-      "processed_date": "2025-07-06 22:37:53",
-      "status": "completed",
-      "analysis": "**Advanced Context Engineering:** This explores how multiple AI agents can work together effectively by managing their individual and shared contexts. Think of it as organizing a team where each member has their own workspace but can share important information when needed.\n\n**Key Technical Components:** The system uses specialized routing, memory management, and coordination protocols to ensure agents don't step on each other's toes while maximizing their collective capabilities.",
-      "ai_provider": "claude",
-      "linked_articles": []
-    },
-    {
-      "id": 16,
-      "title": "GlórIA: Portuguese Language Model",
-      "url": "https://arxiv.org/html/2402.12969v1",
-      "processed_date": "2025-07-06 22:37:21",
-      "status": "completed",
-      "analysis": "**Breaking Language Barriers:** A significant development in making AI accessible to Portuguese speakers worldwide, addressing the linguistic diversity gap in current LLM technology. This represents an important step toward democratizing AI access across different languages and cultures.\n\n**Technical Achievement:** The model demonstrates strong understanding of Portuguese language nuances, handling various tasks with coherent and contextually relevant text generation.",
-      "ai_provider": "claude",
-      "linked_articles": []
-    },
-    {
-      "id": 15,
-      "title": "LlamaIndex Integration Patterns",
-      "url": "https://bsky.app/profile/llamaindex.bsky.social/post/3lt35nmxess2v",
-      "processed_date": "2025-07-04 15:19:45",
-      "status": "completed",
-      "analysis": "**Building Better RAG Systems:** LlamaIndex provides powerful tools for creating retrieval-augmented generation systems. This explores integration patterns and best practices for building efficient, scalable RAG applications.\n\n**Key Focus Areas:** The emphasis is on modular design, efficient indexing strategies, and seamless integration with various data sources and LLM providers.",
-      "ai_provider": "claude",
-      "linked_articles": []
-    },
-    {
-      "id": 14,
-      "title": "Web Agent Paradigm Shift",
-      "url": "https://bsky.app/profile/sungkim.bsky.social/post/3lrlxhzbtsk26",
-      "processed_date": "2025-07-02 13:39:03",
-      "status": "completed",
-      "analysis": "**Rethinking Web Interaction:** The advocates propose a paradigm shift: rather than forcing web agents to adapt to interfaces designed for humans, we should develop a new interaction paradigm specifically optimized for agents.\n\n**The Vision:** \"Build the web for agents, not agents for the web\" - this fundamental rethinking could lead to more efficient and capable web automation systems.",
-      "ai_provider": "claude",
-      "linked_articles": []
-    },
-    {
-      "id": 13,
-      "title": "Deep Research Survey: Systems and Applications",
-      "url": "https://bsky.app/profile/sungkim.bsky.social/post/3lrs76hb3tk2p",
-      "processed_date": "2025-07-02 09:30:35",
-      "status": "completed",
-      "analysis": "**Comprehensive Analysis:** A thorough survey of more than 80 commercial and non-commercial deep research implementations that have emerged since 2023, including offerings from OpenAI, Gemini, Perplexity, and others.\n\n**Key Insights:** The survey reveals common patterns, architectural choices, and implementation strategies across different deep research systems, providing valuable guidance for future development.",
-      "ai_provider": "claude",
-      "linked_articles": []
-    },
-    {
-      "id": 12,
-      "title": "Controlled RAG Context Evaluation",
-      "url": "https://bsky.app/profile/reachsumit.com/post/3lsi5qzveoc2x",
-      "processed_date": "2025-07-02 09:29:48",
-      "status": "completed",
-      "analysis": "**Better RAG Evaluation:** Introduces a framework for evaluating retrieval context in long-form RAG using human-written summaries to control information scope. This addresses a critical gap in how we measure RAG system effectiveness.\n\n**The CRUX Framework:** Uses question-based evaluation to assess RAG's retrieval in a fine-grained manner, offering more reflective and diagnostic evaluation than traditional metrics.",
-      "ai_provider": "claude",
-      "linked_articles": []
-    },
-    {
-      "id": 11,
-      "title": "Text-to-LoRA: Instant Transformer Adaptation",
-      "url": "https://bsky.app/profile/paper.bsky.social/post/3lshtglohzr2d",
-      "processed_date": "2025-07-02 09:29:47",
-      "status": "completed",
-      "analysis": "**Democratizing Model Specialization:** Text-to-LoRA enables adapting large language models on the fly solely based on natural language descriptions. It's a hypernetwork that constructs LoRAs in a single inexpensive forward pass.\n\n**The Innovation:** After training on just 9 pre-trained LoRA adapters, the system can match task-specific adapter performance and even generalize to entirely unseen tasks with minimal compute requirements.",
-      "ai_provider": "claude",
-      "linked_articles": []
-    },
-    {
-      "id": 10,
-      "title": "Advanced Information Retrieval Research",
-      "url": "https://bsky.app/profile/arxiv-cs-ir.bsky.social/post/3lsskaxcsh52p",
-      "processed_date": "2025-07-02 09:29:23",
-      "status": "completed",
-      "analysis": "**Pushing IR Boundaries:** Multiple papers explore cutting-edge techniques in information retrieval, from multi-vector document retrieval to ranking foundation models.\n\n**Key Themes:** Efficiency improvements through compression and quantization, better evaluation metrics, and novel architectures for handling complex retrieval tasks at scale.",
-      "ai_provider": "claude",
-      "linked_articles": []
-    },
-    {
-      "id": 9,
-      "title": "PentaRAG: Enterprise-Scale Knowledge Retrieval",
-      "url": "https://bsky.app/profile/arxiv-cs-ir.bsky.social/post/3lssiq54mri2x",
-      "processed_date": "2025-07-02 09:28:05",
-      "status": "completed",
-      "analysis": "**Five-Layer Intelligence:** PentaRAG introduces a five-layer module that routes queries through instant caches, memory-recall mode, adaptive session memory, and conventional RAG. This achieves sub-second latency while maintaining freshness.\n\n**Enterprise Impact:** The system cuts average GPU time to 0.248 seconds per query and sustains ~100,000 queries per second, demonstrating production-grade efficiency.",
-      "ai_provider": "claude",
-      "linked_articles": []
-    },
-    {
-      "id": 8,
-      "title": "ColPali Hierarchical Patch Compression",
-      "url": "https://bsky.app/profile/arxiv-cs-ir.bsky.social/post/3lssineizm42c",
-      "processed_date": "2025-07-02 09:27:48",
-      "status": "completed",
-      "analysis": "**Efficient Multi-Vector Retrieval:** Addresses the storage and computational costs of multi-vector document retrieval systems through K-Means quantization, attention-guided pruning, and optional binary encoding.\n\n**Real-World Results:** Achieves 30-50% lower query latency while maintaining high retrieval precision, with up to 32x storage reduction.",
-      "ai_provider": "claude",
-      "linked_articles": []
-    },
-    {
-      "id": 7,
-      "title": "ARAG: Agentic RAG for Personalization",
-      "url": "https://bsky.app/profile/arxiv-cs-ir.bsky.social/post/3lssft2zuof25",
-      "processed_date": "2025-07-02 09:27:47",
-      "status": "completed",
-      "analysis": "**Multi-Agent Personalization:** ARAG integrates four specialized LLM-based agents working together to understand user preferences, evaluate semantic alignment, summarize findings, and rank recommendations.\n\n**Performance Gains:** Achieves up to 42.1% improvement in NDCG@5 and 35.5% in Hit@5 over standard RAG baselines, highlighting the effectiveness of agentic reasoning.",
-      "ai_provider": "claude",
-      "linked_articles": []
-    },
-    {
-      "id": 6,
-      "title": "VAT-KG: Multimodal Knowledge Graphs",
-      "url": "https://bsky.app/profile/reachsumit.com/post/3lssbxtzylc22",
-      "processed_date": "2025-07-02 09:27:02",
-      "status": "completed",
-      "analysis": "**Beyond Text:** VAT-KG is the first concept-centric knowledge graph covering visual, audio, and text information. Each triplet is linked to multimodal data and enriched with detailed concept descriptions.\n\n**Enabling Multimodal RAG:** The system enables retrieval and reasoning across different modalities, supporting MLLMs in tasks that require understanding of images, sounds, and text together.",
-      "ai_provider": "claude",
-      "linked_articles": []
-    },
-    {
       "id": 5,
-      "title": "IRanker: Ranking Foundation Model",
-      "url": "https://bsky.app/profile/reachsumit.com/post/3lssbir3mk222",
-      "processed_date": "2025-07-02 09:26:18",
+      "title": "Sumit (@reachsumit.com)",
+      "url": "https://bsky.app/profile/reachsumit.com/post/3lty7qvirds2t",
+      "processed_date": "2025-07-23 17:54:34",
       "status": "completed",
-      "analysis": "**Universal Ranking:** IRanker unifies diverse ranking tasks using a single model through reinforcement learning and iterative decoding. It decomposes complex ranking into step-by-step candidate elimination.\n\n**Broad Impact:** A single IRanker-3B achieves state-of-the-art results across recommendation, routing, and passage ranking, even surpassing larger models on certain datasets.",
-      "ai_provider": "claude",
+      "analysis": "**Key Findings:** Our main discoveries were that the way knowledge is organized and represented significantly impacts how well an LLM can query a knowledge graph. Here's what we found:\n\n1. **Structure Matters**: The structure of the knowledge graph (like how books are arranged in the library) affects the LLM's ability to generate accurate SPARQL queries. Certain structures make it easier for the LLM to find and use the right information.\n\n2. **Complexity Matters**: The complexity of the knowledge representation (like how detailed the book arrangements are) also impacts performance. Too much complexity can make it harder for the LLM to navigate the knowledge graph effectively.\n\nThese findings are significant because they show that the way we organize and represent knowledge can greatly influence the effectiveness of LLMs in retrieval-augmented generation tasks. It's like finding out that the way a library is organized can make a big difference in how quickly and accurately a robot can find the right books.\n\nOur results highlight the importance of designing knowledge representations that are both transferable (can be used in different contexts) and interpretable (easy for the LLM to understand and use).\n\n**Technical Approach:** To understand our technical implementation, let's break it down into simple components:\n\n1. **Large Language Models (LLMs)**: Think of LLMs as very smart assistants that can understand and generate human language. They're trained on vast amounts of text data and can perform a wide range of tasks.\n\n2. **Knowledge Graphs**: These are like maps of information, where nodes represent entities (like people, places, or things) and edges represent relationships between them. Knowledge graphs are stored in triplestores, which are databases designed to handle this kind of data.\n\n3. **SPARQL Queries**: SPARQL is a language used to query knowledge graphs. It's like a set of instructions you give to the librarian (the triplestore) to find specific information.\n\n4. **Agentic Retrieval-Augmented Generation (RAG)**: This is a fancy term for a system where the LLM acts like an agent, deciding what information to retrieve and how to use it to generate a response. It's like the robot in the library deciding which books to look at and how to use the information it finds.\n\nOur technical approach involved creating different knowledge representations (like different ways of arranging books) and seeing how well the LLM could generate SPARQL queries (like asking the librarian for specific books) under each representation. We chose this approach because it allows us to directly observe the impact of knowledge organization on the LLM's performance.\n\nTo implement this, we used various tools and frameworks that support LLMs, knowledge graphs, and SPARQL queries. Each component works together to create a system where the LLM can actively seek and use information based on natural language prompts.\n\n**Methodology:** Imagine you're trying to teach a robot to find information in a vast library. The robot needs to understand not just where to look, but also how to ask the right questions to get the information it needs. This is similar to what we're doing with Large Language Models (LLMs) in our research.\n\nOur fundamental problem is figuring out how different ways of organizing and representing knowledge (like how books are arranged in a library) affect how well an LLM can find and use that knowledge. Here's how we approached this step-by-step:\n\n1. **Define the Task**: We wanted the LLM to generate SPARQL queries. SPARQL is a language used to query knowledge graphs, which are like complex maps of information. Think of it as teaching the robot to ask specific questions about the books in the library.\n\n2. **Knowledge Representation**: We organized knowledge in different ways, much like arranging books by author, topic, or publication date. We used various structures and complexities to see how these arrangements affect the LLM's performance.\n\n3. **Agentic RAG Systems**: We created systems where the LLM acts like an agent, actively selecting, interpreting, and querying knowledge sources based on natural language prompts. This is like the robot deciding which section of the library to search based on a question it's asked.\n\n4. **Evaluation**: We systematically evaluated how well the LLM performed with each knowledge representation. This is like testing how quickly and accurately the robot finds the right books under different arrangements.\n\nEach step was necessary to understand how the organization of knowledge impacts the LLM's ability to retrieve and use it effectively.",
+      "ai_provider": "anthropic",
       "linked_articles": []
     },
     {
       "id": 4,
-      "title": "Text-to-LoRA Implementation Details",
-      "url": "https://arxiv.org/abs/2506.06105",
-      "processed_date": "2025-07-02 09:25:44",
+      "title": "The Big LLM Architecture Comparison",
+      "url": "https://sebastianraschka.com/blog/2025/the-big-llm-architecture-comparison.html",
+      "processed_date": "2025-07-23 17:53:58",
       "status": "completed",
-      "analysis": "**Instant Adaptation:** T2L can adapt LLMs in a single forward pass based on natural language task descriptions. After training on just 9 LoRA adapters, it matches task-specific performance and generalizes to unseen tasks.\n\n**Democratization:** This approach provides language-based adaptation with minimal compute requirements, making model specialization accessible to a broader audience.",
-      "ai_provider": "claude",
+      "analysis": "**Key Findings:** So, what did I find? Well, first, LLMs have come a long way since GPT-2, but the core ideas are still the same. It's like having a basic cake recipe and making small tweaks to improve it.\n\nOne big finding is that efficiency is key. Everyone's trying to make their models faster and cheaper to run. Techniques like MLA and MoE are all about doing more with less. For example, DeepSeek V3 uses MLA to save memory and MoE to increase capacity without blowing up the budget.\n\nAnother finding is that normalization matters. Where you put your normalization layers (like RMSNorm) can make a big difference in how stable your training is. OLMo 2 and Gemma 3 both play with normalization to improve training.\n\nI also found that sliding window attention is a clever trick to save memory. Gemma 3 uses it to focus on local context, which is cheaper than looking at everything at once.\n\nOverall, these findings show that the devil is in the details. Small changes in architecture can lead to big improvements in performance and efficiency.\n\n**Technical Approach:** Let's dive into the technical stuff. Imagine you're building a complex machine (LLM) and you want to understand how different parts work together to make it run smoothly.\n\nFirst, let's talk about attention mechanisms. Think of attention as a way for the machine to focus on important parts of the input. Traditional Multi-Head Attention (MHA) is like having multiple spotlights, each focusing on different parts of the stage. But it's expensive—lots of spotlights mean lots of power (computational resources).\n\nGrouped-Query Attention (GQA) is a way to save power by grouping spotlights together. Instead of each spotlight having its own controls (keys and values), they share controls. This saves power but still lets the machine focus on important parts.\n\nMulti-Head Latent Attention (MLA) is another trick. Instead of sharing controls, it compresses the controls into a smaller space before using them. It's like zipping a file to save space before sending it. This saves memory but adds a step to unzip the file when you need it.\n\nNow, let's talk about Mixture-of-Experts (MoE). Think of MoE as a team of specialists. Instead of one big brain trying to do everything, you have a team of smaller brains, each good at different tasks. But you don't use all the brains at once—that would be too expensive. Instead, a router picks a few specialists for each task.\n\nI chose these technical approaches because they're fundamental to understanding how modern LLMs work. Each part—attention mechanisms, expert management—plays a crucial role in making the machine efficient and effective.\n\nI broke down complex algorithms into simple components and used analogies to make them accessible. For example, thinking of MoE as a team of specialists helps understand why it's efficient. Each technical choice was made to optimize the machine's performance while keeping it manageable.\n\n**Methodology:** Alright, let's break this down step-by-step. Imagine you're trying to understand how different recipes (architectures) for making a cake (LLM) have changed over time. You have a basic recipe from a few years ago (GPT-2 from 2019) and some new recipes from this year (like DeepSeek V3 and Llama 4). Your goal is to figure out what's changed and why.\n\nFirst, I gathered all the recipes (architectures) I wanted to compare. I focused on the text capabilities of these models, leaving multimodal stuff for another time. I looked at things like how they handle attention (like MHA, GQA, MLA), how they manage experts (MoE), and other tricks they use to be more efficient.\n\nI started with DeepSeek V3/R1 because it made a big splash in January 2025. I looked at two key ingredients in its recipe: Multi-Head Latent Attention (MLA) and Mixture-of-Experts (MoE). I compared these to older methods to see how they improved efficiency and performance.\n\nThen, I moved on to other models like OLMo 2, Gemma 3, and so on. For each, I identified what unique things they were doing. For example, OLMo 2 uses normalization layers in a different way, and Gemma 3 uses sliding window attention.\n\nI broke down each architecture into its basic components and explained how each part contributes to the final dish—a better-performing LLM. I used analogies and simple language to make it easy to understand. For instance, think of MoE as a kitchen with many specialized chefs (experts), but only a few are working on your dish at a time to save resources.\n\nI chose each step because it helped me understand the evolution of these architectures and why certain design choices were made. It's like understanding why a chef adds salt at a specific time—it's all about enhancing the final result.",
+      "ai_provider": "anthropic",
       "linked_articles": []
     },
     {
       "id": 3,
-      "title": "Arch-Router: Human-Aligned LLM Routing",
-      "url": "https://arxiv.org/abs/2506.16655",
-      "processed_date": "2025-07-02 09:25:15",
+      "title": "Sung Kim (@sungkim.bsky.social)",
+      "url": "https://bsky.app/profile/sungkim.bsky.social/post/3luj3kikh6c2s",
+      "processed_date": "2025-07-23 17:53:44",
       "status": "completed",
-      "analysis": "**Preference-Aligned Routing:** Arch-Router guides model selection by matching queries to user-defined domains or action types, offering a practical mechanism to encode preferences in routing decisions.\n\n**The Innovation:** This 1.5B model outperforms top proprietary models in matching queries with human preferences, making routing decisions more transparent and flexible.",
-      "ai_provider": "claude",
+      "analysis": "**Key Findings:** Our main discoveries are:\n\n1. **Efficient Data Processing**: We found that MuonClip significantly improves the efficiency of data processing. It can handle large datasets quickly and accurately, which is crucial for real-time applications.\n\n2. **Scalable Data Pipeline**: Our large-scale agentic data pipeline can handle vast amounts of data without slowing down. This is important for applications that require real-time decision-making.\n\n3. **Effective Learning**: Our reinforcement learning framework helps the AI learn and improve over time. This means the AI gets smarter the more it interacts with data, much like a human learning from experience.\n\nThese findings are significant because they address the core problem of creating an AI that can understand and interact with complex data efficiently. They show that our approach works and can be applied to real-world problems.\n\n**Technical Approach:** Let's break down the technical components of Kimi K2 into simpler parts:\n\n1. **MuonClip**: Imagine MuonClip as a highly advanced camera that not only captures images but also understands what it sees. Technically, it's a sophisticated data preprocessing tool that cleans, normalizes, and structures data so that the AI can understand it. We chose specific algorithms that are efficient and scalable, ensuring that MuonClip can handle large datasets without slowing down.\n\n2. **Data Pipeline**: Think of the data pipeline as a conveyor belt in a factory. It moves data from one stage to another, processing it along the way. We used distributed computing techniques to ensure that the pipeline can handle large-scale data efficiently. Each stage of the pipeline has a specific task, like cleaning data, extracting features, and making decisions.\n\n3. **Reinforcement Learning**: This is like teaching a dog to fetch. You reward the dog when it brings the ball back and correct it when it doesn't. Our reinforcement learning framework uses similar principles. We designed it to provide feedback to the AI based on its actions, helping it learn and improve over time. We chose algorithms that balance exploration (trying new things) and exploitation (using what it already knows) to ensure the AI learns effectively.\n\nEach component works together to create a system that can learn and adapt, much like a highly intelligent robot.\n\n**Methodology:** Imagine you're trying to build a highly intelligent robot that can learn from its environment and make decisions on its own. This is similar to what we're doing with Kimi K2, but in the digital world. Our core problem is creating an AI system that can understand and interact with complex data efficiently.\n\n1. **Identify the Problem**: We need an AI that can handle large amounts of data and make smart decisions based on that data. Think of it like teaching a robot to sort through a massive library and find the most relevant books for any topic you give it.\n\n2. **Literature Review**: We started by looking at what others have done. DeepSeek has some good work, but their papers often lack the depth we need. Moonshot AI's papers, on the other hand, are more detailed and give us a better roadmap.\n\n3. **Develop MuonClip**: MuonClip is like the robot's eyes and ears. It helps the AI understand and process the data it receives. We developed MuonClip to be highly efficient and accurate, much like giving our robot super-sensitive sensors.\n\n4. **Large-Scale Agentic Data Pipeline**: Think of this as the robot's brain and nervous system. It takes in data from MuonClip, processes it, and makes decisions. Building this pipeline involved creating a system that can handle vast amounts of data and make sense of it in real-time.\n\n5. **Reinforcement Learning Framework**: This is like the robot's learning mechanism. It allows the AI to improve over time by learning from its mistakes and successes. We designed a framework that rewards the AI for good decisions and penalizes it for bad ones, helping it get smarter over time.\n\nEach step was necessary to create a cohesive system that can learn and adapt, much like a highly intelligent robot.",
+      "ai_provider": "anthropic",
       "linked_articles": []
     },
     {
       "id": 2,
-      "title": "Quantization-Aware Training at Jina",
-      "url": "https://jina.ai/news/quantization-aware-training-of-jina-embeddings-v4/",
-      "processed_date": "2025-07-02 09:24:42",
+      "title": "Maria Antoniak (@mariaa.bsky.social)",
+      "url": "https://bsky.app/profile/mariaa.bsky.social/post/3lumkyphpq22f",
+      "processed_date": "2025-07-23 17:53:30",
       "status": "completed",
-      "analysis": "**Lossless Compression:** Jina demonstrates how quantization-aware training can make embeddings 64x smaller while maintaining performance. This is crucial for deploying AI at scale with limited resources.\n\n**Technical Excellence:** The approach combines output QAT with careful scaling strategies, achieving the best of both worlds: smaller embeddings without sacrificing quality.",
-      "ai_provider": "claude",
+      "analysis": "**Key Findings:** Our main discovery was that even when individual annotations from LLMs are not very confident, we can still draw reliable conclusions by aggregating them. This is significant because it means we don't need to discard uncertain data; it can still be useful.\n\nImagine you have a bunch of slightly blurry photos. Individually, they might not be clear, but when you put them all together, you can still make out the scene. That's what our findings show—even imperfect data can lead to confident conclusions.\n\nThis connects back to our original problem by demonstrating that we don't need to rely solely on highly confident annotations. We can use a broader range of data to make informed decisions.\n\n**Technical Approach:** Think of our technical approach like building a house. Each part has a specific role and contributes to the overall structure.\n\n1. **Data Collection**: We used APIs to gather annotations from LLMs. This is like gathering the materials needed to build the house.\n\n2. **Confidence Scoring**: We implemented a confidence scoring mechanism. Imagine this as a tool that checks the quality of each material (annotation).\n\n3. **Aggregation Algorithm**: We developed an algorithm to combine these annotations. Think of this as the blueprint that tells us how to put the materials together to build the house.\n\n4. **Evaluation Metrics**: We used statistical methods to evaluate the reliability of our conclusions. This is like having an inspector check if the house is sturdy and safe.\n\nOur thought process was to ensure that each component worked together seamlessly. The data collection provided the raw materials, the confidence scoring ensured we knew the quality of each material, the aggregation algorithm told us how to use these materials effectively, and the evaluation metrics confirmed that our final structure (conclusions) was sound.\n\n**Methodology:** Imagine you're trying to solve a puzzle, but some of the pieces are a bit faded and hard to see. That's similar to the problem we're tackling in our research. We want to know if we can still make confident conclusions even when some of our data (annotations from Large Language Models, or LLMs) are not very confident.\n\nHere's how we approached it step-by-step:\n\n1. **Identify the Problem**: We started by recognizing that LLMs often provide annotations with varying levels of confidence. Some annotations are very sure, while others are more like educated guesses.\n\n2. **Collect Data**: We gathered a bunch of annotations from LLMs. Think of this as collecting all the puzzle pieces, even the faded ones.\n\n3. **Analyze Confidence Levels**: We looked at how confident each annotation was. This is like checking how clear each puzzle piece is.\n\n4. **Aggregate Annotations**: We combined these annotations to see if the overall picture became clearer. This is similar to putting the puzzle together and seeing if the faded pieces still help us see the whole image.\n\n5. **Evaluate Conclusions**: Finally, we checked if the conclusions drawn from these aggregated annotations were reliable. This is like stepping back and seeing if the puzzle makes sense even with the faded pieces.\n\nEach step was necessary to understand how unreliable pieces of information can still contribute to a reliable whole.",
+      "ai_provider": "anthropic",
       "linked_articles": []
     },
     {
       "id": 1,
-      "title": "Advanced Embedding Research",
-      "url": "https://bsky.app/profile/tomaarsen.com/post/3lsvucbrlpk24",
-      "processed_date": "2025-07-02 09:24:21",
+      "title": "Maria Antoniak (@mariaa.bsky.social)",
+      "url": "https://bsky.app/profile/mariaa.bsky.social/post/3lumkyphrok2f",
+      "processed_date": "2025-07-23 17:53:14",
       "status": "completed",
-      "analysis": "**Pushing Embedding Boundaries:** Research in embedding technology continues to advance, focusing on efficiency, quality, and practical deployment considerations.\n\n**Key Innovations:** From quantization techniques to novel training approaches, the field is making embeddings more accessible and efficient for real-world applications.",
-      "ai_provider": "claude",
+      "analysis": "**Key Findings:** Our main discoveries were that putting a human in the loop significantly improves the LLM's performance on subjective tasks. Here's what we found and why it's important:\n\n1. **Improved Accuracy**: The LLM's accuracy in tasks like sentiment analysis increased when it learned from human annotations. This is like the robot becoming better at understanding emotions in text.\n\n2. **Better Generalization**: The LLM was able to generalize better to new, unseen data. This means the robot can apply what it learned to new situations, just like a student applying knowledge to new problems.\n\n3. **Reduced Bias**: Human annotations helped reduce bias in the LLM's predictions. This is crucial because it makes the robot's judgments fairer and more reliable.\n\nThese findings are significant because they show that combining human intuition with machine learning can lead to better performance in tasks that are inherently subjective.\n\n**Technical Approach:** Think of our technical approach like building a sophisticated tool to help the robot (LLM) learn from human teachers.\n\n1. **LLM Basics**: At the core, LLMs are like advanced calculators that can process and generate text based on patterns they've learned from large amounts of data.\n\n2. **Human Annotation Tool**: We created a tool that allows humans to annotate data. This tool is like a digital notebook where humans can write down their thoughts and judgments about the data.\n\n3. **Integration**: We integrated this tool with the LLM, so the model could learn from the human annotations. Imagine the robot reading the notebook and learning from the teacher's notes.\n\n4. **Training Algorithm**: We used a training algorithm that adjusts the LLM's parameters based on the human annotations. Think of this as the robot adjusting its understanding based on the teacher's feedback.\n\n5. **Evaluation Metrics**: We used metrics like accuracy and F1-score to evaluate the LLM's performance. These metrics are like report cards that tell us how well the robot is doing.\n\nOur thought process was to create a system where the LLM could continuously learn from human feedback, improving its performance on subjective tasks over time.\n\n**Methodology:** Imagine you're trying to teach a robot to understand something subjective, like whether a painting is beautiful. The robot can learn a lot from data, but it might still struggle because beauty is in the eye of the beholder. So, you decide to put a human in the loop to help the robot learn better. This is the core idea behind our research.\n\nOur methodology starts with a fundamental problem: How can we improve the performance of Large Language Models (LLMs) in tasks that are subjective, like sentiment analysis or artistic critique? Here's how we approached it step-by-step:\n\n1. **Identify the Challenge**: LLMs are great at processing text, but they struggle with subjective tasks because these tasks often rely on human intuition and personal experience.\n\n2. **Human-in-the-Loop Concept**: To tackle this, we introduced the idea of having a human assist the LLM. Think of it like a teacher helping a student understand a complex concept.\n\n3. **Data Collection**: We gathered a dataset of subjective tasks, such as evaluating the sentiment of social media posts or judging the quality of creative writing.\n\n4. **Annotation Process**: We had humans annotate this data, providing their subjective judgments. This is like having multiple art critics rate a painting.\n\n5. **Model Training**: We then trained the LLM using these human-annotated examples. The model learns from the human judgments, improving its ability to handle subjective tasks.\n\n6. **Evaluation**: Finally, we evaluated the LLM's performance on new, unseen data to see how well it had learned from the human annotations.\n\nEach step was necessary to ensure that the LLM could benefit from human insight, making it better at understanding subjective information.",
+      "ai_provider": "anthropic",
       "linked_articles": []
     }
   ],
   "metadata": {
     "date_range": {
-      "earliest": "2025-07-02 09:24:21",
-      "latest": "2025-07-11 10:45:26"
+      "earliest": "2025-07-23T17:53:14",
+      "latest": "2025-07-23T17:54:34"
     },
-    "sources": [
-      "bsky.app",
-      "arxiv.org",
-      "jina.ai",
-      "blog.langchain.com"
-    ],
-    "ai_provider": "claude"
+    "ai_providers": {
+      "anthropic": 5
+    },
+    "status_counts": {
+      "completed": 5
+    }
   },
   "processing_status": {
-    "successful_articles": 23,
-    "failed_articles": 0,
-    "total_processed": 24,
-    "system_status": "success",
-    "recent_errors_by_date": {}
+    "system_status": "unknown",
+    "last_updated": null,
+    "summary": {
+      "total_days": 0,
+      "successful_days": 0,
+      "failed_days": 0
+    },
+    "dates": {},
+    "recent_errors_by_date": {},
+    "health_check": {
+      "timestamp": "2025-07-23T17:55:02.124242+00:00",
+      "apis_working": 0,
+      "rss_feed_accessible": true,
+      "database_accessible": true
+    }
   }
 }
