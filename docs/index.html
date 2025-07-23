@@ -3,155 +3,256 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="AI-powered RSS analysis dashboard displaying academic papers and technical articles with advanced filtering and search capabilities.">
-    <meta name="keywords" content="RSS, AI analysis, academic papers, technical articles, research, machine learning">
-    <meta name="author" content="RSS Analyzer">
-    <meta name="robots" content="index, follow">
+    <title>RSS Article Analyzer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="RSS Article Analysis Dashboard">
-    <meta property="og:description" content="AI-powered analysis of academic papers and technical articles from RSS feeds">
-    <meta property="og:url" content="https://yourusername.github.io/rss-analyzer/">
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #fafafa;
+        }
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:title" content="RSS Article Analysis Dashboard">
-    <meta property="twitter:description" content="AI-powered analysis of academic papers and technical articles from RSS feeds">
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
 
-    <title>RSS Article Analysis Dashboard</title>
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #eee;
+        }
 
-    <!-- Preload critical resources -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" as="style">
-    <link rel="preload" href="styles.css" as="style">
-    <link rel="preload" href="script.js" as="script">
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+        }
 
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232563eb'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z'/%3E%3C/svg%3E">
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #3498db;
+        }
+
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .article-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .article-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+
+        .article-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .article-title a {
+            color: #2c3e50;
+            text-decoration: none;
+        }
+
+        .article-title a:hover {
+            color: #3498db;
+        }
+
+        .article-meta {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            margin-bottom: 1rem;
+        }
+
+        .article-analysis {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .article-analysis h3 {
+            color: #2c3e50;
+            font-size: 1rem;
+            margin: 1rem 0 0.5rem 0;
+        }
+
+        .article-analysis p {
+            margin-bottom: 0.8rem;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #7f8c8d;
+        }
+
+        .error {
+            text-align: center;
+            padding: 2rem;
+            color: #e74c3c;
+            background: #fdf2f2;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .ai-provider {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .articles-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Skip to main content for accessibility -->
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-
-    <!-- Main container -->
-    <div class="app-container">
-        <!-- Header section -->
-        <header class="app-header" role="banner">
-            <div class="header-content">
-                <div class="header-text">
-                    <h1 class="header-title">RSS Article Analysis</h1>
-                    <p class="header-subtitle">AI-powered analysis of academic papers and technical articles</p>
+    <div class="container">
+        <header>
+            <h1>RSS Article Analyzer</h1>
+            <p class="subtitle">AI-powered analysis of academic papers and technical articles</p>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number" id="total-articles">-</div>
+                    <div>Total Articles</div>
                 </div>
-                <div class="header-badge">
-                    <span class="badge-icon">🤖</span>
-                    <span class="badge-text">AI Powered</span>
+                <div class="stat">
+                    <div class="stat-number" id="last-updated">-</div>
+                    <div>Last Updated</div>
                 </div>
             </div>
         </header>
 
-        <!-- Statistics section -->
-        <section class="stats-section" aria-labelledby="stats-heading">
-            <h2 id="stats-heading" class="visually-hidden">Statistics</h2>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-value" id="total-articles" aria-label="Total articles">0</div>
-                    <div class="stat-label">Total Articles</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="today-articles" aria-label="Today's articles">0</div>
-                    <div class="stat-label">Today's Articles</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value system-status" id="system-status" aria-label="System status">—</div>
-                    <div class="stat-label">System Status</div>
-                </div>
+        <main>
+            <div class="loading" id="loading">Loading articles...</div>
+            <div class="error" id="error" style="display: none;">
+                Failed to load articles. Please try again later.
             </div>
-        </section>
-
-        <!-- Controls section -->
-        <section class="controls-section" aria-labelledby="controls-heading">
-            <h2 id="controls-heading" class="visually-hidden">Search and Filter Controls</h2>
-            <div class="controls-grid">
-                <div class="search-container">
-                    <label for="search-input" class="visually-hidden">Search articles</label>
-                    <input
-                        type="text"
-                        id="search-input"
-                        class="search-input"
-                        placeholder="Search articles, topics, or keywords..."
-                        aria-describedby="search-help"
-                        autocomplete="off"
-                        spellcheck="false"
-                    >
-                    <div class="search-icon" aria-hidden="true">🔍</div>
-                    <div id="search-help" class="visually-hidden">Search through article titles and content</div>
-                </div>
-
-
-                <div class="view-controls">
-                    <button id="expand-all" class="control-btn" aria-label="Expand all sections">
-                        <span class="btn-icon">📂</span>
-                        <span class="btn-text">Expand All</span>
-                    </button>
-                    <button id="collapse-all" class="control-btn" aria-label="Collapse all sections">
-                        <span class="btn-icon">📁</span>
-                        <span class="btn-text">Collapse All</span>
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Main content area -->
-        <main id="main-content" class="main-content" role="main">
-            <!-- Loading state -->
-            <div id="loading-container" class="loading-container" aria-live="polite">
-                <div class="loading-spinner" aria-hidden="true"></div>
-                <div class="loading-text">Loading articles...</div>
-            </div>
-
-            <!-- Error state -->
-            <div id="error-container" class="error-container" role="alert" aria-live="assertive" style="display: none;">
-                <div class="error-icon" aria-hidden="true">⚠️</div>
-                <div class="error-text">
-                    <h3 class="error-title">Unable to Load Articles</h3>
-                    <p class="error-message">Please check your connection and try again.</p>
-                </div>
-                <button id="retry-btn" class="retry-btn">Retry</button>
-            </div>
-
-            <!-- Articles container -->
-            <div id="articles-container" class="articles-container" style="display: none;">
-                <!-- Articles will be dynamically inserted here -->
-            </div>
-
-            <!-- Empty state -->
-            <div id="empty-container" class="empty-container" style="display: none;">
-                <div class="empty-icon" aria-hidden="true">📄</div>
-                <div class="empty-text">
-                    <h3 class="empty-title">No Articles Found</h3>
-                    <p class="empty-message">Try adjusting your search or filter criteria.</p>
-                </div>
-            </div>
+            <div class="articles-grid" id="articles-grid"></div>
         </main>
     </div>
 
-    <!-- Footer -->
-    <footer class="app-footer" role="contentinfo">
-        <div class="footer-content">
-            <div class="footer-text">
-                <p>RSS Article Analysis Dashboard</p>
-            </div>
-            <div class="footer-meta">
-                <span id="last-updated" class="last-updated">Last updated: —</span>
-            </div>
-        </div>
-    </footer>
+    <script>
+        async function loadArticles() {
+            try {
+                const response = await fetch('data.json');
+                if (!response.ok) throw new Error('Failed to fetch data');
 
-    <!-- JavaScript -->
-    <script src="script.js"></script>
+                const data = await response.json();
+
+                // Update stats
+                document.getElementById('total-articles').textContent = data.total_articles;
+                const lastUpdated = new Date(data.generated_at).toLocaleDateString();
+                document.getElementById('last-updated').textContent = lastUpdated;
+
+                // Hide loading
+                document.getElementById('loading').style.display = 'none';
+
+                // Render articles
+                const grid = document.getElementById('articles-grid');
+
+                if (data.articles.length === 0) {
+                    grid.innerHTML = '<div class="error">No articles found.</div>';
+                    return;
+                }
+
+                data.articles.forEach(article => {
+                    const card = document.createElement('div');
+                    card.className = 'article-card';
+
+                    const processedDate = new Date(article.processed_date).toLocaleDateString();
+
+                    // Convert markdown-style analysis to HTML
+                    let analysisHtml = article.analysis
+                        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                        .replace(/\n\n/g, '</p><p>')
+                        .replace(/^(.*)$/gm, '<p>$1</p>')
+                        .replace(/<p><\/p>/g, '');
+
+                    card.innerHTML = `
+                        <h2 class="article-title">
+                            <a href="${article.url}" target="_blank" rel="noopener">${article.title}</a>
+                            <span class="ai-provider">${article.ai_provider}</span>
+                        </h2>
+                        <div class="article-meta">
+                            Processed: ${processedDate}
+                        </div>
+                        <div class="article-analysis">
+                            ${analysisHtml}
+                        </div>
+                    `;
+
+                    grid.appendChild(card);
+                });
+
+            } catch (error) {
+                console.error('Error loading articles:', error);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error').style.display = 'block';
+            }
+        }
+
+        // Load articles when page loads
+        loadArticles();
+    </script>
 </body>
-</html><!-- Updated: Fri Jul  4 15:56:11 WEST 2025 -->
+</html>

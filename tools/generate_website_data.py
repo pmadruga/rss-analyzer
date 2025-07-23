@@ -322,14 +322,38 @@ class WebsiteDataGenerator:
             return {"date_range": None, "ai_providers": {}, "status_counts": {}}
 
         # Date range
-        dates = [
-            datetime.fromisoformat(article.processed_date.replace("Z", "+00:00"))
-            for article in articles
-        ]
-        date_range = {
-            "earliest": min(dates).isoformat(),
-            "latest": max(dates).isoformat(),
-        }
+        dates = []
+        for article in articles:
+            try:
+                # Handle different datetime formats
+                date_str = article.processed_date
+                if date_str.endswith("Z"):
+                    date_str = date_str.replace("Z", "+00:00")
+                elif (
+                    "+" not in date_str and "-" not in date_str[-6:] and "T" in date_str
+                ):
+                    # Add UTC timezone if none specified
+                    date_str = date_str + "+00:00"
+
+                parsed_date = datetime.fromisoformat(date_str)
+
+                # Ensure all dates have timezone info (convert naive to UTC)
+                if parsed_date.tzinfo is None:
+                    parsed_date = parsed_date.replace(tzinfo=UTC)
+
+                dates.append(parsed_date)
+            except Exception as e:
+                self.logger.warning(
+                    f"Could not parse date {article.processed_date}: {e}"
+                )
+                continue
+        if dates:
+            date_range = {
+                "earliest": min(dates).isoformat(),
+                "latest": max(dates).isoformat(),
+            }
+        else:
+            date_range = None
 
         # AI provider counts
         ai_providers = {}
