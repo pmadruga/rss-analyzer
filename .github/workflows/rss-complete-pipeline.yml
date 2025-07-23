@@ -73,6 +73,11 @@ jobs:
     # ========================================
     # TEST PHASE
     # ========================================
+    - name: 🔬 Validate imports and dependencies
+      run: |
+        echo "🔬 Validating all imports and dependencies..."
+        uv run python tools/validate_imports.py
+
     - name: 🔍 Test RSS parsing
       run: |
         echo "🔍 Testing RSS feed connectivity..."
@@ -117,7 +122,45 @@ jobs:
       if: github.event.inputs.test_only != 'true'
       run: |
         echo "📊 Running full RSS analysis..."
-        uv run python -m src.main run
+        set -e  # Exit on any error
+
+        # Run the analysis with verbose output
+        if uv run python -m src.main run --log-level DEBUG; then
+          echo "✅ RSS analysis completed successfully"
+        else
+          echo "❌ RSS analysis failed"
+          echo "📋 Checking for any partial results..."
+
+          # Display any available logs for debugging
+          if [ -d "logs" ]; then
+            echo "📁 Log files found:"
+            ls -la logs/
+            echo "📄 Latest log content:"
+            find logs -name "*.log" -exec tail -20 {} \; 2>/dev/null || echo "No log files found"
+          fi
+
+          # Display database status if it exists
+          if [ -f "data/articles.db" ]; then
+            echo "🗄️ Database status:"
+            uv run python -c "
+            import sqlite3
+            conn = sqlite3.connect('data/articles.db')
+            cursor = conn.cursor()
+            try:
+                cursor.execute('SELECT COUNT(*) FROM articles')
+                print(f'Total articles in database: {cursor.fetchone()[0]}')
+                cursor.execute('SELECT status, COUNT(*) FROM articles GROUP BY status')
+                for status, count in cursor.fetchall():
+                    print(f'  {status}: {count}')
+            except Exception as e:
+                print(f'Error querying database: {e}')
+            finally:
+                conn.close()
+            " 2>/dev/null || echo "Could not query database"
+          fi
+
+          exit 1
+        fi
 
     - name: 📝 Generate articles by date
       if: github.event.inputs.test_only != 'true'
