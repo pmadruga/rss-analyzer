@@ -125,7 +125,7 @@ jobs:
         set -e  # Exit on any error
 
         # Run the analysis with verbose output
-        if uv run python -m src.main run --log-level DEBUG; then
+        if uv run python -m src.main --log-level DEBUG run; then
           echo "✅ RSS analysis completed successfully"
         else
           echo "❌ RSS analysis failed"

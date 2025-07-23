@@ -88,7 +88,7 @@ jobs:
       run: |
         echo "🧪 Running full pipeline test with 1 article..."
         mkdir -p data logs output
-        uv run python -m src.main run --limit 1 --log-level DEBUG || {
+        uv run python -m src.main --log-level DEBUG run --limit 1 || {
           echo "❌ Pipeline test failed"
           if [ -d "logs" ]; then
             echo "📁 Available logs:"
