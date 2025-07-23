@@ -1,53 +1,137 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>RSS Article Analysis Dashboard – Jina.ai</title>
-    <link>/tags/jina.ai/</link>
-    <description>Recent content in Jina.ai on RSS Article Analysis Dashboard</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Wed, 02 Jul 2025 00:00:00 +0000</lastBuildDate>
-
-	  <atom:link href="/tags/jina.ai/index.xml" rel="self" type="application/rss+xml" />
-
-
-
-
-
-
-
-    <item>
-      <title>Quantization-Aware Training at Jina</title>
-      <link>/articles/quantization-aware-training-at-jina/</link>
-      <pubDate>Wed, 02 Jul 2025 00:00:00 +0000</pubDate>
-
-      <guid>/articles/quantization-aware-training-at-jina/</guid>
-      <description>
-
-
-        &lt;h1&gt;Quantization-Aware Training at Jina&lt;/h1&gt;&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200&#34;&gt;
-  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;div class=&#34;hx:select-none hx:text-xl&#34; style=&#34;font-family: &#39;Apple Color Emoji&#39;, &#39;Segoe UI Emoji&#39;, &#39;Segoe UI Symbol&#39;;&#34;&gt;ℹ️&lt;/div&gt;&lt;/div&gt;
-
-  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
-    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;&lt;strong&gt;Original Source:&lt;/strong&gt; &lt;a href=&#34;https://jina.ai/news/quantization-aware-training-of-jina-embeddings-v4/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;jina.ai&lt;/a&gt;&lt;br&gt;
-&lt;strong&gt;Analyzed:&lt;/strong&gt; 2025-07-02&lt;br&gt;
-&lt;strong&gt;AI Provider:&lt;/strong&gt; claude&lt;/div&gt;
-  &lt;/div&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Lossless Compression: Jina demonstrates how quantization-aware training can make embeddings 64x smaller while maintaining performance. This is crucial for deploying AI at scale with limited resources.&lt;/p&gt;
-&lt;p&gt;Technical Excellence: The approach combines output QAT with careful scaling strategies, achieving the best of both worlds: smaller embeddings without sacrificing quality.&lt;/p&gt;
-&lt;hr&gt;
-&lt;div class=&#34;hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-orange-100 hx:bg-orange-50 hx:text-orange-800 hx:dark:border-orange-400/30 hx:dark:bg-orange-400/20 hx:dark:text-orange-300&#34;&gt;
-  &lt;div class=&#34;hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2&#34;&gt;&lt;/div&gt;
-
-  &lt;div class=&#34;hx:w-full hx:min-w-0 hx:leading-7&#34;&gt;
-    &lt;div class=&#34;hx:mt-6 hx:leading-7 hx:first:mt-0&#34;&gt;This analysis was generated using the Feynman technique, where the AI takes on the role of the paper&amp;rsquo;s author and explains the research using simple language and analogies to make complex concepts accessible.&lt;/div&gt;
-  &lt;/div&gt;
-&lt;/div&gt;
-
-
-      </description>
-    </item>
-
-  </channel>
-</rss>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>RSS Article Analysis Dashboard – Jina.ai</title><link>/tags/jina.ai/</link><description>Recent content in Jina.ai on RSS Article Analysis Dashboard</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 02 Jul 2025 00:00:00 +0000</lastBuildDate><atom:link href="/tags/jina.ai/index.xml" rel="self" type="application/rss+xml"/><item><title>Quantization-Aware Training at Jina</title><link>/articles/quantization-aware-training-at-jina/</link><pubDate>Wed, 02 Jul 2025 00:00:00 +0000</pubDate><guid>/articles/quantization-aware-training-at-jina/</guid><description>
+&lt;h1>Quantization-Aware Training at Jina&lt;/h1>&lt;div class="hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200">
+&lt;div class="hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2">&lt;div class="hx:select-none hx:text-xl" style="font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';">ℹ️&lt;/div>&lt;/div>
+&lt;div class="hx:w-full hx:min-w-0 hx:leading-7">
+&lt;div class="hx:mt-6 hx:leading-7 hx:first:mt-0">&lt;strong>Original Source:&lt;/strong> &lt;a href="https://jina.ai/news/quantization-aware-training-of-jina-embeddings-v4/" target="_blank" rel="noopener">jina.ai&lt;/a>
+&lt;strong>Analyzed:&lt;/strong> 2025-07-02
+&lt;strong>AI Provider:&lt;/strong> claude&lt;/div>
+&lt;/div>
+&lt;/div>
+&lt;p>Lossless Compression: Jina demonstrates how quantization-aware training can make embeddings 64x smaller while maintaining performance. This is crucial for deploying AI at scale with limited resources.&lt;/p>
+&lt;p>Technical Excellence: The approach combines output QAT with careful scaling strategies, achieving the best of both worlds: smaller embeddings without sacrificing quality.&lt;/p>
+&lt;hr>
+&lt;div class="hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-orange-100 hx:bg-orange-50 hx:text-orange-800 hx:dark:border-orange-400/30 hx:dark:bg-orange-400/20 hx:dark:text-orange-300">
+&lt;div class="hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2">&lt;/div>
+&lt;div class="hx:w-full hx:min-w-0 hx:leading-7">
+&lt;div class="hx:mt-6 hx:leading-7 hx:first:mt-0">This analysis was generated using the Feynman technique, where the AI takes on the role of the paper&amp;rsquo;s author and explains the research using simple language and analogies to make complex concepts accessible.&lt;/div>
+&lt;/div>
+&lt;/div></description></item><item><title>Quantization-Aware Training of jina-embeddings-v4</title><link>/articles/quantization-aware-training-of-jina-embeddings-v4/</link><pubDate>Wed, 02 Jul 2025 00:00:00 +0000</pubDate><guid>/articles/quantization-aware-training-of-jina-embeddings-v4/</guid><description>
+&lt;h1>Quantization-Aware Training of jina-embeddings-v4&lt;/h1>&lt;div class="hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-blue-200 hx:bg-blue-100 hx:text-blue-900 hx:dark:border-blue-200/30 hx:dark:bg-blue-900/30 hx:dark:text-blue-200">
+&lt;div class="hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2">&lt;div class="hx:select-none hx:text-xl" style="font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';">ℹ️&lt;/div>&lt;/div>
+&lt;div class="hx:w-full hx:min-w-0 hx:leading-7">
+&lt;div class="hx:mt-6 hx:leading-7 hx:first:mt-0">&lt;strong>Original Source:&lt;/strong> &lt;a href="https://jina.ai/news/quantization-aware-training-of-jina-embeddings-v4/" target="_blank" rel="noopener">jina.ai&lt;/a>
+&lt;strong>Analyzed:&lt;/strong> 2025-07-02
+&lt;strong>AI Provider:&lt;/strong> anthropic&lt;/div>
+&lt;/div>
+&lt;/div>
+&lt;h2>Fine-Tuning Improves Performance&lt;span class="hx:absolute hx:-mt-20" id="fine-tuning-improves-performance">&lt;/span>
+&lt;a href="#fine-tuning-improves-performance" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>Quantization-aware training (QAT) with fine-tuning significantly improved the performance compared to post-training quantization (PTQ).&lt;/p>
+&lt;ol start="2">
+&lt;li>&lt;/li>
+&lt;/ol>
+&lt;h2>Quantization Level Impact&lt;span class="hx:absolute hx:-mt-20" id="quantization-level-impact">&lt;/span>
+&lt;a href="#quantization-level-impact" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>Less aggressive quantization (e.g., 4-bit) generally performed better than more aggressive methods (e.g., binary). However, there was no significant difference between 8-bit and 4-bit quantization.&lt;/p>
+&lt;ol start="3">
+&lt;li>&lt;/li>
+&lt;/ol>
+&lt;h2>Scaling Methods&lt;span class="hx:absolute hx:-mt-20" id="scaling-methods">&lt;/span>
+&lt;a href="#scaling-methods" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>The rolling average scaling method outperformed the min/max approach, indicating that using scaling values relative to the data works better.&lt;/p>
+&lt;ol start="4">
+&lt;li>&lt;/li>
+&lt;/ol>
+&lt;h2>Asymmetric Quantization&lt;span class="hx:absolute hx:-mt-20" id="asymmetric-quantization">&lt;/span>
+&lt;a href="#asymmetric-quantization" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>Leaving query vectors unquantized improved performance in binary quantization cases.&lt;/p>
+&lt;p>&lt;strong>Technical Approach:&lt;/strong> The technical approach involved several key components working together to achieve the quantization and evaluation of the embedding models:&lt;/p>
+&lt;ol>
+&lt;li>&lt;/li>
+&lt;/ol>
+&lt;h2>Quantization Levels&lt;span class="hx:absolute hx:-mt-20" id="quantization-levels">&lt;/span>
+&lt;a href="#quantization-levels" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;h2>The researchers experimented with different levels of quantization:&lt;span class="hx:absolute hx:-mt-20" id="the-researchers-experimented-with-different-levels-of-quantization">&lt;/span>
+&lt;a href="#the-researchers-experimented-with-different-levels-of-quantization" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;h2>8-bit integers&lt;span class="hx:absolute hx:-mt-20" id="8-bit-integers">&lt;/span>
+&lt;a href="#8-bit-integers" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;h2>Reducing floating-point values to a range of -128 to 127.&lt;span class="hx:absolute hx:-mt-20" id="reducing-floating-point-values-to-a-range-of--128-to-127">&lt;/span>
+&lt;a href="#reducing-floating-point-values-to-a-range-of--128-to-127" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;h2>4-bit integers&lt;span class="hx:absolute hx:-mt-20" id="4-bit-integers">&lt;/span>
+&lt;a href="#4-bit-integers" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;h2>Mapping values to a range of -8 to 7.&lt;span class="hx:absolute hx:-mt-20" id="mapping-values-to-a-range-of--8-to-7">&lt;/span>
+&lt;a href="#mapping-values-to-a-range-of--8-to-7" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;h2>Trinary Quantization&lt;span class="hx:absolute hx:-mt-20" id="trinary-quantization">&lt;/span>
+&lt;a href="#trinary-quantization" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;h2>Mapping values to -1, 0, or 1.&lt;span class="hx:absolute hx:-mt-20" id="mapping-values-to--1-0-or-1">&lt;/span>
+&lt;a href="#mapping-values-to--1-0-or-1" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;h2>Binary Quantization&lt;span class="hx:absolute hx:-mt-20" id="binary-quantization">&lt;/span>
+&lt;a href="#binary-quantization" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>Converting values to either -1 or 1 using the torch.sign datatype.&lt;/p>
+&lt;ol start="2">
+&lt;li>&lt;/li>
+&lt;/ol>
+&lt;h2>Scaling Techniques&lt;span class="hx:absolute hx:-mt-20" id="scaling-techniques">&lt;/span>
+&lt;a href="#scaling-techniques" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;h2>Two scaling techniques were used to normalize the values:&lt;span class="hx:absolute hx:-mt-20" id="two-scaling-techniques-were-used-to-normalize-the-values">&lt;/span>
+&lt;a href="#two-scaling-techniques-were-used-to-normalize-the-values" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;h2>Min/Max Scaling&lt;span class="hx:absolute hx:-mt-20" id="minmax-scaling">&lt;/span>
+&lt;a href="#minmax-scaling" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;h2>Identifying the maximum and minimum values in each batch.&lt;span class="hx:absolute hx:-mt-20" id="identifying-the-maximum-and-minimum-values-in-each-batch">&lt;/span>
+&lt;a href="#identifying-the-maximum-and-minimum-values-in-each-batch" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;h2>Rolling Averaging&lt;span class="hx:absolute hx:-mt-20" id="rolling-averaging">&lt;/span>
+&lt;a href="#rolling-averaging" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>Calculating a moving average of the mean and standard deviation of vector components.&lt;/p>
+&lt;ol start="3">
+&lt;li>&lt;/li>
+&lt;/ol>
+&lt;h2>Fine-Tuning with Straight-Through Estimation&lt;span class="hx:absolute hx:-mt-20" id="fine-tuning-with-straight-through-estimation">&lt;/span>
+&lt;a href="#fine-tuning-with-straight-through-estimation" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>For Output QAT, the model was fine-tuned by reversing the quantization process to restore full precision, calculating the loss, and using that to fine-tune the model. This process involved 10,000 steps, with checkpoints saved every 500 steps.&lt;/p>
+&lt;ol start="4">
+&lt;li>&lt;/li>
+&lt;/ol>
+&lt;h2>Asymmetric Quantization&lt;span class="hx:absolute hx:-mt-20" id="asymmetric-quantization-1">&lt;/span>
+&lt;a href="#asymmetric-quantization-1" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>The researchers tested the impact of quantizing query vectors versus leaving them unquantized to understand the trade-offs in performance and storage.&lt;/p>
+&lt;ol start="5">
+&lt;li>&lt;/li>
+&lt;/ol>
+&lt;h2>Evaluation Metrics&lt;span class="hx:absolute hx:-mt-20" id="evaluation-metrics">&lt;/span>
+&lt;a href="#evaluation-metrics" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>The NanoBEIR benchmark was used to evaluate the performance of the quantized models. This benchmark measures the retrieval accuracy of the models by comparing the cosine similarity between vectors.&lt;/p>
+&lt;p>These technical components were chosen to systematically reduce the size of embedding vectors while maintaining or improving the model&amp;rsquo;s performance. The combination of quantization levels, scaling techniques, and fine-tuning methods allowed the researchers to explore different trade-offs and optimizations.&lt;/p>
+&lt;p>&lt;strong>Methodology:&lt;/strong> The research methodology involved several key steps to study the impact of quantization on embedding models, specifically focusing on making the models more efficient without losing precision. Here’s a breakdown of the process:&lt;/p>
+&lt;ol>
+&lt;li>&lt;/li>
+&lt;/ol>
+&lt;h2>Baseline Establishment&lt;span class="hx:absolute hx:-mt-20" id="baseline-establishment">&lt;/span>
+&lt;a href="#baseline-establishment" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>The researchers started with a baseline model, jina-embeddings-v4, which produces high-precision floating-point vectors. This model was used as a reference point to compare the effects of different quantization techniques.&lt;/p>
+&lt;ol start="2">
+&lt;li>&lt;/li>
+&lt;/ol>
+&lt;h2>Quantization Techniques&lt;span class="hx:absolute hx:-mt-20" id="quantization-techniques">&lt;/span>
+&lt;a href="#quantization-techniques" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;h2>Four main quantization techniques were considered:&lt;span class="hx:absolute hx:-mt-20" id="four-main-quantization-techniques-were-considered">&lt;/span>
+&lt;a href="#four-main-quantization-techniques-were-considered" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;h2>Post-Training Quantization (PTQ)&lt;span class="hx:absolute hx:-mt-20" id="post-training-quantization-ptq">&lt;/span>
+&lt;a href="#post-training-quantization-ptq" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;h2>This involves rounding off the floating-point values produced by the model to reduce their size.&lt;span class="hx:absolute hx:-mt-20" id="this-involves-rounding-off-the-floating-point-values-produced-by-the-model-to-reduce-their-size">&lt;/span>
+&lt;a href="#this-involves-rounding-off-the-floating-point-values-produced-by-the-model-to-reduce-their-size" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;h2>Output Quantization-Aware Training (Output QAT)&lt;span class="hx:absolute hx:-mt-20" id="output-quantization-aware-training-output-qat">&lt;/span>
+&lt;a href="#output-quantization-aware-training-output-qat" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;h2>This fine-tunes the model to produce optimal reduced-precision vectors, focusing only on the output.&lt;span class="hx:absolute hx:-mt-20" id="this-fine-tunes-the-model-to-produce-optimal-reduced-precision-vectors-focusing-only-on-the-output">&lt;/span>
+&lt;a href="#this-fine-tunes-the-model-to-produce-optimal-reduced-precision-vectors-focusing-only-on-the-output" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;h2>Full Quantization-Aware Training (Full QAT)&lt;span class="hx:absolute hx:-mt-20" id="full-quantization-aware-training-full-qat">&lt;/span>
+&lt;a href="#full-quantization-aware-training-full-qat" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;h2>This reduces the precision of the model weights and then fine-tunes the model for better performance.&lt;span class="hx:absolute hx:-mt-20" id="this-reduces-the-precision-of-the-model-weights-and-then-fine-tunes-the-model-for-better-performance">&lt;/span>
+&lt;a href="#this-reduces-the-precision-of-the-model-weights-and-then-fine-tunes-the-model-for-better-performance" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;h2>Distillation&lt;span class="hx:absolute hx:-mt-20" id="distillation">&lt;/span>
+&lt;a href="#distillation" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>This involves training a new quantized model from an existing unquantized one.&lt;/p>
+&lt;ol start="3">
+&lt;li>&lt;/li>
+&lt;/ol>
+&lt;h2>Experimental Conditions&lt;span class="hx:absolute hx:-mt-20" id="experimental-conditions">&lt;/span>
+&lt;a href="#experimental-conditions" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>The study focused on PTQ and Output QAT. The baseline model&amp;rsquo;s vectors were quantized to different levels (8-bit, 4-bit, trinary, and binary) and the performance was evaluated.&lt;/p>
+&lt;ol start="4">
+&lt;li>&lt;/li>
+&lt;/ol>
+&lt;h2>Scaling Methods&lt;span class="hx:absolute hx:-mt-20" id="scaling-methods-1">&lt;/span>
+&lt;a href="#scaling-methods-1" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;h2>Two scaling methods were used to normalize the values for quantization:&lt;span class="hx:absolute hx:-mt-20" id="two-scaling-methods-were-used-to-normalize-the-values-for-quantization">&lt;/span>
+&lt;a href="#two-scaling-methods-were-used-to-normalize-the-values-for-quantization" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;h2>Min/Max&lt;span class="hx:absolute hx:-mt-20" id="minmax">&lt;/span>
+&lt;a href="#minmax" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;h2>Identifying the highest and lowest vector components in each batch.&lt;span class="hx:absolute hx:-mt-20" id="identifying-the-highest-and-lowest-vector-components-in-each-batch">&lt;/span>
+&lt;a href="#identifying-the-highest-and-lowest-vector-components-in-each-batch" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;h2>Rolling Averaging&lt;span class="hx:absolute hx:-mt-20" id="rolling-averaging-1">&lt;/span>
+&lt;a href="#rolling-averaging-1" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>Calculating the average and standard deviation of vector components across batches.&lt;/p>
+&lt;ol start="5">
+&lt;li>&lt;/li>
+&lt;/ol>
+&lt;h2>Fine-Tuning&lt;span class="hx:absolute hx:-mt-20" id="fine-tuning">&lt;/span>
+&lt;a href="#fine-tuning" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>For Output QAT, the model was fine-tuned using straight-through estimation, which reverses the quantization process to calculate the loss and fine-tune the model.&lt;/p>
+&lt;ol start="6">
+&lt;li>&lt;/li>
+&lt;/ol>
+&lt;h2>Asymmetric Quantization&lt;span class="hx:absolute hx:-mt-20" id="asymmetric-quantization-2">&lt;/span>
+&lt;a href="#asymmetric-quantization-2" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>The researchers tested both quantizing the query vectors and leaving them unquantized to see the impact on performance.&lt;/p>
+&lt;ol start="7">
+&lt;li>&lt;/li>
+&lt;/ol>
+&lt;h2>Evaluation&lt;span class="hx:absolute hx:-mt-20" id="evaluation">&lt;/span>
+&lt;a href="#evaluation" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>The performance of each condition was evaluated using the NanoBEIR benchmark, which measures the retrieval accuracy of the quantized models.&lt;/p>
+&lt;hr>
+&lt;div class="hx:overflow-x-auto hx:mt-6 hx:flex hx:rounded-lg hx:border hx:py-2 hx:ltr:pr-4 hx:rtl:pl-4 hx:contrast-more:border-current hx:contrast-more:dark:border-current hx:border-orange-100 hx:bg-orange-50 hx:text-orange-800 hx:dark:border-orange-400/30 hx:dark:bg-orange-400/20 hx:dark:text-orange-300">
+&lt;div class="hx:ltr:pl-3 hx:ltr:pr-2 hx:rtl:pr-3 hx:rtl:pl-2">&lt;/div>
+&lt;div class="hx:w-full hx:min-w-0 hx:leading-7">
+&lt;div class="hx:mt-6 hx:leading-7 hx:first:mt-0">This analysis was generated using the Feynman technique, where the AI takes on the role of the paper&amp;rsquo;s author and explains the research using simple language and analogies to make complex concepts accessible.&lt;/div>
+&lt;/div>
+&lt;/div></description></item></channel></rss>

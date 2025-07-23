@@ -5,30 +5,30 @@ layout: docs
 
 # Analyzed Articles
 
-This section contains 23 articles analyzed using AI with the Feynman technique. Each article is explained as if the author were teaching the concepts to someone encountering the topic for the first time.
+This section contains 24 articles analyzed using AI with the Feynman technique. Each article is explained as if the author were teaching the concepts to someone encountering the topic for the first time.
 
 ## Browse by Source
 
 ### Arxiv.Org (4 articles)
 
-- [Harnessing Multiple LLMs: A Survey on LLM Ensemble](/articles/harnessing-multiple-llms-a-survey-on-llm-ensemble/)
-- [GlórIA: Portuguese Language Model](/articles/glória-portuguese-language-model/)
-- [Text-to-LoRA Implementation Details](/articles/text-to-lora-implementation-details/)
-- [Arch-Router: Human-Aligned LLM Routing](/articles/arch-router-human-aligned-llm-routing/)
+- [Harnessing Multiple Large Language Models: A Survey on LLM Ensemble](/articles/harnessing-multiple-large-language-models-a-survey/)
+- [GlórIA: A Generative and Open Large Language Model for Portuguese Pre-print - Accepted for publication at PROPOR 2024.](/articles/glória-a-generative-and-open-large-language-model-/)
+- [Text-to-LoRA: Instant Transformer Adaption](/articles/text-to-lora-instant-transformer-adaption/)
+- [Arch-Router: Aligning LLM Routing with Human Preferences](/articles/arch-router-aligning-llm-routing-with-human-prefer/)
 
 ### Blog.Langchain.Com (1 articles)
 
-- [Context Engineering for LLM Agents](/articles/context-engineering-for-llm-agents/)
+- [Context Engineering](/articles/context-engineering/)
 
-### Bsky.App (17 articles)
+### Bsky.App (18 articles)
 
-- [Jailbreaking LLMs with InfoFlood Method](/articles/jailbreaking-llms-with-infoflood-method/)
-- [Measuring Hypothesis Testing Errors in Information Retrieval](/articles/measuring-hypothesis-testing-errors-in-information/)
-- [FrugalRAG: Efficient Multi-hop Question Answering](/articles/frugalrag-efficient-multi-hop-question-answering/)
-- [LangChain Context Engineering Deep Dive](/articles/langchain-context-engineering-deep-dive/)
-- [Multi-Agent Systems and Context Management](/articles/multi-agent-systems-and-context-management/)
-- *...and 12 more*
+- [Maria Antoniak (@mariaa.bsky.social)](/articles/maria-antoniak-mariaabskysocial/)
+- [Scott McGrath (@smcgrath.phd)](/articles/scott-mcgrath-smcgrathphd/)
+- [arxiv cs.IR (@arxiv-cs-ir.bsky.social)](/articles/arxiv-csir-arxiv-cs-irbskysocial/)
+- [Sumit (@reachsumit.com)](/articles/sumit-reachsumitcom/)
+- [LangChain (@langchain.bsky.social)](/articles/langchain-langchainbskysocial/)
+- *...and 13 more*
 
 ### Jina.Ai (1 articles)
 
-- [Quantization-Aware Training at Jina](/articles/quantization-aware-training-at-jina/)
+- [Quantization-Aware Training of jina-embeddings-v4](/articles/quantization-aware-training-of-jina-embeddings-v4/)
