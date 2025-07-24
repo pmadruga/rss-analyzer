@@ -181,15 +181,6 @@
             margin: 2rem 0;
         }
 
-        .ai-provider {
-            display: inline-block;
-            background: #3498db;
-            color: white;
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            margin-left: 0.5rem;
-        }
 
         @media (max-width: 768px) {
             .container {
@@ -296,7 +287,6 @@
                     card.innerHTML = `
                         <h2 class="article-title">
                             <a href="${article.url}" target="_blank" rel="noopener">${article.title}</a>
-                            <span class="ai-provider">${article.ai_provider}</span>
                         </h2>
                         <div class="article-meta">
                             Processed: ${processedDate}

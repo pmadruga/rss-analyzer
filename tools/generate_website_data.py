@@ -236,6 +236,81 @@ class WebsiteDataGenerator:
         except sqlite3.Error as e:
             raise DatabaseError(f"Failed to fetch articles from database: {e}") from e
 
+    def _extract_better_title(
+        self, analysis: str, url: str, original_title: str
+    ) -> str:
+        """Extract a better title from the analysis if possible."""
+        import re
+
+        # Skip if already has a good title (not a username)
+        if "@" not in original_title and "bsky" not in original_title:
+            return original_title
+
+        # Check for markdown headers at the beginning
+        lines = analysis.strip().split("\n")
+        for line in lines[:10]:
+            line = line.strip()
+            if line.startswith("# ") and len(line) > 2:
+                title = line[2:].strip()
+                title = title.replace("**", "").replace("*", "").strip()
+                if len(title) > 10 and len(title) < 150:
+                    return title
+
+        # Look for specific title patterns
+        # First check key findings for paper titles
+        if "**Key Findings:" in analysis:
+            key_findings_section = analysis.split("**Key Findings:")[1].split("**")[0]
+
+            # Check for hashtag titles in key findings
+            hashtag_match = re.search(r"#\s*([^#\n]{10,150})", key_findings_section)
+            if hashtag_match:
+                return hashtag_match.group(1).strip()
+
+            # Check for quoted titles
+            quote_patterns = [
+                r'"([^"]{10,150})"',
+                r"'([^']{10,150})'",
+            ]
+            for pattern in quote_patterns:
+                match = re.search(pattern, key_findings_section)
+                if match:
+                    title = match.group(1).strip()
+                    if not title.lower().startswith(("this", "the post", "this post")):
+                        return title
+
+        # Look for paper titles in the text
+        patterns = [
+            r'paper titled ["\']([^"\']+)["\']',
+            r'article titled ["\']([^"\']+)["\']',
+            r'"([^"]+)"(?:\s+paper|\s+article)',
+            r"^([A-Z][^:]{10,150}):\s+[A-Z]",
+            r"#\s*([^#\n]{10,150})",
+        ]
+
+        for pattern in patterns:
+            match = re.search(pattern, analysis, re.IGNORECASE | re.MULTILINE)
+            if match:
+                title = match.group(1).strip()
+                if (
+                    len(title) > 10
+                    and len(title) < 150
+                    and not title.lower().startswith(("this", "the post", "another"))
+                ):
+                    return title
+
+        # As fallback, use first sentence if it's descriptive enough
+        first_sentence = analysis.split(".")[0].strip()
+        if (
+            len(first_sentence) > 20
+            and len(first_sentence) < 100
+            and not first_sentence.lower().startswith(("this", "the post", "another"))
+        ):
+            # Remove markdown formatting
+            first_sentence = re.sub(r"\*\*([^*]+)\*\*", r"\1", first_sentence)
+            return first_sentence
+
+        return original_title
+
     def _process_article_row(self, row: sqlite3.Row) -> Article:
         """
         Process a single article row from the database.
@@ -297,9 +372,37 @@ class WebsiteDataGenerator:
                 f"Failed to parse metadata for article {row['id']}: {e}"
             )
 
+        # Extract better title if needed
+        title = self._extract_better_title(analysis, str(row["url"]), str(row["title"]))
+
+        # Manual title overrides for better readability
+        title_overrides = {
+            25: "Human-in-the-Loop LLM Annotation for Subjective Tasks",
+            24: "InfoFlood: Academic Jargon Jailbreak for AI Safety Systems",
+            23: "Statistical Rigor in Information Retrieval Testing",
+            22: "FrugalRAG: Efficient AI Question-Answering",
+            19: "LangChain Platform Update",
+            17: "AI/ML Research Update by Sung Kim",
+            15: "LlamaIndex Platform Development",
+            14: "Machine Learning Research Update",
+            13: "AI and Machine Learning Topics",
+            12: "CRUX: Diagnostic Revolution for AI Information Retrieval",
+            11: "Machine Learning Research Discussion",
+            10: "LLM2Rec: Teaching Language Models Recommendation",
+            9: "PentaRAG: Five-Lane Highway for Enterprise AI Queries",
+            8: "HPC-ColPali: Powerful and Practical Document Understanding",
+            7: "ARAG: Teaching AI Through Collaborative Intelligence",
+            6: "VAT-KG: First True Multimodal Knowledge Encyclopedia",
+            5: "IRanker: Teaching AI to Rank Like a Tournament Judge",
+            1: "AT Protocol and Bluesky Social Platform",
+        }
+
+        if int(row["id"]) in title_overrides:
+            title = title_overrides[int(row["id"])]
+
         return Article(
             id=int(row["id"]),
-            title=str(row["title"]),
+            title=title,
             url=str(row["url"]),
             processed_date=str(row["processed_date"]),
             status=str(row["status"]),
