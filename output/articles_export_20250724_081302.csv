@@ -1,0 +1,159 @@
+title,url,publication_date,processed_date,methodology_detailed,key_findings,technical_approach,research_design
+Maria Antoniak (@mariaa.bsky.social),https://bsky.app/profile/mariaa.bsky.social/post/3lumkyphrok2f,2025-07-23T15:44:26+00:00,2025-07-24 08:07:24,"Imagine you're trying to teach a robot to understand something subjective, like whether a painting is beautiful. The robot can learn a lot, but it might not always get it right because beauty is in the eye of the beholder. So, you decide to put a human in the loop to help the robot learn better. This is the core idea behind our research.
+
+Our methodology starts with a fundamental problem: How can we improve the accuracy of Large Language Models (LLMs) in subjective tasks, like sentiment analy...","Our main discovery was that involving humans in the loop significantly improved the LLM's performance on subjective tasks. Here's what we found:
+
+1. **Improved Accuracy**: The LLM's predictions became more accurate after learning from human corrections. This is like the robot getting better at judging paintings after learning from the teacher.
+
+2. **Reduced Bias**: The human-in-the-loop approach helped reduce bias in the LLM's predictions. This is because humans can provide a more nuanced und...","Think of our technical approach like building a learning system with two main components: the LLM (the student robot) and the human annotators (the teachers).
+
+1. **Large Language Model (LLM)**: This is like the brain of our robot. It's a complex algorithm that can understand and generate human language. We used a pre-trained LLM, which is like a robot that already knows some basics but needs more specific training.
+
+2. **Human Annotators**: These are the teachers who review the robot's work....","Our research design was centered around the idea of creating a collaborative learning environment between the LLM and human annotators. Here's how we designed our study:
+
+1. **Dataset Selection**: We chose a dataset that included a variety of subjective tasks, like sentiment analysis of social media posts. This ensured that our findings would be applicable to a wide range of real-world scenarios.
+
+2. **Initial Predictions**: We had the LLM make initial predictions on the dataset. This gave us..."
+Maria Antoniak (@mariaa.bsky.social),https://bsky.app/profile/mariaa.bsky.social/post/3lumkyphpq22f,2025-07-23T15:44:12+00:00,2025-07-24 08:07:43,"Imagine you're trying to solve a puzzle, but some of the pieces are a bit fuzzy and uncertain. That's similar to the problem we're tackling in our research: can we use uncertain annotations from Large Language Models (LLMs) to draw confident conclusions?
+
+1. **Identify the Problem**: Think of LLMs as helpful assistants that label data for us, but sometimes they're not sure about their labels. We want to know if we can still use these uncertain labels to make reliable conclusions.
+
+2. **Gather...","Our main discovery is that, yes, we can use uncertain LLM annotations to draw confident conclusions, under certain conditions. Here's why it's significant:
+
+1. **Robustness**: Even with uncertainty, the aggregated annotations can provide reliable insights. It's like completing a puzzle even with some fuzzy pieces.
+
+2. **Efficiency**: Using uncertain annotations means we don't need to discard valuable data, making our process more efficient.
+
+3. **Practicality**: This approach is practical for...","Let's break down the technical side of our research into simple components:
+
+1. **Data Collection**: We use APIs to gather data annotated by LLMs. Think of APIs as messengers that fetch the data for us.
+
+2. **Confidence Scores**: Each annotation comes with a confidence score, a number between 0 and 1 indicating the LLM's certainty. It's like a confidence meter.
+
+3. **Statistical Modeling**: We use statistical techniques to model the uncertainty. Imagine a weather forecast that predicts rain w...","Designing our study involved several key steps:
+
+1. **Hypothesis Formulation**: We started with the hypothesis that uncertain LLM annotations can still lead to confident conclusions. This is like starting with a guess that you can complete a puzzle with fuzzy pieces.
+
+2. **Data Selection**: We chose a dataset that is representative of real-world scenarios where LLMs are used. This ensures our findings are applicable in practical settings.
+
+3. **Uncertainty Analysis**: We designed our analysis..."
+Sung Kim (@sungkim.bsky.social),https://bsky.app/profile/sungkim.bsky.social/post/3luj3kikh6c2s,2025-07-21T23:33:12+00:00,2025-07-24 08:08:42,"Imagine you're trying to build a complex machine, like a robot that can learn and adapt to new tasks. This is similar to what we're doing with Kimi K2. Our fundamental problem is creating an AI system that can handle large-scale data and learn from it efficiently. Here's how we approached it step-by-step:
+
+1. **Identifying the Problem**: We need an AI that can process vast amounts of data and learn from it, much like a robot that needs to understand its environment to function effectively.
+
+2...","Our main discoveries with Kimi K2 are:
+
+1. **Efficient Data Processing**: We found that MuonClip can handle large-scale data very efficiently. This is like discovering that our robot's senses work really well, allowing it to see and hear clearly even in complex environments.
+
+2. **Effective Learning**: Our reinforcement learning framework significantly improves the AI's ability to learn and make decisions. This is like finding out that our robot can learn to walk and perform tasks much faster...","Let's break down the technical components of our AI system, Kimi K2, into simple parts:
+
+1. **MuonClip**: Think of MuonClip as a advanced filter. It takes in raw data and processes it to make it useful for our AI. It's like a coffee filter that takes in coffee grounds and water, but only lets the coffee liquid through. We chose specific algorithms for MuonClip that could handle large-scale data efficiently.
+
+2. **Data Pipeline**: This is like a conveyor belt in a factory. It moves data from o...","Designing our study was like planning a complex journey. Here's how we did it:
+
+1. **Defining the Goal**: Our research question was clear: Can we create an AI system that can handle large-scale data and learn from it efficiently? This is like setting a destination for our journey.
+
+2. **Choosing the Right Tools**: We selected specific algorithms and frameworks for MuonClip, the data pipeline, and the reinforcement learning system. This is like choosing the right vehicle and equipment for our ..."
+The Big LLM Architecture Comparison,https://sebastianraschka.com/blog/2025/the-big-llm-architecture-comparison.html,2025-07-20T13:35:19+00:00,2025-07-24 08:09:43,"Alright, let's dive into the core of my research! Imagine you're trying to understand how different recipes (architectures) for making a cake (LLM) have evolved over time. My goal was to compare these recipes to see what makes some cakes taste better (perform better) than others.
+
+1. **Identify the Core Ingredients**: First, I looked at the basic ingredients that all cakes have, like flour and sugar (basic components like attention mechanisms and normalization layers).
+
+2. **Study the Recipes...","So, what did I discover from all this cake baking (LLM architecture comparison)?
+
+1. **Efficiency Matters**: Techniques like MLA and GQA significantly reduce memory usage, making it easier to bake bigger cakes (larger models) without needing a bigger kitchen (more memory).
+
+2. **MoE is Powerful**: Using multiple chefs (experts) allows for handling more complex recipes (larger models) efficiently. This is a game-changer for baking really big cakes (very large models).
+
+3. **Normalization is Cr...","Now, let's get into the nitty-gritty of how I actually baked these cakes (implemented the architectures).
+
+1. **Understanding Attention Mechanisms**: Think of attention mechanisms as the way the cake batter mixes. Traditional Multi-Head Attention (MHA) is like using multiple whisks, each with its own set of ingredients. Grouped-Query Attention (GQA) is more efficient, like sharing whisks among different ingredients.
+
+2. **Implementing MLA**: Multi-Head Latent Attention (MLA) is a bit more com...","Designing my study was like planning a big baking competition. Here's how I did it:
+
+1. **Select the Recipes**: I chose a variety of recipes (architectures) that have been popular over the years, from classic GPT to the latest like DeepSeek and Llama.
+
+2. **Define the Criteria**: I set clear criteria for what makes a good cake (model performance), such as taste (accuracy), texture (efficiency), and appearance (scalability).
+
+3. **Control the Variables**: I made sure to control variables like ..."
+Sumit (@reachsumit.com),https://bsky.app/profile/reachsumit.com/post/3lty7qvirds2t,2025-07-15T07:49:27+00:00,2025-07-24 08:10:37,"Imagine you're trying to teach a robot to find information in a vast library. The robot needs to understand not just where to look, but also how to ask the right questions to get the information it needs. This is similar to what we're doing with Large Language Models (LLMs) in our research.
+
+Our fundamental problem is figuring out how different ways of organizing and representing knowledge (like how books are arranged and indexed in a library) affect how well an LLM can find and use that know...","Our main discoveries were:
+
+1. **Impact of Knowledge Representation**: We found that how knowledge is organized and represented significantly affects how well the LLM can query it. Some representations made it easier for the LLM to find the right information, while others made it harder.
+
+2. **Balance Between Structure and Complexity**: There's a sweet spot between too simple and too complex. Too simple, and the LLM doesn't have enough information to work with. Too complex, and it gets overwh...","Let's break down the technical side of our work into simple parts:
+
+1. **Knowledge Graphs and Triplestores**: Think of a knowledge graph as a big web of connected facts. Each fact is a 'triple'—like 'Alice knows Bob'—and a triplestore is where these triples are kept.
+
+2. **SPARQL Queries**: SPARQL is the language we use to ask questions about the knowledge graph. It's like SQL but for graphs. For example, 'Who does Alice know?'
+
+3. **Large Language Models (LLMs)**: These are like advanced rob...","Our study was designed to answer the question: 'How do different knowledge representations affect the performance of an LLM in generating SPARQL queries?'
+
+Here's how we set it up:
+
+1. **Knowledge Representations**: We created different ways to organize and represent knowledge. This is like setting up different library arrangements.
+
+2. **LLM Training**: We trained the LLM to understand and work with these different representations. This is like teaching our robot librarian to work in differe..."
+Sumit (@reachsumit.com),https://bsky.app/profile/reachsumit.com/post/3ltya4kszmk2t,2025-07-15T07:48:32+00:00,2025-07-24 08:11:31,Analysis parsing failed,Analysis parsing failed,Analysis parsing failed,Analysis parsing failed
+Sumit (@reachsumit.com),https://bsky.app/profile/reachsumit.com/post/3ltya7niyck2t,2025-07-15T07:48:11+00:00,2025-07-24 08:11:43,"Imagine you're in a library looking for a specific piece of information. Traditionally, you'd first find the relevant books (retrieval) and then read through them to get your answer (reasoning). This is what we call the 'retrieval-then-reasoning' approach. However, what if the librarian could dynamically guide you to the exact shelves and pages you need based on your query? This is the shift we're exploring: from static to dynamic retrieval and reasoning.
+
+Our methodology starts with understa...","Our main discovery is that dynamic frameworks, where retrieval and reasoning are tightly integrated, perform much better than traditional static approaches. This is significant because it means we can build systems that provide more accurate and contextually relevant answers.
+
+We found that systems using transformer models for deep reasoning were particularly effective. These models can understand the nuances of language and generate responses that are almost indistinguishable from human-writ...","Think of our technical approach like building a smart librarian robot. This robot needs to understand your question, find the right books, and then read and summarize the relevant parts to give you an accurate answer.
+
+First, we need a way for the robot to understand your question. This is where natural language processing (NLP) comes in. NLP is like teaching the robot to speak and understand human language. We use techniques like tokenization (breaking down sentences into words) and embeddin...","To design our study, we first identified the key research question: How can we improve the retrieval and reasoning process to make it more dynamic and effective?
+
+We then broke this down into smaller questions, such as: What are the current limitations of static retrieval-then-reasoning approaches? What dynamic frameworks already exist, and how do they work? What are the key components of an effective RAG system?
+
+Our experimental setup involved surveying a wide range of existing RAG-reasonin..."
+"Context Engineering - What it is, and techniques to consider — LlamaIndex - Build Knowledge Assistants over your Enterprise Data",https://www.llamaindex.ai/blog/context-engineering-what-it-is-and-techniques-to-consider?utm_source=socials&utm_medium=li_social,2025-07-13T21:32:38+00:00,2025-07-24 08:12:25,"Imagine you're trying to teach a robot to cook a meal. You can't just tell it 'cook dinner'; you need to give it all the relevant information: the recipe, the ingredients available, the tools in the kitchen, and maybe even some tips on how to use those tools. This is what context engineering is all about, but for AI agents instead of robots.
+
+Our methodology starts with understanding that AI agents need the right context to perform tasks effectively. Here's how we approached it step-by-step:
+...","Our main discovery was that by focusing on context engineering, we could significantly improve the performance of AI agents. Here's why it's significant:
+
+1. **Better Decisions**: By providing the right context, AI agents can make more informed decisions. This is like our detective solving cases more accurately because they have all the relevant clues.
+
+2. **Efficient Use of Resources**: By managing context effectively, we can make the most of the AI's capabilities. This is like our detective...","Think of the AI agent as a detective solving a case. It needs clues (context) to make deductions (decisions). Here's how we technically implemented this:
+
+1. **Context Components**: We identified various components that make up context, like the system prompt, user input, memory, and external information. Each component is like a different type of clue for our detective.
+
+2. **Knowledge Base and Tool Selection**: Before the AI can use information, it needs to know what's available. This is li...","To design our study, we started with the question: 'How can we help AI agents perform tasks more effectively by providing the right context?' Here's how we set up our experiment:
+
+1. **Baseline**: We started by observing AI agents performing tasks with minimal context. This is like watching our detective try to solve a case with barely any clues.
+
+2. **Experimental Groups**: We then tested different context engineering techniques. Each group represented a different approach to providing conte..."
+"The rise of ""context engineering""",https://blog.langchain.com/the-rise-of-context-engineering/,2025-07-12T10:05:14+00:00,2025-07-24 08:12:50,"Imagine you're trying to teach a robot to cook a meal. You can't just tell it 'cook dinner'; you need to give it the right ingredients, tools, and step-by-step instructions. This is what context engineering is all about, but for Large Language Models (LLMs) instead of robots.
+
+1. **Identify the Task**: Start by understanding what you want the LLM to do. This could be anything from answering questions to generating reports.
+
+2. **Gather Context**: Think of context as the ingredients and tools ...","Through our research, we found that context engineering is crucial for building effective LLM applications. Here's why:
+
+1. **Context is King**: Most failures aren't because the LLM isn't smart enough, but because it doesn't have the right context. Giving the LLM the right information and tools is like giving our robot chef the right ingredients and utensils.
+
+2. **Dynamic is Better**: Static prompts just don't cut it. Being able to dynamically pull in context and generate prompts makes our s...","Now, let's look under the hood. Imagine you're building a complex LEGO set. Each piece is a simple component, but together, they create something amazing.
+
+1. **LangGraph**: This is like our LEGO baseplate. It's a framework that lets us control every aspect of our system. With LangGraph, we decide what steps to run, what goes into the LLM, and where to store outputs.
+
+2. **Dynamic Prompts**: Instead of a static prompt, think of a choose-your-own-adventure book. Depending on the context, we dy...","To study context engineering, we set up experiments that compared different approaches to providing context to LLMs.
+
+1. **Baseline**: We started with a simple static prompt as our baseline. This is like giving our robot chef a single recipe and nothing else.
+
+2. **Dynamic Context**: Next, we tested a dynamic system that pulled in context as needed. This is like letting our robot chef adapt to changes in the kitchen.
+
+3. **Tools**: We then added tools that the LLM could use to look up informa..."
+Sumit (@reachsumit.com),https://bsky.app/profile/reachsumit.com/post/3ltnsm55rq227,2025-07-11T08:10:36+00:00,2025-07-24 08:13:02,"Imagine you're in a vast library with millions of books, and you need to answer complex questions by finding relevant information scattered across multiple books. This is similar to the problem we're solving: answering complex questions using a large collection of unstructured documents.
+
+Our approach involves two main steps: retrieving relevant documents and then reasoning through them to find the answer. Here's how we did it:
+
+1. **Retrieval**: Think of this as finding the right books in th...","Our main discoveries are:
+
+1. **Efficiency**: We found that we don't need large-scale fine-tuning to improve our model's performance. By using better prompts and a small set of examples, we could achieve competitive results while reducing the number of searches by nearly half.
+2. **Cost-Effectiveness**: Our approach is not only efficient but also cost-effective. We achieved these results using the same base model and with a small training cost.
+
+These findings are significant because they sho...","To understand our technical approach, let's break it down into simpler parts:
+
+1. **Model Basics**: Think of our model as a smart assistant that can read and understand text. It's built using a type of artificial intelligence called a language model, which is trained to understand and generate human language.
+2. **Retrieval-Augmented Generation (RAG)**: This is like giving our assistant access to a vast library. The assistant retrieves relevant documents (like picking books off the shelves) a...","To design our study, we focused on answering the question: 'Can we improve the efficiency of our model without needing large-scale fine-tuning?'
+
+1. **Benchmarks**: We used popular benchmarks like HotPotQA to test our model's performance. These benchmarks are like standardized tests that help us compare our model's performance with others.
+2. **Baseline Comparison**: We compared our approach with state-of-the-art methods to see how well it performs. This is like comparing our smart assistant'..."
