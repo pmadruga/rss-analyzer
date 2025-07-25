@@ -1,0 +1,163 @@
+title,url,publication_date,processed_date,methodology_detailed,key_findings,technical_approach,research_design
+Can Unconfident LLM Annotations Be Used for Confident Conclusions?,https://arxiv.org/html/2408.15204v2,2025-07-24T12:36:13+00:00,2025-07-25 08:07:06,"Imagine you're trying to solve a puzzle, but some of the pieces are a bit faded and hard to see. These faded pieces are like 'unconfident' annotations from Large Language Models (LLMs)—they're not very clear or reliable. Our goal is to figure out if we can still use these faded pieces to complete the puzzle confidently.
+
+Here's how we approached it step-by-step:
+
+1. **Identify the Problem**: We started by recognizing that LLMs often produce annotations with varying levels of confidence. Some ...","Our main discovery was that even unconfident annotations from LLMs can be valuable. Here's what we found and why it's important:
+
+1. **Hidden Value**: Low-confidence annotations often contain useful information that can complement high-confidence ones. It's like finding that even faded puzzle pieces can help complete the picture.
+
+2. **Improved Accuracy**: By combining low and high-confidence annotations, we achieved more accurate conclusions than using high-confidence annotations alone. This...","Think of our technical approach like building a house. You need a strong foundation and the right tools to put everything together.
+
+1. **Foundation (Data Collection)**: We started by collecting annotations from LLMs. This is like gathering all the materials you need to build your house.
+
+2. **Sorting Materials (Confidence Levels)**: We used statistical methods to categorize these annotations based on their confidence levels. Imagine sorting your materials into piles of strong bricks (high co...","Designing our study was like planning a road trip. You need a clear destination, a good map, and the right stops along the way.
+
+1. **Destination (Research Question)**: Our goal was to determine if unconfident LLM annotations could be used to draw confident conclusions. This is like deciding where you want to go on your trip.
+
+2. **Map (Hypothesis)**: We hypothesized that low-confidence annotations contain valuable information that can be leveraged. Think of this as having a map that guides y..."
+Maria Antoniak (@mariaa.bsky.social),https://bsky.app/profile/mariaa.bsky.social/post/3lumkyphrok2f,2025-07-23T15:44:26+00:00,2025-07-25 08:07:36,"Imagine you're trying to teach a robot to understand something subjective, like whether a painting is beautiful or not. The robot can learn from examples, but it might not always get it right because beauty is in the eye of the beholder. This is the fundamental problem we're tackling: how can we improve the robot's (or in our case, a Large Language Model's) understanding of subjective tasks?
+
+Our approach is like having a teacher guide the robot. Here's how we did it step-by-step:
+
+1. **Ident...","Our main discoveries were:
+
+1. **Improved Performance**: The LLM's performance on subjective tasks significantly improved with human-assisted annotation. This shows that having a 'teacher' helps the robot understand complex, subjective concepts better.
+
+2. **Efficient Learning**: The active learning framework allowed the LLM to focus on areas it was unsure about, making the learning process more efficient. This is like a student asking questions about topics they find difficult, rather than r...","Now, let's dive into the technical side. Think of our LLM as a complex machine that can learn from data. Here's how we implemented our approach:
+
+1. **Data Collection**: We gathered data for our subjective tasks. This is like collecting practice problems for our robot to solve.
+
+2. **LLM Initial Training**: We used a pre-trained LLM and fine-tuned it on our task-specific data. This is like giving our robot some basic knowledge about the tasks.
+
+3. **Active Learning Framework**: We set up an a...","To design our study, we followed these steps:
+
+1. **Define Research Question**: Our main question was 'Can human-assisted annotation improve LLM's performance on subjective tasks?' This guided our entire study.
+
+2. **Select Tasks**: We chose tasks that are known to be subjective, ensuring our research question was relevant.
+
+3. **Baseline Measurement**: We started by measuring the LLM's baseline performance on these tasks. This gave us a starting point to compare against.
+
+4. **Human-Assisted..."
+Maria Antoniak (@mariaa.bsky.social),https://bsky.app/profile/mariaa.bsky.social/post/3lumkyphpq22f,2025-07-23T15:44:12+00:00,2025-07-25 08:07:55,"Imagine you're trying to solve a puzzle, but some of the pieces are a bit faded and hard to see. This is similar to the problem we're tackling: can we use uncertain information (unconfident LLM annotations) to draw confident conclusions? Here's how we approached it step-by-step:
+
+1. **Identify the Problem**: We start with Large Language Models (LLMs) that give us annotations, but these annotations aren't always confident. It's like having a friend who sometimes guesses answers but isn't sure ...","Our main discovery was that, yes, unconfident LLM annotations can be used to draw confident conclusions! It's like finding out that even with some faded pieces, you can still complete the puzzle.
+
+We found that by combining enough uncertain annotations, the overall picture became clearer. This is significant because it means we can use imperfect data to make reliable decisions, which is crucial in fields where perfect data is hard to come by.
+
+This connects back to our original problem by sho...","Think of our technical approach like building a house. Each part has a specific job and works together to create a stable structure.
+
+1. **Data Collection**: We used APIs to gather annotations from LLMs. This is like collecting the bricks for our house.
+
+2. **Uncertainty Quantification**: We used statistical methods to measure how uncertain each annotation was. Imagine measuring how sturdy each brick is.
+
+3. **Aggregation Algorithms**: We developed algorithms to combine these uncertain annota...","Designing our study was like planning a road trip. Each choice was made to ensure we reached our destination safely and efficiently.
+
+1. **Experimental Setup**: We decided to use a variety of LLMs to get a wide range of annotations. This is like choosing different routes to see which is best.
+
+2. **Control Group**: We included a control group of confident annotations to compare against our uncertain ones. Think of this as having a map with clear directions to compare against our uncertain rou..."
+Sung Kim (@sungkim.bsky.social),https://bsky.app/profile/sungkim.bsky.social/post/3luj3kikh6c2s,2025-07-21T23:33:12+00:00,2025-07-25 08:08:20,"Imagine you're trying to build a complex LEGO city, but you don't have instructions. You need to figure out how each piece fits together to create something functional and impressive. That's essentially what we're doing with our research on Kimi K2.
+
+Our core problem is understanding how to create an efficient and scalable AI system that can handle large-scale data and make intelligent decisions. Here's how we approached it:
+
+1. **Identifying the Building Blocks**: Just like identifying all t...","Our main discoveries can be explained simply:
+
+1. **Efficient Data Processing**: We found that MuonClip significantly improves data processing efficiency. It's like discovering a new tool that makes your work much easier and faster.
+
+2. **Adaptable Data Pipeline**: Our agentic data pipeline can handle large-scale data and adapt to different types of data seamlessly. This is like having a versatile tool that can handle multiple tasks efficiently.
+
+3. **Improved Decision Making**: The reinforce...","Let's break down the technical implementation using simple analogies and first principles:
+
+1. **MuonClip Algorithm**: Think of MuonClip as a sophisticated filter. Just like a coffee filter separates grounds from water, MuonClip helps separate useful data from noise. It uses advanced mathematical models to process and understand data more efficiently.
+
+2. **Agentic Data Pipeline**: Imagine a smart conveyor belt in a factory. This conveyor belt can adjust its speed and direction based on the i...","Designing our study was like planning a complex experiment. Here's how we did it:
+
+1. **Defining the Research Question**: Our main question was, 'How can we create an efficient and scalable AI system that handles large-scale data and makes intelligent decisions?' This guided all our decisions.
+
+2. **Choosing the Components**: We selected MuonClip, agentic data pipelines, and reinforcement learning based on their potential to address our research question. Each component was chosen for its spe..."
+The Big LLM Architecture Comparison,https://sebastianraschka.com/blog/2025/the-big-llm-architecture-comparison.html,2025-07-20T13:35:19+00:00,2025-07-25 08:08:51,"Alright, let's break this down step-by-step, starting from the basics. Imagine you're trying to understand how different recipes (architectures) affect the taste (performance) of a cake (LLM). You can't just look at the final cake; you need to understand each ingredient and how it's prepared.
+
+First, I gathered a bunch of recipes (LLM architectures) that have been popular from 2019 to 2025. These include models like GPT-2, DeepSeek, Llama, and others. I wanted to see how the ingredients (tech...","So, what did I find? First, while the core architecture of LLMs hasn't changed dramatically since GPT-2, there have been significant refinements. These refinements, like moving from MHA to GQA or MLA, and introducing MoE layers, have made models more efficient and capable.
+
+Second, normalization layers play a crucial role in stabilizing training. Placing them before or after certain components can have a big impact on how well the model learns.
+
+Third, positional embeddings aren't always nece...","Let's dive into the technical details, but I'll keep it simple. Imagine you're building a complex machine (LLM) from basic parts (algorithms and frameworks).
+
+First, let's talk about attention mechanisms. Think of attention as a spotlight that highlights important information. In Multi-Head Attention (MHA), you have multiple spotlights (heads) each focusing on different parts of the data. This helps the model understand complex relationships, but it can be computationally expensive.
+
+Grouped-...","Designing this study was like planning a big experiment to see which cake recipe (LLM architecture) works best. First, I had to decide which recipes to include. I chose models that have been influential or represent significant advancements from 2019 to 2025.
+
+Next, I had to decide what aspects of the recipes to focus on. Since training techniques and datasets vary widely and aren't well-documented, I chose to focus on architectural developments. This is like focusing on the ingredients and c..."
+Sumit (@reachsumit.com),https://bsky.app/profile/reachsumit.com/post/3lty7qvirds2t,2025-07-15T07:49:27+00:00,2025-07-25 08:09:42,"Imagine you're trying to teach a robot to find information in a vast library. The robot needs to understand not just where to look, but also how to ask the right questions to get the information it needs. This is similar to what we're doing with Large Language Models (LLMs) in our research.
+
+Our fundamental problem is how to make LLMs better at finding and using information from complex databases, called knowledge graphs. These graphs are like intricate maps of information, with nodes represe...","Our main discoveries were:
+
+1. **Complexity Matters**: We found that the complexity of the knowledge representation significantly affects the LLM's performance. Simple representations were easier for the LLM to handle, but they didn't always provide enough detail. Complex representations were harder to handle but provided more accurate information.
+
+2. **Balance is Key**: There's a trade-off between simplicity and detail. The best performance came from representations that were detailed enoug...","To understand our technical approach, let's break it down into simpler components:
+
+1. **Knowledge Graphs**: Think of a knowledge graph as a big network of information. Each node is a piece of data, and each edge is a relationship between two pieces of data. For example, a node could be 'Albert Einstein,' and an edge could be 'was born in' connecting to the node 'Ulm, Germany.'
+
+2. **SPARQL Queries**: SPARQL is like a special language used to ask questions about the knowledge graph. It's simi...","To design our study, we followed these steps:
+
+1. **Define the Research Question**: Our main question was, 'How do different knowledge representations affect the performance of LLMs in querying knowledge graphs?'
+
+2. **Select Knowledge Representations**: We chose a variety of knowledge representations, ranging from simple to complex. This allowed us to test how well the LLM could handle different levels of detail and structure.
+
+3. **Develop the Agentic RAG System**: We built a system where t..."
+Sumit (@reachsumit.com),https://bsky.app/profile/reachsumit.com/post/3ltya4kszmk2t,2025-07-15T07:48:32+00:00,2025-07-25 08:10:05,"Imagine you're trying to find a specific book in a vast library, but instead of shelves, the books are connected in a complex web of relationships, like a spider's web. This is similar to how data is structured in knowledge graphs. Traditional methods of finding information (like following one thread of the web at a time) can get confused and lost, especially when guided by systems that might make mistakes or 'hallucinate' wrong information.
+
+Our approach, GraphRunner, breaks down this comple...","Our main discovery is that by breaking down the graph-based retrieval process into planning, verification, and execution, we can significantly improve both the accuracy and efficiency of information retrieval. This is important because it means we can find the right information more quickly and with fewer mistakes, even in complex, interconnected datasets.
+
+Specifically, we found that GraphRunner outperforms existing methods by 10-50% in terms of accuracy. This means we're much better at find...","Think of our technical approach like building a sophisticated navigation system for our library web. Here's how we did it:
+
+1. **Graph Representation**: We first represent our data as a graph, where nodes are like books and edges are like the threads connecting them. This structure helps us understand the relationships between different pieces of information.
+
+2. **Traversal Actions**: We define a set of high-level actions that allow us to move through the graph in multiple steps at once. Thi...","To design our study, we started with the fundamental problem of errors and hallucinations in graph-based retrieval. We knew that existing methods struggled with these issues, so we wanted to create a new approach that addressed them directly.
+
+We chose a three-stage framework because it allowed us to tackle the problem step by step. By separating planning, verification, and execution, we could focus on improving each part of the process individually. This modular approach also made it easier ..."
+Sumit (@reachsumit.com),https://bsky.app/profile/reachsumit.com/post/3ltya7niyck2t,2025-07-15T07:48:11+00:00,2025-07-25 08:10:24,"Imagine you're in a library looking for a specific book, but you don't know exactly where it is. Traditionally, you'd ask the librarian (static retrieval), get the book, and then read it to find your answers (reasoning). This is how many systems work: they retrieve information first, then reason about it. But what if the librarian could understand your question, search for the book, and even help you read and understand it? This is the shift to dynamic frameworks we're exploring.
+
+Our methodo...","Our main discovery is that dynamic frameworks, where retrieval and reasoning work together, are much better at answering complex questions. It's like having a helpful librarian who understands your question and finds the right book, instead of just handing you something from the shelf.
+
+We found that newer methods using dense vectors for retrieval and deep learning for reasoning outperform older, static methods. This is significant because it means we can build smarter, more efficient systems...","Think of our technical approach like building a advanced robot librarian. First, we need to give it eyes to see (retrieval algorithms) and a brain to think (reasoning algorithms).
+
+1. **Retrieval Algorithms**: These are like the robot's eyes scanning the shelves. Traditional methods use simple keywords, like looking for a specific word on the book spine. Newer methods use dense vectors, like looking for complex patterns on the book cover. We broke down these algorithms into their basic math a...","To design our study, we first defined our research question: How have RAG systems evolved from static to dynamic frameworks, and what makes the dynamic ones better?
+
+1. **Literature Review**: We started by reading lots of papers and articles about RAG systems, like exploring a big library of research. This helped us understand what's already been done and identify the gaps.
+
+2. **Categorization**: We then sorted these systems into categories based on their retrieval and reasoning methods, lik..."
+"Context Engineering - What it is, and techniques to consider — LlamaIndex - Build Knowledge Assistants over your Enterprise Data",https://www.llamaindex.ai/blog/context-engineering-what-it-is-and-techniques-to-consider?utm_source=socials&utm_medium=li_social,2025-07-13T21:32:38+00:00,2025-07-25 08:11:06,"Imagine you're trying to teach a robot to cook a meal. You can't just tell it 'cook dinner'; you need to give it all the relevant information step-by-step. This is similar to what we do with AI agents—we provide them with the context they need to perform tasks effectively. Our research focuses on 'context engineering,' which is about carefully selecting and organizing the information an AI agent needs to complete a task.
+
+Here's how we approached it:
+
+1. **Identifying the Problem**: We notice...","Our main discoveries highlight the significance of context engineering in building effective AI agents. Here's what we found:
+
+1. **Context is Crucial**: Providing the right context is essential for AI agents to perform tasks accurately. This is like giving a chef all the necessary ingredients and tools to cook a meal.
+
+2. **Context Engineering vs. Prompt Engineering**: While prompt engineering focuses on instructions, context engineering goes beyond that by carefully curating the information...","Think of an AI agent as a complex machine that needs specific inputs to produce the desired outputs. Our technical approach involved breaking down this machine into its fundamental components and optimizing each part.
+
+1. **Context Components**: We identified the key components of context, such as system prompts, user input, memory, and information from knowledge bases. Each component is like a different part of the machine, contributing to the overall function.
+
+2. **Context Selection and Or...","To design our study, we followed a systematic approach to understand and address the challenges in context engineering. Here's how we did it:
+
+1. **Literature Review**: We started by reviewing existing work on prompt engineering and context engineering. This helped us understand the current state of the field and identify gaps that our research could fill. Think of it like reading cookbooks to understand different cooking techniques before developing your own recipe.
+
+2. **Defining the Resear..."
+"The rise of ""context engineering""",https://blog.langchain.com/the-rise-of-context-engineering/,2025-07-12T10:05:14+00:00,2025-07-25 08:11:32,"Imagine you're trying to teach a robot to cook a meal. The robot needs clear instructions, the right ingredients, and the necessary tools. If any of these are missing or poorly communicated, the robot will struggle. This is the core idea behind context engineering for Large Language Models (LLMs).
+
+1. **Identify the Problem**: LLMs often fail because they don't have the right information or tools. Just like the robot, they need clear, complete instructions and the right resources to perform t...","The main discovery is that context engineering is crucial for the performance of LLM-based systems. Here's why it's significant:
+
+1. **Context is King**: Providing the right context is more important than clever prompt wording. It's like giving the chef the right ingredients and tools rather than just a fancy recipe.
+
+2. **Dynamic Systems Work Better**: Static prompts are limiting. Dynamic systems that adapt to new information perform better, like a chef who can improvise based on available i...","Let's break down the technical side of context engineering using simple analogies and first principles.
+
+1. **Building the System**: Think of the system as a kitchen where the LLM is the chef. The kitchen needs to be well-stocked with ingredients (information) and tools (APIs, databases).
+
+2. **Dynamic Logic**: The kitchen needs a dynamic menu that changes based on available ingredients. Similarly, the system must dynamically construct prompts based on incoming data.
+
+3. **Information Flow**:...","To design this study, we focused on understanding why LLM-based systems fail and how to improve their performance.
+
+1. **Problem Identification**: We started by identifying that LLMs often fail due to lacking the right context or tools. This is like realizing the chef can't cook without the right ingredients or utensils.
+
+2. **Hypothesis**: We hypothesized that providing complete and structured context would improve performance. This is like thinking that giving the chef everything they need ..."
