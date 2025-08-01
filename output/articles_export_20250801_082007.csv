@@ -1,0 +1,129 @@
+title,url,publication_date,processed_date,methodology_detailed,key_findings,technical_approach,research_design
+Sumit (@reachsumit.com),https://bsky.app/profile/reachsumit.com/post/3lvaedjt25c2e,2025-07-31T08:25:20+00:00,2025-08-01 08:10:46,"Imagine you have a powerful tool, a Large Language Model (LLM), that's great at understanding and generating text. However, when you want to use this tool for tasks like clustering, classification, or retrieval, you need a single, compact representation of the text—an embedding. The problem is, LLMs generate representations for each word (token), and simply combining these into one embedding loses important information. Our goal is to adapt LLMs to create effective text embeddings without usi...","Our main discoveries were:
+
+1. **Effective Embeddings**: By combining prompt engineering and contrastive fine-tuning, we could create state-of-the-art text embeddings for clustering tasks. This means our embeddings capture the text's meaning really well.
+
+2. **Resource Efficiency**: Using LoRA for fine-tuning made our approach resource-efficient. This is important because large models can be expensive to fine-tune.
+
+3. **Model Behavior**: Our analysis showed that fine-tuning makes the model f...","Now, let's dive into the technical details. Our LLM is like a big, complex machine with many gears (parameters). Here's how we made it work for our task:
+
+1. **LoRA (Low-Rank Adaptation)**: Instead of fine-tuning all the gears, which is resource-intensive, we used LoRA. Think of it like adding a few extra, smaller gears that can change the machine's behavior without modifying the original gears much. This makes it resource-efficient.
+
+2. **Contrastive Learning**: We created synthetic positive...","In designing our study, we considered the following:
+
+1. **Baseline Models**: We started with pre-trained, decoder-only LLMs. These models are powerful but not specifically designed for text embeddings.
+
+2. **Tasks and Datasets**: We focused on the English clustering track of the Massive Text Embedding Benchmark (MTEB). This gave us a standard to measure our embeddings against.
+
+3. **Evaluation Metrics**: We used standard clustering metrics to evaluate our embeddings. This helped us quantify ..."
+HALoGEN: Fantastic LLM Hallucinations and Where to Find Them,https://arxiv.org/abs/2501.08292,2025-07-31T00:00:35+00:00,2025-08-01 08:11:31,"Imagine you have a friend who tells amazing stories, but sometimes they mix up facts or make things up. This is similar to what happens with large language models (LLMs)—they generate impressive text but sometimes produce 'hallucinations,' which are statements that don't align with reality or the given context. Our goal was to understand and measure these hallucinations.
+
+Here's how we approached it step-by-step:
+
+1. **Identify the Problem**: We started by recognizing that LLMs can generate i...","Our main discoveries were eye-opening:
+
+1. **Prevalence of Hallucinations**: Even the best LLMs produce a lot of hallucinations. In some areas, up to 86% of the generated facts were incorrect. This is like finding out that even the best storytellers make mistakes frequently.
+
+2. **Error Types**: We found that hallucinations can be caused by different issues, such as misremembering training data (Type A), learning wrong information (Type B), or making things up (Type C). Understanding these ty...","To understand our technical approach, let's break it down into simpler parts:
+
+1. **Prompt Creation**: We designed prompts that cover a wide range of topics. These prompts are like test questions that challenge the LLMs in different ways.
+
+2. **Atomic Units**: We broke down the LLM's responses into 'atomic units'—small, manageable pieces of information. This is like breaking a story into individual sentences to check each one for accuracy.
+
+3. **Verifiers**: For each topic, we created verifie...","Designing our study involved careful planning:
+
+1. **Diverse Prompts**: We chose a wide range of prompts to cover different scenarios where LLMs might be used. This ensures our findings are broadly applicable.
+
+2. **High-Quality Knowledge Sources**: We selected reliable sources for our verifiers to ensure accurate fact-checking. This is like using trusted textbooks to verify information.
+
+3. **Automated Verification**: We opted for automated verifiers to make the process scalable and efficien..."
+Language Model Re-rankers are Fooled by Lexical Similarities,https://arxiv.org/abs/2502.17036,2025-07-29T22:40:29+00:00,2025-08-01 08:12:09,"Imagine you're trying to find the best answers to questions from a large pile of documents. Traditionally, people use a method called BM25, which is like a librarian who matches keywords in your question to keywords in the documents. More recently, language model (LM) re-rankers have been introduced. These are like smart assistants who not only match keywords but also understand the meaning and context of your question. They're more sophisticated but also more resource-intensive.
+
+Our researc...","Our main discoveries were:
+
+1. **Performance Issues**: LM re-rankers struggled to outperform the simple BM25 baseline, especially on the DRUID dataset. This was surprising because we expected the more sophisticated models to do better.
+
+2. **Lexical Dissimilarities**: Using our new separation metric, we found that re-rankers often made mistakes when the words in the query and the answers were not very similar. This means they were sometimes fooled by how words looked rather than what they mea...","To understand our technical approach, let's break it down into simple components:
+
+1. **BM25 Baseline**: BM25 is like a simple search engine that ranks documents based on how often the query words appear in them. It's fast and efficient but doesn't understand the meaning of the words.
+
+2. **Language Model Re-rankers**: These are more advanced models that use neural networks to understand the semantic meaning of the query and the documents. They can capture nuances and relationships between wo...","Our study was designed to answer the question: Are LM re-rankers always better than BM25? Here's how we set it up:
+
+1. **Dataset Selection**: We chose three datasets with different characteristics to ensure our findings were robust and not specific to one type of data.
+
+2. **Model Selection**: We selected six different LM re-rankers to cover a range of approaches and see if any particular model stood out.
+
+3. **Baseline Comparison**: We used BM25 as our baseline because it's a well-establishe..."
+From Citations to Criticality: Predicting Legal Decision Influence in the Multilingual Swiss Jurisprudence,https://arxiv.org/abs/2410.13460,2025-07-28T12:05:48+00:00,2025-08-01 08:13:49,"Imagine you're in a hospital emergency room. The staff needs to quickly decide which patients to treat first based on the severity of their conditions. Similarly, court systems around the world are overwhelmed with cases and need a way to prioritize them effectively. This is the core problem we're tackling: how to predict which legal decisions will have the most influence, so courts can focus on the most critical cases first.
+
+To solve this, we created a new dataset called the Criticality Pre...","Our main discovery was that smaller, fine-tuned models consistently outperformed larger language models in predicting case criticality. This is significant because it shows that for highly specific tasks like ours, having a large, well-labeled dataset can be more valuable than using a large, general-purpose model.
+
+In our emergency room analogy, it's like finding out that junior doctors who have been specifically trained in our hospital are better at predicting which patients need immediate a...","Now, let's dive into the technical details. Imagine you're teaching a computer to predict which patients in an emergency room need immediate attention. Here's how we did it:
+
+1. **Models**: We used different types of models, or 'doctors', to make our predictions:
+   - **Smaller Fine-Tuned Models**: These are like junior doctors who have been specifically trained to recognize critical patients in our hospital.
+   - **Large Language Models**: These are like highly experienced doctors who have s...","To design our study, we followed these steps:
+
+1. **Problem Identification**: We started by identifying the problem of overwhelmed court systems and the need for effective case prioritization.
+
+2. **Data Requirements**: We decided we needed a large, labeled dataset to train and evaluate our models. This is like deciding we need lots of patient records to train our 'doctors'.
+
+3. **Labeling Strategy**: We chose a two-tier labeling system to capture both obvious criticality (LD-Label) and more ..."
+Can Unconfident LLM Annotations Be Used for Confident Conclusions?,https://arxiv.org/html/2408.15204v2,2025-07-24T12:36:13+00:00,2025-08-01 08:14:40,Analysis parsing failed,Analysis parsing failed,Analysis parsing failed,Analysis parsing failed
+Maria Antoniak (@mariaa.bsky.social),https://bsky.app/profile/mariaa.bsky.social/post/3lumkyphrok2f,2025-07-23T15:44:26+00:00,2025-08-01 08:15:32,"Imagine you're trying to teach a robot to understand something subjective, like whether a painting is beautiful. You quickly realize that beauty is in the eye of the beholder—it's subjective and varies from person to person. This is the fundamental problem we're tackling: how can we use machines to help with tasks that are inherently subjective?
+
+Our approach is like having a helper who suggests answers, but you make the final call. Here's how we did it step-by-step:
+
+1. **Identify the Subjec...","So, what did we find?
+
+1. **LLMs Can Help, But Aren't Perfect**: The LLM was good at suggesting sentiments, but it wasn't always right. It's like a student who's good at guessing answers, but sometimes misses the mark.
+
+2. **Humans Still Know Best**: Our human annotators were better at judging subjective tasks than the LLM. They could understand context and nuance better.
+
+3. **Together, They're Better**: The combination of LLM and human was more efficient than a human alone. The LLM could ma...","Now, let's break down the technical side of our work, using simple analogies and first principles:
+
+1. **Large Language Models (LLMs)**: Think of an LLM as a giant book that's read millions of other books. It's trained to predict the next word in a sentence, which helps it understand context and meaning. For our task, we used this ability to suggest sentiments.
+
+2. **Fine-Tuning**: Imagine you're teaching a friend to play a new song on the guitar. They already know how to play guitar (like ou...","Designing our study was like planning a road trip. We needed to know where we were going (our research question) and how we were going to get there (our methods).
+
+1. **Research Question**: Our question was simple: can LLMs help with subjective tasks, and if so, how much do humans still need to be involved?
+
+2. **Dataset Choice**: We chose a dataset of tweets for our subjective task. This is like choosing the scenic route for our road trip—it's interesting and challenging.
+
+3. **Experimental ..."
+Maria Antoniak (@mariaa.bsky.social),https://bsky.app/profile/mariaa.bsky.social/post/3lumkyphpq22f,2025-07-23T15:44:12+00:00,2025-08-01 08:16:09,"Imagine you're trying to solve a puzzle, but some of the pieces are a bit faded and hard to see. That's similar to the problem we're tackling in our research. We want to know if we can still solve the puzzle (make confident conclusions) even when some pieces (LLM annotations) are not very clear (unconfident).
+
+Here's how we approached it step-by-step:
+
+1. **Identify the Puzzle Pieces**: First, we needed to gather all the pieces, both clear and faded. In our case, these are annotations from La...","Our main discovery was that, yes, we can still make confident conclusions even with some unconfident LLM annotations. It's like completing a puzzle with a few faded pieces and still being able to see the full picture.
+
+This is significant because it means we don't need perfect data to make reliable conclusions. In real-world applications, data is often imperfect, so our findings show that we can still work with it effectively.
+
+This connects back to our original problem by providing a solutio...","Think of our technical approach like building a house. Each part of the house has a specific function and contributes to the overall structure.
+
+1. **Foundation (Data Collection)**: We started by collecting a large dataset of LLM annotations. This is like laying the foundation of our house, ensuring it's strong and stable.
+
+2. **Walls (Confidence Measurement)**: Next, we measured the confidence levels of these annotations. This is akin to building the walls of the house, providing structure a...","Designing our study was like planning a road trip. We needed a clear destination (research question) and a well-thought-out route (methodology) to get there.
+
+1. **Destination (Research Question)**: Our goal was to determine if unconfident LLM annotations could be used for confident conclusions. This is like deciding where we want to go on our road trip.
+
+2. **Route (Methodology)**: We chose our methods based on what would best answer our research question. Collecting a large dataset ensured ..."
+Sung Kim (@sungkim.bsky.social),https://bsky.app/profile/sungkim.bsky.social/post/3luj3kikh6c2s,2025-07-21T23:33:12+00:00,2025-08-01 08:17:00,"Imagine you're trying to build a highly intelligent robot that can learn from its environment and make decisions on its own. This is similar to what we're doing with Kimi K2, but in the digital world. Our core problem is creating an AI system that can understand and interact with complex data efficiently.
+
+1. **Identify the Problem**: We need an AI that can handle large-scale data and make decisions like a human would. Think of it like teaching a child to read and understand books, but instea...","Our main discoveries are:
+
+1. **Efficient Data Processing**: We found that MuonClip significantly improves the AI's ability to understand and process different types of data. This is like giving the AI superpowers to see and hear better.
+
+2. **Scalable Data Handling**: Our large-scale agentic data pipeline can handle massive amounts of data efficiently. This means our AI can learn from more data, faster, which is crucial for its improvement.
+
+3. **Effective Learning**: The reinforcement learn...","Let's break down the technical components of Kimi K2 into simpler parts:
+
+1. **MuonClip**: Imagine MuonClip as a sophisticated translator. It takes in raw data (like text, images, or audio) and converts it into a format the AI can understand. We use advanced algorithms to ensure this translation is accurate and efficient.
+
+2. **Data Pipeline**: Think of the data pipeline as a series of conveyor belts in a factory. Each belt (or stage) processes the data in a specific way before passing it to ...","Designing our study was like planning a complex journey:
+
+1. **Define Objectives**: Our goal was to create an AI that can understand and interact with complex data efficiently. Think of this as our destination.
+
+2. **Choose Tools and Techniques**: We selected MuonClip for data understanding, a large-scale data pipeline for handling volume, and reinforcement learning for improvement. These are like our modes of transport.
+
+3. **Experimental Setup**: We set up experiments to test each component..."
