@@ -1,0 +1,131 @@
+title,url,publication_date,processed_date,methodology_detailed,key_findings,technical_approach,research_design
+Context Engineering for AI Agents: Lessons from Building Manus,https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus,2025-08-03T09:26:34+00:00,2025-08-04 08:07:40,"At the start of the Manus project, we faced a critical decision: should we train an end-to-end agentic model using open-source foundations, or build an agent on top of the in-context learning abilities of frontier models? This decision was pivotal because it would determine how quickly we could iterate and improve our AI agent.
+
+In the early days of NLP, models like BERT required fine-tuning and evaluation before they could be applied to new tasks. This process was slow, taking weeks per iter...","Our main discoveries and results can be summarized as follows:
+
+1. **KV-Cache Hit Rate**: Improving the KV-cache hit rate is crucial for reducing latency and cost in production-stage AI agents. By keeping the prompt prefix stable, making the context append-only, and marking cache breakpoints explicitly, we significantly improved the agent's performance.
+
+2. **Context-Aware State Machine**: Using a state machine to manage tool availability and masking token logits during decoding proved to be ...","Our technical implementation revolved around several core principles:
+
+1. **KV-Cache Optimization**: To improve the KV-cache hit rate, we kept our prompt prefix stable, made our context append-only, and marked cache breakpoints explicitly when needed. For self-hosted models, we ensured prefix/prompt caching was enabled and used techniques like session IDs to route requests consistently across distributed workers.
+
+2. **Context-Aware State Machine**: Instead of dynamically adding or removing t...","Our research design was driven by the need to create a flexible, adaptable, and efficient AI agent that could handle complex tasks in real-world scenarios. We chose to focus on context engineering, which allowed us to ship improvements quickly and keep our product adaptable to underlying model advancements. Our experimental setup involved several key steps:
+
+1. **Identifying Critical Metrics**: We identified the KV-cache hit rate as the most critical metric for a production-stage AI agent and..."
+SemRAG: Semantic Knowledge-Augmented RAG for Improved Question-Answering,https://arxiv.org/abs/2507.21110,2025-08-01T17:54:11+00:00,2025-08-04 08:08:09,"Imagine you're trying to find answers to specific questions using a large book, but the book is so big and complex that it's hard to find the right information quickly. This is similar to the challenge we face with large language models (LLMs) when they need to answer questions in specialized fields. Our goal was to make this process more efficient and accurate without spending too much time or resources.
+
+Here's how we approached it step-by-step:
+
+1. **Identify the Problem**: LLMs struggle w...","Our main discoveries were:
+
+1. **Improved Retrieval Accuracy**: By using semantic chunking and knowledge graphs, we significantly improved the relevance and correctness of the information retrieved. This means the model was better at finding the right answers to questions.
+
+2. **Efficiency Without Fine-Tuning**: We showed that it's possible to enhance the performance of LLMs in domain-specific tasks without extensive fine-tuning. This makes our approach more practical and scalable.
+
+3. **Opti...","Let's break down the technical implementation into simple parts:
+
+1. **Sentence Embeddings**: Think of sentence embeddings as converting sentences into numerical representations that capture their meaning. We used pre-trained models to generate these embeddings, which helped us compare sentences based on their semantic similarity.
+
+2. **Cosine Similarity**: This is like measuring the angle between two vectors. If the angle is small, the vectors (or sentences, in our case) are similar. We used...","To design our study, we followed these steps:
+
+1. **Dataset Selection**: We chose datasets that are relevant to domain-specific tasks, such as MultiHop RAG and Wikipedia. These datasets allowed us to test our approach in different contexts.
+
+2. **Baseline Comparison**: We compared our method, SemRAG, against traditional RAG methods to see how well it performs. This helped us understand the improvements we made.
+
+3. **Experimental Setup**: We set up experiments to test different aspects of our..."
+Sumit (@reachsumit.com),https://bsky.app/profile/reachsumit.com/post/3lvcnilnqqk2d,2025-08-01T11:29:02+00:00,2025-08-04 08:08:28,"Imagine you have a big book of language rules (our decoder-only LLM) that you use to understand and generate text. The book has a special rule: you can only look at the past words to understand the current word (causal attention). This is great for generating text but not so good for understanding the meaning of a whole sentence at once (embedding tasks).
+
+Our goal is to make this book better at embedding tasks without changing its rules too much. Here's how we did it step-by-step:
+
+1. **Pre-...","Our main discovery is that by using the Causal2Vec approach, we can significantly improve the performance of decoder-only LLMs on embedding tasks. This is important because it means we can make these models better at understanding the meaning of text without changing their original design or adding a lot of extra computational costs.
+
+We found that Causal2Vec achieves state-of-the-art performance on the Massive Text Embeddings Benchmark (MTEB) among models trained solely on publicly available...","Let's break down the technical implementation into simple components:
+
+1. **Lightweight BERT-style model**: This is a small, efficient model that takes the input text and produces a single Contextual token. It's like a mini-librarian that quickly scans the text and gives you a summary.
+
+2. **Prepending the Contextual token**: We simply add this summary token to the beginning of the input sequence for the LLM. This is like placing a cheat sheet at the start of the text.
+
+3. **Concatenating las...","To design our study, we started with the problem of improving decoder-only LLMs for embedding tasks without altering their architecture or adding significant computational overhead. We knew that these models have a 'look at the past' rule (causal attention), so we needed a way to give them more context without breaking this rule.
+
+We decided to use a lightweight BERT-style model to create a summary token (Contextual token) that captures the essence of the text. We then prepend this token to t..."
+Multiagent AI for generating chain-of-thought training data,https://www.amazon.science/blog/multiagent-ai-for-generating-chain-of-thought-training-data,2025-08-01T09:48:28+00:00,2025-08-04 08:09:00,Analysis parsing failed,Analysis parsing failed,Analysis parsing failed,Analysis parsing failed
+ARES: An Automated Evaluation Framework for Retrieval-Augmented Generation Systems,https://arxiv.org/html/2311.09476v2,2025-07-31T08:41:54+00:00,2025-08-04 08:09:21,"Imagine you're in a library trying to find information for a report. You have two options: search through books yourself (retrieval) or ask a librarian who knows where to find the info (generation). Retrieval-Augmented Generation (RAG) systems combine these methods: they retrieve relevant info and generate answers based on it. Our goal was to evaluate how well these systems work automatically.
+
+1. **Identify the Problem**: RAG systems are complex, and evaluating them manually is time-consumin...","After running many RAG systems through ARES, we found:
+
+1. **Accuracy Varied Widely**: Some systems were great at finding exact info, others weren't. It was like having some librarians who always find the right book and others who don't.
+2. **Relevance Was Tricky**: Even if a system was accurate, it sometimes gave irrelevant info. Like a librarian who gives you a book in the wrong language.
+3. **Efficiency Matters**: Faster systems weren't always better. Sometimes, a quick but inaccurate answ...","Think of ARES as a automated judge for RAG systems. Here's how we built it:
+
+1. **Modular Design**: We broke down ARES into smaller parts, each with a specific job:
+   - **Data Loader**: Loads our dataset of questions and answers.
+   - **RAG Interface**: Connects to the RAG system being tested.
+   - **Evaluator**: Measures the RAG system's performance using our metrics.
+   - **Reporter**: Summarizes the results in an easy-to-understand format.
+
+2. **Metrics Calculation**: For each question, A...","To design our study, we followed these steps:
+
+1. **Research Question**: We asked, 'How can we evaluate RAG systems automatically and fairly?' This guided our whole study.
+2. **Hypothesis**: We thought an automated framework using the right metrics and dataset would work.
+3. **Experimental Setup**: We created ARES, chose our metrics (accuracy, relevance, efficiency), and built our dataset.
+4. **Control Group**: We tested manual evaluation methods as a baseline to compare ARES against.
+5. **Da..."
+Sumit (@reachsumit.com),https://bsky.app/profile/reachsumit.com/post/3lvaedjt25c2e,2025-07-31T08:25:20+00:00,2025-08-04 08:09:50,"Imagine you have a powerful tool that can understand and generate human language, but it's not very good at summarizing information into a single, meaningful representation. This is the problem we faced with Large Language Models (LLMs). These models are great at generating text but struggle to create accurate summaries (embeddings) of entire sentences or documents, which are crucial for tasks like clustering, classification, or retrieval.
+
+To tackle this, we broke down our approach into thre...","Our main discovery was that by combining prompt engineering and contrastive fine-tuning, we could significantly improve the model's ability to create meaningful text embeddings. This was evident in our results on the Massive Text Embedding Benchmark (MTEB), where our approach achieved state-of-the-art performance.
+
+We also found that fine-tuning shifted the model's focus from the prompt tokens to more semantically relevant words. This means the model was better at compressing meaning into the...","To understand our technical approach, let's break it down into simpler parts:
+
+1. **Aggregation Techniques**: We started with basic methods like averaging the word representations (embeddings) to create a sentence summary. This is like taking the average score of a class to represent the overall performance.
+
+2. **Prompt Engineering**: We designed specific prompts to guide the model. For example, we might tell the model to 'Summarize the following text:' before giving it the input. This helps...","To design our study, we started with the goal of improving LLMs for text embedding tasks. We chose the English clustering track of the MTEB as our benchmark because it represents a challenging and practical application of text embeddings.
+
+Our experimental setup involved several key choices:
+
+1. **Model Selection**: We chose pre-trained, decoder-only LLMs because they are widely used and have shown strong performance in text generation tasks.
+
+2. **Aggregation Techniques**: We started with si..."
+HALoGEN: Fantastic LLM Hallucinations and Where to Find Them,https://arxiv.org/abs/2501.08292,2025-07-31T00:00:35+00:00,2025-08-04 08:10:37,"Imagine you have a friend who tells amazing stories, but sometimes they mix up facts or make things up. You want to catch these mistakes, but listening to every story and checking every detail is too much work. This is similar to the problem with large language models (LLMs)—they generate great text but sometimes 'hallucinate,' or make stuff up.
+
+To tackle this, we created HALoGEN, a tool to catch these hallucinations efficiently. Here’s how we did it, step by step:
+
+1. **Collecting Prompts**...","Our main discoveries were both surprising and significant:
+
+1. **Prevalence of Hallucinations**: Even the best-performing LLMs produced a lot of hallucinations. In some cases, up to 86% of the generated facts were incorrect, depending on the domain. This is like finding out that even the best storytellers make up a lot of their stories.
+
+2. **Error Types**: We found that hallucinations could be categorized into three types: Type A (misremembering facts), Type B (learning wrong facts), and Typ...","To understand our technical approach, let’s break it down into simpler parts:
+
+1. **Data Collection**: We started by collecting a diverse set of prompts. Think of this as gathering a wide range of questions to ask the LLM, ensuring we cover different topics and scenarios.
+
+2. **Model Generation**: We then used these prompts to generate responses from various LLMs. This is like feeding questions into different storytelling machines and collecting their outputs.
+
+3. **Decomposition**: We broke ...","Our research design was carefully thought out to address the problem of hallucinations in LLMs:
+
+1. **Prompt Selection**: We chose prompts from nine different domains to ensure a wide range of topics and scenarios. This diversity helped us understand how hallucinations vary across different types of content.
+
+2. **Model Selection**: We selected 14 different LLMs to generate responses. This allowed us to compare how different models perform and identify common patterns in hallucinations.
+
+3. *..."
+Language Model Re-rankers are Fooled by Lexical Similarities,https://arxiv.org/abs/2502.17036,2025-07-29T22:40:29+00:00,2025-08-04 08:11:22,"Imagine you're trying to find the best answers to questions from a large pile of documents. You have two helpers: one is a simple matcher (BM25) who looks for exact word matches, and the other is a sophisticated language model (LM) re-ranker who understands the meaning of words and sentences. The LM re-ranker is supposed to be better because it understands context and semantics, but it's also more expensive to use.
+
+Our goal was to see if the LM re-ranker is always better than the simple matc...","Our main discoveries were:
+
+1. **LM Re-rankers Struggle**: On the DRUID dataset, the LM re-rankers didn't do much better than the simple BM25 matcher. This was surprising because we thought they would be much better at understanding complex questions.
+
+2. **Lexical Dissimilarities**: We found that LM re-rankers make mistakes when the answers don't have the same words as the questions, even if the meaning is similar. It's like they get confused when the language isn't straightforward.
+
+3. **Im...","Think of our technical approach like building a complex machine to sort answers:
+
+1. **BM25 Baseline**: This is like a simple sieve that catches answers with exact word matches to the question. It's fast and cheap but not very smart.
+
+2. **LM Re-rankers**: These are like advanced robots that can understand language. They use neural networks to process the meaning of questions and answers. We used six different types, each with its own way of understanding language.
+
+3. **Separation Metric**: ...","Our study was designed like a competition between helpers:
+
+1. **Dataset Selection**: We chose three different datasets to make sure our findings weren't just specific to one type of question or answer. Each dataset has its own challenges, like different types of questions and levels of complexity.
+
+2. **Baseline Comparison**: We used BM25 as a baseline because it's a simple and well-understood method. Comparing against it helps us see the value of more complex methods.
+
+3. **LM Re-ranker Var..."
+From Citations to Criticality: Predicting Legal Decision Influence in the Multilingual Swiss Jurisprudence,https://arxiv.org/abs/2410.13460,2025-07-28T12:05:48+00:00,2025-08-04 08:11:48,Analysis parsing failed,Analysis parsing failed,Analysis parsing failed,Analysis parsing failed
+Can Unconfident LLM Annotations Be Used for Confident Conclusions?,https://arxiv.org/html/2408.15204v2,2025-07-24T12:36:13+00:00,2025-08-04 08:12:09,Analysis parsing failed,Analysis parsing failed,Analysis parsing failed,Analysis parsing failed
