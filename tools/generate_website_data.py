@@ -330,20 +330,36 @@ class WebsiteDataGenerator:
             if not row[field]:
                 raise DataValidationError(f"Missing required field: {field}")
 
-        # Combine analysis fields
-        analysis_parts = []
-        if row["key_findings"]:
-            analysis_parts.append(f"**Key Findings:** {row['key_findings']}")
-        if row["technical_approach"]:
-            analysis_parts.append(
-                f"**Technical Approach:** {row['technical_approach']}"
-            )
-        if row["methodology_detailed"]:
-            analysis_parts.append(f"**Methodology:** {row['methodology_detailed']}")
+        # Use the methodology_detailed field as the primary analysis (this contains the full Feynman technique explanation)
+        # If methodology_detailed is empty or too short, fall back to key_findings
+        analysis = ""
+        if row["methodology_detailed"] and len(row["methodology_detailed"]) > 500:
+            analysis = row["methodology_detailed"]
+        elif row["key_findings"] and len(row["key_findings"]) > 500:
+            analysis = row["key_findings"]
+        else:
+            # Combine fields for shorter analyses
+            analysis_parts = []
+            if row["key_findings"]:
+                analysis_parts.append(f"**Key Findings:** {row['key_findings']}")
+            if (
+                row["technical_approach"]
+                and row["technical_approach"] != row["key_findings"]
+            ):
+                analysis_parts.append(
+                    f"**Technical Approach:** {row['technical_approach']}"
+                )
+            if (
+                row["methodology_detailed"]
+                and row["methodology_detailed"] != row["key_findings"]
+            ):
+                analysis_parts.append(f"**Methodology:** {row['methodology_detailed']}")
 
-        analysis = (
-            "\n\n".join(analysis_parts) if analysis_parts else "No analysis available"
-        )
+            analysis = (
+                "\n\n".join(analysis_parts)
+                if analysis_parts
+                else "No analysis available"
+            )
 
         # Parse metadata
         linked_articles = []
