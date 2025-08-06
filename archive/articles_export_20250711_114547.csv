@@ -1,0 +1,24 @@
+title,url,publication_date,processed_date,methodology_detailed,key_findings,technical_approach,research_design
+Sumit (@reachsumit.com),https://bsky.app/profile/reachsumit.com/post/3ltnsm55rq227,2025-07-11T08:10:36+00:00,2025-07-11 11:44:55,"The research methodology involves a two-stage training framework designed to improve the efficiency and effectiveness of retrieving and reasoning through large unstructured document corpora to answer complex questions. Here's a step-by-step breakdown:
+
+1. **Problem Identification**: The researchers identified that current methods for answering complex questions from large document corpora rely heavily on retrieval-augmented generation (RAG) metrics like accuracy and recall, but often overlook...","The main findings are that the two-stage training framework achieves competitive RAG performance while reducing retrieval costs by nearly half, using only 1000 training examples. This challenges the popular claim that large-scale fine-tuning is necessary for improving RAG metrics.","The technical approach involves several key components working together to achieve efficient retrieval and reasoning:
+
+1. **ReAct Pipeline**: This is a standard pipeline used for retrieval and reasoning. The researchers enhanced it with improved prompts to guide the model better during the retrieval process.
+
+2. **Supervised Fine-Tuning**: This involves training the model on a labeled dataset to improve its performance. In this case, the model was fine-tuned on a small set of 1000 training ex...",The research design involved developing a two-stage training framework and testing it on benchmarks like HotPotQA. The framework was compared with state-of-the-art methods to evaluate its performance in terms of RAG metrics and retrieval efficiency.
+arxiv cs.IR (@arxiv-cs-ir.bsky.social),https://bsky.app/profile/arxiv-cs-ir.bsky.social/post/3lto4qcwxly2j,2025-07-11T08:09:15+00:00,2025-07-11 11:45:26,"The researchers aimed to evaluate how well different methods of assessing relevance in information retrieval (IR) systems work. Here's a step-by-step breakdown of their approach:
+
+1. **Gathering Data**: They collected data from IR systems, which include queries (questions people ask) and documents (answers the system provides).
+2. **Human Labeling**: They used human assessments to label how relevant the documents are to the queries. These labels are called 'qrels'.
+3. **Comparing Methods**: T...","The main findings are that quantifying Type II errors provides additional insights into the discriminative power of qrels. Balanced classification metrics, such as balanced accuracy, can summarize this discriminative power effectively.","The technical approach involved several key components:
+
+1. **Relevance Assessment Methods**: Different techniques were used to generate qrels, which are relevance labels for query-document pairs. These methods aim to be more efficient than traditional human labeling.
+2. **Statistical Tests**: The researchers used hypothesis testing to compare the performance of different IR systems. They specifically looked for Type I errors (where a test falsely indicates a significant difference) and Type ...",The research design involved comparing different relevance assessment methods by generating qrels and evaluating their discriminative power through statistical tests and balanced accuracy metrics.
+Scott McGrath (@smcgrath.phd),https://bsky.app/profile/smcgrath.phd/post/3lthihzv6ak27,2025-07-09T00:50:59+00:00,2025-07-11 11:45:47,"The research methodology involved a technique called 'InfoFlood.' Here's a step-by-step breakdown of how it was conducted:
+
+1. **Identify Target Queries**: The researchers started by identifying specific queries that they wanted the Large Language Models (LLMs) to respond to in a way that bypasses safety filters.
+2. **Transform Queries**: They transformed these targeted queries into complex and elaborate prose. This means they rephrased the queries using complicated language and academic jarg...","The main discovery was that LLMs can be jailbroken by using the InfoFlood method. This method overwhelms the safety filters by exploiting the model's reliance on superficial cues for toxicity, allowing restricted information to be accessed.","The technical approach involved several key components working together:
+
+1. **Complex Prose Generation**: The researchers used techniques to generate complex and elaborate prose. This could involve using algorithms that rephrase simple sentences into more complicated ones. For example, a simple question like 'How to hack a system?' might be rephrased as 'What are the methodological approaches to infiltrate a digital infrastructure, as discussed in various academic literature?'
+
+2. **Fabricat...",Not clearly specified in the content. The focus was on the methodology and technical approach rather than the experimental setup or study design.

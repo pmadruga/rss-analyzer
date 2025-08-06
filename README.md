@@ -17,7 +17,7 @@ Automatically fetches and analyzes academic papers from RSS feeds using AI APIs 
 # 4. Push to GitHub - starts running automatically once daily at 2 AM UTC!
 ```
 
-📚 **[Full GitHub Actions Setup Guide →](GITHUB_ACTION_SETUP.md)**
+📚 **[Full GitHub Actions Setup Guide →](docs/setup/GITHUB_ACTION_SETUP.md)**
 
 ### Option 2: Local Docker Setup
 

@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RSS Article Analyzer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,7 +15,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Atkinson Hyperlegible', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             line-height: 1.6;
             color: #333;
             background: #fafafa;
@@ -104,18 +107,22 @@
         }
 
         .article-analysis {
+            font-family: 'Atkinson Hyperlegible', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             font-size: 0.95rem;
             line-height: 1.6;
             color: #555;
         }
 
         .article-analysis h3 {
+            font-family: 'Atkinson Hyperlegible', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             color: #2c3e50;
             font-size: 1rem;
+            font-weight: 600;
             margin: 1rem 0 0.5rem 0;
         }
 
         .article-analysis p {
+            font-family: 'Atkinson Hyperlegible', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             margin-bottom: 0.8rem;
         }
 
@@ -124,6 +131,7 @@
         }
 
         .article-content {
+            font-family: 'Atkinson Hyperlegible', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             max-height: 200px;
             overflow: hidden;
             transition: max-height 0.3s ease;
@@ -164,6 +172,165 @@
         .expand-toggle:focus {
             outline: none;
             box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.3);
+        }
+
+        .expand-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .fullscreen-toggle {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .fullscreen-toggle:hover {
+            background: #219a52;
+        }
+
+        .fullscreen-toggle:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(39, 174, 96, 0.3);
+        }
+
+        /* Full-screen modal */
+        .fullscreen-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            overflow: auto;
+        }
+
+        .fullscreen-content {
+            font-family: 'Atkinson Hyperlegible', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+            min-height: calc(100vh - 4rem);
+        }
+
+        .fullscreen-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .fullscreen-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2c3e50;
+            line-height: 1.3;
+            margin: 0;
+            flex: 1;
+            padding-right: 1rem;
+        }
+
+        .fullscreen-title a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .fullscreen-title a:hover {
+            color: #3498db;
+        }
+
+        .close-fullscreen {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: background-color 0.2s ease;
+        }
+
+        .close-fullscreen:hover {
+            background: #c0392b;
+        }
+
+        .close-fullscreen:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.3);
+        }
+
+        .fullscreen-meta {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-bottom: 2rem;
+        }
+
+        .fullscreen-analysis {
+            font-family: 'Atkinson Hyperlegible', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #444;
+        }
+
+        .fullscreen-analysis h1 {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin: 2rem 0 1rem 0;
+            font-weight: 700;
+        }
+
+        .fullscreen-analysis h2 {
+            font-size: 1.4rem;
+            color: #34495e;
+            margin: 1.5rem 0 0.8rem 0;
+            font-weight: 700;
+        }
+
+        .fullscreen-analysis h3 {
+            font-size: 1.2rem;
+            color: #34495e;
+            margin: 1.2rem 0 0.6rem 0;
+            font-weight: 700;
+        }
+
+        .fullscreen-analysis p {
+            margin-bottom: 1.2rem;
+        }
+
+        .fullscreen-analysis ul, .fullscreen-analysis ol {
+            margin: 1rem 0 1rem 2rem;
+        }
+
+        .fullscreen-analysis li {
+            margin-bottom: 0.5rem;
+        }
+
+        .fullscreen-analysis strong {
+            font-weight: 700;
+        }
+
+        /* Keyboard navigation support */
+        .fullscreen-modal:focus-within {
+            outline: none;
         }
 
         .loading {
@@ -229,13 +396,31 @@
         </main>
     </div>
 
+    <!-- Full-screen modal -->
+    <div class="fullscreen-modal" id="fullscreen-modal">
+        <div class="fullscreen-content">
+            <div class="fullscreen-header">
+                <h1 class="fullscreen-title" id="fullscreen-title">
+                    <a href="#" target="_blank" rel="noopener" id="fullscreen-link">Article Title</a>
+                </h1>
+                <button class="close-fullscreen" id="close-fullscreen" aria-label="Close full screen">×</button>
+            </div>
+            <div class="fullscreen-meta" id="fullscreen-meta">Processed: Date</div>
+            <div class="fullscreen-analysis" id="fullscreen-analysis"></div>
+        </div>
+    </div>
+
     <script>
+        // Global articles data for full-screen access
+        let articlesData = [];
+
         async function loadArticles() {
             try {
                 const response = await fetch('data.json');
                 if (!response.ok) throw new Error('Failed to fetch data');
 
                 const data = await response.json();
+                articlesData = data.articles; // Store for full-screen access
 
                 // Update stats
                 document.getElementById('total-articles').textContent = data.total_articles;
@@ -283,6 +468,7 @@
 
                     const contentId = `content-${index}`;
                     const toggleId = `toggle-${index}`;
+                    const fullscreenId = `fullscreen-${index}`;
 
                     card.innerHTML = `
                         <h2 class="article-title">
@@ -297,11 +483,23 @@
                                     <div id="${contentId}" class="article-content collapsed">
                                         ${analysisHtml}
                                     </div>
-                                    <button id="${toggleId}" class="expand-toggle" onclick="toggleExpand('${contentId}', '${toggleId}')">
-                                        Show More ▼
-                                    </button>
+                                    <div class="expand-buttons">
+                                        <button id="${toggleId}" class="expand-toggle" onclick="toggleExpand('${contentId}', '${toggleId}')">
+                                            Show More ▼
+                                        </button>
+                                        <button id="${fullscreenId}" class="fullscreen-toggle" onclick="openFullscreen(${index})">
+                                            Full Screen 📖
+                                        </button>
+                                    </div>
                                 </div>` :
-                                `<div>${analysisHtml}</div>`
+                                `<div>
+                                    ${analysisHtml}
+                                    <div class="expand-buttons">
+                                        <button id="${fullscreenId}" class="fullscreen-toggle" onclick="openFullscreen(${index})">
+                                            Full Screen 📖
+                                        </button>
+                                    </div>
+                                </div>`
                             }
                         </div>
                     `;
@@ -330,6 +528,60 @@
                 toggle.textContent = 'Show More ▼';
             }
         }
+
+        function openFullscreen(articleIndex) {
+            const article = articlesData[articleIndex];
+            if (!article) return;
+
+            // Update modal content
+            document.getElementById('fullscreen-title').querySelector('a').textContent = article.title;
+            document.getElementById('fullscreen-title').querySelector('a').href = article.url;
+            document.getElementById('fullscreen-meta').textContent = `Processed: ${new Date(article.processed_date).toLocaleDateString()}`;
+
+            // Convert markdown-style analysis to HTML with better formatting
+            let analysisHtml = article.analysis
+                .replace(/^# (.*$)/gm, '<h1>$1</h1>')
+                .replace(/^## (.*$)/gm, '<h2>$1</h2>')
+                .replace(/^### (.*$)/gm, '<h3>$1</h3>')
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\n\n/g, '</p><p>')
+                .replace(/^(?!<[h1-3]>)(.*)$/gm, '<p>$1</p>')
+                .replace(/<p><\/p>/g, '')
+                .replace(/<p>(<h[1-3]>.*<\/h[1-3]>)<\/p>/g, '$1')
+                .replace(/^<p>/,'').replace(/<\/p>$/,'');
+
+            document.getElementById('fullscreen-analysis').innerHTML = analysisHtml;
+
+            // Show modal
+            document.getElementById('fullscreen-modal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+
+            // Focus the close button for accessibility
+            document.getElementById('close-fullscreen').focus();
+        }
+
+        function closeFullscreen() {
+            document.getElementById('fullscreen-modal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Event listeners for modal
+        document.getElementById('close-fullscreen').addEventListener('click', closeFullscreen);
+
+        // Close modal when clicking outside content
+        document.getElementById('fullscreen-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeFullscreen();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && document.getElementById('fullscreen-modal').style.display === 'block') {
+                closeFullscreen();
+            }
+        });
+
 
         // Load articles when page loads
         loadArticles();

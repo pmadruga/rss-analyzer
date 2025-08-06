@@ -1,0 +1,18 @@
+title,url,publication_date,processed_date,methodology_detailed,key_findings,technical_approach,research_design
+Maria Antoniak (@mariaa.bsky.social),https://bsky.app/profile/mariaa.bsky.social/post/3lumkyphrok2f,2025-07-23T15:44:26+00:00,2025-07-23 18:43:54,"Imagine you're trying to teach a robot to understand human emotions, but the robot keeps getting confused because emotions are subjective and hard to define. That's the fundamental problem we're tackling: how can we help machines understand subjective tasks better? Our approach is like giving the robot a human helper. Here's how we did it step-by-step:
+
+1. **Identify the Subjective Task**: First, we needed to pick a task that's subjective, something that humans understand but machines struggl...","Our main discovery was that having a human in the loop significantly improved the LLM's performance on subjective tasks. It's like finding out that having a teacher helps the robot learn better. Here's what we found:
+
+1. **Improved Accuracy**: The LLM's accuracy in labeling sentiments increased after learning from human feedback. This is like the robot getting better grades after studying with a teacher.
+
+2. **Reduced Errors**: The number of mistakes the LLM made decreased over time. This is ...","Think of our technical approach like building a smart assistant that learns from feedback. Here's how we did it:
+
+1. **Large Language Model (LLM)**: We started with a pre-trained LLM, which is like a smart robot that already knows a lot about language. It can understand and generate text, but it's not perfect, especially with subjective tasks.
+
+2. **Annotation Framework**: We built a framework where the LLM could try to label text samples. This is like giving the robot a worksheet to fill out...","To design our study, we thought about how to create an effective learning environment for the LLM. Here's our reasoning:
+
+1. **Choice of Task**: We chose sentiment analysis because it's a common and important subjective task. It's like picking a relevant topic to study in class.
+
+2. **Dataset Selection**: We selected a diverse set of text samples to ensure the LLM learned broadly. This is like choosing a variety of movies to watch and learn from.
+
+3. **Human Feedback Mechanism**: We designed ..."
