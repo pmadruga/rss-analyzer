@@ -1,7 +1,287 @@
 {
-  "generated_at": "2025-08-06T13:35:14.254966+00:00",
-  "total_articles": 24,
+  "generated_at": "2025-08-06T18:08:19.890644+00:00",
+  "total_articles": 52,
   "articles": [
+    {
+      "id": 45,
+      "title": "Sumit (@reachsumit.com)",
+      "url": "https://bsky.app/profile/reachsumit.com/post/3ltgncqpysk2j",
+      "processed_date": "2025-08-06 18:07:26",
+      "status": "completed",
+      "analysis": "The researchers aimed to create a system that can efficiently build and retrieve information from knowledge graphs using unstructured text, specifically for large-scale enterprise applications. Here's a step-by-step breakdown of their methodology:\n\n1. **Problem Identification**: The team recognized that current methods for building knowledge graphs using large language models (LLMs) are expensive and slow, making them impractical for large-scale use.\n\n2. **Data Collection**: They gathered unstructured text data from two SAP datasets focused on legacy code migration. This data served as the raw material for building their knowledge graphs.\n\n3. **Knowledge Graph Construction**: Instead of using LLMs, they developed a new method using industrial-grade NLP (Natural Language Processing) libraries. These libraries helped extract important entities (like objects or concepts) and their relationships from the unstructured text. This step is crucial because it organizes the information in a structured way, making it easier to retrieve and use later.\n\n4. **Graph Retrieval Strategy**: They created a lightweight strategy for retrieving information from the knowledge graphs. This strategy combines two main techniques: hybrid query node identification and efficient one-hop traversal. Hybrid query node identification helps in accurately finding the relevant nodes (or points) in the graph, while one-hop traversal ensures that the retrieval process is quick and efficient by only looking at directly connected nodes.\n\n5. **Evaluation**: To test their system, they compared it against traditional RAG (Retrieval Augmented Generation) baselines using metrics like LLM-as-Judge and RAGAS. These metrics helped them measure the performance and efficiency of their new framework.\n\n6. **Analysis**: Finally, they analyzed the results to see how well their system performed in terms of cost, scalability, and accuracy. They found that their method was not only more cost-effective but also nearly as accurate as the more expensive LLM-based methods.",
+      "ai_provider": "anthropic",
+      "linked_articles": []
+    },
+    {
+      "id": 45,
+      "title": "Key Findings: Analysis parsing failed",
+      "url": "https://bsky.app/profile/reachsumit.com/post/3ltgncqpysk2j",
+      "processed_date": "2025-08-06 18:07:26",
+      "status": "completed",
+      "analysis": "**Key Findings:** Analysis parsing failed",
+      "ai_provider": "anthropic",
+      "linked_articles": []
+    },
+    {
+      "id": 44,
+      "title": "The rise of \"context engineering\"",
+      "url": "https://blog.langchain.com/the-rise-of-context-engineering/",
+      "processed_date": "2025-08-06 18:07:00",
+      "status": "completed",
+      "analysis": "**Key Findings:** Analysis parsing failed",
+      "ai_provider": "anthropic",
+      "linked_articles": []
+    },
+    {
+      "id": 44,
+      "title": "The rise of \"context engineering\"",
+      "url": "https://blog.langchain.com/the-rise-of-context-engineering/",
+      "processed_date": "2025-08-06 18:07:00",
+      "status": "completed",
+      "analysis": "**Key Findings:** Analysis parsing failed",
+      "ai_provider": "anthropic",
+      "linked_articles": []
+    },
+    {
+      "id": 43,
+      "title": "Context Engineering - What it is, and techniques to consider — LlamaIndex - Build Knowledge Assistants over your Enterprise Data",
+      "url": "https://www.llamaindex.ai/blog/context-engineering-what-it-is-and-techniques-to-consider?utm_source=socials&utm_medium=li_social",
+      "processed_date": "2025-08-06 18:06:38",
+      "status": "completed",
+      "analysis": "**Key Findings:** Analysis parsing failed",
+      "ai_provider": "anthropic",
+      "linked_articles": []
+    },
+    {
+      "id": 43,
+      "title": "Context Engineering - What it is, and techniques to consider — LlamaIndex - Build Knowledge Assistants over your Enterprise Data",
+      "url": "https://www.llamaindex.ai/blog/context-engineering-what-it-is-and-techniques-to-consider?utm_source=socials&utm_medium=li_social",
+      "processed_date": "2025-08-06 18:06:38",
+      "status": "completed",
+      "analysis": "The article discusses context engineering, which is about providing the right information to AI agents to help them perform tasks effectively. Here's a step-by-step breakdown of the methodology explained in simple terms:\n\n1. **Understanding Context**: The first step is to understand what makes up the context for an AI agent. This includes things like the system's instructions, user input, chat history, long-term memory, information from knowledge bases, tools available to the AI, responses from those tools, structured outputs, and global state/context.\n\n2. **Selecting Relevant Context**: Not all context is useful at the same time. The methodology involves carefully selecting the most relevant pieces of context for the task at hand. This is like choosing the right tools and information for a specific job.\n\n3. **Managing Context Size**: AI agents have a limited 'context window,' meaning they can only handle so much information at once. Techniques like summarizing information or ordering it by importance help manage this limited space.\n\n4. **Using Tools and Knowledge Bases**: The AI might need to use different tools or knowledge bases to get the right information. The methodology involves deciding which tools or knowledge bases to use and how to integrate the information they provide.\n\n5. **Long-term Memory**: For ongoing conversations, the AI needs to remember past interactions. This involves storing and retrieving chat history or other relevant information from long-term memory.\n\n6. **Structured Information**: Providing information in a structured way helps the AI understand and use it more effectively. This can involve asking for information in a specific format or providing structured data as context.\n\n7. **Workflow Engineering**: This involves breaking down complex tasks into smaller, manageable steps. Each step has its own optimized context, making the overall task easier to handle.\n\nIn summary, the methodology is about carefully selecting, managing, and structuring the information provided to an AI agent to help it perform tasks effectively within its limitations.",
+      "ai_provider": "anthropic",
+      "linked_articles": []
+    },
+    {
+      "id": 42,
+      "title": "Sumit (@reachsumit.com)",
+      "url": "https://bsky.app/profile/reachsumit.com/post/3ltya7niyck2t",
+      "processed_date": "2025-08-06 18:04:57",
+      "status": "completed",
+      "analysis": "The research methodology for this survey paper involves several key steps to understand and categorize different approaches to Retrieval-Augmented Generation (RAG) and reasoning systems in Large Language Models (LLMs). Here's a simplified breakdown:\n\n1. **Literature Review**: The researchers started by gathering a large number of academic papers and articles related to RAG and reasoning in LLMs. This is like collecting a big pile of books and articles to read on a specific topic.\n\n2. **Categorization**: They then sorted these papers into different categories based on the approaches used. Imagine sorting those books into different shelves based on their themes or methods.\n\n3. **Analysis**: For each category, they analyzed the methods used in the papers. This involves reading and understanding the techniques described in each paper, similar to reading each book and taking notes on what it says.\n\n4. **Comparison**: The researchers compared the different methods to see how they have evolved over time. This is like comparing notes from different books to see how ideas have changed or improved.\n\n5. **Synthesis**: Finally, they combined all this information to highlight the shift from static retrieval-then-reasoning to dynamic frameworks. This is like writing a summary report that explains how the topic has developed over time.\n\nIn simpler terms, the researchers collected a lot of information, organized it, studied it, compared it, and then wrote a summary about how methods in this field have changed and improved.",
+      "ai_provider": "anthropic",
+      "linked_articles": []
+    },
+    {
+      "id": 42,
+      "title": "The research methodology for this survey paper involves several key steps, explained simply:\n\n1",
+      "url": "https://bsky.app/profile/reachsumit.com/post/3ltya7niyck2t",
+      "processed_date": "2025-08-06 18:04:57",
+      "status": "completed",
+      "analysis": "The research methodology for this survey paper involves several key steps, explained simply:\n\n1. **Literature Review**: The researchers started by gathering and reading many existing studies and papers on RAG (Retrieval-Augmented Generation) and reasoning systems in LLMs (Large Language Models). This is like collecting and reading many books and articles on a specific topic to understand what's already known.\n\n2. **Categorization**: They then organized these studies into different categories based on their approaches. Imagine sorting books into different sections in a library, like fiction, non-fiction, science, etc. Here, they sorted the studies based on how they use RAG and reasoning.\n\n3. **Analysis**: The researchers analyzed each category to understand the strengths and weaknesses of different approaches. This is like reading each book in a library section and writing a summary about what's good and what's not so good about each one.\n\n4. **Comparison**: They compared the different approaches to see how they have evolved over time. This is like comparing books from the same section but published in different years to see how the topic has changed and improved.\n\n5. **Synthesis**: Finally, they combined all this information to highlight the shift from static retrieval-then-reasoning to dynamic frameworks. This is like writing a big summary report that explains how the topic has changed from old methods to new, more advanced methods.\n\nIn simpler terms, the researchers read a lot of existing work, sorted it, analyzed it, compared it, and then wrote a big summary to show how things have changed and improved in this field.",
+      "ai_provider": "anthropic",
+      "linked_articles": []
+    },
+    {
+      "id": 41,
+      "title": "Sumit (@reachsumit.com)",
+      "url": "https://bsky.app/profile/reachsumit.com/post/3ltya4kszmk2t",
+      "processed_date": "2025-08-06 18:03:07",
+      "status": "completed",
+      "analysis": "The research methodology for GraphRunner can be broken down into three main stages, each designed to improve the efficiency and accuracy of graph-based retrieval. Here's a simple step-by-step explanation:\n\n1. **Planning Stage**: In this initial stage, the system creates a high-level plan for navigating through the graph. Imagine you're trying to find a specific book in a large library. Instead of wandering aimlessly, you first create a plan that outlines the sections and shelves you need to visit. This plan is like a map that guides you through the library in the most efficient way possible.\n\n2. **Verification Stage**: Once the plan is created, it needs to be checked for accuracy. This is like double-checking your library map to make sure all the sections and shelves actually exist and are in the right places. The system verifies the plan against the actual structure of the graph and predefined traversal actions. This step helps catch any mistakes or 'hallucinations' (incorrect assumptions) before they cause problems.\n\n3. **Execution Stage**: After the plan is verified, it's time to put it into action. This is like following your library map to find the book you need. The system executes the traversal plan, moving through the graph in a structured and efficient manner to retrieve the relevant information.\n\nBy separating the planning, verification, and execution stages, GraphRunner ensures that the retrieval process is both efficient and accurate, reducing errors and saving time.",
+      "ai_provider": "anthropic",
+      "linked_articles": []
+    },
+    {
+      "id": 40,
+      "title": "Key Findings: Analysis parsing failed",
+      "url": "https://bsky.app/profile/reachsumit.com/post/3lty7qvirds2t",
+      "processed_date": "2025-08-06 18:02:49",
+      "status": "completed",
+      "analysis": "**Key Findings:** Analysis parsing failed",
+      "ai_provider": "anthropic",
+      "linked_articles": []
+    },
+    {
+      "id": 39,
+      "title": "The Big LLM Architecture Comparison",
+      "url": "https://sebastianraschka.com/blog/2025/the-big-llm-architecture-comparison.html",
+      "processed_date": "2025-08-06 18:02:15",
+      "status": "completed",
+      "analysis": "The article compares various Large Language Model (LLM) architectures by examining their structural changes and innovations. The methodology involves the following steps:\n\n1. **Selection of Models**: The author selected several prominent LLM architectures released around 2024-2025, such as DeepSeek V3/R1, OLMo 2, Gemma 3, Mistral Small 3.1, Llama 4, Qwen3, SmolLM3, and Kimi 2.\n\n2. **Review of Architectural Papers**: For each model, the author reviewed the corresponding research papers and technical reports to understand the architectural innovations and design choices.\n\n3. **Identification of Key Components**: The author identified key architectural components and techniques used in each model, such as Multi-Head Latent Attention (MLA), Mixture-of-Experts (MoE), normalization layer placement, sliding window attention, and No Positional Embeddings (NoPE).\n\n4. **Comparison and Analysis**: The author compared these key components across different models, analyzing their advantages and trade-offs. This involved looking at how each model improved computational efficiency, reduced memory usage, or enhanced performance.\n\n5. **Implementation Details**: The author also referred to implementation details, such as code snippets and from-scratch implementations, to understand how these architectural components were practically applied.\n\n6. **Synthesis of Findings**: Finally, the author synthesized the findings into a comprehensive comparison, highlighting the evolution and trends in LLM architectures.\n\nThis methodology is more of a comparative analysis rather than an experimental study. It relies heavily on reviewing and synthesizing information from various technical papers and implementations.",
+      "ai_provider": "anthropic",
+      "linked_articles": []
+    },
+    {
+      "id": 38,
+      "title": "Sung Kim (@sungkim.bsky.social)",
+      "url": "https://bsky.app/profile/sungkim.bsky.social/post/3luj3kikh6c2s",
+      "processed_date": "2025-08-06 18:01:57",
+      "status": "completed",
+      "analysis": "The methodology is not explicitly detailed in the provided content, but we can infer a general approach based on the context. Here's a simplified breakdown of what the research process might involve, based on the topics mentioned: \n\n1. **Data Collection**: The researchers likely gathered a large amount of data from various sources. This data could be text from books, websites, or other written material. \n\n2. **Data Processing**: The collected data would then be processed and cleaned. This means removing any irrelevant information, correcting errors, and organizing the data in a way that makes it useful for training an AI model. \n\n3. **Model Training**: The processed data is used to train an AI model. This involves feeding the data into a computer program that can learn from it. The model tries to understand patterns and relationships in the data, similar to how a human learns from experience. \n\n4. **Development of MuonClip**: This likely refers to a specific technique or tool developed to improve the AI model. It might involve a method to better understand or generate text. \n\n5. **Agentic Data Pipeline**: This suggests that the researchers created a system where AI agents (computer programs that can perform tasks) are used to manage and process data automatically. This pipeline helps in efficiently handling large amounts of data. \n\n6. **Reinforcement Learning Framework**: This is a method where the AI model learns by receiving rewards or penalties for its actions. It's like training a dog with treats; the model gets better at tasks by learning what actions lead to positive outcomes. \n\n7. **Evaluation**: Finally, the trained model is tested to see how well it performs. This could involve giving it new data it hasn't seen before and checking if it can understand or generate text accurately.",
+      "ai_provider": "anthropic",
+      "linked_articles": []
+    },
+    {
+      "id": 37,
+      "title": "The methodology is not clearly specified in the content provided",
+      "url": "https://bsky.app/profile/mariaa.bsky.social/post/3lumkyphpq22f",
+      "processed_date": "2025-08-06 18:01:43",
+      "status": "completed",
+      "analysis": "The methodology is not clearly specified in the content provided. The post mentions a research question about using unconfident annotations from Large Language Models (LLMs) to draw confident conclusions, but it does not provide detailed steps or explanations of how the research was conducted. Typically, such research might involve the following steps, but these are inferred and not explicitly stated in the post:\n\n1. **Data Collection**: Gathering a dataset that includes annotations made by LLMs. These annotations might be labeled with confidence scores indicating how sure the model is about each annotation.\n\n2. **Data Analysis**: Analyzing the dataset to identify patterns or correlations between the confidence levels of the annotations and their accuracy or usefulness.\n\n3. **Model Training**: Using the dataset to train or fine-tune a model that can predict confident conclusions based on unconfident annotations.\n\n4. **Evaluation**: Testing the trained model on a separate dataset to evaluate its performance and accuracy in drawing confident conclusions.\n\n5. **Conclusion**: Drawing insights from the evaluation results to answer the research question.",
+      "ai_provider": "anthropic",
+      "linked_articles": []
+    },
+    {
+      "id": 36,
+      "title": "Can Unconfident LLM Annotations Be Used for Confident Conclusions?",
+      "url": "https://arxiv.org/html/2408.15204v2",
+      "processed_date": "2025-08-06 18:01:25",
+      "status": "completed",
+      "analysis": "**Key Findings:** Analysis parsing failed",
+      "ai_provider": "anthropic",
+      "linked_articles": []
+    },
+    {
+      "id": 35,
+      "title": "From Citations to Criticality: Predicting Legal Decision Influence in the Multilingual Swiss Jurisprudence",
+      "url": "https://arxiv.org/abs/2410.13460",
+      "processed_date": "2025-08-06 18:01:06",
+      "status": "completed",
+      "analysis": "**Key Findings:** Analysis parsing failed",
+      "ai_provider": "anthropic",
+      "linked_articles": []
+    },
+    {
+      "id": 35,
+      "title": "From Citations to Criticality: Predicting Legal Decision Influence in the Multilingual Swiss Jurisprudence",
+      "url": "https://arxiv.org/abs/2410.13460",
+      "processed_date": "2025-08-06 18:01:06",
+      "status": "completed",
+      "analysis": "The research was conducted in several clear steps to create and evaluate a system for predicting the influence of legal decisions. Here's a breakdown of the process:\n\n1. **Data Collection**: The researchers gathered a large number of legal cases from the Swiss court system. These cases were already published and available in multiple languages.\n\n2. **Labeling**: The researchers created a two-tier labeling system to categorize the cases:\n   - **Binary LD-Label**: This label identifies cases that were published as Leading Decisions (LD). A Leading Decision is a case that sets a significant precedent or is particularly influential.\n   - **Citation-Label**: This label ranks cases based on how often they are cited by other cases and how recent those citations are. This helps in understanding the nuanced influence of each case.\n\n3. **Algorithmic Labeling**: Instead of manually labeling each case, which would be time-consuming and resource-intensive, the researchers used algorithms to automatically assign labels. This allowed them to create a much larger dataset than would have been possible with manual labeling.\n\n4. **Model Evaluation**: The researchers then evaluated several multilingual models to see how well they could predict the influence of legal decisions. These models included both smaller models that were fine-tuned (specially trained for this task) and larger language models that were used in a zero-shot setting (used as-is without specific training for this task).\n\n5. **Comparison and Analysis**: Finally, the researchers compared the performance of these models. They looked at how well each model could predict the labels assigned to the cases, which indicated their influence.\n\nIn simple terms, the researchers collected legal cases, automatically labeled them based on their influence, and then tested different computer models to see which one could best predict the influence of these cases.",
+      "ai_provider": "anthropic",
+      "linked_articles": []
+    },
+    {
+      "id": 34,
+      "title": "Language Model Re-rankers are Fooled by Lexical Similarities",
+      "url": "https://arxiv.org/abs/2502.17036",
+      "processed_date": "2025-08-06 18:00:45",
+      "status": "completed",
+      "analysis": "**Key Findings:** Analysis parsing failed",
+      "ai_provider": "anthropic",
+      "linked_articles": []
+    },
+    {
+      "id": 34,
+      "title": "Language Model Re-rankers are Fooled by Lexical Similarities",
+      "url": "https://arxiv.org/abs/2502.17036",
+      "processed_date": "2025-08-06 18:00:45",
+      "status": "completed",
+      "analysis": "**Key Findings:** Analysis parsing failed",
+      "ai_provider": "anthropic",
+      "linked_articles": []
+    },
+    {
+      "id": 33,
+      "title": "HALoGEN: Fantastic LLM Hallucinations and Where to Find Them",
+      "url": "https://arxiv.org/abs/2501.08292",
+      "processed_date": "2025-08-06 18:00:26",
+      "status": "completed",
+      "analysis": "**Key Findings:** Analysis parsing failed",
+      "ai_provider": "anthropic",
+      "linked_articles": []
+    },
+    {
+      "id": 33,
+      "title": "HALoGEN: Fantastic LLM Hallucinations and Where to Find Them",
+      "url": "https://arxiv.org/abs/2501.08292",
+      "processed_date": "2025-08-06 18:00:26",
+      "status": "completed",
+      "analysis": "**Key Findings:** Analysis parsing failed",
+      "ai_provider": "anthropic",
+      "linked_articles": []
+    },
+    {
+      "id": 32,
+      "title": "Sumit (@reachsumit.com)",
+      "url": "https://bsky.app/profile/reachsumit.com/post/3lvaedjt25c2e",
+      "processed_date": "2025-08-06 17:59:59",
+      "status": "completed",
+      "analysis": "The researchers aimed to improve how large language models (LLMs) understand and represent entire texts, not just individual words. Here's a step-by-step breakdown of their approach:\n\n1. **Understanding the Problem**: LLMs are great at generating text and understanding individual words, but they struggle to represent the meaning of entire sentences or documents. The researchers wanted to fix this.\n\n2. **Initial Techniques**: They started by testing different ways to combine the understanding of individual words into a single representation for the entire text. This is like trying different methods to summarize a book based on its chapters.\n\n3. **Prompt Engineering**: They used specific prompts (instructions or questions) to guide the LLM to focus on the task at hand, like clustering similar texts together. This is similar to giving someone a specific question to help them focus on the relevant parts of a text.\n\n4. **Fine-tuning**: They then improved the LLM's performance by fine-tuning it. This means they adjusted the model's settings to make it better at the specific task. They used a method called contrastive fine-tuning, which involves showing the model pairs of similar and dissimilar texts to help it learn to distinguish between them.\n\n5. **Efficiency**: To make the process more efficient, they used a technique called LoRA (Low-Rank Adaptation). This is like making small, targeted adjustments to a machine instead of overhauling the entire system, saving time and resources.\n\n6. **Evaluation**: Finally, they tested their improved model on a benchmark (a standard test) to see how well it performed. They looked at how well the model could cluster similar texts together and found that their approach worked very well.",
+      "ai_provider": "anthropic",
+      "linked_articles": []
+    },
+    {
+      "id": 32,
+      "title": "Key Findings: Analysis parsing failed",
+      "url": "https://bsky.app/profile/reachsumit.com/post/3lvaedjt25c2e",
+      "processed_date": "2025-08-06 17:59:59",
+      "status": "completed",
+      "analysis": "**Key Findings:** Analysis parsing failed",
+      "ai_provider": "anthropic",
+      "linked_articles": []
+    },
+    {
+      "id": 31,
+      "title": "ARES: An Automated Evaluation Framework for Retrieval-Augmented Generation Systems",
+      "url": "https://arxiv.org/html/2311.09476v2",
+      "processed_date": "2025-08-06 17:59:43",
+      "status": "completed",
+      "analysis": "The research methodology for ARES involves several clear steps to evaluate how well retrieval-augmented generation (RAG) systems perform. Here's a simplified breakdown:\n\n1. **Setup**: The researchers started by gathering a collection of questions and their corresponding answers. This collection is used to test the RAG systems.\n\n2. **Retrieval Component**: The RAG system retrieves relevant documents or information based on the questions. This step is like a search engine finding the most relevant web pages for a query.\n\n3. **Generation Component**: The system then generates answers to the questions using the retrieved information. This is similar to how a person might use reference materials to write a report.\n\n4. **Evaluation**: ARES automatically evaluates the answers generated by the RAG system. This evaluation is done using several metrics:\n    - **Faithfulness**: Checks if the generated answers are factually correct and supported by the retrieved documents.\n    - **Answer Relevance**: Measures how relevant the generated answers are to the questions.\n    - **Contextual Precision and Recall**: Assesses the precision and completeness of the context used to generate the answers.\n\n5. **Analysis**: The results from the evaluation metrics are analyzed to determine the overall performance of the RAG system. This helps in understanding how well the system can retrieve and use information to generate accurate and relevant answers.\n\n6. **Iteration**: The process is repeated with different sets of questions and documents to ensure the evaluation is comprehensive and reliable.",
+      "ai_provider": "anthropic",
+      "linked_articles": []
+    },
+    {
+      "id": 30,
+      "title": "Multiagent AI for generating chain-of-thought training data",
+      "url": "https://www.amazon.science/blog/multiagent-ai-for-generating-chain-of-thought-training-data",
+      "processed_date": "2025-08-06 17:59:20",
+      "status": "completed",
+      "analysis": "The research was conducted using a multi-step process involving multiple AI agents working together to generate and refine training data. Here's a step-by-step breakdown:\n\n1. **Intent Decomposition**: The process starts with an AI agent receiving a user query. This agent identifies both explicit and implicit intents behind the query. For example, if a user asks, 'How do I make a cake?', the explicit intent is to get a recipe, and an implicit intent might be to learn baking techniques.\n\n2. **Initial Chain-of-Thought (CoT) Generation**: The identified intents, along with the original query, are passed to another AI agent. This agent generates an initial CoT, which is a step-by-step explanation of how to respond to the query. Using the cake example, the CoT might include steps like gathering ingredients, mixing them, and baking.\n\n3. **Deliberation**: This is an iterative process where multiple AI agents work sequentially to expand and improve the CoT. Each agent reviews the CoT it receives, makes corrections or additions based on a set of policies, and then passes it to the next agent. This continues until the CoT is judged complete or a predefined limit is reached. Think of it like passing a draft of a story to multiple editors, each improving it step by step.\n\n4. **Refinement**: The final step involves another AI agent that takes the outputs from the deliberation stage and post-processes them. This agent filters out any redundant, deceptive, or policy-inconsistent thoughts, ensuring the final CoT is clean and accurate.\n\nThis methodology is designed to create high-quality, policy-compliant training data for AI models, improving their reasoning capabilities and ensuring they adhere to responsible AI policies.",
+      "ai_provider": "anthropic",
+      "linked_articles": []
+    },
+    {
+      "id": 29,
+      "title": "Sumit (@reachsumit.com)",
+      "url": "https://bsky.app/profile/reachsumit.com/post/3lvcnilnqqk2d",
+      "processed_date": "2025-08-06 17:59:00",
+      "status": "completed",
+      "analysis": "The researchers wanted to improve how decoder-only large language models (LLMs) understand and represent text for various tasks. Here's a step-by-step breakdown of their approach:\n\n1. **Identify the Problem**: The team noticed that current methods for improving LLMs often change the model's structure or add extra text, which can be costly and inefficient.\n\n2. **Develop a Lightweight Model**: They created a small, efficient model inspired by BERT (a popular language model) called the 'Contextual token'. This model pre-encodes the input text into a single token.\n\n3. **Integrate the Contextual Token**: This single token is added to the beginning of the input sequence for the LLM. This helps each token in the sequence understand the context better, even without seeing future tokens.\n\n4. **Combine Tokens for Better Embedding**: To reduce bias and improve performance, they combined the last hidden states of the Contextual token and the EOS (End of Sentence) token to create the final text embedding.\n\n5. **Test and Evaluate**: They tested their model, Causal2Vec, on a benchmark called MTEB (Massive Text Embeddings Benchmark) to see how well it performed compared to other methods.\n\n6. **Analyze Results**: They found that Causal2Vec performed very well, reducing the sequence length and inference time significantly while maintaining high performance.",
+      "ai_provider": "anthropic",
+      "linked_articles": []
+    },
+    {
+      "id": 28,
+      "title": "SemRAG: Semantic Knowledge-Augmented RAG for Improved Question-Answering",
+      "url": "https://arxiv.org/abs/2507.21110",
+      "processed_date": "2025-08-06 17:58:32",
+      "status": "completed",
+      "analysis": "**Key Findings:** Analysis parsing failed",
+      "ai_provider": "anthropic",
+      "linked_articles": []
+    },
+    {
+      "id": 27,
+      "title": "Context Engineering for AI Agents: Lessons from Building Manus",
+      "url": "https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus",
+      "processed_date": "2025-08-06 17:58:08",
+      "status": "completed",
+      "analysis": "The research methodology involved building and refining an AI agent called Manus through a process of trial and error, which the team humorously referred to as 'Stochastic Graduate Descent.' Here's a step-by-step breakdown of their approach:\n\n1. **Initial Decision**: The team decided to build Manus using the in-context learning abilities of advanced models rather than training an end-to-end agentic model from scratch. This allowed for quicker improvements and updates.\n\n2. **Iterative Development**: The team rebuilt their agent framework four times, each time discovering better ways to shape the context. This iterative process involved manual architecture searching, tweaking prompts, and empirical guesswork.\n\n3. **Focus on KV-Cache**: They prioritized optimizing the KV-cache hit rate, which directly affects both latency and cost. This involved keeping the prompt prefix stable, making the context append-only, and marking cache breakpoints explicitly when needed.\n\n4. **Managing Action Space**: Instead of dynamically adding or removing tools, they used a context-aware state machine to manage tool availability. This involved masking token logits during decoding to prevent or enforce the selection of certain actions based on the current context.\n\n5. **Using File System as Context**: To handle large amounts of data and long contexts, they treated the file system as the ultimate context. This allowed the agent to write to and read from files on demand, using the file system as structured, externalized memory.\n\n6. **Manipulating Attention**: They used techniques like creating and updating a todo.md file to keep the agent focused on the task objectives, avoiding 'lost-in-the-middle' issues.\n\n7. **Learning from Mistakes**: They found that leaving errors and failed actions in the context helped the model learn and adapt, reducing the chance of repeating the same mistakes.\n\n8. **Avoiding Few-Shot Pitfalls**: They introduced structured variation in actions and observations to prevent the agent from falling into repetitive patterns, which can lead to drift and overgeneralization.\n\nThroughout this process, the team focused on practical, real-world testing and refinement, using insights gained from each iteration to improve the next.",
+      "ai_provider": "anthropic",
+      "linked_articles": []
+    },
+    {
+      "id": 26,
+      "title": "2502",
+      "url": "https://arxiv.org/pdf/2502.09356",
+      "processed_date": "2025-08-06 17:57:37",
+      "status": "completed",
+      "analysis": "**Key Findings:** Analysis parsing failed",
+      "ai_provider": "anthropic",
+      "linked_articles": []
+    },
     {
       "id": 25,
       "title": "Human-in-the-Loop LLM Annotation for Subjective Tasks",
@@ -246,31 +526,19 @@
   "metadata": {
     "date_range": {
       "earliest": "2025-07-02T09:26:18+00:00",
-      "latest": "2025-07-23T18:42:43.669390+00:00"
+      "latest": "2025-08-06T18:07:26+00:00"
     },
     "ai_providers": {
+      "anthropic": 28,
       "claude": 24
     },
     "status_counts": {
-      "completed": 24
+      "completed": 52
     }
   },
   "processing_status": {
     "system_status": "unknown",
-    "last_updated": "2025-07-04T15:30:55.088500+00:00",
-    "summary": {
-      "total_days": 0,
-      "successful_days": 0,
-      "failed_days": 0,
-      "partial_days": 0
-    },
     "dates": {},
-    "recent_errors_by_date": {},
-    "health_check": {
-      "timestamp": "2025-08-06T13:35:14.254956+00:00",
-      "apis_working": 0,
-      "rss_feed_accessible": true,
-      "database_accessible": true
-    }
+    "recent_errors_by_date": {}
   }
 }

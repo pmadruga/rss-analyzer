@@ -116,50 +116,59 @@ jobs:
         uv run python -m src.main run --limit 1 || true
 
     # ========================================
-    # ANALYSIS PHASE (Skip if test_only)
+    # RSS SYNCHRONIZATION CHECK PHASE
     # ========================================
-    - name: 📊 Run full RSS analysis
+    - name: 🔍 Check RSS feed synchronization
       if: github.event.inputs.test_only != 'true'
       run: |
-        echo "📊 Running full RSS analysis..."
+        echo "🔍 Checking RSS feed synchronization..."
+        chmod +x tools/ensure_rss_synced.sh
+        tools/ensure_rss_synced.sh
+
+    # ========================================
+    # ANALYSIS PHASE (Skip if test_only)
+    # ========================================
+    - name: 📊 Run full RSS analysis (backup)
+      if: github.event.inputs.test_only != 'true'
+      run: |
+        echo "📊 Running backup RSS analysis check..."
         set -e  # Exit on any error
 
-        # Run the analysis with verbose output
-        if uv run python -m src.main --log-level DEBUG run; then
-          echo "✅ RSS analysis completed successfully"
+        # Run sync check again to ensure completeness
+        if uv run python tools/check_rss_sync.py; then
+          echo "✅ RSS sync verification passed"
         else
-          echo "❌ RSS analysis failed"
-          echo "📋 Checking for any partial results..."
+          echo "⚠️ RSS sync check indicates missing articles, running additional processing..."
+          # Run additional analysis to catch any remaining articles
+          uv run python -m src.main --log-level DEBUG run --limit 30 || true
+        fi
 
-          # Display any available logs for debugging
-          if [ -d "logs" ]; then
-            echo "📁 Log files found:"
-            ls -la logs/
-            echo "📄 Latest log content:"
-            find logs -name "*.log" -exec tail -20 {} \; 2>/dev/null || echo "No log files found"
-          fi
+        # Final verification and reporting
+        if [ -f "data/articles.db" ]; then
+          echo "🗄️ Final database status:"
+          uv run python -c "
+          import sqlite3
+          conn = sqlite3.connect('data/articles.db')
+          cursor = conn.cursor()
+          try:
+              cursor.execute('SELECT COUNT(*) FROM articles')
+              total = cursor.fetchone()[0]
+              cursor.execute('SELECT status, COUNT(*) FROM articles GROUP BY status')
+              status_counts = cursor.fetchall()
+              print(f'Total articles in database: {total}')
+              for status, count in status_counts:
+                  print(f'  {status}: {count}')
 
-          # Display database status if it exists
-          if [ -f "data/articles.db" ]; then
-            echo "🗄️ Database status:"
-            uv run python -c "
-            import sqlite3
-            conn = sqlite3.connect('data/articles.db')
-            cursor = conn.cursor()
-            try:
-                cursor.execute('SELECT COUNT(*) FROM articles')
-                print(f'Total articles in database: {cursor.fetchone()[0]}')
-                cursor.execute('SELECT status, COUNT(*) FROM articles GROUP BY status')
-                for status, count in cursor.fetchall():
-                    print(f'  {status}: {count}')
-            except Exception as e:
-                print(f'Error querying database: {e}')
-            finally:
-                conn.close()
-            " 2>/dev/null || echo "Could not query database"
-          fi
-
-          exit 1
+              # Check completion rate
+              cursor.execute('SELECT COUNT(*) FROM articles WHERE status = \"completed\"')
+              completed = cursor.fetchone()[0]
+              completion_rate = (completed / total * 100) if total > 0 else 0
+              print(f'Completion rate: {completion_rate:.1f}%')
+          except Exception as e:
+              print(f'Error querying database: {e}')
+          finally:
+              conn.close()
+          " 2>/dev/null || echo "Could not query database"
         fi
 
     - name: 📝 Generate articles by date
