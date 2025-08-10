@@ -82,7 +82,7 @@ jobs:
       run: |
         echo "🔍 Testing RSS feed connectivity..."
         uv run python -c "
-        from src.rss_parser import RSSParser
+        from src.core.rss_parser import RSSParser
         parser = RSSParser()
         entries = parser.fetch_feed('https://bg.raindrop.io/rss/public/57118738')
         print(f'✅ RSS parsing test: Found {len(entries)} entries')
@@ -92,7 +92,7 @@ jobs:
       run: |
         echo "🌐 Testing web scraping..."
         uv run python -c "
-        from src.scraper import WebScraper
+        from src.core.scraper import WebScraper
         scraper = WebScraper()
         result = scraper.scrape_article('https://jina.ai/news/quantization-aware-training-of-jina-embeddings-v4/', follow_links=False)
         print(f'✅ Scraper test: {\"Success\" if result else \"Failed\"}')
@@ -104,7 +104,7 @@ jobs:
       run: |
         echo "🗄️ Testing database..."
         uv run python -c "
-        from src.database import DatabaseManager
+        from src.core.database import DatabaseManager
         db = DatabaseManager('data/test.db')
         print('✅ Database test: Initialized successfully')
         "

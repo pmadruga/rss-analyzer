@@ -10,7 +10,7 @@ sys.path.append("/app" if os.path.exists("/app") else ".")
 
 import logging
 
-from src.scraper import WebScraper
+from src.core.scraper import WebScraper
 
 # Setup logging
 logging.basicConfig(
