@@ -8,8 +8,8 @@ Eliminates code duplication while maintaining Mistral-specific functionality.
 import logging
 from typing import Any
 
-from mistralai.client import MistralClient as MistralAPIClient
-from mistralai.models.chat_completion import ChatMessage
+from mistralai import Mistral
+from mistralai import UserMessage, SystemMessage
 
 from ..config import CONFIG
 from ..exceptions import (
@@ -38,7 +38,7 @@ class MistralClient(BaseAIClient):
 
         # Initialize Mistral client
         try:
-            self.client = MistralAPIClient(api_key=api_key)
+            self.client = Mistral(api_key=api_key)
         except Exception as e:
             raise APIConnectionError(
                 f"Failed to initialize Mistral client: {e}", "Mistral"
@@ -66,10 +66,10 @@ class MistralClient(BaseAIClient):
         """
         try:
             # Create chat message
-            messages = [ChatMessage(role="user", content=prompt)]
+            messages = [UserMessage(content=prompt)]
 
             # Make API call
-            response = self.client.chat(
+            response = self.client.chat.complete(
                 model=self.model,
                 messages=messages,
                 max_tokens=self.max_tokens,

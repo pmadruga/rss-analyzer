@@ -11,19 +11,25 @@ def test_imports():
     print("🔍 Testing critical imports...")
 
     try:
-        # Test RSS and scraping imports
-        from src.database import DatabaseManager  # noqa: F401
-        from src.rss_parser import RSSParser  # noqa: F401
-        from src.scraper import WebScraper  # noqa: F401
+        # Test RSS and scraping imports (new structure)
+        from src.core.database import DatabaseManager  # noqa: F401
+        from src.core.rss_parser import RSSParser  # noqa: F401
+        from src.core.scraper import WebScraper  # noqa: F401
 
         print("✅ Core modules imported successfully")
 
-        # Test AI client imports
-        from src.claude_client import ClaudeClient  # noqa: F401
-        from src.mistral_client import MistralClient  # noqa: F401
-        from src.openai_client import OpenAIClient  # noqa: F401
+        # Test AI client imports (new structure)
+        from src.clients.claude import ClaudeClient  # noqa: F401
+        from src.clients.mistral import MistralClient  # noqa: F401
+        from src.clients.openai import OpenAIClient  # noqa: F401
 
         print("✅ AI client modules imported successfully")
+
+        # Test processor imports
+        from src.processors.article_processor import ArticleProcessor  # noqa: F401
+        from src.config.settings import AppConfig, CONFIG  # noqa: F401
+        
+        print("✅ Processor and config modules imported successfully")
 
         # Test specific dependencies
         import anthropic  # noqa: F401
@@ -56,19 +62,19 @@ def test_functionality():
 
     try:
         # Test database creation
-        from src.database import DatabaseManager
+        from src.core.database import DatabaseManager
 
         DatabaseManager(":memory:")  # In-memory database for testing
         print("✅ Database initialization works")
 
         # Test RSS parser instantiation
-        from src.rss_parser import RSSParser
+        from src.core.rss_parser import RSSParser
 
         RSSParser()
         print("✅ RSS parser instantiation works")
 
         # Test web scraper instantiation
-        from src.scraper import WebScraper
+        from src.core.scraper import WebScraper
 
         WebScraper()
         print("✅ Web scraper instantiation works")
