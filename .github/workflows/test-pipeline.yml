@@ -106,3 +106,4 @@ jobs:
           echo "❌ Some pipeline component tests failed!"
         fi
         echo "Test level: ${{ github.event.inputs.test_level || 'imports' }}"
+        echo "Import fixes applied - 2025-08-11"
