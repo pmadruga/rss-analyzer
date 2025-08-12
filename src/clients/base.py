@@ -5,7 +5,6 @@ Abstract base class for AI clients to eliminate code duplication
 and provide consistent interface across all providers.
 """
 
-import json
 import logging
 import time
 from abc import ABC, abstractmethod
@@ -62,15 +61,9 @@ class BaseAIClient(ABC):
 
     def _create_system_prompt(self) -> str:
         """Create standardized system prompt for analysis"""
-        return """You are an expert academic analyst. Analyze the provided article using the Feynman technique - explain complex concepts as if teaching them to someone new to the field.
-
-Your analysis should be structured as JSON with these fields:
-- methodology_detailed: Comprehensive explanation of the research methodology or approach
-- technical_approach: Technical implementation details and innovation
-- key_findings: Main discoveries and their significance
-- research_design: Overall design and experimental setup
-
-Use clear analogies and examples. Focus on why the approach matters and how it works."""
+        return (
+            "Analyze this content in-depth and explain it using the Feynman technique"
+        )
 
     def _enforce_rate_limit(self) -> None:
         """Enforce rate limiting between requests"""
@@ -101,48 +94,30 @@ Content:
             return None
 
         try:
-            # Try to extract JSON from response
             response_text = response_text.strip()
 
-            # Handle responses wrapped in markdown code blocks
-            if response_text.startswith("```json"):
-                response_text = response_text[7:]
-            if response_text.endswith("```"):
-                response_text = response_text[:-3]
-
-            # Parse JSON
-            analysis = json.loads(response_text)
-
-            # Validate required fields
-            required_fields = [
-                "methodology_detailed",
-                "technical_approach",
-                "key_findings",
-                "research_design",
-            ]
-            for field in required_fields:
-                if field not in analysis:
-                    logger.warning(f"Missing required field: {field}")
-                    analysis[field] = ""
-
-            # Add metadata
-            analysis["metadata"] = {
-                "ai_provider": self.provider_name.lower(),
-                "model": self.model,
-                "processed_at": time.time(),
+            # Store the comprehensive Feynman technique explanation in methodology_detailed
+            # Leave other fields empty since we're getting a single unified analysis
+            analysis = {
+                "methodology_detailed": response_text,
+                "technical_approach": "",
+                "key_findings": "",
+                "research_design": "",
+                "metadata": {
+                    "ai_provider": self.provider_name.lower(),
+                    "model": self.model,
+                    "processed_at": time.time(),
+                },
             }
 
             return analysis
 
-        except json.JSONDecodeError as e:
-            logger.error(f"Failed to parse analysis response as JSON: {e}")
+        except Exception as e:
+            logger.error(f"Failed to parse analysis response: {e}")
             logger.debug(f"Raw response: {response_text[:500]}...")
 
             # Fallback: create structured response from text
             return self._create_fallback_analysis(response_text)
-        except Exception as e:
-            logger.error(f"Unexpected error parsing analysis: {e}")
-            return None
 
     def _create_fallback_analysis(self, text: str) -> dict[str, Any]:
         """Create fallback analysis when JSON parsing fails"""
@@ -167,10 +142,7 @@ Content:
             try:
                 return func(*args, **kwargs)
             except APIRateLimitError as e:
-                if e.retry_after:
-                    sleep_time = e.retry_after
-                else:
-                    sleep_time = self.base_delay * (2**attempt)
+                sleep_time = e.retry_after or self.base_delay * (2**attempt)
 
                 logger.warning(
                     f"Rate limited on attempt {attempt + 1}/{self.max_retries}. "
@@ -190,7 +162,9 @@ Content:
 
             except Exception as e:
                 logger.error(f"Unexpected error on attempt {attempt + 1}: {e}")
-                raise APIClientError(f"Unexpected error: {e}", self.provider_name)
+                raise APIClientError(
+                    f"Unexpected error: {e}", self.provider_name
+                ) from e
 
         # All retries failed
         if last_exception:
@@ -264,7 +238,7 @@ Content:
             raise
         except Exception as e:
             logger.error(f"Unexpected error analyzing article '{title}': {e}")
-            raise ContentProcessingError(f"Analysis failed: {e}")
+            raise ContentProcessingError(f"Analysis failed: {e}") from e
 
     def batch_analyze(
         self, articles: list[dict[str, str]]
