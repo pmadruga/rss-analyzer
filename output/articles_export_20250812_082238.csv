@@ -1,0 +1,59 @@
+title,url,publication_date,processed_date,methodology_detailed,key_findings,technical_approach,research_design
+2502,https://arxiv.org/pdf/2502.09356,2025-08-04T19:11:05+00:00,2025-08-12 08:13:42,"
+{
+  ""methodology_detailed"": {
+    ""explanation"": ""Imagine you're trying to understand a forest by looking at it from different angles—some close-up (like individual leaves), some far away (like the whole forest). The researchers here are doing something similar but for satellite data. They use a method called 'self-supervised learning,' which is like teaching a computer to recognize patterns without giving it explicit labels. Think of it as solving a puzzle where some pieces are missing, and...",,,
+Sumit (@reachsumit.com),https://bsky.app/profile/reachsumit.com/post/3lvcnilnqqk2d,2025-08-01T11:29:02+00:00,2025-08-12 08:14:40,"
+{
+  ""methodology_detailed"": {
+    ""explanation"": ""Imagine you're trying to understand a book by reading it one word at a time, but you can only look at the words you've already read (like reading with a piece of paper covering the rest of the page). This is how decoder-only language models (LLMs) work—they process text in one direction, which can limit their ability to fully understand the context. Causal2Vec is like giving the model a 'cheat sheet' that summarizes the entire book before it ...",,,
+Maria Antoniak (@mariaa.bsky.social),https://bsky.app/profile/mariaa.bsky.social/post/3lumkyphrok2f,2025-07-23T15:44:26+00:00,2025-08-12 08:15:53,"Here’s the analysis of the article using the Feynman technique, structured as JSON with clear explanations and analogies:
+
+```json
+{
+  ""methodology_detailed"": {
+    ""explanation"": ""The research investigates how Large Language Models (LLMs) can assist humans in annotating subjective tasks, like labeling opinions or emotions in text. Think of it like a teacher (the LLM) helping a student (the human annotator) grade essays. The teacher provides suggestions, but the student makes the final decisi...",,,
+The Big LLM Architecture Comparison,https://sebastianraschka.com/blog/2025/the-big-llm-architecture-comparison.html,2025-07-20T13:35:19+00:00,2025-08-12 08:16:58,"Here's the JSON analysis of the article using the Feynman technique to explain complex concepts simply:
+
+```json
+{
+  ""methodology_detailed"": {
+    ""description"": ""The article compares modern LLM architectures by examining their structural components rather than benchmark performance. It uses a qualitative analysis approach, focusing on architectural innovations across multiple models released in 2024-2025."",
+    ""analogy"": ""Think of this like comparing different car engine designs. Instead of...",,,
+Sumit (@reachsumit.com),https://bsky.app/profile/reachsumit.com/post/3lty7qvirds2t,2025-07-15T07:49:27+00:00,2025-08-12 08:17:23,"
+{
+  ""methodology_detailed"": {
+    ""explanation"": ""The study examines how different ways of organizing and representing knowledge (like how you might arrange books in a library—by topic, by author, or by color) affect how well AI systems can retrieve and use that knowledge. Specifically, it looks at 'Agentic Retrieval-Augmented Generation' (RAG) systems, which are like smart assistants that can search through a database (a 'triplestore,' which is a type of database that stores information in ...",,,
+Sumit (@reachsumit.com),https://bsky.app/profile/reachsumit.com/post/3ltnsm55rq227,2025-07-11T08:10:36+00:00,2025-08-12 08:18:22,"
+{
+  ""methodology_detailed"": {
+    ""explanation"": ""Imagine you're trying to solve a complex mystery, like finding out why your plant is dying. You might start by asking questions (e.g., 'What kind of soil does it need?'), looking up answers in books or online (retrieval), and then piecing together the information to find the root cause (reasoning). FrugalRAG works similarly but for AI answering complex questions. It uses a two-stage approach: first, it retrieves relevant information from a la...",,,
+arxiv cs.IR (@arxiv-cs-ir.bsky.social),https://bsky.app/profile/arxiv-cs-ir.bsky.social/post/3lto4qcwxly2j,2025-07-11T08:09:15+00:00,2025-08-12 08:18:38,"
+{
+  ""methodology_detailed"": {
+    ""explanation"": ""The study focuses on evaluating how well we can compare different information retrieval (IR) systems using human-labeled relevance assessments (qrels). Think of qrels as 'grades' given by humans to judge how well a search system retrieves relevant documents for a query. Since getting these grades is expensive and time-consuming, researchers have been trying to find more efficient ways to create qrels. The key question is: *How reliable are th...",,,
+Context Engineering,https://blog.langchain.com/context-engineering-for-agents/,2025-07-06T23:05:23+00:00,2025-08-12 08:19:36,"Here’s the structured analysis of the article using the Feynman technique, broken down into clear, beginner-friendly explanations with analogies and examples:
+
+```json
+{
+  ""methodology_detailed"": {
+    ""explanation"": ""The article introduces 'context engineering' as a way to manage the limited 'memory' (context window) of AI agents, similar to how an operating system manages RAM for a computer. The methodology involves four key strategies: **write, select, compress, and isolate** context. Thes...",,,
+GlórIA: A Generative and Open Large Language Model for Portuguese Pre-print - Accepted for publication at PROPOR 2024.,https://arxiv.org/html/2402.12969v1,2025-07-04T16:39:32+00:00,2025-08-12 08:19:54,"Here’s the analysis of the article using the Feynman technique, structured as JSON with clear explanations and analogies:
+
+```json
+{
+  ""methodology_detailed"": {
+    ""explanation"": ""The researchers built GlórIA, a large language model (LLM) specifically for Portuguese, similar to how a chef might create a specialized recipe book for a specific cuisine. Instead of using a generic model trained on many languages, they focused on Portuguese to make it more accurate and culturally relevant. They u...",,,
+Harnessing Multiple Large Language Models: A Survey on LLM Ensemble,https://arxiv.org/abs/2502.18036,2025-07-02T13:53:35+00:00,2025-08-12 08:21:07,"
+{
+  ""methodology_detailed"": {
+    ""explanation"": ""The paper uses a systematic review methodology to analyze how multiple large language models (LLMs) can be combined to improve performance. Think of it like a team of experts working together—each expert (LLM) has different strengths, and by combining their insights, you get a better result than any single expert could provide alone. The authors categorize existing research into three main phases: before, during, and after inference (the proc...",,,
+Tom Aarsen (@tomaarsen.com),https://bsky.app/profile/tomaarsen.com/post/3lsvucbrlpk24,2025-07-01T15:40:28+00:00,2025-08-12 08:21:21,"
+{
+  ""methodology_detailed"": {
+    ""explanation"": ""The analysis appears to focus on examining a post from Bluesky, a decentralized social media platform. Since the post content couldn't be extracted, the methodology likely involves analyzing metadata, embedded links, and contextual information to infer the purpose or significance of the post. Think of this like trying to understand a book by looking at its cover, table of contents, and references when the actual text is missing. The analyst w...",,,
+Quantization-Aware Training of jina-embeddings-v4,https://jina.ai/news/quantization-aware-training-of-jina-embeddings-v4/,2025-07-01T10:45:47+00:00,2025-08-12 08:21:43,"
+{
+  ""methodology_detailed"": {
+    ""explanation"": ""The article explores how to make AI models more efficient by reducing the size of their outputs (embeddings) without losing accuracy. Think of it like compressing a high-resolution photo into a smaller file size while keeping it sharp enough to recognize details. The study focuses on two main techniques: Post-Training Quantization (PTQ) and Quantization-Aware Training (QAT)."",
+    ""analogy"": ""Imagine you have a recipe book where each recipe i...",,,

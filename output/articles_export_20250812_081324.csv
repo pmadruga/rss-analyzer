@@ -1,0 +1,35 @@
+title,url,publication_date,processed_date,methodology_detailed,key_findings,technical_approach,research_design
+ARES: An Automated Evaluation Framework for Retrieval-Augmented Generation Systems,https://arxiv.org/html/2311.09476v2,2025-07-31T08:41:54+00:00,2025-08-12 08:08:29,"Here’s the analysis of the article using the Feynman technique, structured as JSON with clear explanations and analogies:
+
+```json
+{
+  ""methodology_detailed"": {
+    ""explanation"": ""The researchers built a framework called ARES to evaluate Retrieval-Augmented Generation (RAG) systems. Think of RAG like a librarian who fetches books (retrieval) and then writes a summary based on them (generation). ARES is like a test that checks how well this librarian does their job—whether they pick the right...",,,
+Sumit (@reachsumit.com),https://bsky.app/profile/reachsumit.com/post/3lvaedjt25c2e,2025-07-31T08:25:20+00:00,2025-08-12 08:08:52,"
+{
+  ""methodology_detailed"": {
+    ""explanation"": ""The research focuses on adapting large language models (LLMs) to generate high-quality text embeddings efficiently. Imagine LLMs as powerful engines that understand language deeply but are primarily designed for generating text. The challenge is to repurpose these engines to create compact, meaningful representations (embeddings) of entire sentences or documents, which are useful for tasks like clustering or retrieval.
+
+    The methodology in...",,,
+From Citations to Criticality: Predicting Legal Decision Influence in the Multilingual Swiss Jurisprudence,https://arxiv.org/abs/2410.13460,2025-07-28T12:05:48+00:00,2025-08-12 08:09:44,"
+{
+  ""methodology_detailed"": {
+    ""explanation"": ""Imagine you're in a hospital emergency room, and patients are coming in with different levels of urgency. Some need immediate attention, while others can wait. The researchers are trying to do something similar for court cases. They want to predict which legal cases are most 'critical'—meaning which ones are likely to be influential or important in the future—so courts can prioritize them effectively."",
+    ""analogy"": ""Think of it like a 'tri...",,,
+Can Unconfident LLM Annotations Be Used for Confident Conclusions?,https://arxiv.org/html/2408.15204v2,2025-07-24T12:36:13+00:00,2025-08-12 08:10:05,"Here’s the analysis of the article using the Feynman technique, structured as JSON with clear explanations and analogies:
+
+```json
+{
+  ""methodology_detailed"": {
+    ""explanation"": ""The researchers are trying to figure out if uncertain answers from a Large Language Model (LLM) can still be useful for making confident conclusions. Imagine you're a student who isn't sure about some answers on a test, but your teacher can still use your partially correct work to figure out the right answer. The s...",,,
+Sumit (@reachsumit.com),https://bsky.app/profile/reachsumit.com/post/3ltya4kszmk2t,2025-07-15T07:48:32+00:00,2025-08-12 08:12:21,"
+{
+  ""methodology_detailed"": {
+    ""explanation"": ""GraphRunner is like a GPS for navigating complex knowledge graphs. Instead of making one turn at a time (like traditional methods), it plans the entire route first, checks if the route makes sense, and then executes it. This three-step process—planning, verification, and execution—helps avoid wrong turns (LLM reasoning errors) and dead ends (hallucinations)."",
+    ""why_it_matters"": ""Traditional graph-based retrieval is like driving without a ...",,,
+"Context Engineering - What it is, and techniques to consider — LlamaIndex - Build Knowledge Assistants over your Enterprise Data",https://www.llamaindex.ai/blog/context-engineering-what-it-is-and-techniques-to-consider?utm_source=socials&utm_medium=li_social,2025-07-13T21:32:38+00:00,2025-08-12 08:13:02,"Here’s the structured analysis of the article using the Feynman technique, broken down into clear, beginner-friendly explanations with analogies and examples:
+
+```json
+{
+  ""methodology_detailed"": {
+    ""explanation"": ""Context engineering is like preparing a chef’s workspace before cooking. Just as a chef needs the right ingredients, tools, and recipes to make a dish, an AI agent needs the right context—such as instructions, data, and tools—to perform tasks effectively. The article introduces ...",,,
