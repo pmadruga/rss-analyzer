@@ -1,0 +1,177 @@
+title,url,publication_date,processed_date,methodology_detailed,key_findings,technical_approach,research_design
+2502,https://arxiv.org/pdf/2502.09356,2025-08-04T19:11:05+00:00,2025-08-13 08:07:07,"### **In-Depth Analysis of ""Galileo: Learning Global & Local Features of Many Remote Sensing Modalities"" Using the Feynman Technique**
+
+The **Feynman Technique** involves breaking down complex ideas into simple explanations, identifying gaps, refining understanding, and then reconstructing the concept in plain language. Below, I’ll apply this method to the **Galileo** paper.
+
+---
+
+## **Step 1: Simple Explanation (As if Teaching a Child)**
+Imagine you have a **super-smart robot** that can look...",,,
+Context Engineering for AI Agents: Lessons from Building Manus,https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus,2025-08-03T09:26:34+00:00,2025-08-13 08:07:50,"### **Feynman Technique Breakdown: ""Context Engineering for AI Agents""**
+*(Simplified, step-by-step explanation as if teaching a 5-year-old, then building up complexity.)*
+
+---
+
+### **1. The Core Problem: ""What’s the Best Way to Build an AI Agent?""**
+**Simple Explanation:**
+Imagine you’re teaching a robot assistant (like Jarvis from Iron Man) to help you with tasks. You have two options:
+1. **Train it from scratch** (like teaching a baby everything—slow, expensive).
+2. **Give it a ""cheat shee...",,,
+SemRAG: Semantic Knowledge-Augmented RAG for Improved Question-Answering,https://arxiv.org/abs/2507.21110,2025-08-01T17:54:11+00:00,2025-08-13 08:08:23,"### **In-Depth Analysis of *SemRAG* Using the Feynman Technique**
+
+The **Feynman Technique** involves breaking down complex ideas into simple explanations, identifying gaps, and refining understanding. Below, I’ll apply this to *SemRAG* by:
+
+1. **Simplifying the core idea** (as if explaining to a beginner).
+2. **Identifying key components** and their roles.
+3. **Clarifying challenges and solutions**.
+4. **Summarizing experimental results and implications**.
+
+---
+
+## **1. Simple Explanation (E...",,,
+Sumit (@reachsumit.com),https://bsky.app/profile/reachsumit.com/post/3lvcnilnqqk2d,2025-08-01T11:29:02+00:00,2025-08-13 08:08:53,"### **In-Depth Analysis of *Causal2Vec* Using the Feynman Technique**
+
+The **Feynman Technique** involves breaking down complex ideas into simple, intuitive explanations as if teaching a beginner. Here’s how I’d explain *Causal2Vec* step by step:
+
+---
+
+### **1. The Problem: Why Decoder-Only LLMs Struggle with Embeddings**
+**Simple Explanation:**
+Imagine you’re reading a book *one word at a time*, and you can’t peek ahead. That’s how **decoder-only LLMs** (like GPT) work—they process text *lef...",,,
+Multiagent AI for generating chain-of-thought training data,https://www.amazon.science/blog/multiagent-ai-for-generating-chain-of-thought-training-data,2025-08-01T09:48:28+00:00,2025-08-13 08:09:40,"### **In-Depth Analysis Using the Feynman Technique**
+The **Feynman Technique** involves breaking down complex ideas into simple, intuitive explanations, identifying gaps, and refining understanding. Below is a step-by-step breakdown of the article *""Multiagent AI for Generating Chain-of-Thought Training Data""* using this method.
+
+---
+
+## **1. Core Concept: What is the Problem?**
+### **Simple Explanation:**
+Large Language Models (LLMs) like ChatGPT are good at answering questions, but they so...",,,
+ARES: An Automated Evaluation Framework for Retrieval-Augmented Generation Systems,https://arxiv.org/html/2311.09476v2,2025-07-31T08:41:54+00:00,2025-08-13 08:10:14,"The **Feynman Technique** is a method for learning and explaining complex concepts by breaking them down into simple, intuitive terms. It involves four steps:
+1. **Study** the material deeply.
+2. **Explain** it as if teaching a child (using plain language).
+3. **Identify gaps** in understanding and revisit the source.
+4. **Simplify** further with analogies and examples.
+
+Below, I’ll apply this technique to the paper **""ARES: An Automated Evaluation Framework for Retrieval-Augmented Generation...",,,
+Sumit (@reachsumit.com),https://bsky.app/profile/reachsumit.com/post/3lvaedjt25c2e,2025-07-31T08:25:20+00:00,2025-08-13 08:10:44,"### **In-Depth Analysis Using the Feynman Technique**
+The **Feynman Technique** involves breaking down complex ideas into simple, intuitive explanations by:
+1. **Explaining the concept in plain language** (as if teaching a child).
+2. **Identifying gaps** in understanding and refining explanations.
+3. **Simplifying further** with analogies and examples.
+4. **Reviewing and organizing** the knowledge systematically.
+
+Let’s apply this to the paper:
+
+---
+
+## **1. Plain-Language Explanation**
+### *...",,,
+HALoGEN: Fantastic LLM Hallucinations and Where to Find Them,https://arxiv.org/abs/2501.08292,2025-07-31T00:00:35+00:00,2025-08-13 08:11:21,"### **In-Depth Analysis of ""HALoGEN: Fantastic LLM Hallucinations and Where to Find Them"" Using the Feynman Technique**
+
+The **Feynman Technique** is a learning method that involves:
+1. **Explaining the concept in simple terms** (as if teaching a child).
+2. **Identifying gaps** in understanding and revisiting the source.
+3. **Simplifying and using analogies** to reinforce clarity.
+4. **Reviewing and refining** the explanation.
+
+Let’s break down the paper step by step.
+
+---
+
+## **1. Simple Exp...",,,
+Language Model Re-rankers are Fooled by Lexical Similarities,https://arxiv.org/abs/2502.17036,2025-07-29T22:40:29+00:00,2025-08-13 08:12:11,"### **In-Depth Analysis Using the Feynman Technique**
+The **Feynman Technique** involves breaking down complex ideas into simple explanations, identifying gaps, and refining understanding. Below, I’ll apply this to the paper *""Language Model Re-rankers are Fooled by Lexical Similarities""* in four steps:
+
+---
+
+## **1. Simple Explanation (As if teaching a child)**
+Imagine you’re searching for an answer to a question (e.g., *""Why is the sky blue?""*). A search engine first fetches a bunch of poss...",,,
+From Citations to Criticality: Predicting Legal Decision Influence in the Multilingual Swiss Jurisprudence,https://arxiv.org/abs/2410.13460,2025-07-28T12:05:48+00:00,2025-08-13 08:12:50,"### **In-Depth Analysis Using the Feynman Technique**
+
+The **Feynman Technique** is a learning method that involves breaking down complex ideas into simple explanations, identifying gaps, and refining understanding. Below, I’ll apply this technique to the paper *""From Citations to Criticality: Predicting Legal Decision Influence in the Multilingual Swiss Jurisprudence""* by **Stern et al. (2024)**.
+
+---
+
+## **Step 1: Simple Explanation (As if teaching a 12-year-old)**
+
+### **What’s the Problem...",,,
+Can Unconfident LLM Annotations Be Used for Confident Conclusions?,https://arxiv.org/html/2408.15204v2,2025-07-24T12:36:13+00:00,2025-08-13 08:13:36,"The paper *""Can Unconfident LLM Annotations Be Used for Confident Conclusions?""* (arXiv:2408.15204v2) explores whether **low-confidence annotations from Large Language Models (LLMs)**—where the model expresses uncertainty in its output—can still be **usefully aggregated to produce high-confidence conclusions**. Below, I’ll break this down using the **Feynman Technique**, which involves:
+
+1. **Explaining the concept in simple terms** (as if to a beginner).
+2. **Identifying gaps and refining th...",,,
+Maria Antoniak (@mariaa.bsky.social),https://bsky.app/profile/mariaa.bsky.social/post/3lumkyphrok2f,2025-07-23T15:44:26+00:00,2025-08-13 08:14:03,"### **In-Depth Analysis Using the Feynman Technique**
+
+The **Feynman Technique** is a learning method that involves breaking down complex ideas into simple explanations, identifying gaps, and refining understanding. Here’s how we’ll apply it to Maria Antoniak’s Bluesky post and the linked research paper:
+
+---
+
+### **Step 1: Simplify the Core Idea**
+**What is the post about?**
+Maria Antoniak shared a link to a research paper titled:
+*""Just Put a Human in the Loop? Investigating LLM-Assisted An...",,,
+Maria Antoniak (@mariaa.bsky.social),https://bsky.app/profile/mariaa.bsky.social/post/3lumkyphpq22f,2025-07-23T15:44:12+00:00,2025-08-13 08:14:31,"### **In-Depth Analysis Using the Feynman Technique**
+
+The **Feynman Technique** is a learning method that involves breaking down complex ideas into simple explanations, identifying gaps in understanding, and refining explanations until they are clear. Below, I’ll apply this technique to analyze Maria Antoniak’s Bluesky post and the linked paper (*""Can Unconfident LLM Annotations Be Used for Confident Conclusions?""*).
+
+---
+
+## **Step 1: Simple Explanation (As If Teaching a Child)**
+**What is ...",,,
+Sung Kim (@sungkim.bsky.social),https://bsky.app/profile/sungkim.bsky.social/post/3luj3kikh6c2s,2025-07-21T23:33:12+00:00,2025-08-13 08:15:16,"### **In-Depth Analysis Using the Feynman Technique**
+
+The **Feynman Technique** is a learning method that involves breaking down complex ideas into simple, intuitive explanations. Here’s how we’ll apply it to Sung Kim’s Bluesky post about **Moonshot AI’s Kimi K2 Technical Report**:
+
+---
+
+### **Step 1: Understand the Core Message**
+**Original Post Summary:**
+- **Who?** Sung Kim (a tech/ML enthusiast or researcher) is sharing news about **Moonshot AI**, a Chinese AI lab.
+- **What?** Moonshot A...",,,
+The Big LLM Architecture Comparison,https://sebastianraschka.com/blog/2025/the-big-llm-architecture-comparison.html,2025-07-20T13:35:19+00:00,2025-08-13 08:16:03,"### **In-Depth Analysis Using the Feynman Technique**
+The **Feynman Technique** involves breaking down complex ideas into simple explanations, identifying gaps, and refining understanding. Below, I’ll apply this to Sebastian Raschka’s article, *""The Big LLM Architecture Comparison""*, by:
+1. **Simplifying key concepts** (e.g., attention mechanisms, MoE, normalization).
+2. **Identifying core architectural trends** across models.
+3. **Explaining trade-offs** (e.g., efficiency vs. performance).
+4...",,,
+Sumit (@reachsumit.com),https://bsky.app/profile/reachsumit.com/post/3lty7qvirds2t,2025-07-15T07:49:27+00:00,2025-08-13 08:16:39,"### **In-Depth Analysis Using the Feynman Technique**
+
+The **Feynman Technique** involves breaking down complex ideas into simple, intuitive explanations as if teaching them to a beginner. Here’s how I’ll apply it to this paper:
+
+---
+
+### **1. Simplify the Core Idea (Plain English Explanation)**
+**What’s the paper about?**
+Imagine you’re teaching a robot to answer questions by looking up facts in a giant digital encyclopedia (a *knowledge graph*). The robot uses a brain-like AI (an LLM) to un...",,,
+Sumit (@reachsumit.com),https://bsky.app/profile/reachsumit.com/post/3ltya4kszmk2t,2025-07-15T07:48:32+00:00,2025-08-13 08:17:12,"### **In-Depth Analysis of *GraphRunner* Using the Feynman Technique**
+
+The **Feynman Technique** is a learning method where you break down complex ideas into simple terms, identify gaps, and rebuild understanding from the ground up. Below, I’ll apply this to *GraphRunner* by:
+
+1. **Explaining the core problem** in simple terms.
+2. **Breaking down the solution** (GraphRunner’s framework).
+3. **Identifying key innovations** and why they matter.
+4. **Comparing it to existing methods** to highli...",,,
+Sumit (@reachsumit.com),https://bsky.app/profile/reachsumit.com/post/3ltya7niyck2t,2025-07-15T07:48:11+00:00,2025-08-13 08:17:40,"### **In-Depth Analysis Using the Feynman Technique**
+The **Feynman Technique** involves breaking down complex ideas into simple, intuitive explanations as if teaching them to a beginner. Here’s how I’ll apply it to Sumit’s Bluesky post about **""Agentic RAG with Deep Reasoning.""**
+
+---
+
+### **Step 1: Understand the Core Concepts**
+#### **1. What is RAG?**
+- **Retrieval-Augmented Generation (RAG)** is a technique that combines **retrieval** (fetching relevant information from a database) with ...",,,
+"Context Engineering - What it is, and techniques to consider — LlamaIndex - Build Knowledge Assistants over your Enterprise Data",https://www.llamaindex.ai/blog/context-engineering-what-it-is-and-techniques-to-consider?utm_source=socials&utm_medium=li_social,2025-07-13T21:32:38+00:00,2025-08-13 08:18:25,"### **In-Depth Analysis Using the Feynman Technique**
+The **Feynman Technique** involves breaking down complex ideas into simple, intuitive explanations. Here’s how we can apply it to **Context Engineering** from the LlamaIndex article:
+
+---
+
+## **1. Simplify the Core Idea**
+### **What is Context Engineering?**
+- **Prompt Engineering** = Giving the AI clear instructions (e.g., ""Write a summary of this article"").
+- **Context Engineering** = Carefully selecting and organizing the *right informa...",,,
+"The rise of ""context engineering""",https://blog.langchain.com/the-rise-of-context-engineering/,2025-07-12T10:05:14+00:00,2025-08-13 08:19:13,"### **In-Depth Analysis of ""The Rise of Context Engineering"" Using the Feynman Technique**
+
+The **Feynman Technique** is a learning method where you break down complex ideas into simple explanations, identify gaps in understanding, and refine until clarity is achieved. Below, I’ll apply this technique to the article *""The Rise of Context Engineering""* by LangChain.
+
+---
+
+## **1. Simple Explanation (Teach It to a Child)**
+Imagine you’re teaching a robot how to do a task, like making a sandwich...",,,
