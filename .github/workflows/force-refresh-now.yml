@@ -1,0 +1,85 @@
+name: Force Refresh Articles NOW
+
+on:
+  workflow_dispatch:
+
+env:
+  API_PROVIDER: 'mistral'
+  MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+  MAX_ARTICLES_PER_RUN: '45'
+  FOLLOW_LINKS: 'true'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "force-refresh"
+  cancel-in-progress: false
+
+jobs:
+  force-refresh:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+    - name: 🔄 Checkout repository
+      uses: actions/checkout@v4
+
+    - name: 🐍 Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: ⚡ Install uv
+      uses: astral-sh/setup-uv@v3
+
+    - name: 📦 Install dependencies
+      run: uv sync
+
+    - name: 📁 Create directories
+      run: mkdir -p data logs output docs
+
+    - name: 🔥 Force refresh ALL articles with AI title extraction
+      run: |
+        echo "🔥 Running FORCE REFRESH with AI title extraction..."
+        uv run python -m src.main run --force-refresh --limit 45
+
+    - name: 🌐 Generate website data
+      run: uv run python tools/generate_website_data.py --verbose
+
+    - name: 🎨 Setup GitHub Pages
+      uses: actions/configure-pages@v4
+
+    - name: 📤 Upload website files
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: 'docs'
+
+    - name: 🚀 Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
+
+    - name: 💾 Commit updated titles
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "Force Refresh Pipeline"
+        git add docs/data.json output/ -f || true
+        if ! git diff --staged --quiet; then
+          git commit -m "🎯 Force refresh with AI title extraction - $(date -u '+%Y-%m-%d %H:%M UTC')
+          
+          ✨ All articles refreshed with AI-powered title extraction
+          🤖 Generated with Force Refresh Pipeline"
+          git push
+        fi
+
+    - name: 📤 Upload database
+      uses: actions/upload-artifact@v4
+      with:
+        name: refreshed-database-${{ github.run_number }}
+        path: data/articles.db
+        retention-days: 30
+        if-no-files-found: ignore
