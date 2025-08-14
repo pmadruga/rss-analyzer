@@ -1,0 +1,374 @@
+title,url,publication_date,processed_date,methodology_detailed,key_findings,technical_approach,research_design
+ParallelSearch: Train your LLMs to Decompose Query and Search Sub-queries in Parallel with Reinforcement Learning,https://bsky.app/profile/reachsumit.com/post/3lwdbh73ews2k,2025-08-14T13:38:29+00:00,2025-08-14 19:47:26,"```json
+{
+    ""extracted_title"": ""ParallelSearch: Train your LLMs to Decompose Query and Search Sub-queries in Parallel with Reinforcement Learning"",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""ParallelSearch is a new way to teach AI models (specifically large language models or LLMs) how to break down complex search queries into smaller, independent parts that can be processed simultaneously (in parallel), ra...",,,
+@markriedl.bsky.social on Bluesky,https://bsky.app/profile/markriedl.bsky.social/post/3lwchgyv4ms2s,2025-08-13T21:06:20+00:00,2025-08-14 19:48:19,"```json
+{
+    ""extracted_title"": **""Legal Implications of Human Agency Law for AI Agents: Liability and Value Alignment""**,
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_question"": ""The post asks: *How do existing laws about human agency (the legal concept that humans are responsible for their actions) apply to AI agents? Specifically, what does this mean for (1) **liability** when AI causes harm and (2) **value alignme...",,,
+Galileo: Learning Global & Local Features of Many Remote Sensing Modalities,https://arxiv.org/pdf/2502.09356,2025-08-04T19:11:05+00:00,2025-08-14 19:49:34,"```json
+{
+    ""extracted_title"": **""Galileo: Learning Global & Local Features of Many Remote Sensing Modalities""**,
+
+    ""analysis"": {
+        ""1_Plain_English_Summary"": {
+            ""description"": ""
+            **What is this paper about?**
+            Imagine you’re trying to understand Earth from space using satellites. These satellites collect *many* types of data:
+            - **Optical images** (like photos, but with extra colors humans can’t see, e.g., infrared).
+            - **Rada...",,,
+Context Engineering for AI Agents: Lessons from Building Manus,https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus,2025-08-03T09:26:34+00:00,2025-08-14 19:50:35,"```json
+{
+    ""extracted_title"": ""Context Engineering for AI Agents: Lessons from Building Manus"",
+
+    ""analysis"": {
+        ""introduction"": {
+            ""core_insight"": ""The article is a **practical manifesto** on *context engineering*—the art of structuring, managing, and optimizing the input context for AI agents to maximize performance, cost-efficiency, and reliability. The author, Yichao 'Peak' Ji (co-founder of [Manus](https://manus.im)), frames this as a **paradigm shift** from tradi...",,,
+SemRAG: Semantic Knowledge-Augmented RAG for Improved Question-Answering,https://arxiv.org/abs/2507.21110,2025-08-01T17:54:11+00:00,2025-08-14 19:51:25,"```json
+{
+    ""extracted_title"": ""**SemRAG: Semantic Knowledge-Augmented Retrieval-Augmented Generation for Improved Question-Answering**"",
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""
+                **SemRAG is a smarter way to help AI answer questions accurately by combining two key ideas:**
+                - **Semantic Chunking**: Instead of splitting documents into arbitrary chunks (e.g., fixed-length para...",,,
+Causal2Vec: Improving Decoder-only LLMs as Versatile Embedding Models,https://bsky.app/profile/reachsumit.com/post/3lvcnilnqqk2d,2025-08-01T11:29:02+00:00,2025-08-14 19:52:07,"```json
+{
+    ""extracted_title"": ""Causal2Vec: Improving Decoder-only LLMs as Versatile Embedding Models"",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""
+                **Problem**: Decoder-only LLMs (like those used in chatbots) are great at generating text but struggle with *embedding tasks*—converting text into meaningful numerical vectors for search, clustering, or classification. Existing fixes either:
+    ...",,,
+Multiagent AI for generating chain-of-thought training data,https://www.amazon.science/blog/multiagent-ai-for-generating-chain-of-thought-training-data,2025-08-01T09:48:28+00:00,2025-08-14 19:53:07,"```json
+{
+    ""extracted_title"": ""Towards Safety Reasoning in LLMs: AI-Agentic Deliberation for Policy-Embedded Chain-of-Thought Data Creation"",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""This research introduces a **multiagent AI system** that generates high-quality *chain-of-thought (CoT)* training data to improve large language models' (LLMs) adherence to safety policies. Instead of relying on expensive hu...",,,
+ARES: An Automated Evaluation Framework for Retrieval-Augmented Generation Systems,https://arxiv.org/html/2311.09476v2,2025-07-31T08:41:54+00:00,2025-08-14 19:53:42,"```json
+{
+    ""extracted_title"": **""ARES: An Automated Evaluation Framework for Retrieval-Augmented Generation Systems""**,
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""ARES is a tool designed to automatically evaluate **Retrieval-Augmented Generation (RAG)** systems—the AI models that combine search (retrieval) with text generation (e.g., chatbots answering questions by pulling facts from documents). Traditiona...",,,
+Resource-Efficient Adaptation of Large Language Models for Text Embeddings via Prompt Engineering and Contrastive Fine-tuning,https://bsky.app/profile/reachsumit.com/post/3lvaedjt25c2e,2025-07-31T08:25:20+00:00,2025-08-14 19:54:19,"```json
+{
+    ""extracted_title"": ""Resource-Efficient Adaptation of Large Language Models for Text Embeddings via Prompt Engineering and Contrastive Fine-tuning"",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""This paper solves a key problem: **How to efficiently turn large language models (LLMs) into high-quality text embedding generators without retraining the entire model from scratch**. Traditional LLMs (like ...",,,
+HALoGEN: Fantastic LLM Hallucinations and Where to Find Them,https://arxiv.org/abs/2501.08292,2025-07-31T00:00:35+00:00,2025-08-14 19:55:07,"```json
+{
+    ""extracted_title"": **""HALoGEN: Fantastic LLM Hallucinations and Where to Find Them""**,
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""
+                This paper introduces **HALoGEN**, a benchmark designed to systematically measure and classify **hallucinations** in large language models (LLMs). Hallucinations are false or misleading statements generated by LLMs that conflict with real-world knowle...",,,
+Language Model Re-rankers are Fooled by Lexical Similarities,https://arxiv.org/abs/2502.17036,2025-07-29T22:40:29+00:00,2025-08-14 19:55:50,"```json
+{
+    ""extracted_title"": **""Language Model Re-rankers are Fooled by Lexical Similarities""**,
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""
+                This paper investigates whether **language model (LM) re-rankers**—advanced AI systems designed to *improve* search results by understanding *semantic meaning*—actually work as well as we think. The key finding is surprising: **these sophisticated mod...",,,
+From Citations to Criticality: Predicting Legal Decision Influence in the Multilingual Swiss Jurisprudence,https://arxiv.org/abs/2410.13460,2025-07-28T12:05:48+00:00,2025-08-14 19:56:28,"```json
+{
+    ""extracted_title"": ""\""From Citations to Criticality: Predicting Legal Decision Influence in the Multilingual Swiss Jurisprudence\"""",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""This paper tackles a critical problem in judicial systems worldwide: **court backlogs**. Just as hospitals use triage to prioritize patients, the authors propose a system to prioritize legal cases based on their potential ...",,,
+Can Unconfident LLM Annotations Be Used for Confident Conclusions?,https://arxiv.org/html/2408.15204v2,2025-07-24T12:36:13+00:00,2025-08-14 19:57:00,"```json
+{
+    ""extracted_title"": **""Can Unconfident LLM Annotations Be Used for Confident Conclusions? A Framework for Aggregating Weak Supervision from Large Language Models""**,
+
+    ""analysis"": {
+        ""step_1_simple_explanation"": {
+            ""core_question"": ""The paper asks: *Can we trust conclusions drawn from LLM-generated annotations when the LLM itself is uncertain?* For example, if an LLM labels data with low confidence (e.g., 'maybe this tweet is hate speech?'), can we still comb...",,,
+@mariaa.bsky.social on Bluesky,https://bsky.app/profile/mariaa.bsky.social/post/3lumkyphrok2f,2025-07-23T15:44:26+00:00,2025-08-14 19:57:58,"```json
+{
+    ""extracted_title"": ""\""Just Put a Human in the Loop? Investigating LLM-Assisted Annotation for Subjective Tasks\"""",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_question"": ""The paper investigates whether simply adding a human reviewer ('human-in-the-loop') to LLM-generated annotations actually improves the quality of subjective tasks (e.g., sentiment analysis, content moderation, or qualitative coding wher...",,,
+@mariaa.bsky.social on Bluesky,https://bsky.app/profile/mariaa.bsky.social/post/3lumkyphpq22f,2025-07-23T15:44:12+00:00,2025-08-14 19:58:40,"```json
+{
+    ""extracted_title"": **""Can Unconfident LLM Annotations Be Used for Confident Conclusions?""**,
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_question"": ""The paper asks whether **low-confidence annotations** (e.g., uncertain labels, predictions, or judgments) generated by **Large Language Models (LLMs)** can still be **aggregated or processed** to produce **high-confidence conclusions**—despite the individual...",,,
+@sungkim.bsky.social on Bluesky,https://bsky.app/profile/sungkim.bsky.social/post/3luj3kikh6c2s,2025-07-21T23:33:12+00:00,2025-08-14 19:59:20,"```json
+{
+    ""extracted_title"": **""Moonshot AI Releases Kimi K2 Technical Report: Key Innovations in MuonClip, Agentic Data Pipelines, and Reinforcement Learning""**,
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""This post announces the release of **Moonshot AI’s technical report** for their new AI model, **Kimi K2**, highlighting three key innovations:
+                1. **MuonClip**: A novel technique (likely ...",,,
+The Big LLM Architecture Comparison,https://sebastianraschka.com/blog/2025/the-big-llm-architecture-comparison.html,2025-07-20T13:35:19+00:00,2025-08-14 20:00:38,"```json
+{
+    ""extracted_title"": ""The Big LLM Architecture Comparison: A 2025 Overview of DeepSeek-V3, OLMo 2, Gemma 3, Llama 4, Qwen3, and More"",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""core_concept"": {
+                ""title_explanation"": ""The article is a **comprehensive architectural comparison of state-of-the-art large language models (LLMs) in 2025**, focusing on structural innovations rather than training methodologies or benchmark performance. The titl...",,,
+Knowledge Conceptualization Impacts RAG Efficacy,https://bsky.app/profile/reachsumit.com/post/3lty7qvirds2t,2025-07-15T07:49:27+00:00,2025-08-14 20:01:29,"```json
+{
+    ""extracted_title"": **""Knowledge Conceptualization Impacts RAG Efficacy: Evaluating Representation Strategies for Agentic SPARQL Query Generation in Knowledge Graphs""**,
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_question"": **""How does the *way we organize knowledge* (e.g., simple vs. complex structures) affect an AI agent’s ability to *ask precise questions* (SPARQL queries) about that knowledge using R...",,,
+GraphRunner: A Multi-Stage Framework for Efficient and Accurate Graph-Based Retrieval,https://bsky.app/profile/reachsumit.com/post/3ltya4kszmk2t,2025-07-15T07:48:32+00:00,2025-08-14 20:02:10,"```json
+{
+    ""extracted_title"": ""GraphRunner: A Multi-Stage Framework for Efficient and Accurate Graph-Based Retrieval"",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""
+                GraphRunner is a new system designed to improve how we search for information in **structured, interconnected datasets** (like knowledge graphs) using AI. Unlike traditional text-based search (e.g., Google), knowledge graphs store...",,,
+@reachsumit.com on Bluesky,https://bsky.app/profile/reachsumit.com/post/3ltya7niyck2t,2025-07-15T07:48:11+00:00,2025-08-14 20:02:52,"```json
+{
+    ""extracted_title"": **""Towards Agentic RAG with Deep Reasoning: A Survey of RAG-Reasoning Systems in LLMs""**,
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_concept"": ""This paper surveys **Retrieval-Augmented Generation (RAG) systems** that integrate **deep reasoning** capabilities into Large Language Models (LLMs). The key shift it highlights is moving from traditional *static* RAG (where retrieval happens ...",,,
+"Context Engineering - What it is, and techniques to consider",https://www.llamaindex.ai/blog/context-engineering-what-it-is-and-techniques-to-consider?utm_source=socials&utm_medium=li_social,2025-07-13T21:32:38+00:00,2025-08-14 20:04:08,"```json
+{
+    ""extracted_title"": ""Context Engineering - What it is, and techniques to consider"",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_concept"": ""Context engineering is the **deliberate, strategic process of selecting, structuring, and optimizing the information (context) fed into an LLM's context window** to enable it to perform tasks effectively. Unlike prompt engineering—which focuses on crafting instructions...",,,
+"The rise of ""context engineering""",https://blog.langchain.com/the-rise-of-context-engineering/,2025-07-12T10:05:14+00:00,2025-08-14 20:05:24,"```json
+{
+    ""extracted_title"": ""The Rise of Context Engineering: Building Dynamic Systems for LLM Success"",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_concept"": ""Context engineering is the practice of designing dynamic systems that provide LLMs (Large Language Models) with the *right information*, *right tools*, and *right format* to reliably accomplish tasks. It’s the evolution of prompt engineering—shifting from ...",,,
+FrugalRAG: Learning to retrieve and reason for multi-hop QA,https://bsky.app/profile/reachsumit.com/post/3ltnsm55rq227,2025-07-11T08:10:36+00:00,2025-08-14 20:06:04,"```json
+{
+    ""extracted_title"": ""\""FrugalRAG: Learning to Retrieve and Reason for Multi-Hop QA\"""",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_problem"": {
+                    ""description"": ""The paper tackles **multi-hop question answering (QA)**, where a system must retrieve and reason across *multiple documents* to answer complex questions (e.g., \""What country did the inventor of the telephone, who was born in Edi...",,,
+Measuring Hypothesis Testing Errors in the Evaluation of Retrieval Systems,https://bsky.app/profile/arxiv-cs-ir.bsky.social/post/3lto4qcwxly2j,2025-07-11T08:09:15+00:00,2025-08-14 20:06:40,"```json
+{
+    ""extracted_title"": **""Measuring Hypothesis Testing Errors in the Evaluation of Retrieval Systems""**,
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""
+                This paper tackles a fundamental problem in **Information Retrieval (IR) evaluation**:
+                *How do we reliably compare search systems when our relevance judgments (qrels) are limited or noisy?*
+
+                **Key analogy*...",,,
+@smcgrath.phd on Bluesky,https://bsky.app/profile/smcgrath.phd/post/3lthihzv6ak27,2025-07-09T00:50:59+00:00,2025-08-14 20:07:15,"```json
+{
+    ""extracted_title"": **""Researchers Jailbreak AI by Flooding It with Bullshit Jargon: The 'InfoFlood' Attack on LLM Safety Filters""**,
+
+    ""analysis"": {
+        ""feynman_breakdown"": {
+            ""core_concept"": {
+                ""simple_explanation"": ""
+                Imagine you’re a security guard at a high-tech building. Normally, you stop people who look suspicious or say forbidden words (like 'bomb' or 'hack'). But what if someone starts speaking in an overly complicated, f...",,,
+Efficient Knowledge Graph Construction and Retrieval from Unstructured Text for Large-Scale RAG Systems,https://bsky.app/profile/reachsumit.com/post/3ltgncqpysk2j,2025-07-08T10:43:50+00:00,2025-08-14 20:07:51,"```json
+{
+    ""extracted_title"": ""Efficient Knowledge Graph Construction and Retrieval from Unstructured Text for Large-Scale RAG Systems"",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_problem"": ""Traditional **GraphRAG** (Graph-based Retrieval-Augmented Generation) systems are powerful for complex reasoning but face two major bottlenecks:
+                - **High cost**: Building knowledge graphs (KGs) with LLMs is exp...",,,
+Context Engineering,https://blog.langchain.com/context-engineering-for-agents/,2025-07-06T23:05:23+00:00,2025-08-14 20:08:52,"```json
+{
+    ""extracted_title"": ""Context Engineering for Agents: Write, Select, Compress, and Isolate"",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""Context engineering is the process of strategically managing the information (context) provided to an LLM-based agent to optimize its performance, cost, and reliability. Think of it like managing RAM for a computer: you want to load only the most relevant data at ...",,,
+GlórIA: A Generative and Open Large Language Model for Portuguese Pre-print - Accepted for publication at PROPOR 2024.,https://arxiv.org/html/2402.12969v1,2025-07-04T16:39:32+00:00,2025-08-14 20:09:40,"```json
+{
+    ""extracted_title"": **""GlórIA: A Generative and Open Large Language Model for Portuguese""**,
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""This paper introduces **GlórIA**, the first **open, generative large language model (LLM) specifically trained for Portuguese** from scratch. Unlike prior Portuguese models (which were often adaptations of English-centric LLMs or smaller in scale), GlórIA is buil...",,,
+@llamaindex.bsky.social on Bluesky,https://bsky.app/profile/llamaindex.bsky.social/post/3lt35nmxess2v,2025-07-03T21:48:51+00:00,2025-08-14 20:10:15,"```json
+{
+    ""extracted_title"": **""Understanding the AT Protocol (ATProto) and Bluesky's Decentralized Social Network Architecture""**,
+
+    ""analysis"": {
+        ""step_1_simple_explanation"": {
+            ""description"": ""This Bluesky post (though text isn't directly extractable) is implicitly about **ATProto (Authenticated Transfer Protocol)**, the decentralized foundation for Bluesky Social. The embedded links point to the core infrastructure: `bsky.social` (the platform) and `atproto.com` ...",,,
+@sungkim.bsky.social on Bluesky,https://bsky.app/profile/sungkim.bsky.social/post/3lt35yhxylc27,2025-07-03T21:48:15+00:00,2025-08-14 20:11:02,"```json
+{
+    ""extracted_title"": **""Analysis of Bluesky's Decentralized Social Network Architecture (via @sungkim.bsky.social)""**,
+    ""analysis"": {
+        ""context_and_title_justification"": {
+            ""why_this_title"": ""The provided content is a meta-analysis of a Bluesky post by Sung Kim, but the actual post text is unavailable. The embedded links (`bsky.social` and `atproto.com`) reveal the core subject: **Bluesky’s decentralized social network**, built on the **AT Protocol (ATProto)**...",,,
+@langchain.bsky.social on Bluesky,https://bsky.app/profile/langchain.bsky.social/post/3lsyxf2dshk2q,2025-07-02T22:43:17+00:00,2025-08-14 20:11:28,"```json
+{
+    ""extracted_title"": **""Understanding Bluesky and AT Protocol: A Decentralized Social Networking Framework""**
+    *(Note: Since the actual post content couldn't be extracted, this title is inferred from the embedded links and context. The real title would likely reference **Bluesky's architecture, AT Protocol (ATProto), or decentralized social media** based on the provided URLs.)*,
+
+    ""analysis"": {
+        **""Feynman Technique Breakdown""**:
+
+        **1. Core Concept (Simplified...",,,
+Harnessing Multiple Large Language Models: A Survey on LLM Ensemble,https://arxiv.org/abs/2502.18036,2025-07-02T13:53:35+00:00,2025-08-14 20:12:10,"```json
+{
+    ""extracted_title"": **""Harnessing Multiple Large Language Models: A Survey on LLM Ensemble""**,
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_concept"": ""This paper is a **systematic survey** of **LLM Ensemble**—a technique where multiple large language models (LLMs) are combined to solve a task, leveraging their individual strengths to improve performance over single-model approaches. Think of it like a 'wis...",,,
+@tomaarsen.com on Bluesky,https://bsky.app/profile/tomaarsen.com/post/3lsvucbrlpk24,2025-07-01T15:40:28+00:00,2025-08-14 20:12:56,"```json
+{
+    ""extracted_title"": **""Understanding Bluesky and the AT Protocol: A Decentralized Social Network Analysis""**
+    *(Note: Since the actual post content couldn't be extracted, this title is inferred from the embedded links (`bsky.social` and `atproto.com`), the context of Bluesky as a decentralized social platform, and the analytical framing of the page. The real title would likely reference Bluesky's architecture, the AT Protocol, or a comparison with centralized social media.)*,
+...",,,
+Quantization-Aware Training of jina-embeddings-v4,https://jina.ai/news/quantization-aware-training-of-jina-embeddings-v4/,2025-07-01T10:45:47+00:00,2025-08-14 20:14:07,"```json
+{
+    ""extracted_title"": ""Quantization-Aware Training of jina-embeddings-v4: Lossless Compression for Space-Critical Applications"",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_concept"": ""Quantization is like rounding numbers to save space. Imagine you have a long decimal number like 3.1415926535, but you only need 3.14 for your task. By rounding, you save storage space and computation time. In AI, this means m...",,,
+Arch-Router: Aligning LLM Routing with Human Preferences,https://arxiv.org/abs/2506.16655,2025-07-01T08:39:43+00:00,2025-08-14 20:14:49,"```json
+{
+    ""extracted_title"": ""Arch-Router: Aligning LLM Routing with Human Preferences"",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""Arch-Router is a system that acts like a 'traffic cop' for large language models (LLMs). Instead of blindly picking the 'best' model based on rigid benchmarks, it learns to match user queries to specific models based on *human preferences*—like choosing a travel expert for va...",,,
+Text-to-LoRA: Instant Transformer Adaption,https://arxiv.org/abs/2506.06105,2025-07-01T07:03:22+00:00,2025-08-14 20:15:34,"```json
+{
+    ""extracted_title"": **""Text-to-LoRA: Instant Transformer Adaptation via Hypernetwork-Generated Low-Rank Adapters""**,
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""
+                Imagine you have a Swiss Army knife (a *foundation model* like Llama or GPT) that can do many things but isn’t perfect at any specific task (e.g., solving math problems or answering medical questions). Normally, to make it...",,,
+IRanker: Towards Ranking Foundation Model,https://bsky.app/profile/reachsumit.com/post/3lssbir3mk222,2025-06-30T07:45:39+00:00,2025-08-14 20:16:15,"```json
+{
+    ""extracted_title"": ""\""IRanker: Towards Ranking Foundation Model\"""",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""IRanker is a **single, unified foundation model** designed to handle **all types of ranking tasks** (e.g., recommendations, LLM routing, search result ranking) without needing task-specific models. Unlike traditional approaches that train separate models for each ranking scenario, IRank...",,,
+VAT-KG: Knowledge-Intensive Multimodal Knowledge Graph Dataset for Retrieval-Augmented Generation,https://bsky.app/profile/reachsumit.com/post/3lssbxtzylc22,2025-06-30T07:44:18+00:00,2025-08-14 20:17:05,"```json
+{
+    ""extracted_title"": ""VAT-KG: Knowledge-Intensive Multimodal Knowledge Graph Dataset for Retrieval-Augmented Generation"",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""
+                **Imagine you're building a super-smart AI assistant that needs to understand the world like a human does.** Humans don't just read text—they see images, hear sounds, and connect ideas across these senses. VAT-KG is li...",,,
+ARAG: Agentic Retrieval Augmented Generation for Personalized Recommendation,https://bsky.app/profile/arxiv-cs-ir.bsky.social/post/3lssft2zuof25,2025-06-30T07:41:59+00:00,2025-08-14 20:17:59,"```json
+{
+    ""extracted_title"": ""ARAG: Agentic Retrieval Augmented Generation for Personalized Recommendation"",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""ARAG is a new system that improves personalized recommendations (like suggesting movies, products, or articles) by combining **three key ideas**:
+                1. **Retrieval-Augmented Generation (RAG)**: Using external data to help AI models make better...",,,
+Hierarchical Patch Compression for ColPali: Efficient Multi-Vector Document Retrieval with Dynamic Pruning and Quantization,https://bsky.app/profile/arxiv-cs-ir.bsky.social/post/3lssineizm42c,2025-06-30T07:41:06+00:00,2025-08-14 20:18:48,"```json
+{
+    ""extracted_title"": ""Hierarchical Patch Compression for ColPali: Efficient Multi-Vector Document Retrieval with Dynamic Pruning and Quantization"",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_problem"": ""Multi-vector document retrieval systems (like **ColPali**) are powerful for matching complex queries (e.g., combining text + images) but are **too slow and storage-heavy** because they rely on high-dimensio...",,,
+PentaRAG: Large-Scale Intelligent Knowledge Retrieval for Enterprise LLM Applications,https://bsky.app/profile/arxiv-cs-ir.bsky.social/post/3lssiq54mri2x,2025-06-30T07:40:42+00:00,2025-08-14 20:19:42,"```json
+{
+    ""extracted_title"": ""PentaRAG: Large-Scale Intelligent Knowledge Retrieval for Enterprise LLM Applications"",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""
+                **PentaRAG is a 5-layer system designed to make enterprise LLM applications faster, cheaper, and more accurate by intelligently routing queries through different 'paths' based on their nature (repeated, similar, or novel).**
+     ...",,,
+LLM2Rec: Large Language Models Are Powerful Embedding Models for Sequential Recommendation,https://bsky.app/profile/arxiv-cs-ir.bsky.social/post/3lsskaxcsh52p,2025-06-30T07:39:24+00:00,2025-08-14 20:20:20,"```json
+{
+    ""extracted_title"": ""LLM2Rec: Large Language Models Are Powerful Embedding Models for Sequential Recommendation"",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""
+                **Imagine you're a librarian trying to recommend books to readers.**
+                - Traditional method: You track which books people borrowed together (e.g., readers who took *Harry Potter* also took *Percy Jackson*). This...",,,
+@paper.bsky.social on Bluesky,https://bsky.app/profile/paper.bsky.social/post/3lshtglohzr2d,2025-06-26T13:53:13+00:00,2025-08-14 20:20:57,"```json
+{
+    ""extracted_title"": **""Text-to-LoRA: Instant Transformer Adaptation""**,
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""description"": ""
+                This paper introduces **Text-to-LoRA**, a method to **instantly adapt pre-trained transformer models** (like LLMs) to new tasks or domains **using only textual instructions**, without fine-tuning the entire model. The core idea is to generate **low-rank adaptation ...",,,
+Controlled Retrieval-augmented Context Evaluation for Long-form RAG,https://bsky.app/profile/reachsumit.com/post/3lsi5qzveoc2x,2025-06-26T13:52:38+00:00,2025-08-14 20:21:42,"```json
+{
+    ""extracted_title"": ""CRUX: Controlled Retrieval-augmented Context Evaluation for Long-form RAG"",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""
+                Imagine you're writing a 20-page research report using Wikipedia as your source. Normally, you'd:
+                1) Search Wikipedia for relevant articles (retrieval)
+                2) Copy-paste the most relevant paragraphs into your docum...",,,
