@@ -284,6 +284,36 @@ class DatabaseManager:
             logger.error(f"Failed to get analyzed content hashes: {e}")
             return set()
 
+    def is_content_already_processed(self, content_hash: str) -> bool:
+        """Check if content with this hash has already been processed"""
+        try:
+            with self.get_connection() as conn:
+                cursor = conn.execute("""
+                    SELECT 1 
+                    FROM articles a
+                    JOIN content c ON a.id = c.article_id
+                    WHERE a.content_hash = ? AND a.status = 'completed'
+                    LIMIT 1
+                """, (content_hash,))
+                return cursor.fetchone() is not None
+
+        except Exception as e:
+            logger.error(f"Failed to check if content is processed: {e}")
+            return False
+
+    def update_article_content_hash(self, article_id: int, content_hash: str):
+        """Update the content hash of an article after scraping"""
+        try:
+            with self.get_connection() as conn:
+                conn.execute("""
+                    UPDATE articles 
+                    SET content_hash = ?, updated_at = CURRENT_TIMESTAMP
+                    WHERE id = ?
+                """, (content_hash, article_id))
+
+        except Exception as e:
+            logger.error(f"Failed to update content hash for article {article_id}: {e}")
+
     def get_article_by_url(self, url: str) -> sqlite3.Row | None:
         """Get article by URL"""
         try:

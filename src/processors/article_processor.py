@@ -340,6 +340,21 @@ class ArticleProcessor:
                 logger.warning(f"Failed to scrape article: {entry.title}")
                 return None
 
+            # Check if content with this hash has already been processed
+            if not processing_config.force_refresh and self.db.is_content_already_processed(scraped_content.content_hash):
+                logger.info(f"Content already processed, skipping: {scraped_content.title}")
+                self.db.log_processing(
+                    article_id,
+                    "duplicate_content",
+                    processing_step="scraping",
+                    duration_seconds=scrape_duration,
+                )
+                self.db.update_article_status(article_id, "duplicate")
+                return None
+
+            # Update the article's content hash with the actual scraped content hash
+            self.db.update_article_content_hash(article_id, scraped_content.content_hash)
+
             self.db.log_processing(
                 article_id,
                 "scraped",

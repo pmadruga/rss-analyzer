@@ -30,6 +30,16 @@ class ArticleContent:
         self.content = content
         self.metadata = metadata or {}
         self.scraped_at = time.time()
+        self.content_hash = self.generate_content_hash()
+
+    def generate_content_hash(self) -> str:
+        """Generate a hash based on the actual article content for accurate duplicate detection"""
+        import hashlib
+        
+        # Create hash from the combination of URL, title, and significant portion of content
+        # This ensures we catch duplicates even if RSS metadata slightly differs
+        content_for_hash = f"{self.url}{self.title}{self.content[:2000]}"  # Use first 2000 chars
+        return hashlib.md5(content_for_hash.encode("utf-8")).hexdigest()
 
     def to_dict(self) -> dict:
         """Convert to dictionary"""
@@ -39,6 +49,7 @@ class ArticleContent:
             "content": self.content,
             "metadata": self.metadata,
             "scraped_at": self.scraped_at,
+            "content_hash": self.content_hash,
         }
 
 
@@ -529,25 +540,101 @@ class WebScraper:
         return "Bluesky Social Media Post"
 
     def _extract_title(self, soup: BeautifulSoup) -> str:
-        """Extract article title"""
-        # Try various title selectors
-        title_selectors = [
+        """Extract article title, preferring content-specific titles over generic page titles"""
+        # Try content-specific title selectors first (these are more likely to be the actual article title)
+        content_title_selectors = [
             "h1.title",
-            "h1.article-title",
+            "h1.article-title", 
             "h1.entry-title",
             "h1.post-title",
-            "h1",
-            "title",
+            "h1.paper-title",
+            "[data-testid='article-title']",
+            ".article-header h1",
+            ".post-header h1",
+            ".content h1",
+            "article h1",
+            "main h1",
         ]
 
-        for selector in title_selectors:
+        for selector in content_title_selectors:
             elem = soup.select_one(selector)
             if elem:
                 title = elem.get_text().strip()
                 if title and len(title) > 5:  # Avoid empty or very short titles
+                    # Clean up common title prefixes that don't add value
+                    title = self._clean_title(title)
+                    return title
+
+        # Try meta tags for article titles (often more accurate than page titles)
+        meta_title_selectors = [
+            'meta[property="og:title"]',
+            'meta[name="twitter:title"]', 
+            'meta[name="article:title"]',
+        ]
+
+        for selector in meta_title_selectors:
+            elem = soup.select_one(selector)
+            if elem and elem.get("content"):
+                title = elem["content"].strip()
+                if title and len(title) > 5:
+                    title = self._clean_title(title)
+                    return title
+
+        # Look for the first substantial H1 in the content area
+        content_area = self._find_main_content_area(soup)
+        if content_area:
+            h1_elem = content_area.select_one("h1")
+            if h1_elem:
+                title = h1_elem.get_text().strip()
+                if title and len(title) > 5:
+                    title = self._clean_title(title)
+                    return title
+
+        # Fallback to generic h1 and title tags (least preferred)
+        fallback_selectors = ["h1", "title"]
+        for selector in fallback_selectors:
+            elem = soup.select_one(selector)
+            if elem:
+                title = elem.get_text().strip()
+                if title and len(title) > 5:
+                    title = self._clean_title(title)
                     return title
 
         return "Untitled"
+
+    def _clean_title(self, title: str) -> str:
+        """Clean up title by removing common prefixes and suffixes that don't add value"""
+        import re
+        
+        # Remove common prefixes
+        prefixes_to_remove = [
+            r"^Title:\s*",
+            r"^Article:\s*", 
+            r"^Paper:\s*",
+            r"^Research:\s*",
+            r"^Study:\s*",
+        ]
+        
+        for prefix_pattern in prefixes_to_remove:
+            title = re.sub(prefix_pattern, "", title, flags=re.IGNORECASE)
+        
+        # Remove common site suffixes (e.g., " - Site Name", " | Site Name")
+        # But be conservative - only remove if it's clearly a site name pattern
+        title = re.sub(r"\s+[-|]\s+[A-Za-z\s]+\.(com|org|edu|net|gov).*$", "", title)
+        title = re.sub(r"\s+[-|]\s+(Home|Homepage|Main|Index)$", "", title, flags=re.IGNORECASE)
+        
+        # Clean up whitespace
+        title = re.sub(r"\s+", " ", title).strip()
+        
+        return title
+
+    def _find_main_content_area(self, soup: BeautifulSoup) -> BeautifulSoup | None:
+        """Find the main content area of the page"""
+        for selector in self.content_selectors:
+            content_area = soup.select_one(selector)
+            if content_area:
+                return content_area
+        return None
 
     def _extract_content(self, soup: BeautifulSoup) -> str:
         """Extract main article content"""
