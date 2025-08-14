@@ -41,13 +41,18 @@ except ImportError:
 import argparse
 
 # Configure logging
+log_handlers = [logging.StreamHandler(sys.stdout)]
+try:
+    # Try to create log file handler, but don't fail if we can't
+    Path("logs").mkdir(exist_ok=True)
+    log_handlers.append(logging.FileHandler("logs/website_generator.log", mode="a"))
+except (PermissionError, OSError):
+    pass
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    handlers=[
-        logging.StreamHandler(sys.stdout),
-        logging.FileHandler("logs/website_generator.log", mode="a"),
-    ],
+    handlers=log_handlers,
 )
 logger = logging.getLogger(__name__)
 

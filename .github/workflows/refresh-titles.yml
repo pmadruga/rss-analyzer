@@ -1,4 +1,4 @@
-name: Refresh Article Titles and Formatting
+name: 🔄 Refresh Article Titles
 
 on:
   workflow_dispatch:

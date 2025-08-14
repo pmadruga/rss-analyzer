@@ -1,4 +1,4 @@
-name: Test Pipeline Components
+name: 🧪 Test Pipeline Components
 
 on:
   pull_request:

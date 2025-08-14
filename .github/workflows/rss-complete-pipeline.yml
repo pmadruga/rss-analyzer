@@ -1,4 +1,4 @@
-name: RSS Complete Pipeline
+name: 🔄 RSS Complete Pipeline
 
 on:
   schedule:

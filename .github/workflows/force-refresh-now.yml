@@ -1,4 +1,4 @@
-name: Force Refresh Articles NOW
+name: ⚡ Force Refresh NOW
 
 on:
   workflow_dispatch:
