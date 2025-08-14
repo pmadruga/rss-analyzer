@@ -308,6 +308,24 @@ class ArticleProcessor:
             if not analysis:
                 return None
 
+            # Use AI-extracted title if available and different from current title
+            if analysis.get("extracted_title"):
+                ai_title = analysis["extracted_title"].strip()
+                
+                # Get current title from database
+                with self.db.get_connection() as conn:
+                    cursor = conn.execute("SELECT title FROM articles WHERE id = ?", (article_id,))
+                    current_result = cursor.fetchone()
+                    current_title = current_result[0] if current_result else entry.title
+                
+                if ai_title != current_title and len(ai_title) > 5:
+                    logger.info(f"Updating title with AI-extracted: '{current_title}' -> '{ai_title}'")
+                    with self.db.get_connection() as conn:
+                        conn.execute(
+                            "UPDATE articles SET title = ? WHERE id = ?", 
+                            (ai_title, article_id)
+                        )
+
             # Store content and analysis
             self.db.insert_content(article_id, scraped_content.content, analysis)
             results.analyzed_articles += 1

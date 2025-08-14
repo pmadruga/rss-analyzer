@@ -61,9 +61,17 @@ class BaseAIClient(ABC):
 
     def _create_system_prompt(self) -> str:
         """Create standardized system prompt for analysis"""
-        return (
-            "Analyze this content in-depth and explain it using the Feynman technique"
-        )
+        return """You are an expert analyst. Your task is to:
+1. FIRST, identify the actual title of this article/paper from the content (not from the provided title which may be generic)
+2. Then analyze the content using the Feynman technique as if you were its author
+
+Please respond in this JSON format:
+{
+    "extracted_title": "The actual, specific title found in the content",
+    "analysis": "Your detailed Feynman technique analysis explaining this content in depth..."
+}
+
+Focus on finding the real title from headings, paper titles, or the main subject matter - not generic page titles like 'Home' or site names."""
 
     def _enforce_rate_limit(self) -> None:
         """Enforce rate limiting between requests"""
@@ -95,18 +103,43 @@ Content:
 
         try:
             response_text = response_text.strip()
+            
+            # Try to parse JSON response first
+            extracted_title = None
+            analysis_content = response_text
+            
+            if response_text.startswith('{') and response_text.endswith('}'):
+                try:
+                    import json
+                    parsed_response = json.loads(response_text)
+                    extracted_title = parsed_response.get("extracted_title")
+                    analysis_content = parsed_response.get("analysis", response_text)
+                    logger.info(f"Extracted title from analysis: '{extracted_title}'")
+                except json.JSONDecodeError:
+                    # If JSON parsing fails, treat entire response as analysis
+                    logger.debug("Response not valid JSON, using as plain text")
+                    
+            # Try to extract title from markdown-style response
+            if not extracted_title and response_text.startswith('**Title:'):
+                import re
+                title_match = re.search(r'\*\*Title:\*\*\s*([^\n]+)', response_text)
+                if title_match:
+                    extracted_title = title_match.group(1).strip()
+                    # Remove the title line from the analysis content
+                    analysis_content = re.sub(r'\*\*Title:\*\*[^\n]+\n?', '', response_text).strip()
 
             # Store the comprehensive Feynman technique explanation in methodology_detailed
-            # Leave other fields empty since we're getting a single unified analysis
             analysis = {
-                "methodology_detailed": response_text,
+                "methodology_detailed": analysis_content,
                 "technical_approach": "",
                 "key_findings": "",
                 "research_design": "",
+                "extracted_title": extracted_title,  # Add extracted title to metadata
                 "metadata": {
                     "ai_provider": self.provider_name.lower(),
                     "model": self.model,
                     "processed_at": time.time(),
+                    "title_extraction_attempted": True,
                 },
             }
 
