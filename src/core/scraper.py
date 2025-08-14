@@ -185,14 +185,21 @@ class WebScraper:
 
             soup = BeautifulSoup(response.content, "html.parser")
 
-            # Extract title
+            # Extract title using improved extraction logic
             title = self._extract_title(soup)
+            
+            # Log title extraction for debugging
+            logger.debug(f"Extracted title: '{title}' from {url}")
 
             # Extract main content
             content = self._extract_content(soup)
 
             # Extract metadata
             metadata = self._extract_metadata(soup, url)
+            
+            # Add extracted title to metadata for reference
+            metadata["extracted_title"] = title
+            metadata["title_extraction_method"] = "content_analysis"
 
             if not content:
                 logger.warning(f"No content extracted from {url}")
@@ -667,23 +674,60 @@ class WebScraper:
         return content_md
 
     def _clean_markdown(self, content: str) -> str:
-        """Clean up markdown content"""
-        # Remove excessive whitespace
-        content = re.sub(r"\n\s*\n\s*\n", "\n\n", content)
-
+        """Clean up markdown content with enhanced formatting"""
+        import re
+        
+        # Remove excessive whitespace but preserve paragraph breaks
+        content = re.sub(r"\n\s*\n\s*\n+", "\n\n", content)
+        
+        # Fix heading formatting - ensure proper spacing around headings
+        content = re.sub(r"\n*(#{1,6})\s*([^\n]+)\n*", r"\n\n\1 \2\n\n", content)
+        
         # Remove empty links
         content = re.sub(r"\[\]\([^)]*\)", "", content)
-
+        
+        # Remove malformed links like [text]() without URL
+        content = re.sub(r"\[([^\]]+)\]\(\s*\)", r"\1", content)
+        
         # Remove standalone brackets
         content = re.sub(r"^\s*\[\s*\]\s*$", "", content, flags=re.MULTILINE)
-
-        # Clean up list items
-        content = re.sub(r"^\s*\*\s*$", "", content, flags=re.MULTILINE)
-
-        # Remove excessive spaces
-        content = re.sub(r" +", " ", content)
-
-        return content.strip()
+        
+        # Clean up list items - remove empty list items
+        content = re.sub(r"^\s*[-*+]\s*$", "", content, flags=re.MULTILINE)
+        
+        # Fix bullet point formatting - ensure consistent spacing
+        content = re.sub(r"^\s*([-*+])\s*([^\n]+)", r"\1 \2", content, flags=re.MULTILINE)
+        
+        # Fix numbered list formatting
+        content = re.sub(r"^\s*(\d+\.)\s*([^\n]+)", r"\1 \2", content, flags=re.MULTILINE)
+        
+        # Remove excessive spaces within lines
+        content = re.sub(r" {2,}", " ", content)
+        
+        # Clean up code block formatting - ensure proper spacing
+        content = re.sub(r"\n*```([^\n]*)\n", r"\n\n```\1\n", content)
+        content = re.sub(r"\n```\n*", r"\n```\n\n", content)
+        
+        # Fix quote formatting
+        content = re.sub(r"\n*>\s*([^\n]+)", r"\n\n> \1", content)
+        
+        # Remove lines with only punctuation or symbols
+        content = re.sub(r"^\s*[^\w\s]*\s*$", "", content, flags=re.MULTILINE)
+        
+        # Clean up table formatting if present
+        content = re.sub(r"\n*\|", r"\n|", content)
+        
+        # Remove multiple consecutive empty lines
+        content = re.sub(r"\n{3,}", "\n\n", content)
+        
+        # Ensure content starts and ends cleanly
+        content = content.strip()
+        
+        # Add a final newline for better formatting
+        if content and not content.endswith('\n'):
+            content += '\n'
+            
+        return content
 
     def _extract_metadata(self, soup: BeautifulSoup, url: str) -> dict:
         """Extract metadata from the page"""

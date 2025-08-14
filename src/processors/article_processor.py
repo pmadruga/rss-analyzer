@@ -294,6 +294,15 @@ class ArticleProcessor:
 
             results.scraped_articles += 1
 
+            # Update title with the scraped title if it's better than RSS title
+            if scraped_content.title and scraped_content.title != entry.title:
+                logger.info(f"Updating title from RSS to scraped: '{entry.title}' -> '{scraped_content.title}'")
+                with self.db.get_connection() as conn:
+                    conn.execute(
+                        "UPDATE articles SET title = ? WHERE id = ?", 
+                        (scraped_content.title, article_id)
+                    )
+
             # Analyze with AI client
             analysis = self._analyze_article(entry, scraped_content, article_id)
             if not analysis:
@@ -409,9 +418,19 @@ class ArticleProcessor:
         self, article_id: int, entry: Any, analysis: dict[str, Any]
     ) -> dict[str, Any]:
         """Prepare article data for reporting"""
+        # Get the actual title from the database (which may have been updated with scraped title)
+        try:
+            with self.db.get_connection() as conn:
+                cursor = conn.execute("SELECT title FROM articles WHERE id = ?", (article_id,))
+                result = cursor.fetchone()
+                actual_title = result[0] if result else entry.title
+        except Exception as e:
+            logger.warning(f"Could not get updated title from database: {e}")
+            actual_title = entry.title
+            
         return {
             "id": article_id,
-            "title": entry.title,
+            "title": actual_title,
             "url": entry.link,
             "publication_date": entry.publication_date.isoformat()
             if entry.publication_date

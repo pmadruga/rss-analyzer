@@ -1,0 +1,224 @@
+name: Refresh Article Titles and Formatting
+
+on:
+  workflow_dispatch:
+    inputs:
+      force_refresh:
+        description: 'Force refresh all articles with improved titles'
+        required: false
+        default: true
+        type: boolean
+
+env:
+  # API Configuration
+  API_PROVIDER: 'mistral'
+  MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "refresh-titles"
+  cancel-in-progress: false
+
+jobs:
+  refresh-titles:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+    # ========================================
+    # SETUP PHASE
+    # ========================================
+    - name: 🔄 Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: 🐍 Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: ⚡ Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        version: "latest"
+
+    - name: 📦 Install dependencies
+      run: |
+        uv sync
+
+    - name: 📁 Create directories
+      run: |
+        mkdir -p data logs output docs
+
+    # ========================================
+    # DOWNLOAD EXISTING DATABASE
+    # ========================================
+    - name: 📥 Download existing database from artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: database-backup-*
+        path: data/
+      continue-on-error: true
+
+    # If no artifact, try to pull from a recent workflow run
+    - name: 🔍 Check for database file
+      run: |
+        if [ ! -f "data/articles.db" ]; then
+          echo "No existing database found. Running fresh analysis first..."
+          # Run a limited analysis to create some articles
+          uv run python -m src.main run --limit 10 || true
+        else
+          echo "Found existing database, proceeding with refresh..."
+        fi
+
+    # ========================================
+    # REFRESH PHASE
+    # ========================================
+    - name: 🔄 Force refresh article titles and formatting
+      run: |
+        echo "🔄 Refreshing article titles with improved extraction..."
+        uv run python tools/force_refresh_articles.py
+
+    - name: 📊 Force refresh with new processing (limit 30)
+      run: |
+        echo "📊 Running force refresh analysis..."
+        uv run python -m src.main run --force-refresh --limit 30
+
+    # ========================================
+    # WEBSITE DATA UPDATE PHASE
+    # ========================================
+    - name: 🌐 Generate website data with updated titles
+      run: |
+        echo "🌐 Generating website data with updated titles..."
+        uv run python tools/generate_website_data.py --verbose
+
+    - name: ✅ Validate updated website data
+      run: |
+        if [ -f "docs/data.json" ]; then
+          echo "✅ Validating generated JSON..."
+          python -m json.tool docs/data.json > /dev/null
+          echo "✅ JSON validation successful"
+
+          SIZE=$(stat -c%s docs/data.json 2>/dev/null || stat -f%z docs/data.json)
+          echo "📊 Generated data.json size: $SIZE bytes"
+          
+          # Show a sample of the updated titles
+          echo "📋 Sample of updated titles:"
+          python -c "
+          import json
+          with open('docs/data.json', 'r') as f:
+              data = json.load(f)
+          for i, article in enumerate(data.get('articles', [])[:5]):
+              print(f'{i+1}. {article.get(\"title\", \"No title\")}')
+          "
+        else
+          echo "⚠️ No data.json generated"
+        fi
+
+    # ========================================
+    # WEBSITE DEPLOYMENT PHASE
+    # ========================================
+    - name: 🎨 Setup GitHub Pages
+      uses: actions/configure-pages@v4
+
+    - name: 📤 Upload website files
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: 'docs'
+
+    - name: 🚀 Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
+
+    # ========================================
+    # COMMIT CHANGES PHASE
+    # ========================================
+    - name: 💾 Commit updated data
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "Title Refresh Pipeline"
+
+        # Add generated files
+        git add docs/data.json output/ -f || true
+
+        # Check if there are changes to commit
+        if git diff --staged --quiet; then
+          echo "ℹ️ No changes to commit"
+        else
+          git commit -m "🔄 Refresh article titles and formatting - $(date -u '+%Y-%m-%d %H:%M UTC')
+
+          Updated article titles using improved extraction logic
+          Enhanced markdown formatting for better readability
+
+          🤖 Generated with Title Refresh Pipeline
+
+          Co-Authored-By: Title-Refresh-Bot <noreply@github.com>"
+
+          git push
+          echo "✅ Changes committed and pushed"
+        fi
+
+    # ========================================
+    # ARTIFACTS PHASE
+    # ========================================
+    - name: 📤 Upload updated database backup
+      uses: actions/upload-artifact@v4
+      with:
+        name: database-backup-refreshed-${{ github.run_number }}
+        path: data/articles.db
+        retention-days: 30
+        if-no-files-found: ignore
+
+    - name: 📤 Upload logs
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: refresh-logs-${{ github.run_number }}
+        path: |
+          logs/
+          output/
+        retention-days: 7
+        if-no-files-found: ignore
+
+    - name: 📊 Generate refresh summary
+      if: always()
+      run: |
+        if [ "${{ job.status }}" = "success" ]; then
+          STATUS="✅ Title refresh completed successfully"
+          EMOJI="🟢"
+        else
+          STATUS="❌ Title refresh failed"
+          EMOJI="🔴"
+        fi
+
+        echo "## $EMOJI Article Title Refresh Status" >> $GITHUB_STEP_SUMMARY
+        echo "$STATUS" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+
+        if [ -f "docs/data.json" ]; then
+          ARTICLE_COUNT=$(python -c "
+          import json
+          try:
+              with open('docs/data.json', 'r') as f:
+                  data = json.load(f)
+              print(len(data.get('articles', [])))
+          except:
+              print('0')
+          " 2>/dev/null || echo "0")
+          echo "**Articles updated:** $ARTICLE_COUNT" >> $GITHUB_STEP_SUMMARY
+        fi
+
+        echo "**Refresh run:** ${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Timestamp:** $(date -u '+%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
+
+        if [ "${{ steps.deployment.outputs.page_url }}" ]; then
+          echo "**Website:** ${{ steps.deployment.outputs.page_url }}" >> $GITHUB_STEP_SUMMARY
+        fi
