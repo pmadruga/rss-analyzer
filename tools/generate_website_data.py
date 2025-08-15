@@ -251,25 +251,40 @@ class WebsiteDataGenerator:
         if "@" not in original_title and "bsky" not in original_title:
             return original_title
 
-        # Check for markdown headers at the beginning
+        # Avoid extracting generic analysis headers that shouldn't be titles
+        generic_headers = [
+            "In-Depth Analysis Using the Feynman Technique",
+            "Analysis Using the Feynman Technique", 
+            "In-Depth Analysis",
+            "Feynman Technique Analysis",
+            "Using the Feynman Technique"
+        ]
+        
+        # Check for markdown headers at the beginning, but skip generic ones
         lines = analysis.strip().split("\n")
         for line in lines[:10]:
             line = line.strip()
             if line.startswith("# ") and len(line) > 2:
                 title = line[2:].strip()
                 title = title.replace("**", "").replace("*", "").strip()
-                if len(title) > 10 and len(title) < 150:
+                if (
+                    len(title) > 10 
+                    and len(title) < 150 
+                    and not any(generic in title for generic in generic_headers)
+                    and not title.lower().startswith(("the feynman", "feynman technique"))
+                ):
                     return title
 
-        # Look for specific title patterns
-        # First check key findings for paper titles
+        # Look for specific title patterns in key findings section
         if "**Key Findings:" in analysis:
             key_findings_section = analysis.split("**Key Findings:")[1].split("**")[0]
 
             # Check for hashtag titles in key findings
             hashtag_match = re.search(r"#\s*([^#\n]{10,150})", key_findings_section)
             if hashtag_match:
-                return hashtag_match.group(1).strip()
+                title = hashtag_match.group(1).strip()
+                if not any(generic in title for generic in generic_headers):
+                    return title
 
             # Check for quoted titles
             quote_patterns = [
@@ -280,16 +295,17 @@ class WebsiteDataGenerator:
                 match = re.search(pattern, key_findings_section)
                 if match:
                     title = match.group(1).strip()
-                    if not title.lower().startswith(("this", "the post", "this post")):
+                    if (
+                        not title.lower().startswith(("this", "the post", "this post"))
+                        and not any(generic in title for generic in generic_headers)
+                    ):
                         return title
 
-        # Look for paper titles in the text
+        # Look for paper titles in the text with more specific patterns
         patterns = [
             r'paper titled ["\']([^"\']+)["\']',
             r'article titled ["\']([^"\']+)["\']',
             r'"([^"]+)"(?:\s+paper|\s+article)',
-            r"^([A-Z][^:]{10,150}):\s+[A-Z]",
-            r"#\s*([^#\n]{10,150})",
         ]
 
         for pattern in patterns:
@@ -300,19 +316,17 @@ class WebsiteDataGenerator:
                     len(title) > 10
                     and len(title) < 150
                     and not title.lower().startswith(("this", "the post", "another"))
+                    and not any(generic in title for generic in generic_headers)
                 ):
                     return title
 
-        # As fallback, use first sentence if it's descriptive enough
-        first_sentence = analysis.split(".")[0].strip()
-        if (
-            len(first_sentence) > 20
-            and len(first_sentence) < 100
-            and not first_sentence.lower().startswith(("this", "the post", "another"))
-        ):
-            # Remove markdown formatting
-            first_sentence = re.sub(r"\*\*([^*]+)\*\*", r"\1", first_sentence)
-            return first_sentence
+        # Generate a descriptive title based on URL domain for social media posts
+        if "bsky.app" in url:
+            return f"Bluesky Post Analysis"
+        elif "twitter.com" in url or "x.com" in url:
+            return f"Twitter/X Post Analysis" 
+        elif "arxiv.org" in url:
+            return f"arXiv Paper Analysis"
 
         return original_title
 
@@ -398,6 +412,9 @@ class WebsiteDataGenerator:
 
         # Manual title overrides for better readability
         title_overrides = {
+            44: "CRUX: Enhanced Evaluation Metrics for Long-Form RAG Systems",
+            43: "Text-to-LoRA: Instant Transformer Adaptation via Natural Language",  
+            42: "LLM2Rec: Teaching Language Models Recommendation Systems",
             25: "Human-in-the-Loop LLM Annotation for Subjective Tasks",
             24: "InfoFlood: Academic Jargon Jailbreak for AI Safety Systems",
             23: "Statistical Rigor in Information Retrieval Testing",

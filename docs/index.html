@@ -414,6 +414,194 @@
         // Global articles data for full-screen access
         let articlesData = [];
 
+        function processAnalysisContent(analysisContent) {
+            // Check if content is JSON wrapped in markdown code blocks
+            if (analysisContent.startsWith('```json\n') && analysisContent.endsWith('\n```')) {
+                try {
+                    // Extract JSON content from code block
+                    const jsonContent = analysisContent.slice(8, -4); // Remove ```json\n and \n```
+                    const parsedData = JSON.parse(jsonContent);
+                    
+                    // Convert JSON structure to readable HTML
+                    return convertJsonAnalysisToHtml(parsedData);
+                } catch (e) {
+                    console.warn('Failed to parse JSON analysis:', e);
+                    // Fall back to treating as regular markdown
+                }
+            }
+            
+            // Handle regular markdown content
+            return analysisContent
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\n\n/g, '</p><p>')
+                .replace(/^(.*)$/gm, '<p>$1</p>')
+                .replace(/<p><\/p>/g, '');
+        }
+
+        function convertJsonAnalysisToHtml(jsonData) {
+            let html = '';
+            
+            // Handle extracted title
+            if (jsonData.extracted_title) {
+                html += `<h3>${jsonData.extracted_title.replace(/\*\*/g, '')}</h3>`;
+            }
+            
+            // Process the analysis object
+            if (jsonData.analysis) {
+                html += convertAnalysisObjectToHtml(jsonData.analysis);
+            }
+            
+            return html || '<p>Analysis content could not be displayed properly.</p>';
+        }
+
+        function convertAnalysisObjectToHtml(analysis) {
+            let html = '';
+            
+            // Handle different analysis structures
+            if (analysis.feynman_technique_breakdown) {
+                html += convertFeynmanAnalysisToHtml(analysis.feynman_technique_breakdown);
+            } else if (analysis.step_1_simple_explanation) {
+                html += convertStepBasedAnalysisToHtml(analysis);
+            } else {
+                // Generic object processing
+                html += convertGenericObjectToHtml(analysis);
+            }
+            
+            return html;
+        }
+
+        function convertFeynmanAnalysisToHtml(breakdown) {
+            let html = '';
+            
+            if (breakdown.core_concept) {
+                html += '<h4>Core Concept</h4>';
+                if (breakdown.core_concept.simple_explanation) {
+                    html += `<p>${breakdown.core_concept.simple_explanation}</p>`;
+                }
+                if (breakdown.core_concept.analogy) {
+                    html += '<h5>Analogy</h5>';
+                    html += `<p>${breakdown.core_concept.analogy}</p>`;
+                }
+            }
+            
+            // Process four strategies if they exist
+            if (breakdown.four_strategies_deep_dive) {
+                html += '<h4>Key Strategies</h4>';
+                html += convertGenericObjectToHtml(breakdown.four_strategies_deep_dive);
+            }
+            
+            return html;
+        }
+
+        function convertStepBasedAnalysisToHtml(analysis) {
+            let html = '';
+            
+            // Sort keys to process steps in order
+            const keys = Object.keys(analysis).sort();
+            
+            for (const key of keys) {
+                const section = analysis[key];
+                if (typeof section === 'object' && section !== null) {
+                    // Convert key to readable header
+                    const header = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    html += `<h4>${header}</h4>`;
+                    
+                    if (section.core_concept || section.core_idea) {
+                        const concept = section.core_concept || section.core_idea;
+                        html += `<p><strong>Core Concept:</strong> ${concept}</p>`;
+                    }
+                    
+                    html += convertGenericObjectToHtml(section);
+                }
+            }
+            
+            return html;
+        }
+
+        function convertGenericObjectToHtml(obj, depth = 0) {
+            let html = '';
+            
+            if (depth > 3) return '<p>[Content nested too deeply]</p>'; // Prevent infinite recursion
+            
+            for (const [key, value] of Object.entries(obj)) {
+                if (key === 'core_concept' || key === 'core_idea') continue; // Skip, already processed
+                
+                if (typeof value === 'string') {
+                    if (value.length > 20) { // Only show substantial content
+                        const header = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                        html += `<h5>${header}</h5><p>${value}</p>`;
+                    }
+                } else if (Array.isArray(value)) {
+                    const header = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    html += `<h5>${header}</h5><ul>`;
+                    value.forEach(item => {
+                        if (typeof item === 'string') {
+                            html += `<li>${item}</li>`;
+                        } else if (typeof item === 'object') {
+                            html += `<li>${convertGenericObjectToHtml(item, depth + 1)}</li>`;
+                        }
+                    });
+                    html += '</ul>';
+                } else if (typeof value === 'object' && value !== null) {
+                    const header = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    html += `<h5>${header}</h5>`;
+                    html += convertGenericObjectToHtml(value, depth + 1);
+                }
+            }
+            
+            return html;
+        }
+
+        function extractTextFromAnalysis(analysisContent) {
+            // If it's JSON formatted, extract meaningful text
+            if (analysisContent.startsWith('```json\n') && analysisContent.endsWith('\n```')) {
+                try {
+                    const jsonContent = analysisContent.slice(8, -4);
+                    const parsedData = JSON.parse(jsonContent);
+                    
+                    let text = '';
+                    if (parsedData.extracted_title) {
+                        text += parsedData.extracted_title.replace(/\*\*/g, '') + '. ';
+                    }
+                    
+                    // Extract meaningful text from the analysis object
+                    if (parsedData.analysis) {
+                        text += extractTextFromJsonObject(parsedData.analysis);
+                    }
+                    
+                    return text;
+                } catch (e) {
+                    // Fall back to raw content
+                    return analysisContent.replace(/\*\*(.*?)\*\*/g, '$1');
+                }
+            }
+            
+            // Handle regular markdown content
+            return analysisContent.replace(/\*\*(.*?)\*\*/g, '$1');
+        }
+
+        function extractTextFromJsonObject(obj) {
+            let text = '';
+            
+            for (const [key, value] of Object.entries(obj)) {
+                if (typeof value === 'string') {
+                    text += value + ' ';
+                } else if (Array.isArray(value)) {
+                    value.forEach(item => {
+                        if (typeof item === 'string') {
+                            text += item + ' ';
+                        } else if (typeof item === 'object') {
+                            text += extractTextFromJsonObject(item);
+                        }
+                    });
+                } else if (typeof value === 'object' && value !== null) {
+                    text += extractTextFromJsonObject(value);
+                }
+            }
+            
+            return text;
+        }
+
         async function loadArticles() {
             try {
                 const response = await fetch('data.json');
@@ -444,16 +632,12 @@
 
                     const processedDate = new Date(article.processed_date).toLocaleDateString();
 
-                    // Convert markdown-style analysis to HTML
-                    let analysisHtml = article.analysis
-                        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                        .replace(/\n\n/g, '</p><p>')
-                        .replace(/^(.*)$/gm, '<p>$1</p>')
-                        .replace(/<p><\/p>/g, '');
+                    // Process analysis content - handle both markdown and JSON formats
+                    let analysisHtml = processAnalysisContent(article.analysis);
 
                     // Create a preview (first ~300 characters)
                     const previewLength = 300;
-                    const analysisText = article.analysis.replace(/\*\*(.*?)\*\*/g, '$1');
+                    const analysisText = extractTextFromAnalysis(article.analysis);
                     const needsExpansion = analysisText.length > previewLength;
 
                     let previewHtml = '';
@@ -538,17 +722,14 @@
             document.getElementById('fullscreen-title').querySelector('a').href = article.url;
             document.getElementById('fullscreen-meta').textContent = `Processed: ${new Date(article.processed_date).toLocaleDateString()}`;
 
-            // Convert markdown-style analysis to HTML with better formatting
-            let analysisHtml = article.analysis
+            // Process analysis content for fullscreen - handle both markdown and JSON formats  
+            let analysisHtml = processAnalysisContent(article.analysis);
+            
+            // Apply additional formatting for fullscreen display
+            analysisHtml = analysisHtml
                 .replace(/^# (.*$)/gm, '<h1>$1</h1>')
                 .replace(/^## (.*$)/gm, '<h2>$1</h2>')
-                .replace(/^### (.*$)/gm, '<h3>$1</h3>')
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\n\n/g, '</p><p>')
-                .replace(/^(?!<[h1-3]>)(.*)$/gm, '<p>$1</p>')
-                .replace(/<p><\/p>/g, '')
-                .replace(/<p>(<h[1-3]>.*<\/h[1-3]>)<\/p>/g, '$1')
-                .replace(/^<p>/,'').replace(/<\/p>$/,'');
+                .replace(/^### (.*$)/gm, '<h3>$1</h3>');
 
             document.getElementById('fullscreen-analysis').innerHTML = analysisHtml;
 
