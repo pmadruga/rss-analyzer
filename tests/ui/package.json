@@ -2,10 +2,11 @@
   "name": "rss-analyzer-ui-tests",
   "version": "1.0.0",
   "description": "UI tests for RSS Article Analyzer website",
+  "type": "commonjs",
   "scripts": {
     "test": "jest",
-    "test:ci": "jest --ci --coverage --watchAll=false",
-    "test:json-rendering": "jest --testNamePattern='JSON rendering'"
+    "test:ci": "jest --ci --coverage --watchAll=false --verbose",
+    "test:json-rendering": "jest --testNamePattern='JSON rendering' --verbose"
   },
   "devDependencies": {
     "@testing-library/dom": "^9.3.3",
@@ -16,19 +17,15 @@
   },
   "jest": {
     "testEnvironment": "jsdom",
-    "setupFilesAfterEnv": [
-      "<rootDir>/setup-tests.js"
-    ],
-    "testMatch": [
-      "<rootDir>/**/*.test.js"
-    ],
+    "setupFilesAfterEnv": ["<rootDir>/setup-tests.js"],
+    "testMatch": ["<rootDir>/**/*.test.js"],
+    "moduleFileExtensions": ["js", "json"],
+    "transform": {},
+    "testTimeout": 30000,
     "collectCoverageFrom": [
-      "../../docs/index.html"
-    ]
-  },
-  "main": "browser-integration.test.js",
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs"
+      "../../docs/**/*.{js,html}"
+    ],
+    "coverageReporters": ["text", "json-summary", "html"],
+    "verbose": true
+  }
 }

@@ -10,12 +10,25 @@ describe('Browser Integration - JSON Rendering', () => {
   let browser;
   let page;
 
+  // Set longer timeout for browser tests
+  jest.setTimeout(60000);
+
   beforeAll(async () => {
     browser = await puppeteer.launch({
       headless: 'new',
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      args: [
+        '--no-sandbox', 
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-extensions',
+        '--disable-gpu',
+        '--disable-default-apps',
+        '--no-first-run',
+        '--no-zygote',
+        '--single-process'
+      ]
     });
-  });
+  }, 30000);
 
   afterAll(async () => {
     if (browser) {
