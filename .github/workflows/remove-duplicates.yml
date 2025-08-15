@@ -1,0 +1,174 @@
+name: Remove Duplicate Articles
+
+on:
+  schedule:
+    # Run daily at 2 AM UTC to clean up duplicates
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run mode (show what would be removed without making changes)'
+        required: false
+        default: 'false'
+        type: boolean
+
+jobs:
+  remove-duplicates:
+    name: Remove Duplicate Articles
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Create logs directory
+        run: mkdir -p logs
+
+      - name: Run duplicate analysis (dry run)
+        id: analyze
+        run: |
+          echo "Running duplicate analysis..."
+          python tools/remove_duplicates.py --dry-run --db-path data/articles.db > logs/duplicate_analysis.log 2>&1 || true
+          
+          # Extract stats from log
+          CONTENT_DUPES=$(grep "Content-based duplicates found:" logs/duplicate_analysis.log | grep -o '[0-9]\+' || echo "0")
+          URL_DUPES=$(grep "URL-based duplicates found:" logs/duplicate_analysis.log | grep -o '[0-9]\+' || echo "0")
+          
+          echo "content_duplicates=$CONTENT_DUPES" >> $GITHUB_OUTPUT
+          echo "url_duplicates=$URL_DUPES" >> $GITHUB_OUTPUT
+          
+          echo "Analysis complete:"
+          echo "  Content duplicates: $CONTENT_DUPES"
+          echo "  URL duplicates: $URL_DUPES"
+
+      - name: Remove duplicates (if not dry run)
+        if: ${{ github.event.inputs.dry_run != 'true' && (steps.analyze.outputs.content_duplicates != '0' || steps.analyze.outputs.url_duplicates != '0') }}
+        run: |
+          echo "Removing duplicates..."
+          python tools/remove_duplicates.py --db-path data/articles.db --add-constraints > logs/duplicate_removal.log 2>&1
+          
+          echo "Duplicate removal completed. Log:"
+          cat logs/duplicate_removal.log
+
+      - name: Upload duplicate removal logs
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: duplicate-removal-logs
+          path: logs/
+          retention-days: 7
+
+      - name: Create Issue on High Duplicate Count
+        if: ${{ steps.analyze.outputs.content_duplicates > 10 || steps.analyze.outputs.url_duplicates > 10 }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const contentDupes = ${{ steps.analyze.outputs.content_duplicates }};
+            const urlDupes = ${{ steps.analyze.outputs.url_duplicates }};
+            
+            const issueBody = `
+            ## 🚨 High Duplicate Article Count Detected
+
+            The duplicate removal process has detected a high number of duplicate articles:
+
+            - **Content-based duplicates:** ${contentDupes}
+            - **URL-based duplicates:** ${urlDupes}
+
+            **What this means:**
+            - Content duplicates: Articles with identical or very similar content
+            - URL duplicates: Multiple entries for the same URL
+
+            **Actions taken:**
+            ${context.payload.inputs?.dry_run === 'true' 
+              ? '- Analysis only (dry run mode) - no articles were removed'
+              : '- Duplicate articles have been automatically removed from the database'
+            }
+
+            **Possible causes:**
+            - RSS feed processing issues
+            - Article URL changes or redirects  
+            - Content scraping retrieving the same article multiple times
+            - Database constraint issues
+
+            **Recommendations:**
+            1. Check the RSS parsing logic for duplicate detection
+            2. Verify URL normalization in the scraper
+            3. Review the article hashing mechanism
+            4. Consider adding database constraints to prevent future duplicates
+
+            **Logs:**
+            See the duplicate-removal-logs artifact for detailed information.
+            `;
+
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `High Duplicate Count: ${contentDupes + urlDupes} duplicates detected`,
+              body: issueBody,
+              labels: ['maintenance', 'data-quality']
+            });
+
+  update-website-data:
+    name: Update Website Data After Cleanup
+    runs-on: ubuntu-latest
+    needs: remove-duplicates
+    if: ${{ github.event.inputs.dry_run != 'true' }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python  
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Regenerate website data
+        run: |
+          echo "Regenerating website data after duplicate removal..."
+          python tools/generate_website_data.py --db-path data/articles.db --output-dir docs
+          
+          # Check if data.json was updated
+          if [ -f docs/data.json ]; then
+            echo "Website data regenerated successfully"
+            ARTICLE_COUNT=$(python -c "import json; data=json.load(open('docs/data.json')); print(data['total_articles'])")
+            echo "Total articles after cleanup: $ARTICLE_COUNT"
+          else
+            echo "Warning: Website data not regenerated"
+            exit 1
+          fi
+
+      - name: Commit updated data
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          
+          if [ -n "$(git status --porcelain)" ]; then
+            git add docs/data.json
+            git commit -m "🧹 Update website data after duplicate removal
+
+            - Removed duplicate articles from database
+            - Regenerated website data.json
+            - Ensured data consistency
+
+            🤖 Generated with [GitHub Actions](https://github.com/${{ github.repository }}/actions)"
+            git push
+            echo "Website data updated and committed"
+          else
+            echo "No changes to commit"
+          fi

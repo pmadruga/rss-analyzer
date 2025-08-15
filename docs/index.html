@@ -328,6 +328,52 @@
             font-weight: 700;
         }
 
+        /* JSON content styling */
+        .array-content {
+            margin-left: 1rem;
+            border-left: 3px solid #e3f2fd;
+            padding-left: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .array-item {
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        .object-content {
+            margin-left: 0.5rem;
+            border-left: 2px solid #f0f0f0;
+            padding-left: 1rem;
+        }
+
+        .article-analysis h3 {
+            color: #1976d2;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .article-analysis h4 {
+            color: #424242;
+            margin-top: 1.2rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .article-analysis h5 {
+            color: #616161;
+            margin-top: 1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .article-analysis h6 {
+            color: #757575;
+            margin-top: 0.8rem;
+            margin-bottom: 0.3rem;
+            font-size: 0.9rem;
+        }
+
         /* Keyboard navigation support */
         .fullscreen-modal:focus-within {
             outline: none;
@@ -521,35 +567,82 @@
         function convertGenericObjectToHtml(obj, depth = 0) {
             let html = '';
             
-            if (depth > 3) return '<p>[Content nested too deeply]</p>'; // Prevent infinite recursion
+            if (depth > 4) return '<p><em>[Content nested too deeply]</em></p>'; // Prevent infinite recursion
             
             for (const [key, value] of Object.entries(obj)) {
                 if (key === 'core_concept' || key === 'core_idea') continue; // Skip, already processed
                 
+                const header = formatJsonKeyAsTitle(key);
+                const headerLevel = Math.min(depth + 3, 6); // Start at h3, max h6
+                
                 if (typeof value === 'string') {
-                    if (value.length > 20) { // Only show substantial content
-                        const header = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-                        html += `<h5>${header}</h5><p>${value}</p>`;
+                    if (value.length > 10) { // Show even shorter content
+                        // Clean up the value text - remove excessive formatting
+                        const cleanValue = cleanJsonText(value);
+                        html += `<h${headerLevel}>${header}</h${headerLevel}><p>${cleanValue}</p>`;
                     }
                 } else if (Array.isArray(value)) {
-                    const header = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-                    html += `<h5>${header}</h5><ul>`;
-                    value.forEach(item => {
-                        if (typeof item === 'string') {
-                            html += `<li>${item}</li>`;
-                        } else if (typeof item === 'object') {
-                            html += `<li>${convertGenericObjectToHtml(item, depth + 1)}</li>`;
+                    if (value.length > 0) {
+                        html += `<h${headerLevel}>${header}</h${headerLevel}>`;
+                        
+                        // Check if array contains simple strings or complex objects
+                        const hasComplexItems = value.some(item => typeof item === 'object' && item !== null);
+                        
+                        if (hasComplexItems) {
+                            // Use div structure for complex items
+                            html += '<div class="array-content">';
+                            value.forEach((item, index) => {
+                                if (typeof item === 'string') {
+                                    html += `<p><strong>Point ${index + 1}:</strong> ${cleanJsonText(item)}</p>`;
+                                } else if (typeof item === 'object' && item !== null) {
+                                    html += `<div class="array-item"><h${Math.min(headerLevel + 1, 6)}>Item ${index + 1}</h${Math.min(headerLevel + 1, 6)}>`;
+                                    html += convertGenericObjectToHtml(item, depth + 1);
+                                    html += '</div>';
+                                }
+                            });
+                            html += '</div>';
+                        } else {
+                            // Simple list for string-only arrays
+                            html += '<ul>';
+                            value.forEach(item => {
+                                if (typeof item === 'string') {
+                                    html += `<li>${cleanJsonText(item)}</li>`;
+                                }
+                            });
+                            html += '</ul>';
                         }
-                    });
-                    html += '</ul>';
+                    }
                 } else if (typeof value === 'object' && value !== null) {
-                    const header = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-                    html += `<h5>${header}</h5>`;
+                    html += `<h${headerLevel}>${header}</h${headerLevel}>`;
+                    html += '<div class="object-content">';
                     html += convertGenericObjectToHtml(value, depth + 1);
+                    html += '</div>';
                 }
             }
             
             return html;
+        }
+
+        function formatJsonKeyAsTitle(key) {
+            return key
+                .replace(/_/g, ' ')              // Replace underscores with spaces
+                .replace(/([a-z])([A-Z])/g, '$1 $2') // Add space before capital letters
+                .replace(/\b\w/g, l => l.toUpperCase()) // Capitalize first letter of each word
+                .replace(/\s+/g, ' ')            // Clean up multiple spaces
+                .trim();
+        }
+
+        function cleanJsonText(text) {
+            if (typeof text !== 'string') return text;
+            
+            return text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Convert markdown bold
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')           // Convert markdown italics
+                .replace(/`(.*?)`/g, '<code>$1</code>')         // Convert markdown code
+                .replace(/\n\n+/g, '</p><p>')                   // Convert double newlines to paragraphs
+                .replace(/\n/g, ' ')                            // Convert single newlines to spaces
+                .replace(/<p><\/p>/g, '')                       // Remove empty paragraphs
+                .trim();
         }
 
         function extractTextFromAnalysis(analysisContent) {
