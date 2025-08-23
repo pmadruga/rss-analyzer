@@ -19,6 +19,132 @@
             line-height: 1.6;
             color: #333;
             background: #fafafa;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Dark mode styles */
+        @media (prefers-color-scheme: dark) {
+            body {
+                color: #f1f5f9;
+                background: #0f172a;
+            }
+
+            .article-card {
+                background: #1e293b !important;
+                border: 1px solid #475569 !important;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.3) !important;
+            }
+
+            .article-card:hover {
+                background: #334155 !important;
+                border-color: #64748b !important;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.4) !important;
+            }
+
+            .article-title a {
+                color: #f1f5f9 !important;
+            }
+
+            .article-title a:hover {
+                color: #60a5fa !important;
+            }
+
+            .article-meta {
+                color: #94a3b8 !important;
+            }
+
+            .article-analysis {
+                color: #e2e8f0 !important;
+            }
+
+            .article-analysis h3, .article-analysis h4, .article-analysis h5, .article-analysis h6 {
+                color: #f1f5f9 !important;
+            }
+
+            .fullscreen-content {
+                background: #1e293b !important;
+                color: #f1f5f9 !important;
+                border: 1px solid #475569 !important;
+            }
+
+            .fullscreen-title {
+                color: #f1f5f9 !important;
+            }
+
+            .fullscreen-title a {
+                color: inherit !important;
+            }
+
+            .fullscreen-title a:hover {
+                color: #60a5fa !important;
+            }
+
+            .fullscreen-meta {
+                color: #94a3b8 !important;
+            }
+
+            .fullscreen-analysis {
+                color: #e2e8f0 !important;
+            }
+
+            .fullscreen-analysis h1, .fullscreen-analysis h2, .fullscreen-analysis h3 {
+                color: #f1f5f9 !important;
+            }
+
+            .error {
+                background: #450a0a !important;
+                color: #fca5a5 !important;
+                border: 1px solid #7f1d1d !important;
+            }
+
+            .loading {
+                color: #94a3b8 !important;
+            }
+
+            /* Warning boxes for dark mode */
+            div[style*="background: #fff3cd"] {
+                background: #451a03 !important;
+                border-color: #92400e !important;
+                color: #fbbf24 !important;
+            }
+
+            /* Array and object content styling for dark mode */
+            .array-content {
+                border-left-color: #475569 !important;
+            }
+
+            .array-item {
+                background: #334155 !important;
+                border: 1px solid #475569 !important;
+            }
+
+            .object-content {
+                border-left-color: #475569 !important;
+            }
+
+            /* Sort dropdown for dark mode */
+            select {
+                background: #1e293b !important;
+                color: #f1f5f9 !important;
+                border-color: #475569 !important;
+            }
+
+            /* Stats styling for dark mode */
+            .stat-number {
+                color: #60a5fa !important;
+            }
+
+            header {
+                border-bottom-color: #475569 !important;
+            }
+
+            h1 {
+                color: #f1f5f9 !important;
+            }
+
+            .subtitle {
+                color: #94a3b8 !important;
+            }
         }
 
         .container {
@@ -153,6 +279,12 @@
             pointer-events: none;
         }
 
+        @media (prefers-color-scheme: dark) {
+            .article-content.collapsed::after {
+                background: linear-gradient(transparent, #1e293b) !important;
+            }
+        }
+
         .expand-toggle {
             background: #3498db;
             color: white;
@@ -172,6 +304,20 @@
         .expand-toggle:focus {
             outline: none;
             box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.3);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .expand-toggle {
+                background: #2563eb;
+            }
+
+            .expand-toggle:hover {
+                background: #1d4ed8;
+            }
+
+            .expand-toggle:focus {
+                box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.5);
+            }
         }
 
         .expand-buttons {
@@ -198,6 +344,52 @@
         .fullscreen-toggle:focus {
             outline: none;
             box-shadow: 0 0 0 2px rgba(39, 174, 96, 0.3);
+        }
+
+        .copy-toggle {
+            background: #f59e0b;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .copy-toggle:hover {
+            background: #d97706;
+        }
+
+        .copy-toggle:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.3);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .fullscreen-toggle {
+                background: #16a34a;
+            }
+
+            .fullscreen-toggle:hover {
+                background: #15803d;
+            }
+
+            .fullscreen-toggle:focus {
+                box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.5);
+            }
+
+            .copy-toggle {
+                background: #f59e0b;
+            }
+
+            .copy-toggle:hover {
+                background: #d97706;
+            }
+
+            .copy-toggle:focus {
+                box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.5);
+            }
         }
 
         /* Full-screen modal */
@@ -421,6 +613,15 @@
         <header>
             <h1>RSS Article Analyzer</h1>
             <p class="subtitle">AI-powered analysis of academic papers and technical articles</p>
+            
+            <div class="sorting-controls" style="margin: 1rem 0;">
+                <label for="sort-select" style="font-size: 0.9rem; color: #666; margin-right: 0.5rem;">Sort by:</label>
+                <select id="sort-select" style="padding: 0.3rem; border: 1px solid #ddd; border-radius: 4px; font-size: 0.9rem;">
+                    <option value="created_at">Date Scraped (newest first)</option>
+                    <option value="processed_date">Date Processed (newest first)</option>
+                </select>
+            </div>
+            
             <div class="stats">
                 <div class="stat">
                     <div class="stat-number" id="total-articles">-</div>
@@ -460,109 +661,242 @@
         // Global articles data for full-screen access
         let articlesData = [];
 
+        function sortArticles(articles, sortBy) {
+            return [...articles].sort((a, b) => {
+                const dateFieldA = sortBy === 'created_at' ? a.created_at || a.processed_date : a.processed_date;
+                const dateFieldB = sortBy === 'created_at' ? b.created_at || b.processed_date : b.processed_date;
+                
+                const dateA = new Date(dateFieldA);
+                const dateB = new Date(dateFieldB);
+                return dateB - dateA; // Descending order (newest first)
+            });
+        }
+
+        function renderArticles(articles) {
+            const grid = document.getElementById('articles-grid');
+
+            if (articles.length === 0) {
+                grid.innerHTML = '<div class="error">No articles found.</div>';
+                return;
+            }
+
+            grid.innerHTML = ''; // Clear existing content
+
+            articles.forEach((article, index) => {
+                const card = document.createElement('div');
+                card.className = 'article-card';
+
+                const processedDate = new Date(article.processed_date).toLocaleDateString();
+                const scrapedDate = article.created_at ? new Date(article.created_at).toLocaleDateString() : 'Unknown';
+
+                // Process analysis content - handle both markdown and JSON formats
+                let analysisHtml = processAnalysisContent(article.analysis);
+
+                // Create a preview (first ~300 characters)
+                const previewLength = 300;
+                const analysisText = extractTextFromAnalysis(article.analysis);
+                const needsExpansion = analysisText.length > previewLength;
+
+                let previewHtml = '';
+                if (needsExpansion) {
+                    const previewText = analysisText.substring(0, previewLength).trim();
+                    previewHtml = previewText
+                        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                        .replace(/\n\n/g, '</p><p>')
+                        .replace(/^(.*)$/gm, '<p>$1</p>')
+                        .replace(/<p><\/p>/g, '') + '...';
+                }
+
+                const contentId = `content-${index}`;
+                const toggleId = `toggle-${index}`;
+                const fullscreenId = `fullscreen-${index}`;
+                const copyId = `copy-${index}`;
+
+                // Try to extract title from JSON analysis if available
+                let displayTitle = article.title;
+                if (article.analysis && article.analysis.startsWith('```json')) {
+                    try {
+                        const jsonContent = article.analysis.slice(8, -4);
+                        const parsed = JSON.parse(jsonContent);
+                        if (parsed.extracted_title) {
+                            displayTitle = parsed.extracted_title.replace(/\*\*/g, '').trim();
+                        }
+                    } catch (e) {
+                        // Use original title if parsing fails
+                    }
+                }
+
+                card.innerHTML = `
+                    <h2 class="article-title">
+                        <a href="${article.url}" target="_blank" rel="noopener">${displayTitle}</a>
+                    </h2>
+                    <div class="article-meta">
+                        Scraped: ${scrapedDate} | Processed: ${processedDate}
+                        ${article.ai_provider === 'feynman_reanalysis' ? 
+                            '<span style="background: #e8f5e8; color: #2d5a2d; padding: 2px 6px; border-radius: 3px; font-size: 0.8rem; margin-left: 8px;">✨ Enhanced Analysis</span>' : 
+                            ''}
+                    </div>
+                    <div class="article-analysis">
+                        ${needsExpansion ?
+                            `<div class="article-preview">
+                                <div id="${contentId}" class="article-content collapsed">
+                                    ${analysisHtml}
+                                </div>
+                                <div class="expand-buttons">
+                                    <button id="${toggleId}" class="expand-toggle" onclick="toggleExpand('${contentId}', '${toggleId}')">
+                                        Show More ▼
+                                    </button>
+                                    <button id="${fullscreenId}" class="fullscreen-toggle" onclick="openFullscreen(${index})">
+                                        Full Screen 📖
+                                    </button>
+                                    <button id="${copyId}" class="copy-toggle" onclick="copyContent(${index})">
+                                        Copy Content 📋
+                                    </button>
+                                </div>
+                            </div>` :
+                            `<div>
+                                ${analysisHtml}
+                                <div class="expand-buttons">
+                                    <button id="${fullscreenId}" class="fullscreen-toggle" onclick="openFullscreen(${index})">
+                                        Full Screen 📖
+                                    </button>
+                                    <button id="${copyId}" class="copy-toggle" onclick="copyContent(${index})">
+                                        Copy Content 📋
+                                    </button>
+                                </div>
+                            </div>`
+                        }
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+
+            // Update global articles data for fullscreen access
+            articlesData = articles;
+        }
+
         function processAnalysisContent(analysisContent) {
-            // Check if content is JSON wrapped in markdown code blocks
-            if (analysisContent.startsWith('```json\n') && analysisContent.endsWith('\n```')) {
+            // Ensure we have valid content
+            if (!analysisContent || typeof analysisContent !== 'string') {
+                console.warn('No analysis content or invalid type:', typeof analysisContent);
+                return '<p>No analysis content available.</p>';
+            }
+            
+
+            // Clean up any potential encoding issues
+            const cleanContent = analysisContent.trim();
+            
+            // All content should be Feynman technique JSON wrapped in markdown code blocks
+            if (cleanContent.startsWith('```json\n') && cleanContent.endsWith('\n```')) {
                 try {
                     // Extract JSON content from code block
-                    const jsonContent = analysisContent.slice(8, -4); // Remove ```json\n and \n```
+                    let jsonContent = cleanContent.slice(8, -4); // Remove ```json\n and \n```
+                    
+                    // Fix common JSON formatting issues
+                    // Handle Unicode characters that might break JSON parsing
+                    jsonContent = jsonContent
+                        .replace(/"/g, '"')      // Replace smart quotes
+                        .replace(/"/g, '"')      // Replace smart quotes  
+                        .replace(/'/g, "'")      // Replace smart quotes
+                        .replace(/'/g, "'")      // Replace smart quotes
+                        .replace(/…/g, "...")    // Replace ellipsis
+                        .replace(/†/g, "")       // Remove dagger symbols
+                        .replace(/\u2020/g, "")  // Remove dagger symbols (unicode)
+                        .replace(/\u2021/g, "")  // Remove double dagger symbols
+                        .replace(/"([^"]*)\*\*([^"]*)\*\*([^"]*)"/g, '"$1$2$3"') // Remove ** inside JSON strings
+                        .replace(/\*\*([^"]*?)\*\*/g, '$1'); // Remove ** outside strings
+                    
                     const parsedData = JSON.parse(jsonContent);
                     
                     // Convert JSON structure to readable HTML
                     return convertJsonAnalysisToHtml(parsedData);
                 } catch (e) {
                     console.warn('Failed to parse JSON analysis:', e);
-                    // Fall back to treating as regular markdown
+                    console.warn('Content preview:', cleanContent.substring(0, 200) + '...');
+                    
+                    // FALLBACK: Show raw content as readable text instead of error
+                    console.log('Falling back to showing JSON as formatted text');
+                    return '<div style="background: #f8f9fa; border: 1px solid #e9ecef; padding: 1rem; border-radius: 4px;"><h4>Analysis Content</h4><pre style="white-space: pre-wrap; font-family: inherit; margin: 0;">' + 
+                           cleanContent.replace(/</g, '&lt;').replace(/>/g, '&gt;') + 
+                           '</pre></div>';
                 }
             }
             
-            // Handle regular markdown content
-            return analysisContent
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\n\n/g, '</p><p>')
-                .replace(/^(.*)$/gm, '<p>$1</p>')
-                .replace(/<p><\/p>/g, '');
+            // All content should be Feynman technique in ```json blocks
+            return '<div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 1rem; border-radius: 4px; color: #856404;"><strong>⚠️ Invalid Format:</strong><br>Expected Feynman technique analysis in ```json format. Please re-analyze this article.</div>';
         }
 
         function convertJsonAnalysisToHtml(jsonData) {
             let html = '';
             
-            // Handle extracted title
-            if (jsonData.extracted_title) {
-                html += `<h3>${jsonData.extracted_title.replace(/\*\*/g, '')}</h3>`;
+            
+            // Ensure we have valid JSON data
+            if (!jsonData || typeof jsonData !== 'object') {
+                console.warn('Invalid JSON data type:', typeof jsonData);
+                return '<p>Invalid analysis data format.</p>';
             }
             
-            // Process the analysis object
-            if (jsonData.analysis) {
-                html += convertAnalysisObjectToHtml(jsonData.analysis);
+            // Handle extracted title
+            if (jsonData.extracted_title) {
+                const cleanTitle = jsonData.extracted_title
+                    .replace(/\*\*/g, '')
+                    .replace(/^\*\*/, '')
+                    .replace(/\*\*$/, '')
+                    .trim();
+                if (cleanTitle) {
+                    html += `<h3>${cleanTitle}</h3>`;
+                }
             }
+            
+            // Process the analysis object - must contain Feynman technique breakdown
+            if (jsonData.analysis && jsonData.analysis.feynman_technique_breakdown) {
+                html += convertFeynmanAnalysisToHtml(jsonData.analysis.feynman_technique_breakdown);
+            } else {
+                // Invalid format - missing required Feynman structure
+                html += '<div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 1rem; border-radius: 4px; color: #856404;"><strong>⚠️ Missing Feynman Analysis:</strong><br>Expected "analysis.feynman_technique_breakdown" structure. Please re-analyze this article.</div>';
+            }
+            
             
             return html || '<p>Analysis content could not be displayed properly.</p>';
         }
 
-        function convertAnalysisObjectToHtml(analysis) {
-            let html = '';
-            
-            // Handle different analysis structures
-            if (analysis.feynman_technique_breakdown) {
-                html += convertFeynmanAnalysisToHtml(analysis.feynman_technique_breakdown);
-            } else if (analysis.step_1_simple_explanation) {
-                html += convertStepBasedAnalysisToHtml(analysis);
-            } else {
-                // Generic object processing
-                html += convertGenericObjectToHtml(analysis);
-            }
-            
-            return html;
-        }
 
         function convertFeynmanAnalysisToHtml(breakdown) {
             let html = '';
             
-            if (breakdown.core_concept) {
+            // Handle simple_explanation section
+            if (breakdown.simple_explanation) {
                 html += '<h4>Core Concept</h4>';
-                if (breakdown.core_concept.simple_explanation) {
-                    html += `<p>${breakdown.core_concept.simple_explanation}</p>`;
+                if (breakdown.simple_explanation.core_concept) {
+                    html += `<p>${cleanJsonText(breakdown.simple_explanation.core_concept)}</p>`;
                 }
-                if (breakdown.core_concept.analogy) {
+                if (breakdown.simple_explanation.analogy) {
                     html += '<h5>Analogy</h5>';
-                    html += `<p>${breakdown.core_concept.analogy}</p>`;
+                    html += `<p>${cleanJsonText(breakdown.simple_explanation.analogy)}</p>`;
                 }
             }
             
-            // Process four strategies if they exist
-            if (breakdown.four_strategies_deep_dive) {
-                html += '<h4>Key Strategies</h4>';
-                html += convertGenericObjectToHtml(breakdown.four_strategies_deep_dive);
+            // Process all other sections using generic object converter
+            const sectionsToProcess = [
+                'key_components',
+                'step_by_step_process', 
+                'real_world_applications',
+                'analogies_and_examples',
+                'significance_and_impact'
+            ];
+            
+            for (const sectionKey of sectionsToProcess) {
+                if (breakdown[sectionKey]) {
+                    const sectionTitle = formatJsonKeyAsTitle(sectionKey);
+                    html += `<h4>${sectionTitle}</h4>`;
+                    html += convertGenericObjectToHtml(breakdown[sectionKey], 1);
+                }
             }
             
             return html;
         }
 
-        function convertStepBasedAnalysisToHtml(analysis) {
-            let html = '';
-            
-            // Sort keys to process steps in order
-            const keys = Object.keys(analysis).sort();
-            
-            for (const key of keys) {
-                const section = analysis[key];
-                if (typeof section === 'object' && section !== null) {
-                    // Convert key to readable header
-                    const header = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-                    html += `<h4>${header}</h4>`;
-                    
-                    if (section.core_concept || section.core_idea) {
-                        const concept = section.core_concept || section.core_idea;
-                        html += `<p><strong>Core Concept:</strong> ${concept}</p>`;
-                    }
-                    
-                    html += convertGenericObjectToHtml(section);
-                }
-            }
-            
-            return html;
-        }
 
         function convertGenericObjectToHtml(obj, depth = 0) {
             let html = '';
@@ -637,13 +971,18 @@
             
             return text
                 .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Convert markdown bold
-                .replace(/\*(.*?)\*/g, '<em>$1</em>')           // Convert markdown italics
-                .replace(/`(.*?)`/g, '<code>$1</code>')         // Convert markdown code
-                .replace(/\n\n+/g, '</p><p>')                   // Convert double newlines to paragraphs
-                .replace(/\n/g, ' ')                            // Convert single newlines to spaces
-                .replace(/<p><\/p>/g, '')                       // Remove empty paragraphs
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')             // Convert markdown italics
+                .replace(/`(.*?)`/g, '<code>$1</code>')           // Convert markdown code
+                .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>') // Convert markdown links
+                .replace(/\n\n+/g, '</p><p>')                     // Convert double newlines to paragraphs
+                .replace(/\n/g, ' ')                              // Convert single newlines to spaces
+                .replace(/<p><\/p>/g, '')                         // Remove empty paragraphs
+                .replace(/<p>\s*<\/p>/g, '')                      // Remove empty paragraphs with whitespace
+                .replace(/^\s*<p>/, '<p>')                        // Clean up paragraph starts
+                .replace(/<\/p>\s*$/, '</p>')                     // Clean up paragraph ends
                 .trim();
         }
+
 
         function extractTextFromAnalysis(analysisContent) {
             // If it's JSON formatted, extract meaningful text
@@ -701,7 +1040,12 @@
                 if (!response.ok) throw new Error('Failed to fetch data');
 
                 const data = await response.json();
-                articlesData = data.articles; // Store for full-screen access
+                
+                // Store original articles data for sorting
+                articlesData = data.articles;
+                
+                // Initial sort by created_at (date scraped)
+                const initialSortedArticles = sortArticles(articlesData, 'created_at');
 
                 // Update stats
                 document.getElementById('total-articles').textContent = data.total_articles;
@@ -712,76 +1056,13 @@
                 document.getElementById('loading').style.display = 'none';
 
                 // Render articles
-                const grid = document.getElementById('articles-grid');
-
-                if (data.articles.length === 0) {
-                    grid.innerHTML = '<div class="error">No articles found.</div>';
-                    return;
-                }
-
-                data.articles.forEach((article, index) => {
-                    const card = document.createElement('div');
-                    card.className = 'article-card';
-
-                    const processedDate = new Date(article.processed_date).toLocaleDateString();
-
-                    // Process analysis content - handle both markdown and JSON formats
-                    let analysisHtml = processAnalysisContent(article.analysis);
-
-                    // Create a preview (first ~300 characters)
-                    const previewLength = 300;
-                    const analysisText = extractTextFromAnalysis(article.analysis);
-                    const needsExpansion = analysisText.length > previewLength;
-
-                    let previewHtml = '';
-                    if (needsExpansion) {
-                        const previewText = analysisText.substring(0, previewLength).trim();
-                        previewHtml = previewText
-                            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                            .replace(/\n\n/g, '</p><p>')
-                            .replace(/^(.*)$/gm, '<p>$1</p>')
-                            .replace(/<p><\/p>/g, '') + '...';
-                    }
-
-                    const contentId = `content-${index}`;
-                    const toggleId = `toggle-${index}`;
-                    const fullscreenId = `fullscreen-${index}`;
-
-                    card.innerHTML = `
-                        <h2 class="article-title">
-                            <a href="${article.url}" target="_blank" rel="noopener">${article.title}</a>
-                        </h2>
-                        <div class="article-meta">
-                            Processed: ${processedDate}
-                        </div>
-                        <div class="article-analysis">
-                            ${needsExpansion ?
-                                `<div class="article-preview">
-                                    <div id="${contentId}" class="article-content collapsed">
-                                        ${analysisHtml}
-                                    </div>
-                                    <div class="expand-buttons">
-                                        <button id="${toggleId}" class="expand-toggle" onclick="toggleExpand('${contentId}', '${toggleId}')">
-                                            Show More ▼
-                                        </button>
-                                        <button id="${fullscreenId}" class="fullscreen-toggle" onclick="openFullscreen(${index})">
-                                            Full Screen 📖
-                                        </button>
-                                    </div>
-                                </div>` :
-                                `<div>
-                                    ${analysisHtml}
-                                    <div class="expand-buttons">
-                                        <button id="${fullscreenId}" class="fullscreen-toggle" onclick="openFullscreen(${index})">
-                                            Full Screen 📖
-                                        </button>
-                                    </div>
-                                </div>`
-                            }
-                        </div>
-                    `;
-
-                    grid.appendChild(card);
+                renderArticles(initialSortedArticles);
+                
+                // Add event listener for sort dropdown
+                document.getElementById('sort-select').addEventListener('change', function(e) {
+                    const sortBy = e.target.value;
+                    const sortedArticles = sortArticles(articlesData, sortBy);
+                    renderArticles(sortedArticles);
                 });
 
             } catch (error) {
@@ -806,12 +1087,88 @@
             }
         }
 
+        function copyContent(articleIndex) {
+            const article = articlesData[articleIndex];
+            if (!article) return;
+
+            // Extract readable text content from the analysis
+            let contentToCopy = '';
+            
+            // Get title
+            let title = article.title;
+            if (article.analysis && article.analysis.startsWith('```json')) {
+                try {
+                    const jsonContent = article.analysis.slice(8, -4);
+                    const parsed = JSON.parse(jsonContent);
+                    if (parsed.extracted_title) {
+                        title = parsed.extracted_title.replace(/\*\*/g, '').trim();
+                    }
+                } catch (e) {
+                    // Use original title if parsing fails
+                }
+            }
+            
+            contentToCopy += `# ${title}\n\n`;
+            contentToCopy += `Source: ${article.url}\n\n`;
+            
+            // Extract readable text from the analysis
+            const analysisText = extractTextFromAnalysis(article.analysis);
+            if (analysisText) {
+                contentToCopy += `## Analysis\n\n${analysisText}`;
+            } else {
+                contentToCopy += `## Analysis\n\n${article.analysis || 'No analysis available.'}`;
+            }
+
+            // Copy to clipboard
+            navigator.clipboard.writeText(contentToCopy).then(() => {
+                // Show success feedback
+                const copyButton = document.getElementById(`copy-${articleIndex}`);
+                const originalText = copyButton.textContent;
+                copyButton.textContent = 'Copied! ✅';
+                copyButton.style.background = '#10b981';
+                
+                // Reset button after 2 seconds
+                setTimeout(() => {
+                    copyButton.textContent = originalText;
+                    copyButton.style.background = '';
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy content: ', err);
+                
+                // Fallback: show error feedback
+                const copyButton = document.getElementById(`copy-${articleIndex}`);
+                const originalText = copyButton.textContent;
+                copyButton.textContent = 'Copy Failed ❌';
+                copyButton.style.background = '#ef4444';
+                
+                // Reset button after 2 seconds
+                setTimeout(() => {
+                    copyButton.textContent = originalText;
+                    copyButton.style.background = '';
+                }, 2000);
+            });
+        }
+
         function openFullscreen(articleIndex) {
             const article = articlesData[articleIndex];
             if (!article) return;
 
+            // Try to extract title from JSON analysis for consistent display
+            let displayTitle = article.title;
+            if (article.analysis && article.analysis.startsWith('```json')) {
+                try {
+                    const jsonContent = article.analysis.slice(8, -4);
+                    const parsed = JSON.parse(jsonContent);
+                    if (parsed.extracted_title) {
+                        displayTitle = parsed.extracted_title.replace(/\*\*/g, '').trim();
+                    }
+                } catch (e) {
+                    // Use original title if parsing fails
+                }
+            }
+
             // Update modal content
-            document.getElementById('fullscreen-title').querySelector('a').textContent = article.title;
+            document.getElementById('fullscreen-title').querySelector('a').textContent = displayTitle;
             document.getElementById('fullscreen-title').querySelector('a').href = article.url;
             document.getElementById('fullscreen-meta').textContent = `Processed: ${new Date(article.processed_date).toLocaleDateString()}`;
 
