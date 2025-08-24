@@ -839,6 +839,12 @@
             
             console.log('Processing JSON content, length:', content.length);
             
+            // EMERGENCY BYPASS - if content looks normal, try the old formatRawJsonAsReadable method
+            if (content.includes('extracted_title') && content.includes('analysis')) {
+                console.log('Using emergency fallback to old parsing method');
+                return formatRawJsonAsReadable('```json\n' + content + '\n```');
+            }
+            
             try {
                 // Aggressive JSON cleaning
                 let cleanedContent = content
