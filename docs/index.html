@@ -837,6 +837,8 @@
             // Try JSON.parse first with aggressive cleaning, fall back to text processing
             let content = jsonContent.replace(/```json\n/, '').replace(/\n```$/, '');
             
+            console.log('Processing JSON content, length:', content.length);
+            
             try {
                 // Aggressive JSON cleaning
                 let cleanedContent = content
@@ -851,11 +853,15 @@
                 
                 const parsedData = JSON.parse(cleanedContent);
                 console.log('Successfully parsed JSON, using proper conversion');
-                return convertJsonAnalysisToHtml(parsedData);
+                const result = convertJsonAnalysisToHtml(parsedData);
+                console.log('convertJsonAnalysisToHtml result length:', result.length);
+                return result;
                 
             } catch (e) {
                 console.log('JSON parsing failed, using enhanced text processing:', e.message);
-                return convertRawJsonToReadableHtmlTextBased(content);
+                const fallbackResult = convertRawJsonToReadableHtmlTextBased(content);
+                console.log('Text-based parsing result length:', fallbackResult.length);
+                return fallbackResult;
             }
         }
 
@@ -881,6 +887,20 @@
             if (authorMatch) {
                 html += '<h4>Author Perspective</h4>';
                 html += processGenericSection(authorMatch[1]);
+            }
+            
+            if (!html || html.trim() === '') {
+                console.warn('No HTML generated, using emergency fallback');
+                // Emergency fallback - show first few meaningful lines
+                const lines = content.split('\n').filter(line => line.trim().length > 20).slice(0, 10);
+                html = '<div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 1rem; border-radius: 4px;"><strong>⚠️ Parsing Issue - Showing Raw Content:</strong><br>';
+                lines.forEach(line => {
+                    const cleanLine = line.replace(/^\s*[",{}]+/, '').replace(/[",{}]+$/, '').trim();
+                    if (cleanLine.length > 10) {
+                        html += `<p>${cleanText(cleanLine)}</p>`;
+                    }
+                });
+                html += '</div>';
             }
             
             return html || '<p>Analysis content could not be processed.</p>';
