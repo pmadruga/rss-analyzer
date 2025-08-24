@@ -365,6 +365,23 @@
             outline: none;
             box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.3);
         }
+        .raw-toggle {
+            background: #8b5cf6;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        .raw-toggle:hover {
+            background: #7c3aed;
+        }
+        .raw-toggle:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.3);
+        }
 
         @media (prefers-color-scheme: dark) {
             .fullscreen-toggle {
@@ -389,6 +406,15 @@
 
             .copy-toggle:focus {
                 box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.5);
+            }
+            .raw-toggle {
+                background: #8b5cf6;
+            }
+            .raw-toggle:hover {
+                background: #7c3aed;
+            }
+            .raw-toggle:focus {
+                box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.5);
             }
         }
 
@@ -753,6 +779,9 @@
                                     <button id="${copyId}" class="copy-toggle" onclick="copyContent(${index})">
                                         Copy Content 📋
                                     </button>
+                                    <button id="raw-${index}" class="raw-toggle" onclick="toggleRawJson(${index})">
+                                        Show Raw JSON 🔍
+                                    </button>
                                 </div>
                             </div>` :
                             `<div>
@@ -763,6 +792,9 @@
                                     </button>
                                     <button id="${copyId}" class="copy-toggle" onclick="copyContent(${index})">
                                         Copy Content 📋
+                                    </button>
+                                    <button id="raw-${index}" class="raw-toggle" onclick="toggleRawJson(${index})">
+                                        Show Raw JSON 🔍
                                     </button>
                                 </div>
                             </div>`
@@ -1287,6 +1319,42 @@
                     copyButton.style.background = '';
                 }, 2000);
             });
+        }
+
+        function toggleRawJson(articleIndex) {
+            const article = articlesData[articleIndex];
+            if (!article) return;
+            
+            const analysisElement = document.querySelector(`#article-${articleIndex} .analysis-content`);
+            const rawButton = document.getElementById(`raw-${articleIndex}`);
+            
+            if (!analysisElement || !rawButton) return;
+            
+            // Check current state
+            const isShowingRaw = rawButton.textContent.includes('Hide Raw');
+            
+            if (isShowingRaw) {
+                // Switch back to formatted view
+                analysisElement.innerHTML = processAnalysisContent(article.analysis);
+                rawButton.textContent = 'Show Raw JSON 🔍';
+                rawButton.style.background = '#8b5cf6';
+            } else {
+                // Show raw JSON
+                const rawContent = article.analysis || 'No analysis available';
+                const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                const preStyles = isDark 
+                    ? "background: #1f2937; border: 1px solid #374151; padding: 1rem; border-radius: 4px; overflow-x: auto; white-space: pre-wrap; font-family: 'SF Mono', Consolas, monospace; font-size: 0.85rem; line-height: 1.4; color: #e5e7eb;"
+                    : "background: #f8f9fa; border: 1px solid #dee2e6; padding: 1rem; border-radius: 4px; overflow-x: auto; white-space: pre-wrap; font-family: 'SF Mono', Consolas, monospace; font-size: 0.85rem; line-height: 1.4; color: #333;";
+                analysisElement.innerHTML = `<pre style="${preStyles}">${escapeHtml(rawContent)}</pre>`;
+                rawButton.textContent = 'Hide Raw JSON 🔍';
+                rawButton.style.background = '#ef4444';
+            }
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
 
         function openFullscreen(articleIndex) {
