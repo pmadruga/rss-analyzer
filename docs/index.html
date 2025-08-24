@@ -834,58 +834,157 @@
         }
 
         function convertRawJsonToReadableHtml(jsonContent) {
-            // Direct text processing approach - bypasses JSON.parse entirely
-            // Remove code block markers
+            // Try JSON.parse first with aggressive cleaning, fall back to text processing
             let content = jsonContent.replace(/```json\n/, '').replace(/\n```$/, '');
             
-            // Extract title
+            try {
+                // Aggressive JSON cleaning
+                let cleanedContent = content
+                    .replace(/"/g, '"')      // Replace smart quotes
+                    .replace(/"/g, '"')      // Replace smart quotes  
+                    .replace(/'/g, "'")      // Replace smart quotes
+                    .replace(/'/g, "'")      // Replace smart quotes
+                    .replace(/…/g, "...")    // Replace ellipsis
+                    .replace(/†/g, "")       // Remove dagger symbols
+                    .replace(/\u2020/g, "")  // Remove dagger symbols
+                    .replace(/\u2021/g, "");  // Remove double dagger
+                
+                const parsedData = JSON.parse(cleanedContent);
+                console.log('Successfully parsed JSON, using proper conversion');
+                return convertJsonAnalysisToHtml(parsedData);
+                
+            } catch (e) {
+                console.log('JSON parsing failed, using enhanced text processing:', e.message);
+                return convertRawJsonToReadableHtmlTextBased(content);
+            }
+        }
+
+        function convertRawJsonToReadableHtmlTextBased(content) {
+            // Enhanced text-based processing for when JSON.parse fails
             let html = '';
+            
+            // Extract title
             const titleMatch = content.match(/"extracted_title":\s*"([^"]+)"/);
             if (titleMatch) {
                 html += `<h3>${cleanText(titleMatch[1])}</h3>`;
             }
             
-            // Process main sections - look for numbered or standard format
-            const sections = [
-                {pattern: /"(1_)?simple_explanation":\s*{([^}]*?"core_(idea|concept)":\s*"([^"]*)"[^}]*?)}/s, title: 'Core Concept'},
-                {pattern: /"(2_)?key_components":\s*{(.*?)}/s, title: 'Key Components'},
-                {pattern: /"(3_)?step_by_step_process":\s*{(.*?)}/s, title: 'Step by Step Process'}, 
-                {pattern: /"(4_)?real_world_applications":\s*{(.*?)}/s, title: 'Real World Applications'},
-                {pattern: /"(5_)?analogies_and_examples":\s*{(.*?)}/s, title: 'Analogies and Examples'},
-                {pattern: /"(6_)?significance_and_impact":\s*{(.*?)}/s, title: 'Significance and Impact'}
-            ];
+            // Find the feynman_technique_breakdown section
+            const feynmanMatch = content.match(/"feynman_technique_breakdown":\s*{([\s\S]*?)(?=,\s*"author_perspective"|$)}/);
+            if (feynmanMatch) {
+                const feynmanContent = feynmanMatch[1];
+                html += processFeynmanBreakdown(feynmanContent);
+            }
             
-            for (const section of sections) {
-                const match = content.match(section.pattern);
-                if (match) {
-                    html += `<h4>${section.title}</h4>`;
+            // Extract author_perspective if it exists
+            const authorMatch = content.match(/"author_perspective":\s*{([\s\S]*?)}/);
+            if (authorMatch) {
+                html += '<h4>Author Perspective</h4>';
+                html += processGenericSection(authorMatch[1]);
+            }
+            
+            return html || '<p>Analysis content could not be processed.</p>';
+        }
+
+        function processFeynmanBreakdown(feynmanContent) {
+            let html = '';
+            
+            // Process each numbered section
+            const sectionPattern = /"(\d+)_([^"]+)":\s*{((?:[^{}]|{[^{}]*})*?)}/g;
+            let match;
+            
+            while ((match = sectionPattern.exec(feynmanContent)) !== null) {
+                const sectionNumber = match[1];
+                const sectionName = match[2].replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                const sectionContent = match[3];
+                
+                html += `<h4>${sectionName}</h4>`;
+                
+                if (sectionName.toLowerCase().includes('simple explanation')) {
+                    // Special handling for simple explanation
+                    const coreMatch = sectionContent.match(/"core_(idea|concept)":\s*"([^"]*)"/s);
+                    if (coreMatch) {
+                        html += `<p><strong>Core Idea:</strong> ${cleanText(coreMatch[2])}</p>`;
+                    }
                     
-                    if (section.title === 'Core Concept') {
-                        // Special handling for core concept
-                        const coreMatch = match[0].match(/"core_(idea|concept)":\s*"([^"]*)"/);
-                        if (coreMatch) {
-                            html += `<p>${cleanText(coreMatch[2])}</p>`;
+                    const analogyMatch = sectionContent.match(/"analogy":\s*"([^"]*)"/s);
+                    if (analogyMatch) {
+                        html += `<p><strong>Analogy:</strong> ${cleanText(analogyMatch[1])}</p>`;
+                    }
+                } else {
+                    // Process other sections recursively
+                    html += processComplexSection(sectionContent);
+                }
+            }
+            
+            return html;
+        }
+
+        function processComplexSection(sectionText) {
+            let html = '';
+            
+            // Extract simple key-value pairs
+            const simplePattern = /"([^"]+)":\s*"([^"]*)"/g;
+            let match;
+            const processedKeys = new Set();
+            
+            while ((match = simplePattern.exec(sectionText)) !== null) {
+                const key = match[1];
+                const value = match[2];
+                
+                if (!processedKeys.has(key) && value.length > 10) {
+                    processedKeys.add(key);
+                    const formattedKey = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    html += `<p><strong>${formattedKey}:</strong> ${cleanText(value)}</p>`;
+                }
+            }
+            
+            // Extract arrays
+            const arrayPattern = /"([^"]+)":\s*\[([\s\S]*?)\]/g;
+            while ((match = arrayPattern.exec(sectionText)) !== null) {
+                const key = match[1];
+                const arrayContent = match[2];
+                
+                if (!processedKeys.has(key)) {
+                    processedKeys.add(key);
+                    const formattedKey = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    html += `<p><strong>${formattedKey}:</strong></p>`;
+                    
+                    // Extract array items
+                    const items = [];
+                    const itemPattern = /"([^"]*)"/g;
+                    let itemMatch;
+                    while ((itemMatch = itemPattern.exec(arrayContent)) !== null) {
+                        if (itemMatch[1].length > 5) {
+                            items.push(cleanText(itemMatch[1]));
                         }
-                        
-                        const analogyMatch = match[0].match(/"analogy":\s*"([^"]*)"/s);
-                        if (analogyMatch) {
-                            html += '<h5>Analogy</h5>';
-                            html += `<p>${cleanText(analogyMatch[1])}</p>`;
-                        }
-                    } else {
-                        // Generic processing for other sections
-                        const sectionContent = match[2];
-                        html += processGenericSection(sectionContent);
+                    }
+                    
+                    if (items.length > 0) {
+                        html += '<ul>';
+                        items.forEach(item => {
+                            html += `<li>${item}</li>`;
+                        });
+                        html += '</ul>';
                     }
                 }
             }
             
-            // Fallback: if no sections found, try to extract any meaningful content
-            if (html.trim() === (titleMatch ? `<h3>${cleanText(titleMatch[1])}</h3>` : '')) {
-                html += extractAnyReadableContent(content);
+            // Extract nested objects
+            const nestedPattern = /"([^"]+)":\s*{([^}]+)}/g;
+            while ((match = nestedPattern.exec(sectionText)) !== null) {
+                const key = match[1];
+                const nestedContent = match[2];
+                
+                if (!processedKeys.has(key)) {
+                    processedKeys.add(key);
+                    const formattedKey = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    html += `<h5>${formattedKey}</h5>`;
+                    html += processGenericSection(nestedContent);
+                }
             }
             
-            return html || '<p>Analysis content could not be processed.</p>';
+            return html;
         }
 
         function processGenericSection(sectionText) {
