@@ -1323,12 +1323,22 @@
 
         function toggleRawJson(articleIndex) {
             const article = articlesData[articleIndex];
-            if (!article) return;
+            if (!article) {
+                console.warn('Article not found for index:', articleIndex);
+                return;
+            }
             
-            const analysisElement = document.querySelector(`#article-${articleIndex} .analysis-content`);
+            const analysisElement = document.getElementById(`content-${articleIndex}`);
             const rawButton = document.getElementById(`raw-${articleIndex}`);
             
-            if (!analysisElement || !rawButton) return;
+            if (!analysisElement) {
+                console.warn('Analysis element not found:', `content-${articleIndex}`);
+                return;
+            }
+            if (!rawButton) {
+                console.warn('Raw button not found:', `raw-${articleIndex}`);
+                return;
+            }
             
             // Check current state
             const isShowingRaw = rawButton.textContent.includes('Hide Raw');
