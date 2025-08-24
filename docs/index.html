@@ -691,6 +691,7 @@
 
                 // Process analysis content - handle both markdown and JSON formats
                 let analysisHtml = processAnalysisContent(article.analysis);
+                console.log('Article', index, 'analysisHtml preview:', analysisHtml.substring(0, 100));
 
                 // Create a preview (first ~300 characters)
                 const previewLength = 300;
@@ -776,6 +777,156 @@
             articlesData = articles;
         }
 
+        function formatRawJsonAsReadable(jsonContent) {
+            // Convert JSON structure to readable text format when JSON parsing fails
+            let readable = jsonContent
+                .replace(/```json\n/, '')
+                .replace(/\n```$/, '')
+                .replace(/^\s*{\s*/, '')
+                .replace(/\s*}\s*$/, '')
+                .replace(/^\s*"extracted_title":\s*"([^"]+)",?\s*/m, '<h3>$1</h3>')
+                .replace(/^\s*"analysis":\s*{\s*$/m, '')
+                .replace(/^\s*"feynman_technique_breakdown":\s*{\s*$/m, '')
+                .replace(/^\s*"(\d+_)?([^"]+)":\s*{/gm, (match, num, key) => {
+                    const title = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    return `<h4>${title}</h4>`;
+                })
+                .replace(/^\s*"([^"]+)":\s*"([^"]*)",?$/gm, '<p><strong>$1:</strong> $2</p>')
+                .replace(/^\s*"([^"]+)":\s*\[([^\]]*)\],?$/gm, '<p><strong>$1:</strong> $2</p>')
+                .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+                .replace(/^\s*[{}],?\s*$/gm, '')
+                .replace(/\n\s*\n/g, '\n')
+                .trim();
+            
+            return `<div style="background: #f8f9fa; border: 1px solid #dee2e6; padding: 1.5rem; border-radius: 6px; line-height: 1.6;">${readable}</div>`;
+        }
+
+        function convertRawJsonToReadableHtml(jsonContent) {
+            // Direct text processing approach - bypasses JSON.parse entirely
+            // Remove code block markers
+            let content = jsonContent.replace(/```json\n/, '').replace(/\n```$/, '');
+            
+            // Extract title
+            let html = '';
+            const titleMatch = content.match(/"extracted_title":\s*"([^"]+)"/);
+            if (titleMatch) {
+                html += `<h3>${cleanText(titleMatch[1])}</h3>`;
+            }
+            
+            // Process main sections - look for numbered or standard format
+            const sections = [
+                {pattern: /"(1_)?simple_explanation":\s*{([^}]*?"core_(idea|concept)":\s*"([^"]*)"[^}]*?)}/s, title: 'Core Concept'},
+                {pattern: /"(2_)?key_components":\s*{(.*?)}/s, title: 'Key Components'},
+                {pattern: /"(3_)?step_by_step_process":\s*{(.*?)}/s, title: 'Step by Step Process'}, 
+                {pattern: /"(4_)?real_world_applications":\s*{(.*?)}/s, title: 'Real World Applications'},
+                {pattern: /"(5_)?analogies_and_examples":\s*{(.*?)}/s, title: 'Analogies and Examples'},
+                {pattern: /"(6_)?significance_and_impact":\s*{(.*?)}/s, title: 'Significance and Impact'}
+            ];
+            
+            for (const section of sections) {
+                const match = content.match(section.pattern);
+                if (match) {
+                    html += `<h4>${section.title}</h4>`;
+                    
+                    if (section.title === 'Core Concept') {
+                        // Special handling for core concept
+                        const coreMatch = match[0].match(/"core_(idea|concept)":\s*"([^"]*)"/);
+                        if (coreMatch) {
+                            html += `<p>${cleanText(coreMatch[2])}</p>`;
+                        }
+                        
+                        const analogyMatch = match[0].match(/"analogy":\s*"([^"]*)"/s);
+                        if (analogyMatch) {
+                            html += '<h5>Analogy</h5>';
+                            html += `<p>${cleanText(analogyMatch[1])}</p>`;
+                        }
+                    } else {
+                        // Generic processing for other sections
+                        const sectionContent = match[2];
+                        html += processGenericSection(sectionContent);
+                    }
+                }
+            }
+            
+            // Fallback: if no sections found, try to extract any meaningful content
+            if (html.trim() === (titleMatch ? `<h3>${cleanText(titleMatch[1])}</h3>` : '')) {
+                html += extractAnyReadableContent(content);
+            }
+            
+            return html || '<p>Analysis content could not be processed.</p>';
+        }
+
+        function processGenericSection(sectionText) {
+            let html = '';
+            
+            // Extract key-value pairs
+            const pairs = sectionText.match(/"([^"]+)":\s*"([^"]*)"/g);
+            if (pairs) {
+                pairs.forEach(pair => {
+                    const match = pair.match(/"([^"]+)":\s*"([^"]*)"/);
+                    if (match) {
+                        const key = match[1].replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                        const value = cleanText(match[2]);
+                        if (value.length > 10) { // Only show meaningful content
+                            html += `<p><strong>${key}:</strong> ${value}</p>`;
+                        }
+                    }
+                });
+            }
+            
+            // Extract arrays
+            const arrays = sectionText.match(/"([^"]+)":\s*\[[^\]]*\]/g);
+            if (arrays) {
+                arrays.forEach(arrayStr => {
+                    const match = arrayStr.match(/"([^"]+)":\s*\[([^\]]*)\]/);
+                    if (match) {
+                        const key = match[1].replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                        const items = match[2].split(',').map(item => item.replace(/"/g, '').trim()).filter(item => item);
+                        if (items.length > 0) {
+                            html += `<p><strong>${key}:</strong></p><ul>`;
+                            items.forEach(item => {
+                                html += `<li>${cleanText(item)}</li>`;
+                            });
+                            html += '</ul>';
+                        }
+                    }
+                });
+            }
+            
+            return html;
+        }
+
+        function extractAnyReadableContent(content) {
+            let html = '';
+            
+            // Extract any quoted strings that look like meaningful content
+            const meaningfulContent = content.match(/"([^"]{50,})"/g);
+            if (meaningfulContent) {
+                meaningfulContent.forEach(match => {
+                    const text = match.replace(/^"|"$/g, '');
+                    if (!text.match(/^[a-z_]+$/) && !text.match(/^\d+_/)) { // Skip keys
+                        html += `<p>${cleanText(text)}</p>`;
+                    }
+                });
+            }
+            
+            return html;
+        }
+
+        function cleanText(text) {
+            return text
+                .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+                .replace(/\\n/g, '<br>')
+                .replace(/"/g, '"')
+                .replace(/"/g, '"')
+                .replace(/'/g, "'")
+                .replace(/'/g, "'")
+                .replace(/…/g, "...")
+                .replace(/†/g, "")
+                .replace(/\u2020/g, "")
+                .replace(/\u2021/g, "");
+        }
+
         function processAnalysisContent(analysisContent) {
             // Ensure we have valid content
             if (!analysisContent || typeof analysisContent !== 'string') {
@@ -783,47 +934,20 @@
                 return '<p>No analysis content available.</p>';
             }
             
-
             // Clean up any potential encoding issues
             const cleanContent = analysisContent.trim();
             
             // All content should be Feynman technique JSON wrapped in markdown code blocks
             if (cleanContent.startsWith('```json\n') && cleanContent.endsWith('\n```')) {
-                try {
-                    // Extract JSON content from code block
-                    let jsonContent = cleanContent.slice(8, -4); // Remove ```json\n and \n```
-                    
-                    // Fix common JSON formatting issues
-                    // Handle Unicode characters that might break JSON parsing
-                    jsonContent = jsonContent
-                        .replace(/"/g, '"')      // Replace smart quotes
-                        .replace(/"/g, '"')      // Replace smart quotes  
-                        .replace(/'/g, "'")      // Replace smart quotes
-                        .replace(/'/g, "'")      // Replace smart quotes
-                        .replace(/…/g, "...")    // Replace ellipsis
-                        .replace(/†/g, "")       // Remove dagger symbols
-                        .replace(/\u2020/g, "")  // Remove dagger symbols (unicode)
-                        .replace(/\u2021/g, "")  // Remove double dagger symbols
-                        .replace(/"([^"]*)\*\*([^"]*)\*\*([^"]*)"/g, '"$1$2$3"') // Remove ** inside JSON strings
-                        .replace(/\*\*([^"]*?)\*\*/g, '$1'); // Remove ** outside strings
-                    
-                    const parsedData = JSON.parse(jsonContent);
-                    
-                    // Convert JSON structure to readable HTML
-                    return convertJsonAnalysisToHtml(parsedData);
-                } catch (e) {
-                    console.warn('Failed to parse JSON analysis:', e);
-                    console.warn('Content preview:', cleanContent.substring(0, 200) + '...');
-                    
-                    // FALLBACK: Show raw content as readable text instead of error
-                    console.log('Falling back to showing JSON as formatted text');
-                    return '<div style="background: #f8f9fa; border: 1px solid #e9ecef; padding: 1rem; border-radius: 4px;"><h4>Analysis Content</h4><pre style="white-space: pre-wrap; font-family: inherit; margin: 0;">' + 
-                           cleanContent.replace(/</g, '&lt;').replace(/>/g, '&gt;') + 
-                           '</pre></div>';
-                }
+                console.log('Processing JSON-wrapped content...');
+                
+                // Try direct text processing approach (more robust than JSON.parse)
+                return convertRawJsonToReadableHtml(cleanContent);
             }
             
             // All content should be Feynman technique in ```json blocks
+            console.log('FALLBACK: Content does not match expected ```json format');
+            console.log('Content preview:', cleanContent.substring(0, 100));
             return '<div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 1rem; border-radius: 4px; color: #856404;"><strong>⚠️ Invalid Format:</strong><br>Expected Feynman technique analysis in ```json format. Please re-analyze this article.</div>';
         }
 
@@ -852,9 +976,12 @@
             // Process the analysis object - must contain Feynman technique breakdown
             if (jsonData.analysis && jsonData.analysis.feynman_technique_breakdown) {
                 html += convertFeynmanAnalysisToHtml(jsonData.analysis.feynman_technique_breakdown);
+            } else if (jsonData.analysis) {
+                // Try to process analysis directly if no feynman_technique_breakdown wrapper
+                html += convertFeynmanAnalysisToHtml(jsonData.analysis);
             } else {
-                // Invalid format - missing required Feynman structure
-                html += '<div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 1rem; border-radius: 4px; color: #856404;"><strong>⚠️ Missing Feynman Analysis:</strong><br>Expected "analysis.feynman_technique_breakdown" structure. Please re-analyze this article.</div>';
+                // Invalid format - missing required analysis structure
+                html += '<div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 1rem; border-radius: 4px; color: #856404;"><strong>⚠️ Missing Analysis:</strong><br>Expected analysis structure. Please re-analyze this article.</div>';
             }
             
             
@@ -865,32 +992,45 @@
         function convertFeynmanAnalysisToHtml(breakdown) {
             let html = '';
             
-            // Handle simple_explanation section
-            if (breakdown.simple_explanation) {
+            // Check if this is a feynman_technique_breakdown wrapper
+            if (breakdown.feynman_technique_breakdown) {
+                return convertFeynmanAnalysisToHtml(breakdown.feynman_technique_breakdown);
+            }
+            
+            // Handle both numbered (1_simple_explanation) and non-numbered (simple_explanation) formats
+            const simpleExplanation = breakdown.simple_explanation || breakdown['1_simple_explanation'];
+            if (simpleExplanation) {
                 html += '<h4>Core Concept</h4>';
-                if (breakdown.simple_explanation.core_concept) {
-                    html += `<p>${cleanJsonText(breakdown.simple_explanation.core_concept)}</p>`;
+                
+                const coreContent = simpleExplanation.core_concept || simpleExplanation.core_idea;
+                if (coreContent) {
+                    html += `<p>${cleanJsonText(coreContent)}</p>`;
                 }
-                if (breakdown.simple_explanation.analogy) {
+                
+                if (simpleExplanation.analogy) {
                     html += '<h5>Analogy</h5>';
-                    html += `<p>${cleanJsonText(breakdown.simple_explanation.analogy)}</p>`;
+                    html += `<p>${cleanJsonText(simpleExplanation.analogy)}</p>`;
                 }
             }
             
-            // Process all other sections using generic object converter
-            const sectionsToProcess = [
-                'key_components',
-                'step_by_step_process', 
-                'real_world_applications',
-                'analogies_and_examples',
-                'significance_and_impact'
-            ];
+            // Process all sections in order (both numbered and standard formats)
+            const allKeys = Object.keys(breakdown).sort();
+            const processedKeys = new Set(['simple_explanation', '1_simple_explanation', 'feynman_technique_breakdown']);
             
-            for (const sectionKey of sectionsToProcess) {
-                if (breakdown[sectionKey]) {
-                    const sectionTitle = formatJsonKeyAsTitle(sectionKey);
-                    html += `<h4>${sectionTitle}</h4>`;
-                    html += convertGenericObjectToHtml(breakdown[sectionKey], 1);
+            for (const key of allKeys) {
+                if (processedKeys.has(key)) continue;
+                
+                // Convert key to readable title
+                let title = key;
+                if (key.match(/^\d+_/)) {
+                    title = key.replace(/^\d+_/, ''); // Remove number prefix
+                }
+                title = formatJsonKeyAsTitle(title);
+                
+                const sectionData = breakdown[key];
+                if (sectionData && typeof sectionData === 'object') {
+                    html += `<h4>${title}</h4>`;
+                    html += convertGenericObjectToHtml(sectionData, 1);
                 }
             }
             
