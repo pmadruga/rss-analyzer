@@ -1,0 +1,257 @@
+title,url,publication_date,processed_date,methodology_detailed,key_findings,technical_approach,research_design
+A Comprehensive Survey of Self-Evolving AI Agents: A New Paradigm Bridging Foundation Models and Lifelong Agentic Systems,https://arxiv.org/pdf/2508.07407,2025-08-16T05:53:39+00:00,2025-08-27 08:30:43,"```json
+{
+    ""extracted_title"": ""\""A Comprehensive Survey of Self-Evolving AI Agents: A New Paradigm Bridging Foundation Models and Lifelong Agentic Systems\"""",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""
+                This paper is about **AI agents that can *improve themselves over time***—like a robot or software assistant that doesn’t just follow pre-programmed rules but *learns from its experiences* a...",,,
+Efficient Patent Searching Using Graph Transformers,https://bsky.app/profile/arxiv-cs-ir.bsky.social/post/3lwg2fungbk2t,2025-08-15T19:02:18+00:00,2025-08-27 08:31:57,"```json
+{
+    ""extracted_title"": **""Efficient Patent Searching Using Graph Transformers""**,
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""This paper introduces a **graph-based transformer model** to improve how we search for patents by treating each invention as a structured graph (nodes = features, edges = relationships between them). Instead of just comparing text (like traditional search engines), it uses **p...",,,
+Semantic IDs for Joint Generative Search and Recommendation,https://bsky.app/profile/arxiv-cs-ir.bsky.social/post/3lwg2gsanx42f,2025-08-15T19:02:03+00:00,2025-08-27 08:33:32,"```json
+{
+    ""extracted_title"": ""\""Semantic IDs for Joint Generative Search and Recommendation\"""",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""step_1_simple_explanation"": {
+                ""core_problem"": ""
+                The paper addresses a fundamental challenge in modern AI systems: **how to design a unified framework where a single generative model (like an LLM) can effectively handle *both* search and recommendation tasks simultaneously**.
+                ...",,,
+LeanRAG: Knowledge-Graph-Based Generation with Semantic Aggregation and Hierarchical Retrieval,https://bsky.app/profile/reachsumit.com/post/3lwfvwp23z22i,2025-08-15T04:36:55+00:00,2025-08-27 08:35:12,"```json
+{
+    ""extracted_title"": ""LeanRAG: Knowledge-Graph-Based Generation with Semantic Aggregation and Hierarchical Retrieval"",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_problem"": ""
+                Imagine you're trying to answer a complex question (like *'How does quantum computing impact drug discovery?'*).
+                A standard RAG system would:
+                1. Search a database for relevant documents ...",,,
+ParallelSearch: Train your LLMs to Decompose Query and Search Sub-queries in Parallel with Reinforcement Learning,https://bsky.app/profile/reachsumit.com/post/3lwdbh73ews2k,2025-08-14T13:38:29+00:00,2025-08-27 08:36:33,"```json
+{
+    ""extracted_title"": ""ParallelSearch: Train your LLMs to Decompose Query and Search Sub-queries in Parallel with Reinforcement Learning"",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""ParallelSearch is a new way to teach AI models (specifically LLMs) to break down complex search queries into smaller, independent parts that can be processed simultaneously (in parallel) instead of one after another (se...",,,
+@markriedl.bsky.social on Bluesky,https://bsky.app/profile/markriedl.bsky.social/post/3lwchgyv4ms2s,2025-08-13T21:06:20+00:00,2025-08-27 08:37:54,"```json
+{
+    ""extracted_title"": **""Legal Implications of AI Agency: Liability and Value Alignment in Autonomous Systems""**,
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_core_idea"": {
+                ""explanation"": ""The post is a teaser for a research paper co-authored by **Mark Riedl (AI/ethics researcher)** and **Deven Desai (legal scholar)** that examines **how existing human agency laws might (or might not) apply to AI agents**. The central question is:
+     ...",,,
+Galileo: Learning Global & Local Features of Many Remote Sensing Modalities,https://arxiv.org/pdf/2502.09356,2025-08-04T19:11:05+00:00,2025-08-27 08:39:17,"```json
+{
+    ""extracted_title"": **""Galileo: Learning Global & Local Features of Many Remote Sensing Modalities""**,
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""
+                **Galileo** is a new AI model designed to understand *many types of remote sensing data* (like satellite images, radar, elevation maps, weather data, etc.) *all at once*. Unlike older models that focus on just one type of data (e.g., on...",,,
+Context Engineering for AI Agents: Lessons from Building Manus,https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus,2025-08-03T09:26:34+00:00,2025-08-27 08:41:30,"```json
+{
+    ""extracted_title"": ""Context Engineering for AI Agents: Lessons from Building Manus"",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""core_concept"": {
+                ""simple_explanation"": ""Context engineering is the art and science of designing how an AI agent 'sees' and interacts with its environment by carefully structuring its input context (memory, tools, and task state). Think of it like setting up a chef's kitchen: you arrange ingredients (data), t...",,,
+SemRAG: Semantic Knowledge-Augmented RAG for Improved Question-Answering,https://arxiv.org/abs/2507.21110,2025-08-01T17:54:11+00:00,2025-08-27 08:42:08,"```json
+{
+    ""extracted_title"": **""SemRAG: Semantic Knowledge-Augmented RAG for Improved Question-Answering""**,
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""
+                **SemRAG is a smarter way to help AI answer questions accurately in specialized fields (like medicine or law) without retraining the entire model from scratch.**
+                Imagine you’re a doctor using AI to diagnose rare diseases. A...",,,
+Causal2Vec: Improving Decoder-only LLMs as Versatile Embedding Models,https://bsky.app/profile/reachsumit.com/post/3lvcnilnqqk2d,2025-08-01T11:29:02+00:00,2025-08-27 08:43:51,"```json
+{
+    ""extracted_title"": ""Causal2Vec: Improving Decoder-only LLMs as Versatile Embedding Models"",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""
+                **Problem**: Decoder-only LLMs (like those used in chatbots) are *unidirectional*—they process text left-to-right with a 'causal mask' that hides future tokens. This makes them poor at *bidirectional* tasks like semantic search or retrieval, wher...",,,
+Multiagent AI for generating chain-of-thought training data,https://www.amazon.science/blog/multiagent-ai-for-generating-chain-of-thought-training-data,2025-08-01T09:48:28+00:00,2025-08-27 08:45:49,"```json
+{
+    ""extracted_title"": ""Towards Safety Reasoning in LLMs: AI-Agentic Deliberation for Policy-Embedded Chain-of-Thought Data Creation"",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""This research introduces a **multiagent AI system** that automatically generates high-quality **chain-of-thought (CoT) training data** to improve large language models' (LLMs) ability to reason *safely* (i.e., adhere to resp...",,,
+ARES: An Automated Evaluation Framework for Retrieval-Augmented Generation Systems,https://arxiv.org/html/2311.09476v2,2025-07-31T08:41:54+00:00,2025-08-27 08:47:04,"```json
+{
+    ""extracted_title"": ""**ARES: An Automated Evaluation Framework for Retrieval-Augmented Generation Systems**"",
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""ARES is a tool designed to automatically evaluate **Retrieval-Augmented Generation (RAG)** systems—the AI models that combine search (retrieving relevant documents) with text generation (e.g., chatbots answering questions). The problem it solves i...",,,
+Resource-Efficient Adaptation of Large Language Models for Text Embeddings via Prompt Engineering and Contrastive Fine-tuning,https://bsky.app/profile/reachsumit.com/post/3lvaedjt25c2e,2025-07-31T08:25:20+00:00,2025-08-27 08:47:41,"```json
+{
+    ""extracted_title"": ""\""Resource-Efficient Adaptation of Large Language Models for Text Embeddings via Prompt Engineering and Contrastive Fine-tuning\"""",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""This paper solves a key problem: **How to efficiently turn large language models (LLMs) into high-quality text embedding generators** without retraining them from scratch. Embeddings are compact numerica...",,,
+HALoGEN: Fantastic LLM Hallucinations and Where to Find Them,https://arxiv.org/abs/2501.08292,2025-07-31T00:00:35+00:00,2025-08-27 08:48:42,"```json
+{
+    ""extracted_title"": **""HALoGEN: Fantastic LLM Hallucinations and Where to Find Them""**,
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""
+                This paper tackles a critical flaw in large language models (LLMs): **hallucinations**—when models generate confident but factually incorrect or unsupported statements. The authors introduce **HALoGEN**, a benchmark to systematically measure and class...",,,
+Language Model Re-rankers are Fooled by Lexical Similarities,https://arxiv.org/abs/2502.17036,2025-07-29T22:40:29+00:00,2025-08-27 08:50:39,"```json
+{
+    ""extracted_title"": ""\""Language Model Re-rankers are Fooled by Lexical Similarities\"""",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""
+                This paper investigates whether **language model (LM) re-rankers**—advanced AI systems designed to improve search results by understanding *semantic meaning*—actually perform better than older, simpler methods like **BM25** (a lexical matching algorit...",,,
+From Citations to Criticality: Predicting Legal Decision Influence in the Multilingual Swiss Jurisprudence,https://arxiv.org/abs/2410.13460,2025-07-28T12:05:48+00:00,2025-08-27 08:52:00,"```json
+{
+    ""extracted_title"": ""\""From Citations to Criticality: Predicting Legal Decision Influence in the Multilingual Swiss Jurisprudence\"""",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""This paper tackles a real-world problem: **overwhelmed court systems** with massive case backlogs. The authors propose a **data-driven solution** to prioritize cases—similar to how hospitals triage patients—by predicting w...",,,
+Can Unconfident LLM Annotations Be Used for Confident Conclusions?,https://arxiv.org/html/2408.15204v2,2025-07-24T12:36:13+00:00,2025-08-27 08:53:09,"```json
+{
+    ""extracted_title"": **""Can Unconfident LLM Annotations Be Used for Confident Conclusions? A Framework for Uncertainty-Aware Aggregation""**,
+
+    ""analysis"": {
+        ""1. Core Idea (Simplified)"": {
+            ""description"": ""The paper tackles a fundamental problem in using Large Language Models (LLMs) for data annotation: **How can we derive *reliable* conclusions from annotations where the LLM itself expresses uncertainty (e.g., low confidence scores)?** The authors propose a m...",,,
+@mariaa.bsky.social on Bluesky,https://bsky.app/profile/mariaa.bsky.social/post/3lumkyphrok2f,2025-07-23T15:44:26+00:00,2025-08-27 08:54:27,"```json
+{
+    ""extracted_title"": ""\""Just Put a Human in the Loop? Investigating LLM-Assisted Annotation for Subjective Tasks\"""",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""This paper examines whether simply adding a human reviewer ('human-in-the-loop') to Large Language Model (LLM)-generated annotations actually improves the quality of subjective tasks (e.g., sentiment analysis, content moderation, or qualita...",,,
+@mariaa.bsky.social on Bluesky,https://bsky.app/profile/mariaa.bsky.social/post/3lumkyphpq22f,2025-07-23T15:44:12+00:00,2025-08-27 08:55:05,"```json
+{
+    ""extracted_title"": **""Can Unconfident LLM Annotations Be Used for Confident Conclusions?""**,
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_question"": ""The paper asks whether **low-confidence annotations** (e.g., uncertain labels, predictions, or judgments) generated by **Large Language Models (LLMs)** can still be **aggregated or processed** to produce **high-confidence conclusions**—despite the individual...",,,
+@sungkim.bsky.social on Bluesky,https://bsky.app/profile/sungkim.bsky.social/post/3luj3kikh6c2s,2025-07-21T23:33:12+00:00,2025-08-27 08:55:57,"```json
+{
+    ""extracted_title"": **""Moonshot AI Releases Kimi K2 Technical Report: Insights into MuonClip, Agentic Data Pipelines, and Reinforcement Learning Framework""**,
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""This post by Sung Kim announces the release of **Moonshot AI’s technical report for Kimi K2**, a likely large language model (LLM) or AI system. The excitement stems from three key innovations high...",,,
+The Big LLM Architecture Comparison,https://sebastianraschka.com/blog/2025/the-big-llm-architecture-comparison.html,2025-07-20T13:35:19+00:00,2025-08-27 08:57:55,"```json
+{
+    ""extracted_title"": ""The Big LLM Architecture Comparison: A 2025 Survey of Key Design Choices in DeepSeek-V3, OLMo 2, Gemma 3, Llama 4, and Other Flagship Open Models"",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""core_concept"": {
+                ""title_explanation"": ""The article is a **comprehensive survey of 2025-era LLM architectures**, focusing exclusively on **structural innovations** (not training/data) in open-weight models like DeepSeek-V3, OLM...",,,
+Knowledge Conceptualization Impacts RAG Efficacy,https://bsky.app/profile/reachsumit.com/post/3lty7qvirds2t,2025-07-15T07:49:27+00:00,2025-08-27 08:59:19,"```json
+{
+    ""extracted_title"": **""Knowledge Conceptualization Impacts RAG Efficacy: A Study of Agentic SPARQL Query Generation Over Knowledge Graphs""**,
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""
+                This paper explores how the *way knowledge is structured and represented* (its 'conceptualization') affects the performance of AI systems—specifically **agentic RAG (Retrieval-Augmented Generation)...",,,
+GraphRunner: A Multi-Stage Framework for Efficient and Accurate Graph-Based Retrieval,https://bsky.app/profile/reachsumit.com/post/3ltya4kszmk2t,2025-07-15T07:48:32+00:00,2025-08-27 09:00:27,"```json
+{
+    ""extracted_title"": ""GraphRunner: A Multi-Stage Framework for Efficient and Accurate Graph-Based Retrieval"",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""
+                GraphRunner is a new system designed to **improve how AI retrieves information from complex, interconnected datasets** (like knowledge graphs) by breaking the process into **three clear stages**:
+                1. **Planning**: T...",,,
+@reachsumit.com on Bluesky,https://bsky.app/profile/reachsumit.com/post/3ltya7niyck2t,2025-07-15T07:48:11+00:00,2025-08-27 09:01:42,"```json
+{
+    ""extracted_title"": **""Towards Agentic RAG with Deep Reasoning: A Survey of RAG-Reasoning Systems in LLMs""**,
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_concept"": ""This paper surveys **Agentic RAG (Retrieval-Augmented Generation) with Deep Reasoning**—a new paradigm where LLMs (Large Language Models) don’t just *retrieve-then-reason* in a static way, but dynamically integrate retrieval and reasoning into...",,,
+"Context Engineering - What it is, and techniques to consider",https://www.llamaindex.ai/blog/context-engineering-what-it-is-and-techniques-to-consider?utm_source=socials&utm_medium=li_social,2025-07-13T21:32:38+00:00,2025-08-27 09:03:22,"```json
+{
+    ""extracted_title"": ""Context Engineering - What it is, and techniques to consider"",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_concept"": ""Context engineering is the **deliberate design of what information an AI agent receives** (its 'context window') to maximize task performance, accounting for both **relevance** and **technical constraints** (like token limits). It’s a shift from *prompt engineering* (f...",,,
+"The rise of ""context engineering""",https://blog.langchain.com/the-rise-of-context-engineering/,2025-07-12T10:05:14+00:00,2025-08-27 09:04:36,"```json
+{
+    ""extracted_title"": ""The Rise of Context Engineering: Building Dynamic Systems for LLM Success"",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""Context engineering is the practice of designing systems that dynamically gather, format, and deliver the *right* information, tools, and instructions to LLMs so they can reliably complete tasks. It’s the evolution of prompt engineering for complex, agentic s...",,,
+FrugalRAG: Learning to retrieve and reason for multi-hop QA,https://bsky.app/profile/reachsumit.com/post/3ltnsm55rq227,2025-07-11T08:10:36+00:00,2025-08-27 09:05:43,"```json
+{
+    ""extracted_title"": ""\""FrugalRAG: Learning to Retrieve and Reason for Multi-Hop QA\"""",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_problem"": {
+                    ""description"": ""The paper tackles **multi-hop question answering (QA)**, where answering a question requires piecing together information from *multiple documents* (e.g., \""What river flows through the capital of France where the Eiffel Tower is...",,,
+Measuring Hypothesis Testing Errors in the Evaluation of Retrieval Systems,https://bsky.app/profile/arxiv-cs-ir.bsky.social/post/3lto4qcwxly2j,2025-07-11T08:09:15+00:00,2025-08-27 09:06:35,"```json
+{
+    ""extracted_title"": **""Measuring Hypothesis Testing Errors in the Evaluation of Retrieval Systems""**,
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""
+                This paper tackles a fundamental problem in **Information Retrieval (IR) evaluation**: how to reliably determine whether one search system (e.g., a search engine or recommender system) is *actually* better than another when we don’t have...",,,
+@smcgrath.phd on Bluesky,https://bsky.app/profile/smcgrath.phd/post/3lthihzv6ak27,2025-07-09T00:50:59+00:00,2025-08-27 09:07:36,"```json
+{
+    ""extracted_title"": **""Researchers Jailbreak AI by Flooding It with Bullshit Jargon: The 'InfoFlood' Attack on LLM Safety Filters""**,
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""This post describes a new method called **'InfoFlood'** that tricks large language models (LLMs) into bypassing their safety filters. The attack works by disguising harmful or rule-breaking queries in **overly complex, jar...",,,
+Efficient Knowledge Graph Construction and Retrieval from Unstructured Text for Large-Scale RAG Systems,https://bsky.app/profile/reachsumit.com/post/3ltgncqpysk2j,2025-07-08T10:43:50+00:00,2025-08-27 09:08:08,"```json
+{
+    ""extracted_title"": ""Efficient Knowledge Graph Construction and Retrieval from Unstructured Text for Large-Scale RAG Systems"",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""This paper introduces a **scalable, cost-efficient way to build and use knowledge graphs (KGs) for Retrieval-Augmented Generation (RAG) systems**—without relying on expensive large language models (LLMs). Traditional GraphRAG sys...",,,
