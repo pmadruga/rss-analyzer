@@ -1,0 +1,258 @@
+title,url,publication_date,processed_date,methodology_detailed,key_findings,technical_approach,research_design
+Enhancing Semantic Document Retrieval- Employing Group Steiner Tree Algorithm with Domain Knowledge Enrichment,https://bsky.app/profile/arxiv-cs-ir.bsky.social/post/3lxjc3ie6ok23,2025-08-29T05:09:03+00:00,2025-10-11 08:16:56,"```json
+{
+    ""extracted_title"": ""\""Enhancing Semantic Document Retrieval: Employing Group Steiner Tree Algorithm with Domain Knowledge Enrichment\"""",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_problem"": {
+                    ""description"": ""The paper tackles a fundamental challenge in **Information Retrieval (IR)**: how to retrieve *semantically relevant* documents from diverse, heterogeneous data sources when:
+    ...",,,
+A Comprehensive Survey of Self-Evolving AI Agents: A New Paradigm Bridging Foundation Models and Lifelong Agentic Systems,https://arxiv.org/pdf/2508.07407,2025-08-16T05:53:39+00:00,2025-10-11 08:17:30,"```json
+{
+    ""extracted_title"": ""\""A Comprehensive Survey of Self-Evolving AI Agents: A New Paradigm Bridging Foundation Models and Lifelong Agentic Systems\"""",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""This paper is about **AI agents that can *improve themselves over time***—like a robot that learns from its mistakes and gets smarter without human intervention. Traditional AI agents (e.g., chatbots or task...",,,
+Efficient Patent Searching Using Graph Transformers,https://bsky.app/profile/arxiv-cs-ir.bsky.social/post/3lwg2fungbk2t,2025-08-15T19:02:18+00:00,2025-10-11 08:17:57,"```json
+{
+    ""extracted_title"": **""Efficient Patent Searching Using Graph Transformers""**,
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""
+                This paper solves a **real-world problem in patent law**: efficiently finding *prior art* (existing patents/documents that might invalidate a new patent claim).
+                The key challenge is that patent databases are **massive** (millions of documents),...",,,
+Semantic IDs for Joint Generative Search and Recommendation,https://bsky.app/profile/arxiv-cs-ir.bsky.social/post/3lwg2gsanx42f,2025-08-15T19:02:03+00:00,2025-10-11 08:18:28,"```json
+{
+    ""extracted_title"": ""\""Semantic IDs for Joint Generative Search and Recommendation\"""",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""
+                This paper tackles a modern challenge in AI-powered systems: **how to design a unified way to represent items (like products, videos, or documents) so that the *same* generative AI model can handle *both* search (finding relevant items for a query) *an...",,,
+LeanRAG: Knowledge-Graph-Based Generation with Semantic Aggregation and Hierarchical Retrieval,https://bsky.app/profile/reachsumit.com/post/3lwfvwp23z22i,2025-08-15T04:36:55+00:00,2025-10-11 08:18:55,"```json
+{
+    ""extracted_title"": ""LeanRAG: Knowledge-Graph-Based Generation with Semantic Aggregation and Hierarchical Retrieval"",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_problem"": {
+                    ""description"": ""Retrieval-Augmented Generation (RAG) systems often retrieve **contextually flawed or incomplete information** because they lack structured ways to connect high-level concepts (e.g., 'semantic island...",,,
+ParallelSearch: Train your LLMs to Decompose Query and Search Sub-queries in Parallel with Reinforcement Learning,https://bsky.app/profile/reachsumit.com/post/3lwdbh73ews2k,2025-08-14T13:38:29+00:00,2025-10-11 08:19:20,"```json
+{
+    ""extracted_title"": ""ParallelSearch: Train your LLMs to Decompose Query and Search Sub-queries in Parallel with Reinforcement Learning"",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""ParallelSearch is a new way to teach AI models (specifically large language models or LLMs) how to break down complex search queries into smaller, independent parts that can be processed simultaneously (in parallel) ins...",,,
+@markriedl.bsky.social on Bluesky,https://bsky.app/profile/markriedl.bsky.social/post/3lwchgyv4ms2s,2025-08-13T21:06:20+00:00,2025-10-11 08:19:44,"```json
+{
+    ""extracted_title"": **""Legal Implications of AI Agency: Liability and Value Alignment in Autonomous Systems""**,
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_question"": ""The post is asking: *If AI agents act autonomously, who is legally responsible when things go wrong? And how does the law ensure these agents align with human values?*"",
+                ""analogy"": ""Imagine a self-driving car (an AI agent) c...",,,
+Galileo: Learning Global & Local Features of Many Remote Sensing Modalities,https://arxiv.org/pdf/2502.09356,2025-08-04T19:11:05+00:00,2025-10-11 08:20:13,"```json
+{
+    ""extracted_title"": **""Galileo: Learning Global & Local Features of Many Remote Sensing Modalities""**,
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""
+                **Galileo is a transformer-based AI model designed to understand *many types of remote sensing data* (like satellite images, radar, weather, elevation maps, etc.) *simultaneously* and at *different scales* (from tiny boats to massive gl...",,,
+Context Engineering for AI Agents: Lessons from Building Manus,https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus,2025-08-03T09:26:34+00:00,2025-10-11 08:20:59,"```json
+{
+    ""extracted_title"": ""Context Engineering for AI Agents: Lessons from Building Manus"",
+
+    ""analysis"": {
+        ""core_concept"": {
+            ""definition"": ""Context engineering is the deliberate design and optimization of the input context (e.g., prompts, memory, tool definitions, and environmental state) provided to an AI agent to maximize its performance, efficiency, and adaptability. Unlike traditional fine-tuning, it leverages *in-context learning*—the ability of modern LLMs...",,,
+SemRAG: Semantic Knowledge-Augmented RAG for Improved Question-Answering,https://arxiv.org/abs/2507.21110,2025-08-01T17:54:11+00:00,2025-10-11 08:21:18,"```json
+{
+    ""extracted_title"": **""SemRAG: Semantic Knowledge-Augmented RAG for Improved Question-Answering""**,
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""
+                **SemRAG** is a smarter way to help AI (like chatbots or search tools) answer questions *accurately* in specialized fields (e.g., medicine, law, or finance) *without* needing to retrain the entire AI from scratch. It does this by:
+        ...",,,
+Causal2Vec: Improving Decoder-only LLMs as Versatile Embedding Models,https://bsky.app/profile/reachsumit.com/post/3lvcnilnqqk2d,2025-08-01T11:29:02+00:00,2025-10-11 08:21:38,"```json
+{
+    ""extracted_title"": ""Causal2Vec: Improving Decoder-only LLMs as Versatile Embedding Models"",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""
+                **Problem**: Decoder-only LLMs (like those used in chatbots) are *unidirectional*—they process text left-to-right with a 'causal mask' that blocks future tokens from influencing current ones. This makes them poor at *bidirectional* tasks like sem...",,,
+Multiagent AI for generating chain-of-thought training data,https://www.amazon.science/blog/multiagent-ai-for-generating-chain-of-thought-training-data,2025-08-01T09:48:28+00:00,2025-10-11 08:22:12,"```json
+{
+    ""extracted_title"": ""Towards Safety Reasoning in LLMs: AI-Agentic Deliberation for Policy-Embedded Chain-of-Thought Data Creation"",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""This research explores how to **automatically generate high-quality training data** for large language models (LLMs) that includes **chain-of-thought (CoT) reasoning** while ensuring the responses align with **safety and pol...",,,
+ARES: An Automated Evaluation Framework for Retrieval-Augmented Generation Systems,https://arxiv.org/html/2311.09476v2,2025-07-31T08:41:54+00:00,2025-10-11 08:22:48,"```json
+{
+    ""extracted_title"": **""ARES: An Automated Evaluation Framework for Retrieval-Augmented Generation Systems""**,
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""
+                **ARES** is a tool designed to automatically test and evaluate **Retrieval-Augmented Generation (RAG)** systems—the AI models that combine large language models (LLMs) with external knowledge retrieval (e.g., searching documents ...",,,
+Resource-Efficient Adaptation of Large Language Models for Text Embeddings via Prompt Engineering and Contrastive Fine-tuning,https://bsky.app/profile/reachsumit.com/post/3lvaedjt25c2e,2025-07-31T08:25:20+00:00,2025-10-11 08:23:14,"```json
+{
+    ""extracted_title"": ""Resource-Efficient Adaptation of Large Language Models for Text Embeddings via Prompt Engineering and Contrastive Fine-tuning"",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""This paper solves a key problem: **How can we efficiently turn large language models (LLMs) into high-quality text embedding generators without retraining them from scratch?** The authors propose a 3-part so...",,,
+HALoGEN: Fantastic LLM Hallucinations and Where to Find Them,https://arxiv.org/abs/2501.08292,2025-07-31T00:00:35+00:00,2025-10-11 08:23:36,"```json
+{
+    ""extracted_title"": **""HALoGEN: Fantastic LLM Hallucinations and Where to Find Them""**,
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""
+                This paper introduces **HALoGEN**, a benchmark to systematically measure and classify **hallucinations** in large language models (LLMs). Hallucinations are false or misleading statements generated by LLMs that conflict with real-world knowledge or in...",,,
+Language Model Re-rankers are Fooled by Lexical Similarities,https://arxiv.org/abs/2502.17036,2025-07-29T22:40:29+00:00,2025-10-11 08:24:06,"```json
+{
+    ""extracted_title"": ""\""Language Model Re-rankers are Fooled by Lexical Similarities\"""",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""
+                This paper investigates whether **language model (LM) re-rankers**—advanced AI systems designed to *improve* search results by understanding *meaning* (semantics) rather than just keyword matching—actually work as well as we think. The key finding is ...",,,
+From Citations to Criticality: Predicting Legal Decision Influence in the Multilingual Swiss Jurisprudence,https://arxiv.org/abs/2410.13460,2025-07-28T12:05:48+00:00,2025-10-11 08:24:25,"```json
+{
+    ""extracted_title"": ""\""From Citations to Criticality: Predicting Legal Decision Influence in the Multilingual Swiss Jurisprudence\"""",
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""This paper tackles a real-world problem: **overwhelmed court systems** with massive case backlogs. The authors propose a solution inspired by medical triage—prioritizing legal cases based on their *potential influence* (lik...",,,
+Can Unconfident LLM Annotations Be Used for Confident Conclusions?,https://arxiv.org/html/2408.15204v2,2025-07-24T12:36:13+00:00,2025-10-11 08:24:47,"```json
+{
+    ""extracted_title"": **""Can Unconfident LLM Annotations Be Used for Confident Conclusions? A Case Study in Political Science""**,
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_question"": ""The paper asks: *Can we trust conclusions drawn from data labeled by a Large Language Model (LLM) when the LLM itself is uncertain about its labels?* It’s like asking whether a student’s guesses on a test (even if they’re un...",,,
+@mariaa.bsky.social on Bluesky,https://bsky.app/profile/mariaa.bsky.social/post/3lumkyphrok2f,2025-07-23T15:44:26+00:00,2025-10-11 08:25:14,"```json
+{
+    ""extracted_title"": ""\""Just Put a Human in the Loop? Investigating LLM-Assisted Annotation for Subjective Tasks\"""",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""This paper examines whether simply adding human oversight ('human-in-the-loop') to Large Language Model (LLM) annotations actually improves the quality of subjective tasks (e.g., sentiment analysis, content moderation, or qualitative labeli...",,,
+@mariaa.bsky.social on Bluesky,https://bsky.app/profile/mariaa.bsky.social/post/3lumkyphpq22f,2025-07-23T15:44:12+00:00,2025-10-11 08:25:36,"```json
+{
+    ""extracted_title"": **""Can Unconfident LLM Annotations Be Used for Confident Conclusions?""**,
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_question"": ""The paper asks whether **low-confidence annotations** (e.g., uncertain labels, predictions, or judgments) produced by **Large Language Models (LLMs)** can still be **aggregated or processed** to yield **high-confidence conclusions**—despite the individual an...",,,
+@sungkim.bsky.social on Bluesky,https://bsky.app/profile/sungkim.bsky.social/post/3luj3kikh6c2s,2025-07-21T23:33:12+00:00,2025-10-11 08:26:06,"```json
+{
+    ""extracted_title"": **""Analysis of Moonshot AI’s Kimi K2 Technical Report: MuonClip, Agentic Data Pipelines, and Reinforcement Learning Framework""**,
+
+    ""analysis"": {
+        ""step_1_simple_explanation"": {
+            ""core_idea"": ""This is a **curated highlight** of Moonshot AI’s newly released *Kimi K2 Technical Report*, emphasizing three key innovations:
+            1. **MuonClip**: Likely a novel technique (possibly a variant of CLIP—Contrastive Language–Image Pretraining) t...",,,
+The Big LLM Architecture Comparison,https://sebastianraschka.com/blog/2025/the-big-llm-architecture-comparison.html,2025-07-20T13:35:19+00:00,2025-10-11 08:27:08,"```json
+{
+    ""extracted_title"": ""The Big LLM Architecture Comparison (2025): DeepSeek-V3, OLMo 2, Gemma 3, Llama 4, Qwen3, and More"",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""core_concept"": {
+                ""simple_explanation"": ""This article is a **2025 state-of-the-art survey** of how modern Large Language Model (LLM) architectures (e.g., DeepSeek-V3, OLMo 2, Gemma 3, Llama 4) differ structurally, despite sharing the same foundational transformer design int...",,,
+Knowledge Conceptualization Impacts RAG Efficacy,https://bsky.app/profile/reachsumit.com/post/3lty7qvirds2t,2025-07-15T07:49:27+00:00,2025-10-11 08:28:22,"```json
+{
+    ""extracted_title"": **""Knowledge Conceptualization Impacts RAG Efficacy: A Study of Agentic SPARQL Query Generation Over Knowledge Graphs""**,
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""
+                This paper explores a critical question in AI: *How does the way we structure and represent knowledge (e.g., in knowledge graphs) affect how well LLMs can use that knowledge to generate precise que...",,,
+GraphRunner: A Multi-Stage Framework for Efficient and Accurate Graph-Based Retrieval,https://bsky.app/profile/reachsumit.com/post/3ltya4kszmk2t,2025-07-15T07:48:32+00:00,2025-10-11 08:28:53,"```json
+{
+    ""extracted_title"": ""GraphRunner: A Multi-Stage Framework for Efficient and Accurate Graph-Based Retrieval"",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_problem"": ""Current Retrieval-Augmented Generation (RAG) systems work well for text but fail with structured data like knowledge graphs. These graphs contain interconnected nodes (entities) and edges (relationships), where understanding the *path* between ...",,,
+@reachsumit.com on Bluesky,https://bsky.app/profile/reachsumit.com/post/3ltya7niyck2t,2025-07-15T07:48:11+00:00,2025-10-11 08:29:21,"```json
+{
+    ""extracted_title"": **""Towards Agentic RAG with Deep Reasoning: A Survey of RAG-Reasoning Systems in LLMs""**,
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_concept"": ""This paper surveys **Retrieval-Augmented Generation (RAG) systems** that integrate **deep reasoning** capabilities, moving beyond traditional 'retrieve-then-generate' pipelines. The key shift is from *static* (fixed retrieval → reasoning) to *...",,,
+"Context Engineering - What it is, and techniques to consider",https://www.llamaindex.ai/blog/context-engineering-what-it-is-and-techniques-to-consider?utm_source=socials&utm_medium=li_social,2025-07-13T21:32:38+00:00,2025-10-11 08:30:16,"```json
+{
+    ""extracted_title"": ""Context Engineering: What It Is, and Techniques to Consider"",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_concept"": ""Context engineering is the **deliberate, strategic process of selecting, structuring, and optimizing the information (context) fed into an LLM's context window** to enable it to perform tasks effectively. Unlike *prompt engineering* (which focuses on crafting instructio...",,,
+"The rise of ""context engineering""",https://blog.langchain.com/the-rise-of-context-engineering/,2025-07-12T10:05:14+00:00,2025-10-11 08:31:00,"```json
+{
+    ""extracted_title"": ""The Rise of Context Engineering: Building Dynamic Systems for LLM Success"",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_concept"": ""Context engineering is the practice of designing **dynamic systems** that feed LLMs (Large Language Models) the **right information, tools, and instructions** in the **right format** so they can reliably complete tasks. It’s like being a chef who doesn’t j...",,,
+FrugalRAG: Learning to retrieve and reason for multi-hop QA,https://bsky.app/profile/reachsumit.com/post/3ltnsm55rq227,2025-07-11T08:10:36+00:00,2025-10-11 08:31:25,"```json
+{
+    ""extracted_title"": ""\""FrugalRAG: Learning to Retrieve and Reason for Multi-Hop QA\"""",
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""
+                **Imagine you're a detective solving a complex case (a multi-hop question like \""What country did the inventor of the telephone, who was born in Edinburgh, represent in his later patent disputes?\"").** Normally, you’d:
+                1. **Search** thr...",,,
+Measuring Hypothesis Testing Errors in the Evaluation of Retrieval Systems,https://bsky.app/profile/arxiv-cs-ir.bsky.social/post/3lto4qcwxly2j,2025-07-11T08:09:15+00:00,2025-10-11 08:31:51,"```json
+{
+    ""extracted_title"": **""Measuring Hypothesis Testing Errors in the Evaluation of Retrieval Systems""**,
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""
+                This paper tackles a fundamental problem in **Information Retrieval (IR) evaluation**:
+                *How do we reliably determine if one search system (e.g., Google vs. Bing) is truly better than another when we don’t have perfect rel...",,,
+@smcgrath.phd on Bluesky,https://bsky.app/profile/smcgrath.phd/post/3lthihzv6ak27,2025-07-09T00:50:59+00:00,2025-10-11 08:32:17,"```json
+{
+    ""extracted_title"": **""Researchers Jailbreak AI by Flooding It with Bullshit Jargon: The 'InfoFlood' Attack on LLM Safety Filters""**,
+
+    ""analysis"": {
+        ""feynman_technique_breakdown"": {
+            ""1_simple_explanation"": {
+                ""core_idea"": ""This research reveals a new way to bypass AI safety filters (called 'jailbreaking') by overwhelming large language models (LLMs) with **fake academic jargon and complex, nonsensical prose**. The attack, dubbed **'InfoFlood...",,,
