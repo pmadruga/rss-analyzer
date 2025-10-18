@@ -1,13 +1,59 @@
-# Articles Analysis by Date
+# RSS Feed Article Analysis Report
 
-This document contains all analyzed articles organized by their processing date.
+**Generated:** 2025-10-18 08:25:45
 
-## October 18, 2025
+**Total Articles Analyzed:** 20
 
-### Enhancing Semantic Document Retrieval- Employing Group Steiner Tree Algorithm with Domain Knowledge Enrichment
-**Source:** https://bsky.app/profile/arxiv-cs-ir.bsky.social/post/3lxjc3ie6ok23  
-**Processed:** 2025-10-18 08:05:35  
-**Methodology:**
+---
+
+## Processing Statistics
+
+- **Total Articles:** 20
+### Articles by Domain
+
+- **Unknown:** 20 articles
+
+---
+
+## Table of Contents
+
+1. [Enhancing Semantic Document Retrieval- Employing Group Steiner Tree Algorithm with Domain Knowledge Enrichment](#article-1-enhancing-semantic-document-retrieval--e)
+2. [A Comprehensive Survey of Self-Evolving AI Agents: A New Paradigm Bridging Foundation Models and Lifelong Agentic Systems](#article-2-a-comprehensive-survey-of-self-evolving-)
+3. [Efficient Patent Searching Using Graph Transformers](#article-3-efficient-patent-searching-using-graph-t)
+4. [Semantic IDs for Joint Generative Search and Recommendation](#article-4-semantic-ids-for-joint-generative-search)
+5. [LeanRAG: Knowledge-Graph-Based Generation with Semantic Aggregation and Hierarchical Retrieval](#article-5-leanrag-knowledge-graph-based-generation)
+6. [ParallelSearch: Train your LLMs to Decompose Query and Search Sub-queries in Parallel with Reinforcement Learning](#article-6-parallelsearch-train-your-llms-to-decomp)
+7. [@markriedl.bsky.social on Bluesky](#article-7-markriedlbskysocial-on-bluesky)
+8. [Galileo: Learning Global & Local Features of Many Remote Sensing Modalities](#article-8-galileo-learning-global--local-features-)
+9. [Context Engineering for AI Agents: Lessons from Building Manus](#article-9-context-engineering-for-ai-agents-lesson)
+10. [SemRAG: Semantic Knowledge-Augmented RAG for Improved Question-Answering](#article-10-semrag-semantic-knowledge-augmented-rag)
+11. [Causal2Vec: Improving Decoder-only LLMs as Versatile Embedding Models](#article-11-causal2vec-improving-decoder-only-llms-)
+12. [Multiagent AI for generating chain-of-thought training data](#article-12-multiagent-ai-for-generating-chain-of-t)
+13. [ARES: An Automated Evaluation Framework for Retrieval-Augmented Generation Systems](#article-13-ares-an-automated-evaluation-framework-)
+14. [Resource-Efficient Adaptation of Large Language Models for Text Embeddings via Prompt Engineering and Contrastive Fine-tuning](#article-14-resource-efficient-adaptation-of-large-)
+15. [HALoGEN: Fantastic LLM Hallucinations and Where to Find Them](#article-15-halogen-fantastic-llm-hallucinations-an)
+16. [Language Model Re-rankers are Fooled by Lexical Similarities](#article-16-language-model-re-rankers-are-fooled-by)
+17. [From Citations to Criticality: Predicting Legal Decision Influence in the Multilingual Swiss Jurisprudence](#article-17-from-citations-to-criticality-predictin)
+18. [Can Unconfident LLM Annotations Be Used for Confident Conclusions?](#article-18-can-unconfident-llm-annotations-be-used)
+19. [@mariaa.bsky.social on Bluesky](#article-19-mariaabskysocial-on-bluesky)
+20. [@mariaa.bsky.social on Bluesky](#article-20-mariaabskysocial-on-bluesky)
+
+---
+
+## Article Summaries
+
+### 1. Enhancing Semantic Document Retrieval- Employing Group Steiner Tree Algorithm with Domain Knowledge Enrichment {#article-1-enhancing-semantic-document-retrieval--e}
+
+#### Article Information
+
+**Source:** [https://bsky.app/profile/arxiv-cs-ir.bsky.social/post/3lxjc3ie6ok23](https://bsky.app/profile/arxiv-cs-ir.bsky.social/post/3lxjc3ie6ok23)
+
+**Publication Date:** 2025-08-29T05:09:03+00:00
+
+**Processed:** 2025-10-18 08:06:04
+
+#### Methodology
+
 ```json
 {
     "extracted_title": "\"Enhancing Semantic Document Retrieval: Employing Group Steiner Tree Algorithm with Domain Knowledge Enrichment\"",
@@ -138,18 +184,21 @@ This document contains all analyzed articles organized by their processing date.
 }
 ```
 
-**Technical Approach:**
-Not specified
-
-**Key Findings:**
-Not specified
 
 ---
 
-### A Comprehensive Survey of Self-Evolving AI Agents: A New Paradigm Bridging Foundation Models and Lifelong Agentic Systems
-**Source:** https://arxiv.org/pdf/2508.07407  
-**Processed:** 2025-10-18 08:06:04  
-**Methodology:**
+### 2. A Comprehensive Survey of Self-Evolving AI Agents: A New Paradigm Bridging Foundation Models and Lifelong Agentic Systems {#article-2-a-comprehensive-survey-of-self-evolving-}
+
+#### Article Information
+
+**Source:** [https://arxiv.org/pdf/2508.07407](https://arxiv.org/pdf/2508.07407)
+
+**Publication Date:** 2025-08-16T05:53:39+00:00
+
+**Processed:** 2025-10-18 08:06:31
+
+#### Methodology
+
 ```json
 {
     "extracted_title": **"A Comprehensive Survey of Self-Evolving AI Agents: A New Paradigm Bridging Foundation Models and Lifelong Agentic Systems"**,
@@ -283,18 +332,21 @@ Not specified
 }
 ```
 
-**Technical Approach:**
-Not specified
-
-**Key Findings:**
-Not specified
 
 ---
 
-### Efficient Patent Searching Using Graph Transformers
-**Source:** https://bsky.app/profile/arxiv-cs-ir.bsky.social/post/3lwg2fungbk2t  
-**Processed:** 2025-10-18 08:06:31  
-**Methodology:**
+### 3. Efficient Patent Searching Using Graph Transformers {#article-3-efficient-patent-searching-using-graph-t}
+
+#### Article Information
+
+**Source:** [https://bsky.app/profile/arxiv-cs-ir.bsky.social/post/3lwg2fungbk2t](https://bsky.app/profile/arxiv-cs-ir.bsky.social/post/3lwg2fungbk2t)
+
+**Publication Date:** 2025-08-15T19:02:18+00:00
+
+**Processed:** 2025-10-18 08:07:04
+
+#### Methodology
+
 ```json
 {
     "extracted_title": **"Efficient Patent Searching Using Graph Transformers"**,
@@ -461,18 +513,21 @@ Not specified
 }
 ```
 
-**Technical Approach:**
-Not specified
-
-**Key Findings:**
-Not specified
 
 ---
 
-### Semantic IDs for Joint Generative Search and Recommendation
-**Source:** https://bsky.app/profile/arxiv-cs-ir.bsky.social/post/3lwg2gsanx42f  
-**Processed:** 2025-10-18 08:07:04  
-**Methodology:**
+### 4. Semantic IDs for Joint Generative Search and Recommendation {#article-4-semantic-ids-for-joint-generative-search}
+
+#### Article Information
+
+**Source:** [https://bsky.app/profile/arxiv-cs-ir.bsky.social/post/3lwg2gsanx42f](https://bsky.app/profile/arxiv-cs-ir.bsky.social/post/3lwg2gsanx42f)
+
+**Publication Date:** 2025-08-15T19:02:03+00:00
+
+**Processed:** 2025-10-18 08:07:36
+
+#### Methodology
+
 ```json
 {
     "extracted_title": "\"Semantic IDs for Joint Generative Search and Recommendation\"",
@@ -617,18 +672,21 @@ Not specified
 }
 ```
 
-**Technical Approach:**
-Not specified
-
-**Key Findings:**
-Not specified
 
 ---
 
-### LeanRAG: Knowledge-Graph-Based Generation with Semantic Aggregation and Hierarchical Retrieval
-**Source:** https://bsky.app/profile/reachsumit.com/post/3lwfvwp23z22i  
-**Processed:** 2025-10-18 08:07:36  
-**Methodology:**
+### 5. LeanRAG: Knowledge-Graph-Based Generation with Semantic Aggregation and Hierarchical Retrieval {#article-5-leanrag-knowledge-graph-based-generation}
+
+#### Article Information
+
+**Source:** [https://bsky.app/profile/reachsumit.com/post/3lwfvwp23z22i](https://bsky.app/profile/reachsumit.com/post/3lwfvwp23z22i)
+
+**Publication Date:** 2025-08-15T04:36:55+00:00
+
+**Processed:** 2025-10-18 08:08:14
+
+#### Methodology
+
 ```json
 {
     "extracted_title": "LeanRAG: Knowledge-Graph-Based Generation with Semantic Aggregation and Hierarchical Retrieval",
@@ -855,18 +913,21 @@ Not specified
 }
 ```
 
-**Technical Approach:**
-Not specified
-
-**Key Findings:**
-Not specified
 
 ---
 
-### ParallelSearch: Train your LLMs to Decompose Query and Search Sub-queries in Parallel with Reinforcement Learning
-**Source:** https://bsky.app/profile/reachsumit.com/post/3lwdbh73ews2k  
-**Processed:** 2025-10-18 08:08:14  
-**Methodology:**
+### 6. ParallelSearch: Train your LLMs to Decompose Query and Search Sub-queries in Parallel with Reinforcement Learning {#article-6-parallelsearch-train-your-llms-to-decomp}
+
+#### Article Information
+
+**Source:** [https://bsky.app/profile/reachsumit.com/post/3lwdbh73ews2k](https://bsky.app/profile/reachsumit.com/post/3lwdbh73ews2k)
+
+**Publication Date:** 2025-08-14T13:38:29+00:00
+
+**Processed:** 2025-10-18 08:08:37
+
+#### Methodology
+
 ```json
 {
     "extracted_title": "ParallelSearch: Train your LLMs to Decompose Query and Search Sub-queries in Parallel with Reinforcement Learning",
@@ -995,18 +1056,21 @@ Not specified
 }
 ```
 
-**Technical Approach:**
-Not specified
-
-**Key Findings:**
-Not specified
 
 ---
 
-### @markriedl.bsky.social on Bluesky
-**Source:** https://bsky.app/profile/markriedl.bsky.social/post/3lwchgyv4ms2s  
-**Processed:** 2025-10-18 08:08:37  
-**Methodology:**
+### 7. @markriedl.bsky.social on Bluesky {#article-7-markriedlbskysocial-on-bluesky}
+
+#### Article Information
+
+**Source:** [https://bsky.app/profile/markriedl.bsky.social/post/3lwchgyv4ms2s](https://bsky.app/profile/markriedl.bsky.social/post/3lwchgyv4ms2s)
+
+**Publication Date:** 2025-08-13T21:06:20+00:00
+
+**Processed:** 2025-10-18 08:09:05
+
+#### Methodology
+
 ```json
 {
     "extracted_title": **"Legal Implications of AI Agency: Liability, Value Alignment, and Human Agency Law"**,
@@ -1169,18 +1233,21 @@ Not specified
 }
 ```
 
-**Technical Approach:**
-Not specified
-
-**Key Findings:**
-Not specified
 
 ---
 
-### Galileo: Learning Global & Local Features of Many Remote Sensing Modalities
-**Source:** https://arxiv.org/pdf/2502.09356  
-**Processed:** 2025-10-18 08:09:05  
-**Methodology:**
+### 8. Galileo: Learning Global & Local Features of Many Remote Sensing Modalities {#article-8-galileo-learning-global--local-features-}
+
+#### Article Information
+
+**Source:** [https://arxiv.org/pdf/2502.09356](https://arxiv.org/pdf/2502.09356)
+
+**Publication Date:** 2025-08-04T19:11:05+00:00
+
+**Processed:** 2025-10-18 08:09:34
+
+#### Methodology
+
 ```json
 {
     "extracted_title": **"Galileo: Learning Global & Local Features of Many Remote Sensing Modalities"**,
@@ -1341,18 +1408,21 @@ Not specified
 }
 ```
 
-**Technical Approach:**
-Not specified
-
-**Key Findings:**
-Not specified
 
 ---
 
-### Context Engineering for AI Agents: Lessons from Building Manus
-**Source:** https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus  
-**Processed:** 2025-10-18 08:09:34  
-**Methodology:**
+### 9. Context Engineering for AI Agents: Lessons from Building Manus {#article-9-context-engineering-for-ai-agents-lesson}
+
+#### Article Information
+
+**Source:** [https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus)
+
+**Publication Date:** 2025-08-03T09:26:34+00:00
+
+**Processed:** 2025-10-18 08:10:35
+
+#### Methodology
+
 ```json
 {
     "extracted_title": "Context Engineering for AI Agents: Lessons from Building Manus",
@@ -1566,18 +1636,21 @@ Not specified
 }
 ```
 
-**Technical Approach:**
-Not specified
-
-**Key Findings:**
-Not specified
 
 ---
 
-### SemRAG: Semantic Knowledge-Augmented RAG for Improved Question-Answering
-**Source:** https://arxiv.org/abs/2507.21110  
-**Processed:** 2025-10-18 08:10:35  
-**Methodology:**
+### 10. SemRAG: Semantic Knowledge-Augmented RAG for Improved Question-Answering {#article-10-semrag-semantic-knowledge-augmented-rag}
+
+#### Article Information
+
+**Source:** [https://arxiv.org/abs/2507.21110](https://arxiv.org/abs/2507.21110)
+
+**Publication Date:** 2025-08-01T17:54:11+00:00
+
+**Processed:** 2025-10-18 08:11:10
+
+#### Methodology
+
 ```json
 {
     "extracted_title": **"SemRAG: Semantic Knowledge-Augmented RAG for Improved Question-Answering"**,
@@ -1757,18 +1830,21 @@ Not specified
 }
 ```
 
-**Technical Approach:**
-Not specified
-
-**Key Findings:**
-Not specified
 
 ---
 
-### Causal2Vec: Improving Decoder-only LLMs as Versatile Embedding Models
-**Source:** https://bsky.app/profile/reachsumit.com/post/3lvcnilnqqk2d  
-**Processed:** 2025-10-18 08:11:10  
-**Methodology:**
+### 11. Causal2Vec: Improving Decoder-only LLMs as Versatile Embedding Models {#article-11-causal2vec-improving-decoder-only-llms-}
+
+#### Article Information
+
+**Source:** [https://bsky.app/profile/reachsumit.com/post/3lvcnilnqqk2d](https://bsky.app/profile/reachsumit.com/post/3lvcnilnqqk2d)
+
+**Publication Date:** 2025-08-01T11:29:02+00:00
+
+**Processed:** 2025-10-18 08:11:32
+
+#### Methodology
+
 ```json
 {
     "extracted_title": "Causal2Vec: Improving Decoder-only LLMs as Versatile Embedding Models",
@@ -1867,18 +1943,21 @@ Not specified
 }
 ```
 
-**Technical Approach:**
-Not specified
-
-**Key Findings:**
-Not specified
 
 ---
 
-### Multiagent AI for generating chain-of-thought training data
-**Source:** https://www.amazon.science/blog/multiagent-ai-for-generating-chain-of-thought-training-data  
-**Processed:** 2025-10-18 08:11:32  
-**Methodology:**
+### 12. Multiagent AI for generating chain-of-thought training data {#article-12-multiagent-ai-for-generating-chain-of-t}
+
+#### Article Information
+
+**Source:** [https://www.amazon.science/blog/multiagent-ai-for-generating-chain-of-thought-training-data](https://www.amazon.science/blog/multiagent-ai-for-generating-chain-of-thought-training-data)
+
+**Publication Date:** 2025-08-01T09:48:28+00:00
+
+**Processed:** 2025-10-18 08:17:02
+
+#### Methodology
+
 ```json
 {
     "extracted_title": "Towards Safety Reasoning in LLMs: AI-Agentic Deliberation for Policy-Embedded Chain-of-Thought Data Creation",
@@ -2073,18 +2152,21 @@ Not specified
 }
 ```
 
-**Technical Approach:**
-Not specified
-
-**Key Findings:**
-Not specified
 
 ---
 
-### ARES: An Automated Evaluation Framework for Retrieval-Augmented Generation Systems
-**Source:** https://arxiv.org/html/2311.09476v2  
-**Processed:** 2025-10-18 08:17:02  
-**Methodology:**
+### 13. ARES: An Automated Evaluation Framework for Retrieval-Augmented Generation Systems {#article-13-ares-an-automated-evaluation-framework-}
+
+#### Article Information
+
+**Source:** [https://arxiv.org/html/2311.09476v2](https://arxiv.org/html/2311.09476v2)
+
+**Publication Date:** 2025-07-31T08:41:54+00:00
+
+**Processed:** 2025-10-18 08:17:39
+
+#### Methodology
+
 ```json
 {
     "extracted_title": "**ARES: An Automated Evaluation Framework for Retrieval-Augmented Generation Systems**",
@@ -2341,18 +2423,21 @@ Not specified
 }
 ```
 
-**Technical Approach:**
-Not specified
-
-**Key Findings:**
-Not specified
 
 ---
 
-### Resource-Efficient Adaptation of Large Language Models for Text Embeddings via Prompt Engineering and Contrastive Fine-tuning
-**Source:** https://bsky.app/profile/reachsumit.com/post/3lvaedjt25c2e  
-**Processed:** 2025-10-18 08:17:39  
-**Methodology:**
+### 14. Resource-Efficient Adaptation of Large Language Models for Text Embeddings via Prompt Engineering and Contrastive Fine-tuning {#article-14-resource-efficient-adaptation-of-large-}
+
+#### Article Information
+
+**Source:** [https://bsky.app/profile/reachsumit.com/post/3lvaedjt25c2e](https://bsky.app/profile/reachsumit.com/post/3lvaedjt25c2e)
+
+**Publication Date:** 2025-07-31T08:25:20+00:00
+
+**Processed:** 2025-10-18 08:18:06
+
+#### Methodology
+
 ```json
 {
     "extracted_title": "Resource-Efficient Adaptation of Large Language Models for Text Embeddings via Prompt Engineering and Contrastive Fine-tuning",
@@ -2515,18 +2600,21 @@ Not specified
 }
 ```
 
-**Technical Approach:**
-Not specified
-
-**Key Findings:**
-Not specified
 
 ---
 
-### HALoGEN: Fantastic LLM Hallucinations and Where to Find Them
-**Source:** https://arxiv.org/abs/2501.08292  
-**Processed:** 2025-10-18 08:18:06  
-**Methodology:**
+### 15. HALoGEN: Fantastic LLM Hallucinations and Where to Find Them {#article-15-halogen-fantastic-llm-hallucinations-an}
+
+#### Article Information
+
+**Source:** [https://arxiv.org/abs/2501.08292](https://arxiv.org/abs/2501.08292)
+
+**Publication Date:** 2025-07-31T00:00:35+00:00
+
+**Processed:** 2025-10-18 08:18:32
+
+#### Methodology
+
 ```json
 {
     "extracted_title": **"HALoGEN: Fantastic LLM Hallucinations and Where to Find Them"**,
@@ -2671,18 +2759,21 @@ Not specified
 }
 ```
 
-**Technical Approach:**
-Not specified
-
-**Key Findings:**
-Not specified
 
 ---
 
-### Language Model Re-rankers are Fooled by Lexical Similarities
-**Source:** https://arxiv.org/abs/2502.17036  
-**Processed:** 2025-10-18 08:18:32  
-**Methodology:**
+### 16. Language Model Re-rankers are Fooled by Lexical Similarities {#article-16-language-model-re-rankers-are-fooled-by}
+
+#### Article Information
+
+**Source:** [https://arxiv.org/abs/2502.17036](https://arxiv.org/abs/2502.17036)
+
+**Publication Date:** 2025-07-29T22:40:29+00:00
+
+**Processed:** 2025-10-18 08:18:58
+
+#### Methodology
+
 ```json
 {
     "extracted_title": **"Language Model Re-rankers are Fooled by Lexical Similarities"**,
@@ -2826,18 +2917,21 @@ Not specified
 }
 ```
 
-**Technical Approach:**
-Not specified
-
-**Key Findings:**
-Not specified
 
 ---
 
-### From Citations to Criticality: Predicting Legal Decision Influence in the Multilingual Swiss Jurisprudence
-**Source:** https://arxiv.org/abs/2410.13460  
-**Processed:** 2025-10-18 08:18:58  
-**Methodology:**
+### 17. From Citations to Criticality: Predicting Legal Decision Influence in the Multilingual Swiss Jurisprudence {#article-17-from-citations-to-criticality-predictin}
+
+#### Article Information
+
+**Source:** [https://arxiv.org/abs/2410.13460](https://arxiv.org/abs/2410.13460)
+
+**Publication Date:** 2025-07-28T12:05:48+00:00
+
+**Processed:** 2025-10-18 08:24:14
+
+#### Methodology
+
 ```json
 {
     "extracted_title": "\"From Citations to Criticality: Predicting Legal Decision Influence in the Multilingual Swiss Jurisprudence\"",
@@ -2952,18 +3046,21 @@ Not specified
 }
 ```
 
-**Technical Approach:**
-Not specified
-
-**Key Findings:**
-Not specified
 
 ---
 
-### Can Unconfident LLM Annotations Be Used for Confident Conclusions?
-**Source:** https://arxiv.org/html/2408.15204v2  
-**Processed:** 2025-10-18 08:24:14  
-**Methodology:**
+### 18. Can Unconfident LLM Annotations Be Used for Confident Conclusions? {#article-18-can-unconfident-llm-annotations-be-used}
+
+#### Article Information
+
+**Source:** [https://arxiv.org/html/2408.15204v2](https://arxiv.org/html/2408.15204v2)
+
+**Publication Date:** 2025-07-24T12:36:13+00:00
+
+**Processed:** 2025-10-18 08:24:42
+
+#### Methodology
+
 ```json
 {
     "extracted_title": **"Can Unconfident LLM Annotations Be Used for Confident Conclusions? A Case Study in Political Science"**,
@@ -3093,18 +3190,21 @@ Not specified
 }
 ```
 
-**Technical Approach:**
-Not specified
-
-**Key Findings:**
-Not specified
 
 ---
 
-### @mariaa.bsky.social on Bluesky
-**Source:** https://bsky.app/profile/mariaa.bsky.social/post/3lumkyphrok2f  
-**Processed:** 2025-10-18 08:24:42  
-**Methodology:**
+### 19. @mariaa.bsky.social on Bluesky {#article-19-mariaabskysocial-on-bluesky}
+
+#### Article Information
+
+**Source:** [https://bsky.app/profile/mariaa.bsky.social/post/3lumkyphrok2f](https://bsky.app/profile/mariaa.bsky.social/post/3lumkyphrok2f)
+
+**Publication Date:** 2025-07-23T15:44:26+00:00
+
+**Processed:** 2025-10-18 08:25:10
+
+#### Methodology
+
 ```json
 {
     "extracted_title": "\"Just Put a Human in the Loop? Investigating LLM-Assisted Annotation for Subjective Tasks\"",
@@ -3248,18 +3348,21 @@ Not specified
 }
 ```
 
-**Technical Approach:**
-Not specified
-
-**Key Findings:**
-Not specified
 
 ---
 
-### @mariaa.bsky.social on Bluesky
-**Source:** https://bsky.app/profile/mariaa.bsky.social/post/3lumkyphpq22f  
-**Processed:** 2025-10-18 08:25:10  
-**Methodology:**
+### 20. @mariaa.bsky.social on Bluesky {#article-20-mariaabskysocial-on-bluesky}
+
+#### Article Information
+
+**Source:** [https://bsky.app/profile/mariaa.bsky.social/post/3lumkyphpq22f](https://bsky.app/profile/mariaa.bsky.social/post/3lumkyphpq22f)
+
+**Publication Date:** 2025-07-23T15:44:12+00:00
+
+**Processed:** 2025-10-18 08:25:45
+
+#### Methodology
+
 ```json
 {
     "extracted_title": **"Can Unconfident LLM Annotations Be Used for Confident Conclusions?"**,
@@ -3439,15 +3542,8 @@ Not specified
 }
 ```
 
-**Technical Approach:**
-Not specified
-
-**Key Findings:**
-Not specified
 
 ---
 
-## Summary Statistics
-- **Total Articles Analyzed:** 20
-- **Sources:** ArXiv papers, Jina.ai articles, Bluesky posts
-- **Topics:** AI/ML, Embeddings, Quantization, LLM Routing, Knowledge Graphs, Document Retrieval, Recommendation Systems
+*This report was generated automatically by the RSS Article Analyzer using Claude Sonnet.*
+*Report generated on: 2025-10-18 at 08:25:45*
