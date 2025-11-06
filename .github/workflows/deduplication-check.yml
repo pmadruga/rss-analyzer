@@ -1,0 +1,293 @@
+name: 🔍 Deduplication Check
+
+on:
+  workflow_dispatch:
+    inputs:
+      remove_duplicates:
+        description: 'Remove duplicates after detection'
+        required: false
+        default: false
+        type: boolean
+      report_only:
+        description: 'Generate report only (no removal)'
+        required: false
+        default: true
+        type: boolean
+  schedule:
+    # Run weekly on Sunday at 2:00 AM UTC
+    - cron: '0 2 * * 0'
+
+env:
+  # Database configuration
+  DATABASE_PATH: 'data/articles.db'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: "deduplication-check"
+  cancel-in-progress: false
+
+jobs:
+  deduplicate:
+    runs-on: ubuntu-latest
+
+    steps:
+    # ========================================
+    # SETUP PHASE
+    # ========================================
+    - name: 🔄 Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: 🐍 Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: ⚡ Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        version: "latest"
+
+    - name: 📦 Install dependencies
+      run: |
+        uv sync
+
+    - name: 📁 Create directories
+      run: |
+        mkdir -p data logs output
+
+    # ========================================
+    # DATABASE DOWNLOAD PHASE
+    # ========================================
+    - name: 📥 Download latest database artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: database-backup-*
+        path: data/
+      continue-on-error: true
+
+    - name: 🔍 Check for database file
+      run: |
+        if [ ! -f "data/articles.db" ]; then
+          echo "⚠️ No database found. Creating empty database for testing..."
+          uv run python -c "
+          from src.core.database import DatabaseManager
+          db = DatabaseManager('data/articles.db')
+          print('✅ Empty database created')
+          "
+        else
+          echo "✅ Database found, proceeding with duplicate check..."
+          # Show database stats
+          uv run python -c "
+          import sqlite3
+          conn = sqlite3.connect('data/articles.db')
+          cursor = conn.cursor()
+          cursor.execute('SELECT COUNT(*) FROM articles')
+          total = cursor.fetchone()[0]
+          print(f'📊 Database contains {total} articles')
+          conn.close()
+          "
+        fi
+
+    # ========================================
+    # DEDUPLICATION ANALYSIS PHASE
+    # ========================================
+    - name: 🔍 Build deduplication cache
+      id: build_cache
+      run: |
+        echo "🔍 Building O(1) hash-based deduplication cache..."
+        CACHE_OUTPUT=$(uv run python -c "
+        from src.deduplication_manager import DeduplicationManager
+        import time
+
+        start_time = time.time()
+        dedup = DeduplicationManager('data/articles.db')
+        cache_size = dedup.build_cache()
+        elapsed = time.time() - start_time
+
+        print(f'✅ Built deduplication cache: {cache_size} articles in {elapsed:.2f}s')
+        print(f'cache_size={cache_size}')
+        print(f'build_time={elapsed:.2f}')
+        ")
+
+        echo "$CACHE_OUTPUT"
+
+        # Extract metrics for job summary
+        CACHE_SIZE=$(echo "$CACHE_OUTPUT" | grep 'cache_size=' | cut -d'=' -f2)
+        BUILD_TIME=$(echo "$CACHE_OUTPUT" | grep 'build_time=' | cut -d'=' -f2)
+
+        echo "cache_size=$CACHE_SIZE" >> $GITHUB_OUTPUT
+        echo "build_time=$BUILD_TIME" >> $GITHUB_OUTPUT
+
+    - name: 📊 Run duplicate detection with statistics
+      id: detect_duplicates
+      run: |
+        echo "📊 Detecting duplicates using O(1) hash lookups..."
+
+        DETECTION_OUTPUT=$(uv run python tools/check_duplicates.py --stats 2>&1)
+        echo "$DETECTION_OUTPUT"
+
+        # Extract statistics
+        DUPLICATE_COUNT=$(echo "$DETECTION_OUTPUT" | grep -oP 'Found \K\d+(?= duplicate)' || echo "0")
+        TOTAL_ARTICLES=$(echo "$DETECTION_OUTPUT" | grep -oP 'Total articles: \K\d+' || echo "0")
+
+        echo "duplicate_count=$DUPLICATE_COUNT" >> $GITHUB_OUTPUT
+        echo "total_articles=$TOTAL_ARTICLES" >> $GITHUB_OUTPUT
+
+        # Generate detailed report
+        echo "📄 Generating detailed duplicate report..."
+        uv run python tools/check_duplicates.py --report > output/duplicate_report.txt
+
+    - name: 🧹 Remove duplicates (if requested)
+      if: github.event.inputs.remove_duplicates == 'true'
+      id: remove_duplicates
+      run: |
+        echo "🧹 Removing duplicates from database..."
+
+        REMOVAL_OUTPUT=$(uv run python tools/check_duplicates.py --remove --stats 2>&1)
+        echo "$REMOVAL_OUTPUT"
+
+        REMOVED_COUNT=$(echo "$REMOVAL_OUTPUT" | grep -oP 'Removed \K\d+(?= duplicate)' || echo "0")
+        echo "removed_count=$REMOVED_COUNT" >> $GITHUB_OUTPUT
+
+        echo "✅ Removed $REMOVED_COUNT duplicate articles"
+
+    # ========================================
+    # PERFORMANCE METRICS PHASE
+    # ========================================
+    - name: 📈 Generate performance metrics
+      id: performance_metrics
+      run: |
+        echo "📈 Analyzing deduplication performance..."
+
+        uv run python -c "
+        from src.deduplication_manager import DeduplicationManager
+        import time
+
+        dedup = DeduplicationManager('data/articles.db')
+
+        # Test O(1) lookup performance
+        test_url = 'https://example.com/test-article'
+        test_content = 'Sample article content for performance testing'
+
+        start = time.time()
+        for _ in range(1000):
+            dedup.is_duplicate_url(test_url)
+            dedup.is_duplicate_content(test_content)
+        elapsed = time.time() - start
+
+        avg_lookup_time = (elapsed / 2000) * 1000  # ms per lookup
+
+        print(f'⚡ Average lookup time: {avg_lookup_time:.3f}ms')
+        print(f'avg_lookup_ms={avg_lookup_time:.3f}')
+        " > output/performance_metrics.txt
+
+        cat output/performance_metrics.txt
+
+        AVG_LOOKUP=$(grep 'avg_lookup_ms=' output/performance_metrics.txt | cut -d'=' -f2)
+        echo "avg_lookup_ms=$AVG_LOOKUP" >> $GITHUB_OUTPUT
+
+    # ========================================
+    # UPLOAD ARTIFACTS PHASE
+    # ========================================
+    - name: 📤 Upload cleaned database
+      if: github.event.inputs.remove_duplicates == 'true'
+      uses: actions/upload-artifact@v4
+      with:
+        name: database-cleaned-${{ github.run_number }}
+        path: data/articles.db
+        retention-days: 30
+        if-no-files-found: ignore
+
+    - name: 📤 Upload duplicate report
+      uses: actions/upload-artifact@v4
+      with:
+        name: duplicate-report-${{ github.run_number }}
+        path: |
+          output/duplicate_report.txt
+          output/performance_metrics.txt
+        retention-days: 14
+        if-no-files-found: ignore
+
+    # ========================================
+    # COMMIT CHANGES PHASE (if duplicates removed)
+    # ========================================
+    - name: 💾 Commit cleaned database
+      if: github.event.inputs.remove_duplicates == 'true' && steps.remove_duplicates.outputs.removed_count != '0'
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "Deduplication Bot"
+
+        git add data/articles.db -f || true
+
+        if git diff --staged --quiet; then
+          echo "ℹ️ No changes to commit"
+        else
+          git commit -m "🧹 Remove duplicate articles - $(date -u '+%Y-%m-%d %H:%M UTC')
+
+          Removed ${{ steps.remove_duplicates.outputs.removed_count }} duplicate articles
+          Using hash-based O(1) deduplication
+
+          🤖 Generated with Deduplication Check Workflow
+
+          Co-Authored-By: Deduplication-Bot <noreply@github.com>"
+
+          git push
+          echo "✅ Changes committed and pushed"
+        fi
+
+    # ========================================
+    # JOB SUMMARY PHASE
+    # ========================================
+    - name: 📊 Generate job summary
+      if: always()
+      run: |
+        if [ "${{ job.status }}" = "success" ]; then
+          STATUS="✅ Deduplication check completed successfully"
+          EMOJI="🟢"
+        else
+          STATUS="❌ Deduplication check failed"
+          EMOJI="🔴"
+        fi
+
+        echo "## $EMOJI Deduplication Check Results" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Status:** $STATUS" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+
+        echo "### 📊 Statistics" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "| Metric | Value |" >> $GITHUB_STEP_SUMMARY
+        echo "|--------|-------|" >> $GITHUB_STEP_SUMMARY
+        echo "| Total Articles | ${{ steps.detect_duplicates.outputs.total_articles }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| Duplicates Found | ${{ steps.detect_duplicates.outputs.duplicate_count }} |" >> $GITHUB_STEP_SUMMARY
+
+        if [ "${{ github.event.inputs.remove_duplicates }}" = "true" ]; then
+          echo "| Duplicates Removed | ${{ steps.remove_duplicates.outputs.removed_count }} |" >> $GITHUB_STEP_SUMMARY
+        fi
+
+        echo "| Cache Size | ${{ steps.build_cache.outputs.cache_size }} articles |" >> $GITHUB_STEP_SUMMARY
+        echo "| Cache Build Time | ${{ steps.build_cache.outputs.build_time }}s |" >> $GITHUB_STEP_SUMMARY
+        echo "| Avg Lookup Time | ${{ steps.performance_metrics.outputs.avg_lookup_ms }}ms |" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+
+        echo "### ⚡ Performance" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "- **Hash-based O(1) lookups**: Sub-millisecond duplicate detection" >> $GITHUB_STEP_SUMMARY
+        echo "- **In-memory cache**: No full database scans required" >> $GITHUB_STEP_SUMMARY
+        echo "- **Batch processing**: Efficient for large article databases" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+
+        if [ -f "output/duplicate_report.txt" ]; then
+          echo "### 📄 Duplicate Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          head -n 50 output/duplicate_report.txt >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+        fi
+
+        echo "**Workflow run:** ${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Timestamp:** $(date -u '+%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY

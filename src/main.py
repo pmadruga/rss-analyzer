@@ -350,8 +350,14 @@ def health(ctx, output):
     config = ctx.obj["config"]
 
     try:
+        from .core import get_monitor
+
         click.echo("🏥 Running system health check...")
         health_results = {}
+
+        # Get system health from monitoring
+        monitor = get_monitor()
+        system_health = monitor.get_system_health()
 
         # Test database
         click.echo("📊 Checking database...")
@@ -409,6 +415,20 @@ def health(ctx, output):
             health_results["ai_provider"] = {"status": "error", "error": str(e)}
             click.echo(f"   ❌ AI provider error: {e}")
 
+        # Add system health to results
+        health_results["system"] = system_health.to_dict()
+
+        # Display system health
+        click.echo("\n💻 System Health:")
+        click.echo(f"   Status: {system_health.status}")
+        click.echo(f"   Memory Available: {system_health.memory_available_mb:.1f} MB")
+        click.echo(f"   Disk Space: {system_health.disk_space_available_mb:.1f} MB")
+        click.echo(f"   CPU Count: {system_health.cpu_count}")
+        if system_health.issues:
+            click.echo("   ⚠️  Issues:")
+            for issue in system_health.issues:
+                click.echo(f"      - {issue}")
+
         # Save health report
         import json
 
@@ -429,6 +449,165 @@ def health(ctx, output):
 
     except Exception as e:
         click.echo(f"❌ Health check failed: {e}", err=True)
+        sys.exit(1)
+
+
+@cli.command()
+@click.option("--format", "-f", default="json", type=click.Choice(["json", "csv"]), help="Output format")
+@click.option("--output", "-o", help="Output file path")
+@click.pass_context
+def metrics(ctx, format, output):
+    """Show current performance metrics"""
+    try:
+        from .core import get_monitor
+
+        click.echo("📊 Performance Metrics")
+        click.echo("=" * 60)
+
+        monitor = get_monitor()
+        metrics = monitor.get_metrics()
+
+        # Display key metrics
+        click.echo("\n🔄 Processing:")
+        click.echo(f"   Articles Processed: {metrics.articles_processed}")
+        click.echo(f"   Success Rate: {metrics.success_rate:.1f}%")
+        click.echo(f"   Total Time: {metrics.total_processing_time:.1f}s")
+        click.echo(f"   Average Time: {metrics.average_processing_time:.2f}s")
+
+        click.echo("\n🧠 API Calls:")
+        click.echo(f"   Total Calls: {metrics.api_calls_made}")
+        click.echo(f"   Total Time: {metrics.api_call_time:.1f}s")
+        click.echo(f"   Average Time: {metrics.avg_api_call_time:.2f}s")
+        click.echo(f"   Tokens Used: {metrics.api_tokens_used}")
+        click.echo(f"   Estimated Cost: ${metrics.api_cost_estimate:.4f}")
+
+        click.echo("\n🕷️  Web Scraping:")
+        click.echo(f"   Pages Scraped: {metrics.pages_scraped}")
+        click.echo(f"   Failed Scrapes: {metrics.failed_scrapes}")
+        click.echo(f"   Total Time: {metrics.scraping_time:.1f}s")
+        click.echo(f"   Average Time: {metrics.avg_scraping_time:.2f}s")
+        click.echo(f"   Links Followed: {metrics.followed_links}")
+
+        click.echo("\n💾 Database:")
+        click.echo(f"   Queries Executed: {metrics.db_queries_executed}")
+        click.echo(f"   Total Time: {metrics.db_query_time:.2f}s")
+        click.echo(f"   Average Time: {metrics.avg_db_query_time:.4f}s")
+        click.echo(f"   Cache Hit Rate: {metrics.cache_hit_rate:.1f}%")
+
+        click.echo("\n💻 System:")
+        click.echo(f"   Memory Usage: {metrics.memory_usage_mb:.1f} MB")
+        click.echo(f"   CPU Usage: {metrics.cpu_usage_percent:.1f}%")
+        click.echo(f"   Errors: {metrics.error_count}")
+        click.echo(f"   Warnings: {metrics.warning_count}")
+
+        # Export to file if requested
+        if output:
+            monitor.save_metrics(output, format)
+            click.echo(f"\n📄 Metrics exported to: {output}")
+        else:
+            # Print export data
+            click.echo(f"\n📋 {format.upper()} Export:")
+            click.echo(monitor.export_metrics(format))
+
+    except Exception as e:
+        click.echo(f"❌ Failed to get metrics: {e}", err=True)
+        sys.exit(1)
+
+
+@cli.command()
+@click.option("--iterations", "-i", default=10, type=int, help="Number of iterations")
+@click.option("--output", "-o", help="Output file for results")
+@click.pass_context
+def benchmark(ctx, iterations, output):
+    """Run performance benchmark"""
+    config = ctx.obj["config"]
+
+    try:
+        import time
+        from .core import DatabaseManager, RSSParser, get_monitor
+
+        click.echo(f"🏃 Running performance benchmark ({iterations} iterations)...")
+        click.echo("=" * 60)
+
+        monitor = get_monitor()
+        results = {
+            "iterations": iterations,
+            "start_time": time.time(),
+            "tests": {}
+        }
+
+        # Benchmark: Database operations
+        click.echo("\n📊 Benchmarking database operations...")
+        db = DatabaseManager(config["db_path"])
+        db_times = []
+        for i in range(iterations):
+            start = time.perf_counter()
+            with monitor.track_db_query():
+                stats = db.get_processing_statistics()
+            db_times.append(time.perf_counter() - start)
+
+        results["tests"]["database"] = {
+            "avg_time": sum(db_times) / len(db_times),
+            "min_time": min(db_times),
+            "max_time": max(db_times),
+        }
+        click.echo(f"   Average: {results['tests']['database']['avg_time']:.4f}s")
+
+        # Benchmark: RSS parsing
+        click.echo("\n📰 Benchmarking RSS feed parsing...")
+        parser = RSSParser()
+        rss_times = []
+        for i in range(min(iterations, 3)):  # Limit RSS tests to avoid hammering feed
+            start = time.perf_counter()
+            entries = parser.fetch_feed(config["rss_feed_url"])
+            rss_times.append(time.perf_counter() - start)
+
+        results["tests"]["rss_parsing"] = {
+            "avg_time": sum(rss_times) / len(rss_times),
+            "min_time": min(rss_times),
+            "max_time": max(rss_times),
+            "entries_fetched": len(entries) if entries else 0,
+        }
+        click.echo(f"   Average: {results['tests']['rss_parsing']['avg_time']:.2f}s")
+        click.echo(f"   Entries: {results['tests']['rss_parsing']['entries_fetched']}")
+
+        # Benchmark: Content hash generation
+        click.echo("\n🔐 Benchmarking content hashing...")
+        from .core import create_content_hash
+        hash_times = []
+        test_content = "Test article content " * 100
+        for i in range(iterations * 10):  # More iterations for fast operation
+            start = time.perf_counter()
+            create_content_hash(test_content)
+            hash_times.append(time.perf_counter() - start)
+
+        results["tests"]["content_hashing"] = {
+            "avg_time": sum(hash_times) / len(hash_times),
+            "min_time": min(hash_times),
+            "max_time": max(hash_times),
+        }
+        click.echo(f"   Average: {results['tests']['content_hashing']['avg_time']:.6f}s")
+
+        results["end_time"] = time.time()
+        results["total_duration"] = results["end_time"] - results["start_time"]
+
+        # Display summary
+        click.echo("\n" + "=" * 60)
+        click.echo("📈 BENCHMARK SUMMARY")
+        click.echo("=" * 60)
+        click.echo(f"Total Duration: {results['total_duration']:.2f}s")
+        click.echo(f"Iterations: {iterations}")
+
+        # Save results if requested
+        if output:
+            import json
+            os.makedirs(os.path.dirname(output) if os.path.dirname(output) else ".", exist_ok=True)
+            with open(output, "w") as f:
+                json.dump(results, f, indent=2)
+            click.echo(f"\n📄 Results saved to: {output}")
+
+    except Exception as e:
+        click.echo(f"❌ Benchmark failed: {e}", err=True)
         sys.exit(1)
 
 

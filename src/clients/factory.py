@@ -3,12 +3,17 @@ AI Client Factory Module
 
 Factory pattern implementation for creating AI clients.
 Provides a clean interface for client instantiation and configuration.
+Supports both synchronous and asynchronous clients.
 """
 
 import logging
 from typing import Any
 
 from ..exceptions import APIClientError, ConfigurationError
+from .async_base import AsyncAIClient
+from .async_claude import AsyncClaudeClient
+from .async_mistral import AsyncMistralClient
+from .async_openai import AsyncOpenAIClient
 from .base import BaseAIClient
 from .claude import ClaudeClient
 from .mistral import MistralClient
@@ -18,14 +23,22 @@ logger = logging.getLogger(__name__)
 
 
 class AIClientFactory:
-    """Factory for creating AI clients"""
+    """Factory for creating AI clients (sync and async)"""
 
-    # Registry of available clients
+    # Registry of available sync clients
     _clients = {
         "anthropic": ClaudeClient,
         "claude": ClaudeClient,  # Alias
         "mistral": MistralClient,
         "openai": OpenAIClient,
+    }
+
+    # Registry of available async clients
+    _async_clients = {
+        "anthropic": AsyncClaudeClient,
+        "claude": AsyncClaudeClient,  # Alias
+        "mistral": AsyncMistralClient,
+        "openai": AsyncOpenAIClient,
     }
 
     # Default models for each provider
@@ -107,15 +120,63 @@ class AIClientFactory:
         logger.info(f"Registered new AI client: {provider}")
 
     @classmethod
-    def create_from_config(cls, config: dict[str, Any]) -> BaseAIClient:
+    def create_async_client(
+        cls, provider: str, api_key: str, model: str | None = None, **kwargs
+    ) -> AsyncAIClient:
+        """
+        Create an async AI client instance
+
+        Args:
+            provider: Provider name (anthropic, mistral, openai)
+            api_key: API key for the provider
+            model: Model name (optional, uses default if not provided)
+            **kwargs: Additional configuration parameters
+
+        Returns:
+            Configured async AI client instance
+
+        Raises:
+            ConfigurationError: If provider is not supported or configuration is invalid
+            APIClientError: If client initialization fails
+        """
+        provider = provider.lower().strip()
+
+        if provider not in cls._async_clients:
+            available = ", ".join(cls._async_clients.keys())
+            raise ConfigurationError(
+                f"Unsupported AI provider: {provider}. Available: {available}"
+            )
+
+        if not api_key:
+            raise ConfigurationError(f"API key is required for {provider}")
+
+        # Use default model if not specified
+        if not model:
+            model = cls._default_models[provider]
+
+        client_class = cls._async_clients[provider]
+
+        try:
+            logger.info(f"Creating async {provider} client with model {model}")
+            return client_class(api_key=api_key, model=model, **kwargs)
+
+        except Exception as e:
+            logger.error(f"Failed to create async {provider} client: {e}")
+            raise APIClientError(f"Async client creation failed: {e}", provider)
+
+    @classmethod
+    def create_from_config(
+        cls, config: dict[str, Any], async_mode: bool = False
+    ) -> BaseAIClient | AsyncAIClient:
         """
         Create client from configuration dictionary
 
         Args:
             config: Configuration dictionary containing provider, api_key, model etc.
+            async_mode: Create async client if True, sync client if False
 
         Returns:
-            Configured AI client instance
+            Configured AI client instance (sync or async)
         """
         provider = config.get("api_provider", "anthropic")
 
@@ -146,4 +207,7 @@ class AIClientFactory:
         model_field = model_mapping.get(provider)
         model = config.get(model_field) if model_field else None
 
-        return cls.create_client(provider, api_key, model)
+        if async_mode:
+            return cls.create_async_client(provider, api_key, model)
+        else:
+            return cls.create_client(provider, api_key, model)

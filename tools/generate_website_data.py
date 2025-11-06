@@ -72,7 +72,7 @@ class Article:
     id: int
     title: str
     url: str
-    processed_date: str
+    processed_date: str  # Now contains publication_date or falls back to processed_date
     status: str
     analysis: str
     ai_provider: str
@@ -207,6 +207,7 @@ class WebsiteDataGenerator:
                     a.id,
                     a.title,
                     a.url,
+                    COALESCE(a.publication_date, a.processed_date) as display_date,
                     a.processed_date,
                     a.status,
                     COALESCE(c.key_findings, '') as key_findings,
@@ -216,7 +217,7 @@ class WebsiteDataGenerator:
                 FROM articles a
                 LEFT JOIN content c ON a.id = c.article_id
                 WHERE a.status = 'completed'
-                ORDER BY a.processed_date DESC
+                ORDER BY COALESCE(a.publication_date, a.processed_date) DESC
                 """
 
                 cursor.execute(query)
@@ -343,8 +344,8 @@ class WebsiteDataGenerator:
         Raises:
             DataValidationError: If data validation fails
         """
-        # Validate required fields
-        required_fields = ["id", "title", "url", "processed_date", "status"]
+        # Validate required fields (use display_date which is publication_date with fallback)
+        required_fields = ["id", "title", "url", "display_date", "status"]
         for field in required_fields:
             if not row[field]:
                 raise DataValidationError(f"Missing required field: {field}")
@@ -442,7 +443,7 @@ class WebsiteDataGenerator:
             id=int(row["id"]),
             title=title,
             url=str(row["url"]),
-            processed_date=str(row["processed_date"]),
+            processed_date=str(row["display_date"]),  # Use publication_date (with fallback)
             status=str(row["status"]),
             analysis=analysis,
             ai_provider=ai_provider,

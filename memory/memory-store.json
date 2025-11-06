@@ -1,0 +1,10 @@
+{
+  "default": [
+    {
+      "key": "article-dedup/workflows/patterns",
+      "value": "# GitHub Actions Deduplication Workflow Patterns\n\n## Performance Metrics\n- Cache build: < 10 seconds for 100K articles\n- Duplicate check: < 5 seconds for 10K articles\n- Memory usage: < 200MB\n- O(1) hash-based lookups: sub-millisecond\n\n## Integration Points\n\n### Pre-Process Phase (Before Analysis)\n- Build deduplication cache in memory\n- Run duplicate detection with statistics\n- Log cache size and build time\n- Ready for O(1) lookups during processing\n\n### Post-Process Phase (After Analysis)\n- Generate duplicate detection report\n- Extract metrics (duplicate count, total articles)\n- Save report to artifacts\n- Alert if duplicates found\n\n### Maintenance Workflow (Weekly)\n- Standalone deduplication check\n- Optional duplicate removal\n- Performance metrics collection\n- Database artifact preservation\n\n## Key Features\n1. Hash-based O(1) lookups (no full database scans)\n2. In-memory cache built once per run\n3. Batch processing for efficiency\n4. Statistics reporting in job summaries\n5. Artifact preservation of cleaned databases\n6. Weekly scheduled maintenance\n\n## Workflow Files Created\n- .github/workflows/deduplication-check.yml (standalone maintenance)\n- .github/workflows/rss-complete-pipeline.yml (updated with pre/post checks)\n- .github/workflows/refresh-titles.yml (updated with pre-refresh check)",
+      "namespace": "default",
+      "timestamp": 1760212830614
+    }
+  ]
+}

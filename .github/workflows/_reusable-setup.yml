@@ -1,0 +1,99 @@
+name: 🔧 Reusable Setup
+
+on:
+  workflow_call:
+    inputs:
+      python-version:
+        description: 'Python version to use'
+        required: false
+        default: '3.11'
+        type: string
+      fetch-depth:
+        description: 'Git fetch depth (0 for full history, 1 for shallow)'
+        required: false
+        default: 0
+        type: number
+      install-dependencies:
+        description: 'Whether to install Python dependencies'
+        required: false
+        default: true
+        type: boolean
+      create-directories:
+        description: 'Create standard directories (data, logs, output, docs)'
+        required: false
+        default: true
+        type: boolean
+    outputs:
+      cache-hit:
+        description: 'Whether dependency cache was hit'
+        value: ${{ jobs.setup.outputs.cache-hit }}
+      python-version:
+        description: 'Python version installed'
+        value: ${{ jobs.setup.outputs.python-version }}
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      cache-hit: ${{ steps.cache.outputs.cache-hit }}
+      python-version: ${{ inputs.python-version }}
+
+    steps:
+    - name: 🔄 Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: ${{ inputs.fetch-depth }}
+
+    - name: 🐍 Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ inputs.python-version }}
+        cache: 'pip'
+
+    - name: ⚡ Install uv with cache
+      uses: astral-sh/setup-uv@v3
+      with:
+        version: "latest"
+        enable-cache: true
+
+    - name: 📦 Restore dependency cache
+      id: cache
+      if: inputs.install-dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          .venv
+          ~/.cache/uv
+        key: ${{ runner.os }}-uv-v1-${{ hashFiles('**/pyproject.toml', '**/uv.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-uv-v1-
+
+    - name: 📦 Install dependencies
+      if: inputs.install-dependencies && steps.cache.outputs.cache-hit != 'true'
+      run: |
+        echo "💿 Cache miss - installing dependencies..."
+        uv sync --frozen
+
+    - name: 📦 Use cached dependencies
+      if: inputs.install-dependencies && steps.cache.outputs.cache-hit == 'true'
+      run: |
+        echo "✅ Cache hit - using cached dependencies"
+        # Verify cache is valid
+        uv sync --frozen --no-install-workspace
+
+    - name: 📁 Create directories
+      if: inputs.create-directories
+      run: |
+        echo "📁 Creating standard directories..."
+        mkdir -p data logs output docs
+        echo "✅ Directories created"
+
+    - name: 📊 Setup summary
+      run: |
+        echo "## 🔧 Setup Complete" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Python Version**: ${{ inputs.python-version }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Fetch Depth**: ${{ inputs.fetch-depth }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Dependencies Installed**: ${{ inputs.install-dependencies }}" >> $GITHUB_STEP_SUMMARY
+        echo "**Cache Hit**: ${{ steps.cache.outputs.cache-hit }}" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY

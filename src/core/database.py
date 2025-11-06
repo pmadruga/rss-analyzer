@@ -2,24 +2,144 @@
 Database Module
 
 Handles SQLite database operations for articles, content, and processing logs.
-Includes duplicate detection, migrations, and efficient querying.
+Includes duplicate detection, migrations, efficient querying, and connection pooling.
 """
 
 import json
 import logging
 import os
 import sqlite3
+import threading
+from contextlib import contextmanager
 from datetime import datetime
+from queue import Empty, Queue
+from typing import Optional
 
 logger = logging.getLogger(__name__)
 
 
-class DatabaseManager:
-    """SQLite database manager for RSS article analyzer"""
+class ConnectionPool:
+    """Thread-safe SQLite connection pool"""
 
-    def __init__(self, db_path: str = "data/articles.db"):
+    def __init__(self, db_path: str, pool_size: int = 5):
         self.db_path = db_path
+        self.pool_size = pool_size
+        self._pool: Queue = Queue(maxsize=pool_size)
+        self._lock = threading.Lock()
+        self._active_connections = 0
+        self._total_created = 0
+        self._closed = False
+
+        # Pre-populate the pool with connections
+        for _ in range(pool_size):
+            conn = self._create_connection()
+            self._pool.put(conn)
+            self._total_created += 1
+
+        logger.debug(f"Initialized connection pool with {pool_size} connections")
+
+    def _create_connection(self) -> sqlite3.Connection:
+        """Create a new database connection with proper settings"""
+        conn = sqlite3.connect(self.db_path, check_same_thread=False)
+        conn.row_factory = sqlite3.Row  # Enable dict-like access
+        conn.execute("PRAGMA foreign_keys = ON")  # Enable foreign key constraints
+        return conn
+
+    def _validate_connection(self, conn: sqlite3.Connection) -> bool:
+        """Validate that a connection is still usable"""
+        try:
+            conn.execute("SELECT 1")
+            return True
+        except sqlite3.Error:
+            return False
+
+    @contextmanager
+    def get_connection(self):
+        """
+        Get a connection from the pool (context manager)
+
+        Usage:
+            with pool.get_connection() as conn:
+                cursor = conn.execute("SELECT * FROM articles")
+        """
+        if self._closed:
+            raise RuntimeError("Connection pool is closed")
+
+        conn = None
+        try:
+            # Try to get connection from pool with timeout
+            conn = self._pool.get(timeout=30)
+
+            # Validate connection and recreate if necessary
+            if not self._validate_connection(conn):
+                logger.warning("Invalid connection detected, creating new one")
+                try:
+                    conn.close()
+                except Exception:
+                    pass
+                conn = self._create_connection()
+
+            with self._lock:
+                self._active_connections += 1
+
+            yield conn
+
+        except Empty:
+            raise RuntimeError(
+                "Timeout waiting for database connection from pool"
+            )
+        finally:
+            if conn:
+                try:
+                    # Return connection to pool
+                    self._pool.put(conn, block=False)
+                except Exception as e:
+                    logger.error(f"Failed to return connection to pool: {e}")
+                finally:
+                    with self._lock:
+                        self._active_connections -= 1
+
+    def get_pool_stats(self) -> dict:
+        """Get statistics about the connection pool"""
+        with self._lock:
+            return {
+                "pool_size": self.pool_size,
+                "active_connections": self._active_connections,
+                "idle_connections": self._pool.qsize(),
+                "total_connections_created": self._total_created,
+                "closed": self._closed,
+            }
+
+    def close_pool(self):
+        """Close all connections in the pool"""
+        if self._closed:
+            return
+
+        with self._lock:
+            self._closed = True
+
+        # Close all connections in the pool
+        while not self._pool.empty():
+            try:
+                conn = self._pool.get_nowait()
+                conn.close()
+            except (Empty, Exception) as e:
+                logger.debug(f"Error closing pooled connection: {e}")
+
+        logger.info("Connection pool closed")
+
+
+class DatabaseManager:
+    """SQLite database manager for RSS article analyzer with connection pooling"""
+
+    def __init__(self, db_path: str = "data/articles.db", pool_size: int = 5):
+        self.db_path = db_path
+        self.pool_size = pool_size
         self.ensure_directory_exists()
+
+        # Initialize connection pool
+        self._pool: Optional[ConnectionPool] = ConnectionPool(db_path, pool_size)
+
         self.init_database()
 
     def ensure_directory_exists(self):
@@ -29,12 +149,34 @@ class DatabaseManager:
             os.makedirs(db_dir, exist_ok=True)
             logger.info(f"Created database directory: {db_dir}")
 
-    def get_connection(self) -> sqlite3.Connection:
-        """Get database connection with proper settings"""
-        conn = sqlite3.connect(self.db_path)
-        conn.row_factory = sqlite3.Row  # Enable dict-like access
-        conn.execute("PRAGMA foreign_keys = ON")  # Enable foreign key constraints
-        return conn
+    @contextmanager
+    def get_connection(self):
+        """
+        Get database connection from pool (backward compatible)
+
+        Usage:
+            with db.get_connection() as conn:
+                cursor = conn.execute("SELECT * FROM articles")
+        """
+        with self._pool.get_connection() as conn:
+            yield conn
+
+    def get_pool_stats(self) -> dict:
+        """Get connection pool statistics"""
+        return self._pool.get_pool_stats()
+
+    def close_pool(self):
+        """Close the connection pool and all connections"""
+        if self._pool:
+            self._pool.close_pool()
+            self._pool = None
+
+    def __del__(self):
+        """Cleanup connection pool on object destruction"""
+        try:
+            self.close_pool()
+        except Exception:
+            pass  # Ignore errors during cleanup
 
     def init_database(self):
         """Initialize database with required tables"""
@@ -512,3 +654,330 @@ class DatabaseManager:
         except Exception as e:
             logger.error(f"Failed to get database info: {e}")
             return {"error": str(e)}
+
+    def insert_articles_batch(self, articles: list[dict]) -> list[int]:
+        """
+        Insert multiple articles in a single transaction
+
+        Args:
+            articles: List of article dicts with keys: title, url, content_hash,
+                     rss_guid (optional), publication_date (optional)
+
+        Returns:
+            List of inserted article IDs (may include existing IDs for duplicates)
+
+        Example:
+            articles = [
+                {
+                    "title": "Paper 1",
+                    "url": "https://example.com/1",
+                    "content_hash": "abc123",
+                    "rss_guid": "guid1",
+                    "publication_date": datetime.now()
+                },
+                ...
+            ]
+            article_ids = db.insert_articles_batch(articles)
+        """
+        if not articles:
+            return []
+
+        article_ids = []
+        batch_size = 50  # Process in chunks of 50
+
+        try:
+            for i in range(0, len(articles), batch_size):
+                batch = articles[i : i + batch_size]
+
+                with self.get_connection() as conn:
+                    # Begin explicit transaction for atomicity
+                    conn.execute("BEGIN TRANSACTION")
+
+                    try:
+                        for article in batch:
+                            try:
+                                cursor = conn.execute(
+                                    """
+                                    INSERT INTO articles (title, url, content_hash, rss_guid, publication_date)
+                                    VALUES (?, ?, ?, ?, ?)
+                                """,
+                                    (
+                                        article["title"],
+                                        article["url"],
+                                        article["content_hash"],
+                                        article.get("rss_guid"),
+                                        article.get("publication_date"),
+                                    ),
+                                )
+                                article_ids.append(cursor.lastrowid)
+
+                            except sqlite3.IntegrityError as e:
+                                # Handle duplicates gracefully by fetching existing ID
+                                if "UNIQUE constraint failed: articles.url" in str(e):
+                                    existing = self.get_article_by_url(article["url"])
+                                    if existing:
+                                        article_ids.append(existing["id"])
+                                        logger.debug(
+                                            f"Article already exists (URL): {article['url']}"
+                                        )
+                                elif "UNIQUE constraint failed: articles.content_hash" in str(
+                                    e
+                                ):
+                                    existing = self.get_article_by_content_hash(
+                                        article["content_hash"]
+                                    )
+                                    if existing:
+                                        article_ids.append(existing["id"])
+                                        logger.debug(
+                                            f"Article already exists (hash): {article['content_hash']}"
+                                        )
+                                else:
+                                    raise
+
+                        conn.commit()
+                        logger.debug(
+                            f"Batch inserted {len(batch)} articles (batch {i // batch_size + 1})"
+                        )
+
+                    except Exception as e:
+                        conn.rollback()
+                        logger.error(
+                            f"Failed to insert article batch {i // batch_size + 1}: {e}"
+                        )
+                        raise
+
+            logger.info(f"Batch inserted {len(article_ids)} articles total")
+            return article_ids
+
+        except Exception as e:
+            logger.error(f"Failed to batch insert articles: {e}")
+            raise
+
+    def insert_content_batch(self, contents: list[dict]) -> list[int]:
+        """
+        Insert multiple content records in a single transaction
+
+        Args:
+            contents: List of content dicts with keys: article_id, original_content,
+                     analysis (dict with methodology_detailed, technical_approach,
+                     key_findings, research_design, metadata)
+
+        Returns:
+            List of inserted content IDs
+
+        Example:
+            contents = [
+                {
+                    "article_id": 1,
+                    "original_content": "Full text...",
+                    "analysis": {
+                        "methodology_detailed": "...",
+                        "technical_approach": "...",
+                        "key_findings": "...",
+                        "research_design": "...",
+                        "metadata": {...}
+                    }
+                },
+                ...
+            ]
+            content_ids = db.insert_content_batch(contents)
+        """
+        if not contents:
+            return []
+
+        content_ids = []
+        batch_size = 50
+
+        try:
+            for i in range(0, len(contents), batch_size):
+                batch = contents[i : i + batch_size]
+
+                with self.get_connection() as conn:
+                    conn.execute("BEGIN TRANSACTION")
+
+                    try:
+                        for content in batch:
+                            analysis = content.get("analysis", {})
+
+                            cursor = conn.execute(
+                                """
+                                INSERT INTO content (
+                                    article_id, original_content, methodology_detailed,
+                                    technical_approach, key_findings, research_design,
+                                    metadata
+                                ) VALUES (?, ?, ?, ?, ?, ?, ?)
+                            """,
+                                (
+                                    content["article_id"],
+                                    content.get("original_content", ""),
+                                    analysis.get("methodology_detailed", ""),
+                                    analysis.get("technical_approach", ""),
+                                    analysis.get("key_findings", ""),
+                                    analysis.get("research_design", ""),
+                                    json.dumps(analysis.get("metadata", {})),
+                                ),
+                            )
+                            content_ids.append(cursor.lastrowid)
+
+                        conn.commit()
+                        logger.debug(
+                            f"Batch inserted {len(batch)} content records (batch {i // batch_size + 1})"
+                        )
+
+                    except Exception as e:
+                        conn.rollback()
+                        logger.error(
+                            f"Failed to insert content batch {i // batch_size + 1}: {e}"
+                        )
+                        raise
+
+            logger.info(f"Batch inserted {len(content_ids)} content records total")
+            return content_ids
+
+        except Exception as e:
+            logger.error(f"Failed to batch insert content: {e}")
+            raise
+
+    def update_status_batch(self, updates: list[tuple[int, str]]) -> int:
+        """
+        Update status for multiple articles in a single transaction
+
+        Args:
+            updates: List of tuples (article_id, status)
+
+        Returns:
+            Number of articles updated
+
+        Example:
+            updates = [(1, "completed"), (2, "failed"), (3, "completed")]
+            count = db.update_status_batch(updates)
+        """
+        if not updates:
+            return 0
+
+        batch_size = 100
+        total_updated = 0
+
+        try:
+            for i in range(0, len(updates), batch_size):
+                batch = updates[i : i + batch_size]
+
+                with self.get_connection() as conn:
+                    conn.execute("BEGIN TRANSACTION")
+
+                    try:
+                        for article_id, status in batch:
+                            conn.execute(
+                                """
+                                UPDATE articles
+                                SET status = ?, updated_at = CURRENT_TIMESTAMP
+                                WHERE id = ?
+                            """,
+                                (status, article_id),
+                            )
+
+                        conn.commit()
+                        total_updated += len(batch)
+                        logger.debug(
+                            f"Batch updated {len(batch)} article statuses (batch {i // batch_size + 1})"
+                        )
+
+                    except Exception as e:
+                        conn.rollback()
+                        logger.error(
+                            f"Failed to update status batch {i // batch_size + 1}: {e}"
+                        )
+                        raise
+
+            logger.info(f"Batch updated {total_updated} article statuses total")
+            return total_updated
+
+        except Exception as e:
+            logger.error(f"Failed to batch update statuses: {e}")
+            raise
+
+    def log_processing_batch(self, logs: list[dict]) -> int:
+        """
+        Insert multiple processing log entries in a single transaction
+
+        Args:
+            logs: List of log dicts with keys: article_id (optional), status,
+                 error_message (optional), processing_step (optional),
+                 duration_seconds (optional)
+
+        Returns:
+            Number of log entries inserted
+
+        Example:
+            logs = [
+                {
+                    "article_id": 1,
+                    "status": "success",
+                    "processing_step": "scraping",
+                    "duration_seconds": 2.5
+                },
+                {
+                    "article_id": 2,
+                    "status": "error",
+                    "error_message": "Timeout",
+                    "processing_step": "analysis",
+                    "duration_seconds": 5.0
+                },
+                ...
+            ]
+            count = db.log_processing_batch(logs)
+        """
+        if not logs:
+            return 0
+
+        batch_size = 100
+        total_logged = 0
+
+        try:
+            for i in range(0, len(logs), batch_size):
+                batch = logs[i : i + batch_size]
+
+                with self.get_connection() as conn:
+                    conn.execute("BEGIN TRANSACTION")
+
+                    try:
+                        for log in batch:
+                            conn.execute(
+                                """
+                                INSERT INTO processing_log (
+                                    article_id, status, error_message,
+                                    processing_step, duration_seconds
+                                )
+                                VALUES (?, ?, ?, ?, ?)
+                            """,
+                                (
+                                    log.get("article_id"),
+                                    log["status"],
+                                    log.get("error_message"),
+                                    log.get("processing_step"),
+                                    log.get("duration_seconds"),
+                                ),
+                            )
+
+                        conn.commit()
+                        total_logged += len(batch)
+                        logger.debug(
+                            f"Batch logged {len(batch)} processing entries (batch {i // batch_size + 1})"
+                        )
+
+                    except Exception as e:
+                        conn.rollback()
+                        logger.error(
+                            f"Failed to log processing batch {i // batch_size + 1}: {e}"
+                        )
+                        # Don't raise for logging errors - log and continue
+                        logger.warning(
+                            f"Continuing despite logging error in batch {i // batch_size + 1}"
+                        )
+
+            logger.info(f"Batch logged {total_logged} processing entries total")
+            return total_logged
+
+        except Exception as e:
+            logger.error(f"Failed to batch log processing: {e}")
+            return total_logged  # Return partial count instead of raising

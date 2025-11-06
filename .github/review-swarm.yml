@@ -1,0 +1,308 @@
+version: 1
+
+# Automated Code Review Configuration for RSS Analyzer
+review:
+  auto-trigger: true
+
+  # Required agents that must approve
+  required-agents:
+    - security
+    - code-quality
+    - python-best-practices
+
+  # Optional agents for enhanced review
+  optional-agents:
+    - performance
+    - database
+    - api-integration
+    - documentation
+
+  # Thresholds for blocking/warning
+  thresholds:
+    security: block        # Block PR on security issues
+    performance: warn      # Warn on performance regressions
+    code-quality: suggest  # Suggest improvements
+    database: warn         # Warn on database issues
+
+  # Review depth based on changed files
+  depth-rules:
+    critical-paths:
+      - "**/database.py"
+      - "**/auth/**"
+      - "**/*_client.py"
+      depth: comprehensive
+      agents: ["security", "performance", "database"]
+
+    core-logic:
+      - "**/processors/**"
+      - "**/core/**"
+      depth: thorough
+      agents: ["code-quality", "performance", "python-best-practices"]
+
+    workflows:
+      - ".github/workflows/**"
+      depth: standard
+      agents: ["security", "workflow-validation"]
+
+    documentation:
+      - "docs/**"
+      - "**/*.md"
+      depth: light
+      agents: ["documentation"]
+
+# Security Review Rules
+security:
+  critical-checks:
+    - no-hardcoded-secrets
+    - proper-input-validation
+    - sql-injection-prevention
+    - api-key-security
+    - secure-http-only
+
+  patterns-to-flag:
+    - "eval\\("
+    - "exec\\("
+    - "os\\.system\\("
+    - "subprocess\\.call\\("
+    - "API_KEY\\s*=\\s*['\"]"
+    - "password\\s*=\\s*['\"]"
+
+  allowed-exceptions:
+    - "test/**"           # Tests can have hardcoded values
+    - "**/*_test.py"
+
+# Performance Review Rules
+performance:
+  checks:
+    - no-n-plus-one-queries
+    - efficient-database-queries
+    - proper-caching
+    - rate-limiting
+    - connection-pooling
+
+  thresholds:
+    max-query-time: 100ms
+    max-memory-increase: 10%
+    max-response-time-regression: 5%
+
+  database-patterns:
+    warn:
+      - "for .* in .*:\n.*\\.execute\\("  # Loop with query
+      - "SELECT \\* FROM"                   # Select all columns
+    suggest:
+      - "fetchall\\(\\)"                    # Suggest pagination
+
+# Code Quality Rules
+code-quality:
+  checks:
+    - proper-error-handling
+    - descriptive-variable-names
+    - function-length
+    - cyclomatic-complexity
+    - code-duplication
+    - docstring-coverage
+
+  thresholds:
+    max-function-lines: 50
+    max-complexity: 10
+    min-docstring-coverage: 80%
+    max-duplicate-lines: 5
+
+  patterns:
+    require-docstrings:
+      - "def .*\\(.*\\):"     # All functions
+      - "class .*:"            # All classes
+
+    naming-conventions:
+      - snake_case: "functions,variables,methods"
+      - PascalCase: "classes"
+      - UPPER_CASE: "constants"
+
+# Python Best Practices
+python-best-practices:
+  checks:
+    - type-hints-coverage
+    - proper-imports
+    - exception-handling
+    - context-managers
+    - pathlib-usage
+    - f-strings-over-format
+
+  enforce:
+    - use-pathlib: true          # Use Path over os.path
+    - use-f-strings: true        # Use f-strings over .format()
+    - type-hints: true           # Require type hints
+    - context-managers: true     # Use 'with' for resources
+
+  patterns:
+    prefer:
+      - "from pathlib import Path"
+      - "with open\\("
+      - "def .*\\(.*\\) -> "     # Return type hints
+
+    avoid:
+      - "import \\*"
+      - "except:"                # Bare except
+      - "os\\.path\\."           # Prefer pathlib
+
+# Database Review Rules
+database:
+  checks:
+    - proper-transactions
+    - connection-management
+    - index-usage
+    - migration-safety
+    - constraint-validation
+
+  patterns:
+    require:
+      - "with.*\\.get_connection\\(\\):"  # Use context managers
+
+    warn:
+      - "conn\\.execute\\(.*%"            # String formatting in SQL
+      - "DROP TABLE"                       # Destructive operations
+      - "ALTER TABLE.*DROP"
+
+# API Integration Rules
+api-integration:
+  checks:
+    - proper-error-handling
+    - retry-logic
+    - timeout-configuration
+    - rate-limiting
+    - response-validation
+
+  ai-clients:
+    anthropic:
+      - check-api-key-security
+      - validate-model-names
+      - proper-error-handling
+      - token-usage-tracking
+
+    mistral:
+      - check-api-key-security
+      - validate-endpoints
+      - proper-timeout-handling
+
+    openai:
+      - check-api-key-security
+      - validate-model-versions
+      - proper-rate-limiting
+
+# Documentation Rules
+documentation:
+  checks:
+    - readme-updated
+    - changelog-updated
+    - docstrings-complete
+    - inline-comments-helpful
+    - api-docs-current
+
+  require-update-on:
+    - "New feature: README.md, docs/**"
+    - "Breaking change: CHANGELOG.md, docs/MIGRATION.md"
+    - "API change: docs/API.md"
+    - "Config change: docs/CONFIGURATION.md"
+
+# Auto-fix Capabilities
+auto-fix:
+  enabled: true
+  fixes:
+    - trailing-whitespace
+    - import-sorting
+    - basic-formatting
+    - missing-newlines
+
+  # Only auto-fix on specific file types
+  file-patterns:
+    - "*.py"
+    - "*.yml"
+    - "*.yaml"
+    - "*.md"
+
+# Review Comments
+comments:
+  style: constructive
+  include-examples: true
+  suggest-fixes: true
+  reference-docs: true
+
+  templates:
+    security-critical: |
+      🔒 **Security Issue: {issue_type}**
+
+      **Severity**: {severity}
+
+      **Description**: {description}
+
+      **Impact**: {impact}
+
+      **Suggested Fix**:
+      ```python
+      {fix_example}
+      ```
+
+      **References**:
+      {references}
+
+    performance-warning: |
+      ⚡ **Performance Concern: {concern_type}**
+
+      **Current**: {current_approach}
+      **Suggested**: {suggested_approach}
+
+      **Expected Improvement**: {improvement}
+
+      **Example**:
+      ```python
+      {example_code}
+      ```
+
+    code-quality: |
+      📋 **Code Quality Suggestion**
+
+      {suggestion}
+
+      **Why**: {reasoning}
+
+      **Better approach**:
+      ```python
+      {example}
+      ```
+
+# Integration Settings
+integration:
+  block-merge-on:
+    - critical-security-issues
+    - failing-tests
+    - unresolved-comments
+
+  require-approval-from:
+    - security-agent        # For security-sensitive changes
+    - database-agent        # For database changes
+
+  auto-label:
+    security-issues: "security-review-required"
+    performance-issues: "performance-review"
+    needs-documentation: "documentation-needed"
+    breaking-changes: "breaking-change"
+
+# Metrics & Reporting
+metrics:
+  track:
+    - issues-found
+    - false-positives
+    - fix-rate
+    - review-time
+    - agent-accuracy
+
+  reporting:
+    frequency: weekly
+    recipients:
+      - maintainers
+
+    include:
+      - summary
+      - trends
+      - top-issues
+      - improvement-suggestions

@@ -141,20 +141,18 @@ class ArticleProcessor:
         try:
             logger.info("Starting RSS article analysis pipeline")
 
-            # Step 1: Test API connection
-            self._test_api_connection()
-
-            # Step 2: Fetch RSS feed
+            # Step 1: Fetch RSS feed
             rss_entries = self._fetch_rss_feed(results)
             if not rss_entries:
                 return self._finalize_results(results, start_time)
 
-            # Step 3: Filter new articles
+            # Step 2: Filter new articles
             new_entries = self._filter_articles(rss_entries, processing_config, results)
             if not new_entries:
+                logger.info("No new articles to process - pipeline complete")
                 return self._finalize_results(results, start_time)
 
-            # Step 4: Process articles
+            # Step 3: Process articles
             processed_articles = self._process_articles(
                 new_entries, processing_config, results
             )

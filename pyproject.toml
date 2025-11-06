@@ -36,6 +36,8 @@ dependencies = [
     "charset-normalizer==3.3.2",
     "pyyaml==6.0.1",
     "openai>=1.0.0",
+    "aiohttp>=3.9.0",
+    "psutil>=7.0.0",
 ]
 
 [project.optional-dependencies]

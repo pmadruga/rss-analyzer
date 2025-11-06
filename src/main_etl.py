@@ -11,7 +11,7 @@ from typing import List
 import click
 
 from .etl_orchestrator import ETLOrchestrator
-from .config.settings import load_config, setup_logging, validate_config
+from .core import load_config, setup_logging, validate_config
 
 logger = logging.getLogger(__name__)
 
@@ -174,11 +174,10 @@ def test_ai(ctx):
     config = ctx.obj['config']
     
     try:
-        from .etl.transform.ai_clients.factory import AIClientFactory
-        
-        provider = config.get("default_ai_provider", "anthropic")
-        factory = AIClientFactory()
-        client = factory.create_client(provider, config)
+        from .clients import AIClientFactory
+
+        provider = config.get("api_provider", config.get("default_ai_provider", "anthropic"))
+        client = AIClientFactory.create_from_config(config)
         
         # Test with simple content
         result = client.analyze_article(

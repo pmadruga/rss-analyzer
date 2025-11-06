@@ -2,6 +2,18 @@
 
 from .database import DatabaseManager
 from .error_logger import get_error_logger
+from .monitoring import (
+    AlertThresholds,
+    MonitoringManager,
+    PerformanceMetrics,
+    PerformanceMonitor,
+    SystemHealth,
+    get_monitor,
+    track_api_call,
+    track_db_query,
+    track_processing,
+    track_scraping,
+)
 from .report_generator import ReportGenerator
 from .rss_parser import RSSParser
 from .scraper import WebScraper
@@ -26,4 +38,15 @@ __all__ = [
     "sanitize_filename",
     "setup_logging",
     "validate_config",
+    # Monitoring
+    "PerformanceMonitor",
+    "PerformanceMetrics",
+    "MonitoringManager",
+    "SystemHealth",
+    "AlertThresholds",
+    "get_monitor",
+    "track_processing",
+    "track_api_call",
+    "track_scraping",
+    "track_db_query",
 ]

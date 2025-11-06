@@ -126,6 +126,36 @@ jobs:
         tools/ensure_rss_synced.sh
 
     # ========================================
+    # DEDUPLICATION PRE-PROCESS PHASE
+    # ========================================
+    - name: 🔍 Pre-process duplicate check
+      if: github.event.inputs.test_only != 'true'
+      run: |
+        echo "🔍 Checking for duplicates before processing..."
+
+        # Check if database exists
+        if [ -f "data/articles.db" ]; then
+          echo "📊 Running duplicate detection with statistics..."
+          uv run python tools/check_duplicates.py --stats || true
+
+          echo "⚡ Building deduplication cache for O(1) lookups..."
+          uv run python -c "
+          from src.deduplication_manager import DeduplicationManager
+          import time
+
+          start_time = time.time()
+          dedup = DeduplicationManager('data/articles.db')
+          cache_size = dedup.build_cache()
+          elapsed = time.time() - start_time
+
+          print(f'✅ Built deduplication cache: {cache_size} articles in {elapsed:.2f}s')
+          print(f'🚀 Ready for O(1) duplicate detection during processing')
+          " || true
+        else
+          echo "ℹ️ No existing database found, skipping duplicate check"
+        fi
+
+    # ========================================
     # ANALYSIS PHASE (Skip if test_only)
     # ========================================
     - name: 📊 Run full RSS analysis (backup)
@@ -176,6 +206,34 @@ jobs:
       run: |
         echo "📝 Generating articles by date..."
         uv run python tools/generate_articles_by_date.py
+
+    - name: 📊 Duplicate detection report
+      if: github.event.inputs.test_only != 'true'
+      run: |
+        echo "📊 Generating post-process duplicate detection report..."
+
+        if [ -f "data/articles.db" ]; then
+          echo "🔍 Final duplicate check after processing..."
+          DUPLICATE_REPORT=$(uv run python tools/check_duplicates.py --report 2>&1)
+
+          echo "$DUPLICATE_REPORT"
+
+          # Extract key metrics
+          DUPLICATE_COUNT=$(echo "$DUPLICATE_REPORT" | grep -oP 'Found \K\d+(?= duplicate)' || echo "0")
+          TOTAL_ARTICLES=$(echo "$DUPLICATE_REPORT" | grep -oP 'Total articles: \K\d+' || echo "0")
+
+          if [ "$DUPLICATE_COUNT" -gt "0" ]; then
+            echo "⚠️ Warning: $DUPLICATE_COUNT duplicates detected in final database"
+            echo "💡 Run deduplication-check workflow to clean up duplicates"
+          else
+            echo "✅ No duplicates detected - database is clean"
+          fi
+
+          # Save report for artifacts
+          echo "$DUPLICATE_REPORT" > output/final_duplicate_report.txt
+        else
+          echo "ℹ️ No database found for duplicate reporting"
+        fi
 
     - name: 📈 Generate analysis summary
       if: github.event.inputs.test_only != 'true'

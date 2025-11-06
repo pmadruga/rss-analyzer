@@ -43,6 +43,26 @@ jobs:
     - name: 📁 Create directories
       run: mkdir -p data logs output docs
 
+    # Download existing database to preserve article history
+    - name: 📥 Download existing database from artifacts
+      uses: actions/download-artifact@v4
+      with:
+        pattern: database-backup-*
+        path: data/
+        merge-multiple: true
+      continue-on-error: true
+
+    - name: 🔍 Check database status
+      run: |
+        if [ -f "data/articles.db" ]; then
+          echo "✅ Found existing database, will preserve article history"
+          SIZE=$(stat -c%s data/articles.db 2>/dev/null || stat -f%z data/articles.db)
+          echo "Database size: $SIZE bytes"
+          sqlite3 data/articles.db "SELECT COUNT(*) FROM articles" 2>&1 | head -1 || echo "0"
+        else
+          echo "ℹ️ No existing database found, will create new one"
+        fi
+
     - name: 🔥 Force refresh ALL articles with AI title extraction
       run: |
         echo "🔥 Running FORCE REFRESH with AI title extraction..."

@@ -80,6 +80,42 @@ jobs:
         fi
 
     # ========================================
+    # DEDUPLICATION PRE-REFRESH PHASE
+    # ========================================
+    - name: 🔍 Pre-refresh duplicate check
+      run: |
+        echo "🔍 Checking for duplicates before refresh..."
+
+        if [ -f "data/articles.db" ]; then
+          echo "📊 Running duplicate detection..."
+          uv run python tools/check_duplicates.py --stats || true
+
+          echo "⚡ Building deduplication cache..."
+          uv run python -c "
+          from src.deduplication_manager import DeduplicationManager
+          import time
+
+          start_time = time.time()
+          dedup = DeduplicationManager('data/articles.db')
+          cache_size = dedup.build_cache()
+          elapsed = time.time() - start_time
+
+          print(f'✅ Built deduplication cache: {cache_size} articles in {elapsed:.2f}s')
+
+          # Check for duplicates that should be cleaned before refresh
+          if cache_size > 0:
+            duplicate_count = len(dedup.find_duplicate_articles())
+            if duplicate_count > 0:
+              print(f'⚠️ Found {duplicate_count} duplicates - recommend cleaning before refresh')
+              print(f'💡 Run: gh workflow run deduplication-check.yml -f remove_duplicates=true')
+            else:
+              print(f'✅ No duplicates found - database is clean')
+          " || true
+        else
+          echo "ℹ️ No existing database found"
+        fi
+
+    # ========================================
     # REFRESH PHASE
     # ========================================
     - name: 🔄 Force refresh article titles and formatting
