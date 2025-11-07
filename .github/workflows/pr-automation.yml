@@ -76,7 +76,7 @@ jobs:
 
           # Workflows
           if echo "$CHANGED_FILES" | grep -q "\.github/workflows/"; then
-            gh pr edit $PR_NUM --add-label "ci-cd"
+            gh pr edit $PR_NUM --add-label "ci-cd" 2>/dev/null || gh pr edit $PR_NUM --add-label "workflows" || true
           fi
 
           # Docker
@@ -217,6 +217,9 @@ jobs:
     name: 🔗 Link Related Issues
     runs-on: ubuntu-latest
     steps:
+      - name: 🔄 Checkout code
+        uses: actions/checkout@v4
+
       - name: 🔧 Setup GitHub CLI
         run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
 
@@ -302,6 +305,9 @@ jobs:
     if: always()
     runs-on: ubuntu-latest
     steps:
+      - name: 🔄 Checkout code
+        uses: actions/checkout@v4
+
       - name: 🔧 Setup GitHub CLI
         run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
 
