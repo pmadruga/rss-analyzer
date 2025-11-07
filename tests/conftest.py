@@ -2,10 +2,11 @@
 Test configuration and fixtures for RSS Analyzer tests
 """
 
+import asyncio
 import os
 import tempfile
 from pathlib import Path
-from unittest.mock import Mock
+from unittest.mock import AsyncMock, Mock
 
 import pytest
 
@@ -282,3 +283,53 @@ def mock_mistral_client():
     ]
     client.chat.return_value = response_mock
     return client
+
+
+@pytest.fixture
+def event_loop():
+    """Create an event loop for async tests"""
+    loop = asyncio.get_event_loop_policy().new_event_loop()
+    yield loop
+    loop.close()
+
+
+@pytest.fixture
+async def mock_async_api_client():
+    """Mock async AI client for testing"""
+    client = AsyncMock()
+    client.provider_name = "test_provider"
+    client.model = "test_model"
+    client.analyze_article = AsyncMock(return_value={
+        "methodology_detailed": "Test methodology",
+        "technical_approach": "Test approach",
+        "key_findings": "Test findings",
+        "research_design": "Test design",
+        "metadata": {
+            "ai_provider": "test_provider",
+            "model": "test_model",
+            "processed_at": 1234567890,
+        },
+    })
+    client.test_connection = AsyncMock(return_value=True)
+    client.get_provider_info = AsyncMock(return_value={
+        "provider": "test_provider",
+        "model": "test_model",
+        "max_retries": 3,
+        "rate_limit_delay": 1.0,
+        "timeout": 30,
+    })
+    return client
+
+
+@pytest.fixture
+async def mock_async_scraper():
+    """Mock async web scraper for testing"""
+    scraper = AsyncMock()
+    content_mock = Mock()
+    content_mock.content = "Test article content"
+    content_mock.title = "Test Article Title"
+    content_mock.url = "https://example.com/article"
+    content_mock.metadata = {}
+    scraper.scrape_article = AsyncMock(return_value=content_mock)
+    scraper.scrape_articles = AsyncMock(return_value=[content_mock])
+    return scraper

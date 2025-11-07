@@ -35,12 +35,19 @@ scraper:
   respect_robots_txt: true
   follow_links: true
   max_linked_articles: 3
+  # Rate limiting configuration (prevents DoS and IP bans)
+  rate_limit_rps: 10  # Requests per second
+  rate_limit_burst: 20  # Maximum burst size
 
 # Processing Configuration
 processing:
   max_articles_per_run: 30
   batch_size: 5
   concurrent_requests: 1
+  # Async processing configuration (6-8x speedup)
+  use_async_processing: false  # Enable with --async flag
+  max_concurrent_articles: 5  # Concurrent articles in async mode
+  async_scraper_concurrent: 5  # Concurrent scraper requests
 
 # Output Configuration
 output:

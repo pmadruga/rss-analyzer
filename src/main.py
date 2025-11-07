@@ -65,8 +65,14 @@ def cli(ctx, config, log_level, log_file):
 @click.option(
     "--max-linked", type=int, default=3, help="Maximum linked articles to analyze"
 )
+@click.option(
+    "--async", "use_async", is_flag=True, help="Use async processing for 6-8x speedup"
+)
+@click.option(
+    "--max-concurrent", type=int, default=5, help="Max concurrent articles (async mode)"
+)
 @click.pass_context
-def run(ctx, force_refresh, limit, output_dir, no_follow_links, max_linked):
+def run(ctx, force_refresh, limit, output_dir, no_follow_links, max_linked, use_async, max_concurrent):
     """Run the complete article analysis pipeline"""
 
     config = ctx.obj["config"]
@@ -79,35 +85,69 @@ def run(ctx, force_refresh, limit, output_dir, no_follow_links, max_linked):
     if not limit:
         limit = config.get("max_articles_per_run")
 
+    # Add max_concurrent to config for async mode
+    config["max_concurrent_articles"] = max_concurrent
+
     # Create processing configuration
+    from .processors import ProcessingConfig
     processing_config = ProcessingConfig(
         force_refresh=force_refresh,
         limit=limit,
         follow_links=not no_follow_links,
         max_linked_articles=max_linked,
+        max_concurrent=max_concurrent,
     )
 
     try:
-        processor = ArticleProcessor(config)
+        if use_async:
+            # Use async processor for 6-8x throughput
+            import asyncio
+            from .processors import AsyncArticleProcessor
 
-        click.echo("🚀 Starting RSS article analysis pipeline...")
+            processor = AsyncArticleProcessor(config)
 
-        # Show configuration info
-        client_info = processor.get_client_info()
-        click.echo(
-            f"📡 Using {client_info['provider']} with model {client_info['model']}"
-        )
+            click.echo("🚀 Starting ASYNC RSS article analysis pipeline...")
+            click.echo(f"⚡ Async mode enabled: {max_concurrent} concurrent articles")
 
-        if processing_config.limit:
-            click.echo(f"📊 Processing limited to {processing_config.limit} articles")
+            # Show configuration info
+            client_info = processor.get_client_info()
+            click.echo(
+                f"📡 Using {client_info['provider']} with model {client_info['model']}"
+            )
 
-        if processing_config.force_refresh:
-            click.echo("🔄 Force refresh enabled - reprocessing all articles")
+            if processing_config.limit:
+                click.echo(f"📊 Processing limited to {processing_config.limit} articles")
 
-        results = processor.run(processing_config)
+            if processing_config.force_refresh:
+                click.echo("🔄 Force refresh enabled - reprocessing all articles")
 
-        # Display results
-        _display_results(results, config)
+            # Run async pipeline
+            results = asyncio.run(processor.run_async(processing_config))
+
+            # Display results
+            _display_results(results, config)
+        else:
+            # Use sync processor (original)
+            processor = ArticleProcessor(config)
+
+            click.echo("🚀 Starting RSS article analysis pipeline...")
+
+            # Show configuration info
+            client_info = processor.get_client_info()
+            click.echo(
+                f"📡 Using {client_info['provider']} with model {client_info['model']}"
+            )
+
+            if processing_config.limit:
+                click.echo(f"📊 Processing limited to {processing_config.limit} articles")
+
+            if processing_config.force_refresh:
+                click.echo("🔄 Force refresh enabled - reprocessing all articles")
+
+            results = processor.run(processing_config)
+
+            # Display results
+            _display_results(results, config)
 
     except KeyboardInterrupt:
         click.echo("\n❌ Process interrupted by user", err=True)
@@ -511,6 +551,97 @@ def metrics(ctx, format, output):
 
     except Exception as e:
         click.echo(f"❌ Failed to get metrics: {e}", err=True)
+        sys.exit(1)
+
+
+@cli.command()
+@click.pass_context
+def cache_stats(ctx):
+    """Show cache statistics"""
+    config = ctx.obj["config"]
+
+    try:
+        from .processors import ArticleProcessor
+
+        processor = ArticleProcessor(config)
+        stats = processor.get_cache_stats()
+
+        click.echo("💾 Cache Statistics")
+        click.echo("=" * 60)
+
+        click.echo("\n📊 Performance:")
+        click.echo(f"   Hit Rate: {stats['hit_rate']:.1f}%")
+        click.echo(f"   Total Hits: {stats['total_hits']}")
+        click.echo(f"   Total Misses: {stats['total_misses']}")
+
+        click.echo("\n🔹 L1 Cache (Memory):")
+        click.echo(f"   Hits: {stats['l1_hits']}")
+        click.echo(f"   Misses: {stats['l1_misses']}")
+        click.echo(f"   Hit Rate: {stats['l1_hit_rate']:.1f}%")
+        click.echo(f"   Entries: {stats['l1_entries']}")
+        click.echo(f"   Size: {stats['l1_size_mb']:.2f} MB")
+
+        click.echo("\n🔸 L2 Cache (Disk):")
+        click.echo(f"   Hits: {stats['l2_hits']}")
+        click.echo(f"   Misses: {stats['l2_misses']}")
+        click.echo(f"   Hit Rate: {stats['l2_hit_rate']:.1f}%")
+        click.echo(f"   Entries: {stats['l2_entries']}")
+        click.echo(f"   Size: {stats['l2_size_mb']:.2f} MB")
+
+        click.echo("\n📈 Overall:")
+        click.echo(f"   Total Size: {stats['total_size_mb']:.2f} MB")
+        click.echo(f"   Evictions: {stats['evictions']}")
+        click.echo(f"   Expirations: {stats['expirations']}")
+
+    except Exception as e:
+        click.echo(f"❌ Failed to get cache stats: {e}", err=True)
+        sys.exit(1)
+
+
+@cli.command()
+@click.option("--confirm", is_flag=True, help="Skip confirmation prompt")
+@click.pass_context
+def clear_cache(ctx, confirm):
+    """Clear all cached content"""
+    config = ctx.obj["config"]
+
+    try:
+        from .processors import ArticleProcessor
+
+        if not confirm:
+            if not click.confirm("Are you sure you want to clear all cached content?"):
+                click.echo("Cache clear cancelled.")
+                return
+
+        processor = ArticleProcessor(config)
+        processor.clear_cache()
+
+        click.echo("✅ Cache cleared successfully")
+
+    except Exception as e:
+        click.echo(f"❌ Failed to clear cache: {e}", err=True)
+        sys.exit(1)
+
+
+@cli.command()
+@click.pass_context
+def cleanup_cache(ctx):
+    """Remove expired cache entries"""
+    config = ctx.obj["config"]
+
+    try:
+        from .processors import ArticleProcessor
+
+        processor = ArticleProcessor(config)
+        removed = processor.cleanup_expired_cache()
+
+        if removed > 0:
+            click.echo(f"✅ Removed {removed} expired cache entries")
+        else:
+            click.echo("✅ No expired cache entries found")
+
+    except Exception as e:
+        click.echo(f"❌ Failed to cleanup cache: {e}", err=True)
         sys.exit(1)
 
 

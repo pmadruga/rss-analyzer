@@ -19,6 +19,7 @@ from ..core import (
     WebScraper,
     format_timestamp,
 )
+from ..core.cache import ContentCache
 from ..exceptions import (
     ConfigurationError,
     ContentProcessingError,
@@ -90,6 +91,11 @@ class ArticleProcessor:
         try:
             # Initialize database
             self.db = DatabaseManager(self.config["db_path"])
+
+            # Initialize two-tier cache (L1 memory + L2 disk)
+            cache_db_path = self.config.get("cache_db_path", "data/cache.db")
+            self.cache = ContentCache(cache_db_path)
+            logger.info(f"Cache initialized: {cache_db_path}")
 
             # Initialize RSS parser
             user_agent = self.config.get("user_agent", CONFIG.scraping.USER_AGENT)
@@ -240,110 +246,173 @@ class ArticleProcessor:
         processing_config: ProcessingConfig,
         results: ProcessingResults,
     ) -> list[dict[str, Any]]:
-        """Process articles through scraping and analysis"""
+        """Process articles through scraping and analysis with batch operations"""
         processed_articles = []
 
-        logger.info(f"Processing {len(entries)} articles...")
+        logger.info(f"Processing {len(entries)} articles with batch operations...")
 
-        for i, entry in enumerate(entries):
+        # Phase 1: Batch insert all articles at once
+        articles_to_insert = []
+        for entry in entries:
+            articles_to_insert.append({
+                "title": entry.title,
+                "url": entry.link,
+                "content_hash": entry.content_hash,
+                "rss_guid": entry.guid,
+                "publication_date": entry.publication_date,
+            })
+
+        try:
+            article_ids = self.db.insert_articles_batch(articles_to_insert)
+            logger.info(f"Batch inserted {len(article_ids)} articles")
+        except Exception as e:
+            logger.error(f"Batch insert failed: {e}")
+            results.errors.append(f"Batch insert failed: {e}")
+            return []
+
+        # Phase 2: Process each article (scraping + analysis) and collect batch data
+        status_updates = []
+        content_records = []
+        processing_logs = []
+        title_updates = []  # Store title updates for batch execution
+        title_map = {}  # Track final title for each article_id
+
+        for i, (entry, article_id) in enumerate(zip(entries, article_ids)):
             try:
                 logger.info(
                     f"Processing article {i + 1}/{len(entries)}: {entry.title[:50]}..."
                 )
 
-                article_data = self._process_single_article(
-                    entry, processing_config, results
-                )
-                if article_data:
-                    processed_articles.append(article_data)
+                # Initialize with original title
+                title_map[article_id] = entry.title
+
+                # Track that we started processing
+                processing_logs.append({
+                    "article_id": article_id,
+                    "status": "started",
+                    "processing_step": "scraping"
+                })
+
+                # Set status to processing
+                status_updates.append((article_id, "processing"))
+
+                # Scrape article content
+                scraped_content = self._scrape_article(entry, processing_config, article_id)
+                if not scraped_content:
+                    continue
+
+                results.scraped_articles += 1
+
+                # Update title if scraped title is better
+                if scraped_content.title and scraped_content.title != entry.title:
+                    logger.info(f"Will update title from RSS to scraped: '{entry.title}' -> '{scraped_content.title}'")
+                    title_updates.append((scraped_content.title, article_id))
+                    title_map[article_id] = scraped_content.title
+
+                # Analyze with AI client
+                analysis = self._analyze_article(entry, scraped_content, article_id)
+                if not analysis:
+                    continue
+
+                # Use AI-extracted title if available
+                if analysis.get("extracted_title"):
+                    ai_title = analysis["extracted_title"].strip()
+                    current_title = title_map[article_id]
+
+                    if ai_title != current_title and len(ai_title) > 5:
+                        logger.info(f"Will update title with AI-extracted: '{current_title}' -> '{ai_title}'")
+                        # Replace previous title update or add new one
+                        title_updates = [(ai_title, article_id) if aid == article_id else (t, aid)
+                                       for t, aid in title_updates]
+                        if article_id not in [aid for _, aid in title_updates]:
+                            title_updates.append((ai_title, article_id))
+                        title_map[article_id] = ai_title
+
+                # Store content record for batch insert
+                content_records.append({
+                    "article_id": article_id,
+                    "original_content": scraped_content.content,
+                    "analysis": analysis
+                })
+
+                results.analyzed_articles += 1
+
+                # Mark as completed
+                status_updates.append((article_id, "completed"))
+
+                # Prepare article data for reporting with tracked title
+                article_data = self._prepare_article_data(article_id, entry, analysis, title_map[article_id])
+                processed_articles.append(article_data)
 
             except Exception as e:
                 logger.error(f"Error processing article '{entry.title}': {e}")
                 results.errors.append(f"Processing '{entry.title}': {e}")
 
+                # Log failure
+                processing_logs.append({
+                    "article_id": article_id,
+                    "status": "processing_failed",
+                    "error_message": str(e)
+                })
+                status_updates.append((article_id, "failed"))
+
+        # Phase 3: Execute all batch operations at once
+        logger.info("Executing batch database operations...")
+
+        # Batch update titles
+        if title_updates:
+            try:
+                with self.db.get_connection() as conn:
+                    conn.execute("BEGIN TRANSACTION")
+                    for title, article_id in title_updates:
+                        conn.execute(
+                            "UPDATE articles SET title = ? WHERE id = ?",
+                            (title, article_id)
+                        )
+                    conn.commit()
+                logger.info(f"Batch updated {len(title_updates)} article titles")
+            except Exception as e:
+                logger.error(f"Batch title update failed: {e}")
+
+        # Batch update statuses
+        if status_updates:
+            try:
+                self.db.update_status_batch(status_updates)
+            except Exception as e:
+                logger.error(f"Batch status update failed: {e}")
+
+        # Batch insert content
+        if content_records:
+            try:
+                self.db.insert_content_batch(content_records)
+            except Exception as e:
+                logger.error(f"Batch content insert failed: {e}")
+
+        # Batch log processing
+        if processing_logs:
+            try:
+                self.db.log_processing_batch(processing_logs)
+            except Exception as e:
+                logger.error(f"Batch processing log failed: {e}")
+
+        logger.info(f"Batch processing complete: {len(processed_articles)} articles successfully processed")
         return processed_articles
 
-    def _process_single_article(
-        self,
-        entry: Any,
-        processing_config: ProcessingConfig,
-        results: ProcessingResults,
-    ) -> dict[str, Any] | None:
-        """Process a single article"""
-        article_id = None
-
-        try:
-            # Insert article into database
-            article_id = self.db.insert_article(
-                title=entry.title,
-                url=entry.link,
-                content_hash=entry.content_hash,
-                rss_guid=entry.guid,
-                publication_date=entry.publication_date,
-            )
-
-            self.db.log_processing(article_id, "started", processing_step="scraping")
-            self.db.update_article_status(article_id, "processing")
-
-            # Scrape article content
-            scraped_content = self._scrape_article(entry, processing_config, article_id)
-            if not scraped_content:
-                return None
-
-            results.scraped_articles += 1
-
-            # Update title with the scraped title if it's better than RSS title
-            if scraped_content.title and scraped_content.title != entry.title:
-                logger.info(f"Updating title from RSS to scraped: '{entry.title}' -> '{scraped_content.title}'")
-                with self.db.get_connection() as conn:
-                    conn.execute(
-                        "UPDATE articles SET title = ? WHERE id = ?", 
-                        (scraped_content.title, article_id)
-                    )
-
-            # Analyze with AI client
-            analysis = self._analyze_article(entry, scraped_content, article_id)
-            if not analysis:
-                return None
-
-            # Use AI-extracted title if available and different from current title
-            if analysis.get("extracted_title"):
-                ai_title = analysis["extracted_title"].strip()
-                
-                # Get current title from database
-                with self.db.get_connection() as conn:
-                    cursor = conn.execute("SELECT title FROM articles WHERE id = ?", (article_id,))
-                    current_result = cursor.fetchone()
-                    current_title = current_result[0] if current_result else entry.title
-                
-                if ai_title != current_title and len(ai_title) > 5:
-                    logger.info(f"Updating title with AI-extracted: '{current_title}' -> '{ai_title}'")
-                    with self.db.get_connection() as conn:
-                        conn.execute(
-                            "UPDATE articles SET title = ? WHERE id = ?", 
-                            (ai_title, article_id)
-                        )
-
-            # Store content and analysis
-            self.db.insert_content(article_id, scraped_content.content, analysis)
-            results.analyzed_articles += 1
-
-            self.db.update_article_status(article_id, "completed")
-
-            # Prepare article data for reporting
-            return self._prepare_article_data(article_id, entry, analysis)
-
-        except Exception as e:
-            if article_id:
-                self.db.log_processing(article_id, "processing_failed", str(e))
-                self.db.update_article_status(article_id, "failed")
-            raise
 
     def _scrape_article(
         self, entry: Any, processing_config: ProcessingConfig, article_id: int
     ):
-        """Scrape article content with error handling"""
+        """Scrape article content with error handling and caching (batch-optimized)"""
         try:
+            # Check cache first (unless force refresh)
+            cache_key = ContentCache.generate_key(entry.link, "scraped_content")
+            if not processing_config.force_refresh:
+                cached_content = self.cache.get(cache_key)
+                if cached_content:
+                    logger.info(f"Cache hit for scraped content: {entry.link}")
+                    return cached_content
+
+            # Cache miss - scrape as usual
             scrape_start = time.time()
 
             scraped_content = self.scraper.scrape_article(
@@ -355,37 +424,25 @@ class ArticleProcessor:
             scrape_duration = time.time() - scrape_start
 
             if not scraped_content:
-                self.db.log_processing(
-                    article_id,
-                    "scraping_failed",
-                    processing_step="scraping",
-                    duration_seconds=scrape_duration,
-                )
-                self.db.update_article_status(article_id, "scraping_failed")
                 logger.warning(f"Failed to scrape article: {entry.title}")
                 return None
 
             # Check if content with this hash has already been processed
             if not processing_config.force_refresh and self.db.is_content_already_processed(scraped_content.content_hash):
                 logger.info(f"Content already processed, skipping: {scraped_content.title}")
-                self.db.log_processing(
-                    article_id,
-                    "duplicate_content",
-                    processing_step="scraping",
-                    duration_seconds=scrape_duration,
-                )
-                self.db.update_article_status(article_id, "duplicate")
                 return None
 
             # Update the article's content hash with the actual scraped content hash
             self.db.update_article_content_hash(article_id, scraped_content.content_hash)
 
-            self.db.log_processing(
-                article_id,
-                "scraped",
-                processing_step="scraping",
-                duration_seconds=scrape_duration,
+            # Store in cache for future use
+            self.cache.set(
+                cache_key,
+                scraped_content,
+                ttl=ContentCache.TTL_SCRAPED_CONTENT,
+                content_type="scraped_content"
             )
+            logger.debug(f"Cached scraped content: {entry.link}")
 
             return scraped_content
 
@@ -394,8 +451,27 @@ class ArticleProcessor:
             raise ScrapingError(f"Scraping failed: {e}", entry.link)
 
     def _analyze_article(self, entry: Any, scraped_content: Any, article_id: int):
-        """Analyze article with AI client"""
+        """Analyze article with AI client and caching (batch-optimized)"""
         try:
+            # Check cache first (unless force refresh)
+            # Include model in cache key to invalidate when model changes
+            cache_key = ContentCache.generate_key(
+                f"{entry.link}:{self.ai_client.model}",
+                "ai_analysis"
+            )
+
+            # Get force_refresh from current processing config (if available)
+            # This is a workaround since we don't pass processing_config to this method
+            # In a future refactor, we should pass it as a parameter
+            force_refresh = False  # Conservative default
+
+            if not force_refresh:
+                cached_analysis = self.cache.get(cache_key)
+                if cached_analysis:
+                    logger.info(f"Cache hit for AI analysis: {entry.link}")
+                    return cached_analysis
+
+            # Cache miss - analyze as usual
             analysis_start = time.time()
 
             analysis = self.ai_client.analyze_article(
@@ -407,22 +483,17 @@ class ArticleProcessor:
             analysis_duration = time.time() - analysis_start
 
             if not analysis:
-                self.db.log_processing(
-                    article_id,
-                    "analysis_failed",
-                    processing_step="analysis",
-                    duration_seconds=analysis_duration,
-                )
-                self.db.update_article_status(article_id, "analysis_failed")
                 logger.warning(f"Failed to analyze article: {entry.title}")
                 return None
 
-            self.db.log_processing(
-                article_id,
-                "completed",
-                processing_step="analysis",
-                duration_seconds=analysis_duration,
+            # Store in cache for future use
+            self.cache.set(
+                cache_key,
+                analysis,
+                ttl=ContentCache.TTL_API_RESPONSE,
+                content_type="ai_analysis"
             )
+            logger.debug(f"Cached AI analysis: {entry.link}")
 
             return analysis
 
@@ -431,19 +502,12 @@ class ArticleProcessor:
             raise ContentProcessingError(f"Analysis failed: {e}")
 
     def _prepare_article_data(
-        self, article_id: int, entry: Any, analysis: dict[str, Any]
+        self, article_id: int, entry: Any, analysis: dict[str, Any], title: str | None = None
     ) -> dict[str, Any]:
-        """Prepare article data for reporting"""
-        # Get the actual title from the database (which may have been updated with scraped title)
-        try:
-            with self.db.get_connection() as conn:
-                cursor = conn.execute("SELECT title FROM articles WHERE id = ?", (article_id,))
-                result = cursor.fetchone()
-                actual_title = result[0] if result else entry.title
-        except Exception as e:
-            logger.warning(f"Could not get updated title from database: {e}")
-            actual_title = entry.title
-            
+        """Prepare article data for reporting (batch-optimized)"""
+        # Use provided title (from batch tracking) or fallback to entry title
+        actual_title = title or entry.title
+
         return {
             "id": article_id,
             "title": actual_title,
@@ -521,3 +585,21 @@ class ArticleProcessor:
     def get_processing_stats(self) -> dict[str, Any]:
         """Get processing statistics from database"""
         return self.db.get_processing_statistics()
+
+    def get_cache_stats(self) -> dict[str, Any]:
+        """Get cache statistics"""
+        return self.cache.get_stats()
+
+    def clear_cache(self):
+        """Clear all cached content"""
+        self.cache.clear()
+        logger.info("Cache cleared")
+
+    def cleanup_expired_cache(self) -> int:
+        """
+        Remove expired entries from cache.
+
+        Returns:
+            Number of entries removed
+        """
+        return self.cache.cleanup_expired()

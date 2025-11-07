@@ -1,0 +1,49 @@
+# Lefthook Configuration for RSS Analyzer
+# Runs linting and formatting on pre-commit
+
+pre-commit:
+  parallel: true
+  commands:
+    # Python linting with ruff
+    ruff-check:
+      glob: "*.py"
+      run: uv run ruff check {staged_files}
+      stage_fixed: true
+
+    # Python formatting with ruff
+    ruff-format:
+      glob: "*.py"
+      run: uv run ruff format {staged_files}
+      stage_fixed: true
+
+    # Type checking with mypy (optional, can be enabled later)
+    # mypy:
+    #   glob: "*.py"
+    #   run: uv run mypy {staged_files}
+
+pre-push:
+  parallel: false
+  commands:
+    # Run tests before pushing
+    pytest:
+      run: uv run pytest tests/ -v --tb=short
+      fail_text: "Tests failed. Fix issues before pushing."
+
+    # Check code quality
+    ruff-check-all:
+      run: uv run ruff check src/
+      fail_text: "Linting issues found. Run 'uv run ruff check --fix src/' to auto-fix."
+
+commit-msg:
+  commands:
+    # Validate commit message format (conventional commits)
+    commit-msg-check:
+      run: |
+        commit_msg=$(cat {1})
+        if ! echo "$commit_msg" | grep -qE "^(feat|fix|docs|style|refactor|perf|test|chore|ci|build)(\(.+\))?: .{1,}$"; then
+          echo "❌ Invalid commit message format!"
+          echo "Use: type(scope): description"
+          echo "Types: feat, fix, docs, style, refactor, perf, test, chore, ci, build"
+          echo "Example: feat(cache): add cache integration to article processor"
+          exit 1
+        fi

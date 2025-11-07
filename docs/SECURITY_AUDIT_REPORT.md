@@ -1,264 +1,97 @@
-# RSS Analyzer Security Audit Report
+# Security Audit Report: RSS Analyzer
 
-**Audit Date:** 2025-10-29
-**Auditor:** Security Analysis System
-**Scope:** Complete codebase security review
-**Version:** Current main branch
+**Audit Date:** 2025-11-06
+**Auditor:** Code Review Agent
+**Codebase Version:** Main branch (commit 29d87dc)
+**Scope:** Complete security analysis of RSS Analyzer application
 
 ---
 
 ## Executive Summary
 
-This comprehensive security audit identified **15 security findings** across multiple categories, ranging from **CRITICAL** to **LOW** severity. The RSS Analyzer demonstrates **good security practices** in many areas but requires attention to several key vulnerabilities.
+This security audit identified **1 CRITICAL**, **3 HIGH**, **4 MEDIUM**, and **5 LOW** severity vulnerabilities across the RSS Analyzer codebase. The most significant issues involve SQL injection risks, insufficient input validation, and potential information disclosure through error messages.
 
-### Risk Overview
+**Overall Security Rating:** ⚠️ MEDIUM RISK
 
-| Severity | Count | Description |
-|----------|-------|-------------|
-| 🔴 **CRITICAL** | 2 | Require immediate attention |
-| 🟠 **HIGH** | 4 | Should be addressed urgently |
-| 🟡 **MEDIUM** | 6 | Should be fixed in next release |
-| 🟢 **LOW** | 3 | Nice to have improvements |
+**Immediate Actions Required:**
+1. Fix SQL injection vulnerability in database cleanup function (CRITICAL)
+2. Implement rate limiting for web scraping (HIGH)
+3. Add comprehensive URL validation to prevent SSRF (HIGH)
+4. Sanitize error messages to prevent information disclosure (MEDIUM)
 
-### Overall Security Score: **72/100** (Good with Room for Improvement)
+### Summary of Findings
 
-**Strengths:**
-- ✅ No hardcoded secrets in source code
-- ✅ Proper use of environment variables
-- ✅ Parameterized SQL queries (no SQL injection)
-- ✅ Non-root Docker container user
-- ✅ GitHub Actions secrets properly configured
-- ✅ Connection pooling with validation
-- ✅ Comprehensive error handling
-
-**Critical Areas Requiring Attention:**
-- ❌ Plain text API keys in environment variables
-- ❌ Insufficient input validation on URLs
-- ❌ Potential SSRF vulnerabilities in web scraper
-- ❌ Missing rate limiting protection
-- ❌ No API key rotation mechanism
+| Severity | Count | Action Timeline |
+|----------|-------|-----------------|
+| 🔴 CRITICAL | 1 | Fix immediately (this week) |
+| 🟠 HIGH | 3 | Fix within 1-2 weeks |
+| 🟡 MEDIUM | 4 | Fix within 1 month |
+| 🔵 LOW | 5 | Fix when convenient |
 
 ---
 
 ## Detailed Findings
 
-### 1. 🔴 CRITICAL: Unencrypted API Key Storage
+### 🔴 CRITICAL Vulnerabilities
 
-**Category:** Secret Management
-**Location:** Environment variables, `.env` files
-**Severity:** CRITICAL
-**CVSS Score:** 9.1 (Critical)
+#### 1. SQL Injection via String Interpolation
 
-**Issue:**
-API keys are stored in plain text in environment variables and `.env` files. While these are not committed to the repository (proper `.gitignore`), they are readable by any process with access to the environment.
+**Location:** `src/core/database.py:606-608`
 
-**Evidence:**
-```bash
-# .env.example
-ANTHROPIC_API_KEY=sk-ant-your-anthropic-key-here
-MISTRAL_API_KEY=your-mistral-key-here
-OPENAI_API_KEY=sk-your-openai-key-here
+**Vulnerability:**
+```python
+def cleanup_old_logs(self, days_to_keep: int = 30):
+    """Clean up old processing logs"""
+    try:
+        with self.get_connection() as conn:
+            cursor = conn.execute(f"""
+                DELETE FROM processing_log
+                WHERE timestamp < datetime('now', '-{days_to_keep} days')
+            """)
+```
+
+**Issue:** The `days_to_keep` parameter is directly interpolated into the SQL query using an f-string, creating a SQL injection vulnerability. Although the parameter has a type hint of `int`, Python type hints are not enforced at runtime.
+
+**Exploitation Scenario:**
+```python
+# Malicious input could execute arbitrary SQL
+db.cleanup_old_logs("30 days'); DROP TABLE articles; --")
 ```
 
 **Impact:**
-- Compromise of API keys could lead to unauthorized API usage
-- Financial loss from API abuse
-- Data exfiltration through compromised AI model access
-- Container introspection could expose keys
-
-**Recommendations:**
-
-**Immediate (Required):**
-1. Implement secrets management system (HashiCorp Vault, AWS Secrets Manager, or Azure Key Vault)
-2. Use encrypted environment variable storage
-3. Implement key rotation policy (90-day rotation)
-4. Add API key usage monitoring and anomaly detection
-
-**Implementation Example:**
-```python
-# src/core/secrets_manager.py
-import os
-from cryptography.fernet import Fernet
-import base64
-
-class SecretsManager:
-    """Encrypted secrets management with rotation support"""
-
-    def __init__(self):
-        # Load encryption key from secure location
-        self.key = self._load_encryption_key()
-        self.cipher = Fernet(self.key)
-
-    def get_api_key(self, provider: str) -> str:
-        """Retrieve and decrypt API key"""
-        encrypted_key = os.getenv(f"{provider.upper()}_API_KEY_ENCRYPTED")
-        if not encrypted_key:
-            raise ValueError(f"No encrypted key found for {provider}")
-
-        decrypted = self.cipher.decrypt(encrypted_key.encode())
-        return decrypted.decode()
-
-    def rotate_key(self, provider: str, new_key: str):
-        """Rotate API key with zero-downtime"""
-        # Implement key rotation logic
-        pass
-```
-
-**References:**
-- OWASP Top 10 2021: A07:2021 – Identification and Authentication Failures
-- CWE-798: Use of Hard-coded Credentials
-
----
-
-### 2. 🔴 CRITICAL: Server-Side Request Forgery (SSRF) Vulnerability
-
-**Category:** Input Validation
-**Location:** `src/core/async_scraper.py`, web scraping functions
-**Severity:** CRITICAL
-**CVSS Score:** 8.6 (High)
-
-**Issue:**
-The web scraper accepts arbitrary URLs without validation, allowing potential SSRF attacks. An attacker could force the scraper to access internal services, cloud metadata endpoints, or perform port scanning.
-
-**Evidence:**
-```python
-# src/core/async_scraper.py:161-196
-async def scrape_article_async(
-    self,
-    session: ClientSession,
-    url: str,  # ⚠️ No validation
-    follow_links: bool = True,
-    max_linked_articles: int = 3,
-) -> Optional[ScrapedContent]:
-    # URL is used directly without validation
-    async with session.get(url) as response:
-        response.raise_for_status()
-        html = await response.text()
-```
-
-**Attack Scenarios:**
-
-1. **Cloud Metadata Access:**
-```python
-# Attacker-controlled RSS feed contains:
-url = "http://169.254.169.254/latest/meta-data/iam/security-credentials/"
-# This could expose AWS credentials
-```
-
-2. **Internal Network Scanning:**
-```python
-# Port scanning internal services
-url = "http://internal-database:5432"
-url = "http://localhost:6379"  # Redis
-url = "http://192.168.1.1/admin"
-```
-
-3. **Denial of Service:**
-```python
-# Force connection to slow/unresponsive hosts
-url = "http://attacker.com/infinite-redirect"
-```
-
-**Impact:**
-- Exposure of cloud provider credentials
-- Access to internal services and databases
-- Port scanning of internal network
+- Complete database compromise
+- Data deletion or modification
 - Potential data exfiltration
-- DoS through resource exhaustion
 
-**Recommendations:**
-
-**Immediate (Required):**
-1. Implement URL whitelist/blacklist validation
-2. Block private IP ranges (RFC 1918)
-3. Block cloud metadata endpoints
-4. Implement DNS rebinding protection
-5. Set strict connection timeouts
-
-**Implementation Example:**
+**Remediation:**
 ```python
-# src/core/url_validator.py
-import ipaddress
-import socket
-from urllib.parse import urlparse
-from typing import List
+def cleanup_old_logs(self, days_to_keep: int = 30):
+    """Clean up old processing logs"""
+    try:
+        # Validate input first
+        if not isinstance(days_to_keep, int) or days_to_keep < 1 or days_to_keep > 3650:
+            raise ValueError(f"Invalid days_to_keep: {days_to_keep}")
 
-class URLValidator:
-    """SSRF protection for web scraper"""
-
-    BLOCKED_IP_RANGES = [
-        ipaddress.ip_network('10.0.0.0/8'),      # Private
-        ipaddress.ip_network('172.16.0.0/12'),   # Private
-        ipaddress.ip_network('192.168.0.0/16'),  # Private
-        ipaddress.ip_network('127.0.0.0/8'),     # Loopback
-        ipaddress.ip_network('169.254.0.0/16'),  # Link-local (AWS metadata)
-        ipaddress.ip_network('::1/128'),         # IPv6 loopback
-        ipaddress.ip_network('fc00::/7'),        # IPv6 private
-    ]
-
-    ALLOWED_SCHEMES = ['http', 'https']
-
-    BLOCKED_DOMAINS = [
-        'metadata.google.internal',  # GCP metadata
-        'kubernetes.default.svc',    # K8s services
-    ]
-
-    def validate_url(self, url: str) -> bool:
-        """Validate URL for SSRF protection"""
-        try:
-            parsed = urlparse(url)
-
-            # Check scheme
-            if parsed.scheme not in self.ALLOWED_SCHEMES:
-                raise ValueError(f"Invalid scheme: {parsed.scheme}")
-
-            # Check blocked domains
-            if parsed.hostname in self.BLOCKED_DOMAINS:
-                raise ValueError(f"Blocked domain: {parsed.hostname}")
-
-            # Resolve hostname and check IP
-            ip_addr = socket.gethostbyname(parsed.hostname)
-            ip = ipaddress.ip_address(ip_addr)
-
-            # Check against blocked ranges
-            for blocked_range in self.BLOCKED_IP_RANGES:
-                if ip in blocked_range:
-                    raise ValueError(f"Blocked IP range: {ip}")
-
-            return True
-
-        except Exception as e:
-            raise ValueError(f"URL validation failed: {e}")
-
-# Usage in async_scraper.py
-async def scrape_article_async(self, session, url, ...):
-    validator = URLValidator()
-    validator.validate_url(url)  # Validate before scraping
-
-    async with session.get(url, timeout=10) as response:
-        ...
+        with self.get_connection() as conn:
+            # Use parameterized query
+            cursor = conn.execute("""
+                DELETE FROM processing_log
+                WHERE timestamp < datetime('now', ? || ' days')
+            """, (f'-{days_to_keep}',))
 ```
 
-**References:**
-- OWASP SSRF Prevention Cheat Sheet
-- CWE-918: Server-Side Request Forgery (SSRF)
-- PortSwigger SSRF Vulnerability
+**Priority:** 🚨 IMMEDIATE FIX REQUIRED
 
 ---
 
-### 3. 🟠 HIGH: Missing Rate Limiting and DoS Protection
+### 🟠 HIGH Severity Vulnerabilities
 
-**Category:** Availability
-**Location:** API clients, web scraper
-**Severity:** HIGH
-**CVSS Score:** 7.5 (High)
+#### 2. Missing Rate Limiting on Web Scraping
 
-**Issue:**
-The application lacks comprehensive rate limiting, making it vulnerable to denial of service attacks and API quota exhaustion.
+**Location:** `src/core/async_scraper.py:150-159`
 
-**Evidence:**
+**Vulnerability:**
 ```python
-# src/core/async_scraper.py:150-159
 async def _respect_rate_limit(self):
     """Implement async delay between requests"""
     async with self._rate_limit_lock:
@@ -270,1026 +103,705 @@ async def _respect_rate_limit(self):
         self.last_request_time = time.time()
 ```
 
-**Vulnerabilities:**
-1. Simple delay-based rate limiting (easily bypassed)
-2. No token bucket or leaky bucket algorithm
-3. No per-host rate limiting
-4. No API call quota management
-5. No backpressure mechanism
+**Issue:** Rate limiting is based only on delay between requests, with no upper bound on total requests per time period. A malicious user could configure a very small delay and overwhelm target servers.
+
+**Exploitation Scenario:**
+```python
+# User can set delay to near-zero
+scraper = AsyncWebScraper(delay_between_requests=0.001, max_concurrent=100)
+# This could send 100 requests nearly simultaneously, repeatedly
+```
 
 **Impact:**
-- API quota exhaustion leading to service disruption
-- Financial loss from excessive API usage
-- IP blocking by external services
-- Resource exhaustion on scraping targets
+- Denial of Service (DoS) against target websites
+- IP banning for the application
+- Potential legal issues for aggressive scraping
+- Resource exhaustion
 
-**Recommendations:**
-
-**Immediate (Required):**
+**Remediation:**
 ```python
-# src/core/rate_limiter.py
-import asyncio
-import time
-from collections import defaultdict
-from typing import Dict, Optional
+class RateLimiter:
+    """Token bucket rate limiter"""
+    def __init__(self, max_requests_per_minute: int = 60):
+        self.max_requests = max_requests_per_minute
+        self.request_times = []
+        self.lock = asyncio.Lock()
 
-class TokenBucketRateLimiter:
-    """Token bucket rate limiter for API calls"""
-
-    def __init__(
-        self,
-        rate: float,          # Tokens per second
-        capacity: int,        # Bucket capacity
-        per_host: bool = True # Per-host limiting
-    ):
-        self.rate = rate
-        self.capacity = capacity
-        self.per_host = per_host
-        self._buckets: Dict[str, dict] = defaultdict(
-            lambda: {'tokens': capacity, 'last_update': time.time()}
-        )
-        self._lock = asyncio.Lock()
-
-    async def acquire(self, host: Optional[str] = None) -> bool:
-        """Acquire token for request"""
-        async with self._lock:
-            key = host if self.per_host and host else 'global'
-            bucket = self._buckets[key]
-
-            # Refill tokens
+    async def acquire(self):
+        async with self.lock:
             now = time.time()
-            elapsed = now - bucket['last_update']
-            bucket['tokens'] = min(
-                self.capacity,
-                bucket['tokens'] + elapsed * self.rate
-            )
-            bucket['last_update'] = now
+            # Remove requests older than 1 minute
+            self.request_times = [t for t in self.request_times if now - t < 60]
 
-            # Check if token available
-            if bucket['tokens'] >= 1:
-                bucket['tokens'] -= 1
-                return True
-            else:
-                # Calculate wait time
-                wait_time = (1 - bucket['tokens']) / self.rate
-                await asyncio.sleep(wait_time)
-                bucket['tokens'] = 0
-                return True
+            if len(self.request_times) >= self.max_requests:
+                wait_time = 60 - (now - self.request_times[0])
+                if wait_time > 0:
+                    logger.warning(f"Rate limit reached, waiting {wait_time:.2f}s")
+                    await asyncio.sleep(wait_time)
 
-class APIQuotaManager:
-    """Manage API quotas and prevent exhaustion"""
-
-    def __init__(self, daily_limit: int):
-        self.daily_limit = daily_limit
-        self.calls_today = 0
-        self.reset_time = None
-        self._lock = asyncio.Lock()
-
-    async def check_quota(self) -> bool:
-        """Check if quota available"""
-        async with self._lock:
-            # Reset if new day
-            if self.reset_time is None or time.time() > self.reset_time:
-                self.calls_today = 0
-                self.reset_time = time.time() + 86400  # 24 hours
-
-            if self.calls_today >= self.daily_limit:
-                raise QuotaExceededError(
-                    f"Daily quota exceeded: {self.calls_today}/{self.daily_limit}"
-                )
-
-            self.calls_today += 1
-            return True
+            self.request_times.append(time.time())
 ```
 
-**References:**
-- OWASP API Security Top 10: API4:2023 Unrestricted Resource Consumption
-- CWE-770: Allocation of Resources Without Limits or Throttling
+**Priority:** ⚠️ HIGH - Implement within 1 week
 
 ---
 
-### 4. 🟠 HIGH: Insufficient Error Information Disclosure
+#### 3. Insufficient URL Validation (SSRF Risk)
 
-**Category:** Information Disclosure
-**Location:** Exception handling throughout codebase
-**Severity:** HIGH
-**CVSS Score:** 6.5 (Medium)
+**Location:** `src/core/async_scraper.py:161-242`
 
-**Issue:**
-Error messages may leak sensitive information including stack traces, file paths, and internal system details.
-
-**Evidence:**
+**Vulnerability:**
 ```python
-# src/core/database.py:254-256
+async def scrape_article_async(self, session: ClientSession, url: str, ...):
+    """Asynchronously scrape article content from URL"""
+    # ...
+    async with session.get(url) as response:  # No URL validation!
+        response.raise_for_status()
+        html = await response.text()
+```
+
+**Issue:** URLs are not validated before use. This allows:
+1. **SSRF (Server-Side Request Forgery)**: Requests to internal network resources
+2. **Protocol exploits**: file://, ftp://, etc.
+3. **DNS rebinding attacks**
+
+**Exploitation Scenario:**
+```python
+# SSRF attack to access internal services
+malicious_urls = [
+    "http://localhost:6379/",  # Redis
+    "http://169.254.169.254/latest/meta-data/",  # AWS metadata
+    "file:///etc/passwd",  # Local file access
+    "http://internal-admin-panel.local/",  # Internal services
+]
+```
+
+**Impact:**
+- Access to internal network resources
+- Cloud metadata exposure (AWS, GCP credentials)
+- File system access
+- Port scanning of internal infrastructure
+
+**Remediation:**
+```python
+import ipaddress
+from urllib.parse import urlparse
+
+def validate_url(url: str) -> bool:
+    """Validate URL for safe scraping"""
+    try:
+        parsed = urlparse(url)
+
+        # Only allow http/https
+        if parsed.scheme not in ('http', 'https'):
+            raise ValueError(f"Invalid protocol: {parsed.scheme}")
+
+        # Prevent localhost/internal IPs
+        hostname = parsed.hostname
+        if not hostname:
+            raise ValueError("No hostname in URL")
+
+        # Check for localhost variants
+        if hostname.lower() in ('localhost', '127.0.0.1', '::1'):
+            raise ValueError("Localhost access not allowed")
+
+        # Check for private IP ranges
+        try:
+            ip = ipaddress.ip_address(hostname)
+            if ip.is_private or ip.is_loopback or ip.is_link_local:
+                raise ValueError(f"Private IP address not allowed: {ip}")
+        except ValueError:
+            # Not an IP, it's a domain - that's fine
+            pass
+
+        return True
+    except Exception as e:
+        logger.error(f"URL validation failed: {e}")
+        return False
+```
+
+**Priority:** ⚠️ HIGH - Implement within 1 week
+
+---
+
+#### 4. API Key Exposure Risk in Error Messages
+
+**Location:** `src/clients/base.py:53-60`
+
+**Vulnerability:**
+```python
+def _validate_api_key(self, api_key: str) -> str:
+    """Validate API key format"""
+    if not api_key or len(api_key) < 10:
+        raise APIClientError(
+            "Invalid API key provided",
+            self.provider_name if hasattr(self, "provider_name") else "unknown",
+        )
+    return api_key
+```
+
+**Issue:** If exception traceback is logged or displayed, the API key could be exposed in stack traces or error messages.
+
+**Exploitation Scenario:**
+```python
+# Exception handler logs full traceback
+try:
+    client = ClaudeClient(api_key="sk-ant-sensitive-key-123", model="claude-3")
+except APIClientError as e:
+    logger.error(f"Failed with key: {e}", exc_info=True)  # API key in logs!
+```
+
+**Impact:**
+- API key exposure in logs
+- Credential leakage in error tracking systems (Sentry, etc.)
+- Unauthorized API usage if logs are compromised
+
+**Remediation:**
+```python
+def _redact_api_key(self, api_key: str) -> str:
+    """Redact API key for safe logging"""
+    if len(api_key) < 10:
+        return "***"
+    return f"{api_key[:7]}...{api_key[-4:]}"  # Show only prefix/suffix
+
+def _validate_api_key(self, api_key: str) -> str:
+    """Validate API key format"""
+    if not api_key or len(api_key) < 10:
+        # Never include the actual key in error messages
+        raise APIClientError(
+            "Invalid API key provided (length or format check failed)",
+            self.provider_name if hasattr(self, "provider_name") else "unknown",
+        )
+    return api_key
+
+# Use in logging
+logger.info(f"Initialized {provider_name} with key {self._redact_api_key(self.api_key)}")
+```
+
+**Priority:** ⚠️ HIGH - Implement within 2 weeks
+
+---
+
+### 🟡 MEDIUM Severity Vulnerabilities
+
+#### 5. Path Traversal in File Operations
+
+**Location:** `src/main.py:344-345, 456, 695`
+
+**Vulnerability:**
+```python
+@cli.command()
+@click.option("--output", "-o", default="logs/health_report.json", help="Output file for report")
+def health(ctx, output):
+    # ...
+    os.makedirs(os.path.dirname(output), exist_ok=True)
+    with open(output, "w") as f:
+        json.dump(health_results, f, indent=2)
+```
+
+**Issue:** User-controlled `output` parameter is used directly for file operations without validation, allowing path traversal.
+
+**Exploitation Scenario:**
+```bash
+# Write to arbitrary locations
+python -m src.main health --output "../../../etc/passwd"
+python -m src.main health --output "/tmp/sensitive_data.json"
+```
+
+**Impact:**
+- Writing files outside intended directories
+- Overwriting system files (if permissions allow)
+- Information disclosure
+
+**Remediation:**
+```python
+from pathlib import Path
+
+def validate_output_path(output: str, base_dir: str = "logs") -> str:
+    """Validate output path is within allowed directory"""
+    base_path = Path(base_dir).resolve()
+    output_path = Path(output).resolve()
+
+    # Check if output is within base directory
+    try:
+        output_path.relative_to(base_path)
+    except ValueError:
+        raise ValueError(f"Output path must be within {base_dir} directory")
+
+    return str(output_path)
+
+# Use in command
+output = validate_output_path(output, base_dir="logs")
+```
+
+**Priority:** 🟡 MEDIUM - Fix within 1 month
+
+---
+
+#### 6. Information Disclosure via Detailed Error Messages
+
+**Location:** Multiple locations (e.g., `src/main.py:189-191`)
+
+**Vulnerability:**
+```python
 except Exception as e:
-    logger.error(f"Failed to initialize database: {e}")
-    raise  # ⚠️ Full exception with stack trace propagated
-
-# src/clients/async_claude.py:96-97
-except anthropic.APIConnectionError as e:
-    logger.error(f"Claude connection error: {e}")
-    raise APIConnectionError(f"Connection failed: {e}", "Claude")
+    click.echo(f"❌ {api_provider} test failed: {e}", err=True)
+    sys.exit(1)
 ```
 
-**Information Leakage Examples:**
-```
-Error: Failed to initialize database: [Errno 13] Permission denied: '/app/data/articles.db'
-# Reveals: File system structure, permissions issues
-
-Error: Claude connection error: Connection refused at https://api.anthropic.com/v1/messages
-# Reveals: Internal API endpoints, configuration
-
-Traceback (most recent call last):
-  File "/app/src/core/database.py", line 42, in _create_connection
-# Reveals: File paths, code structure
-```
+**Issue:** Detailed exception messages are displayed to users, potentially revealing internal paths, database schema, API endpoints, and library versions.
 
 **Impact:**
-- Exposure of internal file paths and structure
-- Revelation of dependency versions (aids targeted attacks)
-- Configuration information leakage
-- Aid to reconnaissance phase of attacks
+- Information gathering for further attacks
+- Internal architecture exposure
+- Library vulnerability identification
 
-**Recommendations:**
-
-**Implementation:**
+**Remediation:**
 ```python
-# src/core/error_handler.py
-import logging
-from typing import Optional
-import traceback
+def sanitize_error_message(error: Exception, show_details: bool = False) -> str:
+    """Sanitize error messages for safe display to users"""
+    if show_details:  # Only in debug mode
+        return str(error)
 
-class SecureErrorHandler:
-    """Sanitize errors for external exposure"""
+    # Generic messages for production
+    error_type = type(error).__name__
 
-    def __init__(self, debug_mode: bool = False):
-        self.debug_mode = debug_mode
-        self.logger = logging.getLogger(__name__)
-
-    def sanitize_error(self, error: Exception) -> str:
-        """Return safe error message"""
-        # Log full error internally
-        self.logger.error(
-            f"Error occurred: {error}",
-            exc_info=True,
-            extra={'full_traceback': traceback.format_exc()}
-        )
-
-        if self.debug_mode:
-            return str(error)
-
-        # Generic messages for production
-        error_map = {
-            'ConnectionError': 'Service temporarily unavailable',
-            'PermissionError': 'Access denied',
-            'ValueError': 'Invalid input provided',
-            'FileNotFoundError': 'Resource not found',
-        }
-
-        error_type = type(error).__name__
-        return error_map.get(error_type, 'An unexpected error occurred')
-
-    def safe_log(self, error: Exception, context: str = ""):
-        """Log error without sensitive data"""
-        safe_msg = self.sanitize_error(error)
-        self.logger.warning(f"{context}: {safe_msg}")
-```
-
----
-
-### 5. 🟠 HIGH: Dependency Vulnerabilities
-
-**Category:** Supply Chain Security
-**Location:** `requirements.txt`, `pyproject.toml`
-**Severity:** HIGH
-**CVSS Score:** 7.3 (High)
-
-**Issue:**
-Several dependencies have known vulnerabilities or are outdated.
-
-**Vulnerable Dependencies:**
-
-1. **urllib3==2.0.7** (Latest: 2.2.0)
-   - CVE-2023-45803: Cookie header truncation
-   - CVE-2023-43804: Cookie leakage in redirects
-   - Severity: MEDIUM
-
-2. **aiohttp==3.9.1** (Latest: 3.9.5)
-   - CVE-2024-23334: Path traversal vulnerability
-   - Severity: HIGH
-
-3. **requests==2.31.0** (Latest: 2.32.3)
-   - Known issues with cookie handling
-   - Severity: LOW-MEDIUM
-
-4. **lxml==4.9.3** (Latest: 5.1.0)
-   - Multiple XML parsing vulnerabilities
-   - Severity: MEDIUM
-
-**Evidence:**
-```bash
-# requirements.txt
-urllib3==2.0.7      # ⚠️ 2 CVEs
-aiohttp==3.9.1      # ⚠️ 1 CVE
-requests==2.31.0    # ⚠️ Outdated
-lxml==4.9.3         # ⚠️ Outdated
-```
-
-**Impact:**
-- Potential remote code execution (lxml)
-- Path traversal attacks (aiohttp)
-- Session hijacking (urllib3, requests)
-- XML external entity (XXE) attacks
-
-**Recommendations:**
-
-**Immediate (Required):**
-```bash
-# Update requirements.txt
-urllib3>=2.2.0
-aiohttp>=3.9.5
-requests>=2.32.3
-lxml>=5.1.0
-```
-
-**Continuous Security:**
-```yaml
-# .github/workflows/security-scan.yml
-name: Security Scan
-
-on:
-  schedule:
-    - cron: '0 0 * * 0'  # Weekly
-  pull_request:
-  push:
-    branches: [main]
-
-jobs:
-  dependency-scan:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Run Safety check
-        run: |
-          pip install safety
-          safety check --json
-
-      - name: Run pip-audit
-        run: |
-          pip install pip-audit
-          pip-audit --requirement requirements.txt
-
-      - name: Run Snyk
-        uses: snyk/actions/python@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-```
-
----
-
-### 6. 🟠 HIGH: Insecure Database File Permissions
-
-**Category:** Access Control
-**Location:** Docker volumes, file system
-**Severity:** HIGH
-**CVSS Score:** 6.8 (Medium)
-
-**Issue:**
-SQLite database files may have overly permissive file permissions, allowing unauthorized read/write access.
-
-**Evidence:**
-```dockerfile
-# Dockerfile:54-55
-RUN mkdir -p /app/data /app/output && \
-    chown -R appuser:appuser /app
-# ⚠️ No explicit permission setting (defaults to 755)
-```
-
-**Impact:**
-- Unauthorized database access by other container processes
-- Data tampering or deletion
-- Privacy violations (article content, API usage data)
-
-**Recommendations:**
-
-**Implementation:**
-```dockerfile
-# Secure Dockerfile
-RUN mkdir -p /app/data /app/output && \
-    chmod 700 /app/data && \
-    chmod 755 /app/output && \
-    chown -R appuser:appuser /app
-
-# src/core/database.py
-def ensure_directory_exists(self):
-    """Ensure database directory exists with secure permissions"""
-    db_dir = os.path.dirname(self.db_path)
-    if db_dir and not os.path.exists(db_dir):
-        os.makedirs(db_dir, mode=0o700, exist_ok=True)  # rwx------
-        logger.info(f"Created database directory with secure permissions: {db_dir}")
-
-    # Secure database file permissions
-    if os.path.exists(self.db_path):
-        os.chmod(self.db_path, 0o600)  # rw-------
-```
-
----
-
-### 7. 🟡 MEDIUM: Inadequate Logging and Monitoring
-
-**Category:** Logging & Monitoring
-**Location:** Throughout application
-**Severity:** MEDIUM
-**CVSS Score:** 5.3 (Medium)
-
-**Issue:**
-Insufficient security event logging makes incident detection and forensic analysis difficult.
-
-**Missing Security Events:**
-1. Failed authentication attempts (API keys)
-2. Suspicious URL access patterns
-3. Rate limit violations
-4. Abnormal API usage spikes
-5. Database access patterns
-
-**Recommendations:**
-
-**Implementation:**
-```python
-# src/core/security_logger.py
-import logging
-import json
-from datetime import datetime
-from typing import Dict, Any
-
-class SecurityLogger:
-    """Dedicated security event logger"""
-
-    def __init__(self):
-        self.logger = logging.getLogger('security')
-        handler = logging.FileHandler('logs/security.log')
-        handler.setFormatter(
-            logging.Formatter(
-                '%(asctime)s - SECURITY - %(levelname)s - %(message)s'
-            )
-        )
-        self.logger.addHandler(handler)
-        self.logger.setLevel(logging.INFO)
-
-    def log_event(self, event_type: str, details: Dict[str, Any]):
-        """Log security event in structured format"""
-        event = {
-            'timestamp': datetime.utcnow().isoformat(),
-            'event_type': event_type,
-            'details': details
-        }
-        self.logger.info(json.dumps(event))
-
-    # Specific event loggers
-    def log_api_key_validation(self, provider: str, success: bool):
-        self.log_event('api_key_validation', {
-            'provider': provider,
-            'success': success
-        })
-
-    def log_suspicious_url(self, url: str, reason: str):
-        self.log_event('suspicious_url', {
-            'url': url,
-            'reason': reason,
-            'severity': 'high'
-        })
-
-    def log_rate_limit_exceeded(self, identifier: str, limit: int):
-        self.log_event('rate_limit_exceeded', {
-            'identifier': identifier,
-            'limit': limit,
-            'severity': 'medium'
-        })
-```
-
----
-
-### 8. 🟡 MEDIUM: No API Key Validation
-
-**Category:** Authentication
-**Location:** Client factory
-**Severity:** MEDIUM
-**CVSS Score:** 5.5 (Medium)
-
-**Issue:**
-API keys are not validated for format or checked against expected patterns before use.
-
-**Evidence:**
-```python
-# src/clients/factory.py:80-81
-if not api_key:
-    raise ConfigurationError(f"API key is required for {provider}")
-# ⚠️ Only checks if key exists, not if it's valid format
-```
-
-**Recommendations:**
-
-```python
-# src/core/validators.py
-import re
-from typing import Dict
-
-class APIKeyValidator:
-    """Validate API key formats"""
-
-    PATTERNS: Dict[str, str] = {
-        'anthropic': r'^sk-ant-api03-[A-Za-z0-9_-]{95}$',
-        'openai': r'^sk-[A-Za-z0-9]{48}$',
-        'mistral': r'^[A-Za-z0-9]{32}$',
+    sanitized_messages = {
+        "ConnectionError": "Unable to connect to the service.",
+        "TimeoutError": "The request timed out.",
+        "APIClientError": "API request failed. Please check your configuration.",
+        "DatabaseError": "Database operation failed.",
     }
 
-    @classmethod
-    def validate(cls, provider: str, api_key: str) -> bool:
-        """Validate API key format"""
-        pattern = cls.PATTERNS.get(provider)
-        if not pattern:
-            return True  # Unknown provider, skip validation
+    return sanitized_messages.get(error_type, "An unexpected error occurred.")
 
-        if not re.match(pattern, api_key):
-            raise ValueError(
-                f"Invalid {provider} API key format. "
-                "Please check your API key."
-            )
-        return True
+# Use in exception handlers
+except Exception as e:
+    logger.error(f"API test failed: {e}", exc_info=True)  # Full details in logs
+    user_message = sanitize_error_message(e)
+    click.echo(f"❌ {user_message}", err=True)
 ```
+
+**Priority:** 🟡 MEDIUM - Fix within 1 month
 
 ---
 
-### 9. 🟡 MEDIUM: Missing Content Security Policy
+#### 7. Unvalidated Content Length (Memory Exhaustion Risk)
 
-**Category:** Web Security
-**Location:** GitHub Pages deployment
-**Severity:** MEDIUM
-**CVSS Score:** 5.0 (Medium)
+**Location:** `src/clients/base.py:85-91`
 
-**Issue:**
-Generated website lacks Content Security Policy headers, making it vulnerable to XSS if user-generated content is ever displayed.
-
-**Recommendations:**
-
-```html
-<!-- docs/index.html -->
-<meta http-equiv="Content-Security-Policy" content="
-    default-src 'self';
-    script-src 'self' 'unsafe-inline';
-    style-src 'self' 'unsafe-inline';
-    img-src 'self' data: https:;
-    font-src 'self';
-    connect-src 'self';
-    frame-ancestors 'none';
-    base-uri 'self';
-    form-action 'self';
-">
+**Vulnerability:**
+```python
+def _prepare_content(self, title: str, content: str, url: str = "") -> str:
+    """Prepare content for analysis with length limits"""
+    max_length = CONFIG.processing.MAX_CONTENT_LENGTH
+    if len(content) > max_length:
+        content = content[:max_length] + "\n\n[Content truncated due to length]"
 ```
+
+**Issue:** Extremely large content could still be loaded into memory before truncation.
+
+**Impact:**
+- Memory exhaustion
+- Application crash
+- Denial of Service
+
+**Remediation:**
+```python
+def _prepare_content(self, title: str, content: str, url: str = "") -> str:
+    """Prepare content for analysis with length limits"""
+    max_length = CONFIG.processing.MAX_CONTENT_LENGTH
+
+    # Hard rejection for extremely large content
+    if len(content) > max_length * 2:
+        raise ContentProcessingError("Content exceeds maximum allowed size")
+
+    # Truncate if needed
+    if len(content) > max_length:
+        content = content[:max_length] + "\n\n[Content truncated]"
+```
+
+**Priority:** 🟡 MEDIUM - Fix within 1 month
 
 ---
 
-### 10. 🟡 MEDIUM: No Input Sanitization for Article Content
+#### 8. Missing HTTPS Certificate Verification Configuration
 
-**Category:** Input Validation
-**Location:** Web scraper, content processing
-**Severity:** MEDIUM
-**CVSS Score:** 5.3 (Medium)
+**Location:** `src/core/async_scraper.py:125-148`
 
-**Issue:**
-Scraped content is not sanitized before storage or processing, potentially allowing stored XSS or code injection.
-
-**Recommendations:**
-
+**Vulnerability:**
 ```python
-# src/core/content_sanitizer.py
-import html
-import re
-from bs4 import BeautifulSoup
-
-class ContentSanitizer:
-    """Sanitize scraped content"""
-
-    ALLOWED_TAGS = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-                    'ul', 'ol', 'li', 'a', 'strong', 'em', 'code']
-
-    @classmethod
-    def sanitize_html(cls, content: str) -> str:
-        """Remove dangerous HTML tags and attributes"""
-        soup = BeautifulSoup(content, 'html.parser')
-
-        # Remove script and style tags
-        for tag in soup(['script', 'style', 'iframe', 'object', 'embed']):
-            tag.decompose()
-
-        # Remove event handlers
-        for tag in soup.find_all():
-            for attr in list(tag.attrs):
-                if attr.startswith('on') or attr in ['href', 'src']:
-                    if attr == 'href':
-                        # Sanitize URLs
-                        tag[attr] = cls.sanitize_url(tag[attr])
-                    elif attr == 'src':
-                        del tag[attr]
-                    else:
-                        del tag[attr]
-
-        return str(soup)
-
-    @classmethod
-    def sanitize_url(cls, url: str) -> str:
-        """Sanitize URL to prevent javascript: and data: URIs"""
-        url = url.strip()
-        if url.startswith(('javascript:', 'data:', 'vbscript:')):
-            return '#'
-        return url
-```
-
----
-
-### 11. 🟡 MEDIUM: Insufficient Timeout Configuration
-
-**Category:** Availability
-**Location:** HTTP clients
-**Severity:** MEDIUM
-**CVSS Score:** 4.5 (Medium)
-
-**Issue:**
-While timeouts are set, they may be too generous and lack comprehensive coverage.
-
-**Current Implementation:**
-```python
-# src/core/async_scraper.py:127
-timeout_config = ClientTimeout(total=self.timeout, connect=10, sock_read=20)
-# total=30, connect=10, sock_read=20
-```
-
-**Recommendations:**
-
-```python
-# Recommended timeout hierarchy
-TIMEOUT_CONFIG = {
-    'connect': 5,      # Connection establishment
-    'read': 10,        # Socket read timeout
-    'total': 20,       # Total request timeout
-    'pool': 30         # Pool acquisition timeout
-}
-
-# Implementation
-timeout_config = ClientTimeout(
-    total=TIMEOUT_CONFIG['total'],
-    connect=TIMEOUT_CONFIG['connect'],
-    sock_read=TIMEOUT_CONFIG['read']
+connector = TCPConnector(
+    limit=self.max_concurrent * 2,
+    limit_per_host=5,
+    ttl_dns_cache=300,
+    enable_cleanup_closed=True,
 )
+# No SSL verification configuration!
 ```
 
----
+**Issue:** No explicit SSL/TLS certificate verification configuration.
 
-### 12. 🟡 MEDIUM: No Database Backup Encryption
+**Impact:**
+- Man-in-the-middle attacks
+- Certificate validation bypass
+- Credential interception
 
-**Category:** Data Protection
-**Location:** GitHub Actions workflow
-**Severity:** MEDIUM
-**CVSS Score:** 5.7 (Medium)
-
-**Issue:**
-Database backups uploaded to GitHub Actions artifacts are not encrypted.
-
-**Evidence:**
-```yaml
-# .github/workflows/rss-complete-pipeline.yml:352-359
-- name: 📤 Upload database backup
-  uses: actions/upload-artifact@v4
-  with:
-    name: database-backup-${{ github.run_number }}
-    path: data/articles.db  # ⚠️ Unencrypted backup
-```
-
-**Recommendations:**
-
-```yaml
-- name: 🔒 Encrypt database backup
-  run: |
-    # Encrypt before upload
-    openssl enc -aes-256-cbc -salt -pbkdf2 \
-      -in data/articles.db \
-      -out data/articles.db.enc \
-      -k "${{ secrets.BACKUP_ENCRYPTION_KEY }}"
-
-- name: 📤 Upload encrypted database backup
-  uses: actions/upload-artifact@v4
-  with:
-    name: database-backup-${{ github.run_number }}
-    path: data/articles.db.enc
-```
-
----
-
-### 13. 🟡 MEDIUM: Missing Security Headers
-
-**Category:** Web Security
-**Location:** Docker container, web deployment
-**Severity:** MEDIUM
-**CVSS Score:** 4.3 (Medium)
-
-**Issue:**
-No security headers configured for the application.
-
-**Recommendations:**
-
+**Remediation:**
 ```python
-# If adding a web interface
-SECURITY_HEADERS = {
-    'X-Content-Type-Options': 'nosniff',
-    'X-Frame-Options': 'DENY',
-    'X-XSS-Protection': '1; mode=block',
-    'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
-    'Referrer-Policy': 'strict-origin-when-cross-origin',
-}
+import ssl
+
+def _create_session(self) -> ClientSession:
+    """Create aiohttp session with SSL verification"""
+    # Enforce strict SSL verification
+    ssl_context = ssl.create_default_context()
+    ssl_context.check_hostname = True
+    ssl_context.verify_mode = ssl.CERT_REQUIRED
+
+    connector = TCPConnector(
+        limit=self.max_concurrent * 2,
+        limit_per_host=5,
+        ssl=ssl_context,  # Enforce SSL verification
+    )
+
+    return ClientSession(connector=connector, ...)
 ```
+
+**Priority:** 🟡 MEDIUM - Fix within 1 month
 
 ---
 
-### 14. 🟢 LOW: Verbose Logging in Production
+### 🔵 LOW Severity Vulnerabilities
 
-**Category:** Information Disclosure
-**Location:** Logging configuration
-**Severity:** LOW
-**CVSS Score:** 3.1 (Low)
+#### 9. Weak MD5 Hash for Content Deduplication
 
-**Issue:**
-Debug-level logging may be enabled in production, logging sensitive information.
+**Location:** `src/core/utils.py:227-237`
 
-**Recommendations:**
-
+**Vulnerability:**
 ```python
-# src/core/config.py
-import os
-
-LOG_LEVEL = os.getenv('LOG_LEVEL', 'INFO')
-if os.getenv('ENVIRONMENT') == 'production':
-    LOG_LEVEL = 'WARNING'  # Force WARNING+ in production
+def create_content_hash(content: str) -> str:
+    """Create MD5 hash of content for duplicate detection"""
+    return hashlib.md5(content.encode("utf-8")).hexdigest()
 ```
 
----
+**Issue:** MD5 is cryptographically broken. For deduplication purposes this is low risk, but SHA-256 is recommended.
 
-### 15. 🟢 LOW: No Container Image Scanning
-
-**Category:** Supply Chain Security
-**Location:** Docker build process
-**Severity:** LOW
-**CVSS Score:** 3.5 (Low)
-
-**Issue:**
-No automated scanning of Docker images for vulnerabilities.
-
-**Recommendations:**
-
-```yaml
-# .github/workflows/security-scan.yml
-- name: Run Trivy vulnerability scanner
-  uses: aquasecurity/trivy-action@master
-  with:
-    image-ref: 'rss-analyzer:latest'
-    format: 'sarif'
-    output: 'trivy-results.sarif'
-
-- name: Upload Trivy results to GitHub Security
-  uses: github/codeql-action/upload-sarif@v2
-  with:
-    sarif_file: 'trivy-results.sarif'
-```
-
----
-
-## Security Best Practices Already Implemented ✅
-
-### 1. Secret Management
-- ✅ No hardcoded secrets in source code
-- ✅ Environment variables used for configuration
-- ✅ `.env` files properly gitignored
-- ✅ GitHub Actions secrets properly configured
-
-### 2. SQL Injection Prevention
-- ✅ **Parameterized queries throughout** - Perfect implementation
-- ✅ No string concatenation in SQL
-- ✅ Proper use of placeholders (`?`)
-
-**Example:**
+**Remediation:**
 ```python
-# src/core/database.py:312-318
-cursor = conn.execute(
-    """
-    INSERT INTO articles (title, url, content_hash, rss_guid, publication_date)
-    VALUES (?, ?, ?, ?, ?)
-    """,
-    (title, url, content_hash, rss_guid, publication_date),
-)
+def create_content_hash(content: str) -> str:
+    """Create SHA-256 hash of content for duplicate detection"""
+    return hashlib.sha256(content.encode("utf-8")).hexdigest()
 ```
 
-### 3. Container Security
-- ✅ Non-root user in Docker container
-- ✅ Multi-stage build for smaller attack surface
-- ✅ Minimal base image (`python:3.11-slim`)
-- ✅ Resource limits configured
+**Note:** Requires database migration to change hash column size.
 
-**Example:**
-```dockerfile
-# Dockerfile:41-42, 64
-RUN groupadd -r appuser && useradd -r -g appuser appuser
-USER appuser
-```
-
-### 4. Connection Pooling Security
-- ✅ Thread-safe connection management
-- ✅ Connection validation before use
-- ✅ Proper cleanup and resource management
-
-### 5. Error Handling
-- ✅ Comprehensive exception handling
-- ✅ Proper error logging
-- ✅ No silent failures
-
-### 6. Dependency Management
-- ✅ Pinned dependency versions
-- ✅ Modern dependency management with `uv`
-- ✅ Minimal dependency footprint
+**Priority:** 🔵 LOW - Consider for next major version
 
 ---
 
-## Compliance Assessment
+#### 10. Potential Log Injection
 
-### OWASP Top 10 2021 Coverage
+**Location:** Multiple locations (e.g., `src/core/async_scraper.py:184`)
 
-| Risk | Status | Notes |
-|------|--------|-------|
-| A01: Broken Access Control | ⚠️ Partial | File permissions need review |
-| A02: Cryptographic Failures | ❌ Needs Work | Unencrypted API keys, backups |
-| A03: Injection | ✅ Protected | Parameterized SQL queries |
-| A04: Insecure Design | ⚠️ Partial | SSRF vulnerabilities present |
-| A05: Security Misconfiguration | ⚠️ Partial | Headers, timeouts need work |
-| A06: Vulnerable Components | ❌ Needs Work | Outdated dependencies |
-| A07: Identification and Authentication | ⚠️ Partial | API key validation needed |
-| A08: Software and Data Integrity | ⚠️ Partial | No image scanning |
-| A09: Security Logging | ⚠️ Partial | Insufficient security logging |
-| A10: Server-Side Request Forgery | ❌ Critical | SSRF protection needed |
+**Vulnerability:**
+```python
+logger.info(f"Scraping article: {url}")
+```
+
+**Issue:** User-controlled data logged without sanitization. Malicious URLs with newlines could inject fake log entries.
+
+**Exploitation Scenario:**
+```python
+malicious_url = "https://example.com\nERROR: System compromised"
+logger.info(f"Scraping: {malicious_url}")
+# Creates fake ERROR log entry
+```
+
+**Remediation:**
+```python
+def sanitize_log_data(data: str) -> str:
+    """Sanitize data for safe logging"""
+    return data.replace('\n', '\\n').replace('\r', '\\r')
+
+logger.info(f"Scraping article: {sanitize_log_data(url)}")
+```
+
+**Priority:** 🔵 LOW - Implement when convenient
 
 ---
 
-## Remediation Roadmap
+#### 11. Missing Input Validation in CLI Parameters
 
-### Phase 1: Critical Fixes (Week 1)
+**Location:** `src/main.py:62-67`
 
-**Priority 1: SSRF Protection**
-- [ ] Implement URL validation with IP range blocking
-- [ ] Add cloud metadata endpoint blocking
-- [ ] Implement DNS rebinding protection
-- [ ] Add comprehensive URL sanitization
+**Vulnerability:**
+```python
+@click.option("--limit", "-l", type=int, help="Limit number of articles")
+@click.option("--max-linked", type=int, default=3, help="Max linked articles")
+```
 
-**Priority 2: Secrets Management**
-- [ ] Implement secrets encryption at rest
-- [ ] Set up key rotation mechanism
-- [ ] Add API key format validation
-- [ ] Configure secrets management system
+**Issue:** No validation on parameter ranges. Could cause issues with negative or huge values.
 
-### Phase 2: High Priority (Week 2-3)
+**Remediation:**
+```python
+@click.option("--limit", "-l", type=click.IntRange(min=1, max=1000))
+@click.option("--max-linked", type=click.IntRange(min=0, max=10), default=3)
+```
 
-**Rate Limiting & DoS Protection**
-- [ ] Implement token bucket rate limiter
-- [ ] Add API quota management
-- [ ] Configure per-host rate limiting
-- [ ] Add backpressure mechanisms
+**Priority:** 🔵 LOW - Implement when convenient
 
-**Dependency Security**
-- [ ] Update all dependencies to latest secure versions
-- [ ] Set up automated dependency scanning
-- [ ] Configure Dependabot/Renovate
-- [ ] Implement CI/CD security gates
+---
 
-**File Permissions**
-- [ ] Audit and fix file permissions
-- [ ] Implement secure defaults in Docker
-- [ ] Add permission validation tests
+#### 12. Permissive YAML Configuration Loading
 
-### Phase 3: Medium Priority (Week 4-5)
+**Location:** `src/core/utils.py:123-127`
 
-**Logging & Monitoring**
-- [ ] Implement security event logging
-- [ ] Add anomaly detection
-- [ ] Configure alerting system
-- [ ] Set up log aggregation
+**Vulnerability:**
+```python
+file_config = yaml.safe_load(f)
+```
 
-**Input Sanitization**
-- [ ] Implement content sanitizer
-- [ ] Add HTML/XSS protection
-- [ ] Configure CSP headers
-- [ ] Add input validation layer
+**Issue:** While `safe_load` is used (good!), there's no validation of loaded configuration values.
 
-**Backup Security**
-- [ ] Encrypt database backups
-- [ ] Implement secure backup rotation
-- [ ] Add backup integrity checks
+**Remediation:**
+```python
+def validate_config_schema(config: dict) -> bool:
+    """Validate configuration against expected schema"""
+    expected_keys = {
+        'api_provider': str,
+        'max_articles_per_run': int,
+        # ... add all expected keys
+    }
 
-### Phase 4: Low Priority (Week 6+)
+    for key, expected_type in expected_keys.items():
+        if key in config and not isinstance(config[key], expected_type):
+            raise ValueError(f"Config key '{key}' has invalid type")
+    return True
+```
 
-**Additional Hardening**
-- [ ] Container image scanning
-- [ ] Security headers implementation
-- [ ] Production logging configuration
-- [ ] Comprehensive security testing
+**Priority:** 🔵 LOW - Implement when convenient
+
+---
+
+#### 13. Missing HTTP Response Size Limits
+
+**Location:** `src/core/async_scraper.py:195-198`
+
+**Vulnerability:**
+```python
+async with session.get(url) as response:
+    response.raise_for_status()
+    html = await response.text()
+```
+
+**Issue:** No size limit on HTTP responses. Malicious server could return gigabytes of data.
+
+**Remediation:**
+```python
+MAX_RESPONSE_SIZE = 10 * 1024 * 1024  # 10 MB
+
+async with session.get(url) as response:
+    # Check content length
+    content_length = response.headers.get('Content-Length')
+    if content_length and int(content_length) > MAX_RESPONSE_SIZE:
+        raise ValueError(f"Response too large: {content_length} bytes")
+
+    html = await response.text()
+    if len(html) > MAX_RESPONSE_SIZE:
+        raise ValueError("Response exceeded size limit")
+```
+
+**Priority:** 🔵 LOW - Implement when convenient
+
+---
+
+## Dependency Vulnerabilities
+
+### Checked Dependencies (`requirements.txt`)
+
+| Package | Current Version | Status | Recommendation |
+|---------|----------------|--------|----------------|
+| requests | 2.31.0 | ✅ OK | Up to date |
+| beautifulsoup4 | 4.12.2 | ⚠️ Minor update | Update to 4.12.3 |
+| urllib3 | 2.0.7 | ❌ Vulnerable | Update to 2.2.2+ (CVE-2024-37891) |
+| aiohttp | 3.9.1 | ⚠️ Update available | Update to 3.9.5+ |
+| pyyaml | 6.0.1 | ✅ OK | Up to date |
+| openai | >=1.0.0 | ⚠️ Unpinned | Pin to 1.12.0 |
+
+**Immediate Actions:**
+1. Update `urllib3` to 2.2.2+ (security fix)
+2. Update `aiohttp` to 3.9.5+
+3. Pin `openai` version: `openai==1.12.0`
+
+---
+
+## Security Best Practices Assessment
+
+### ✅ Good Practices Identified
+
+1. **Parameterized SQL Queries** - Most database queries use proper parameterization (except the one SQL injection found)
+2. **Safe YAML Loading** - Uses `yaml.safe_load()` instead of `yaml.load()`
+3. **Environment Variable Usage** - API keys stored in environment variables, not hardcoded
+4. **Connection Pooling** - Proper connection management prevents exhaustion
+5. **Custom Exception Classes** - Structured error handling
+6. **API Key Validation** - Basic format checking
+
+### ⚠️ Missing Security Controls
+
+1. **No Rate Limiting** - API calls and web scraping lack proper rate limits
+2. **No Input Validation Framework** - Ad-hoc validation instead of systematic
+3. **No Security Headers** - If serving web content, security headers missing
+4. **No Audit Logging** - Security events not logged systematically
+5. **No Secrets Rotation** - No mechanism for rotating API keys
+6. **No Content Security Policy** - If web UI exists, CSP not implemented
+
+---
+
+## OWASP Top 10 (2021) Compliance
+
+| OWASP Risk | Status | Notes |
+|------------|--------|-------|
+| A01: Broken Access Control | ⚠️ PARTIAL | Missing rate limiting |
+| A02: Cryptographic Failures | ⚠️ PARTIAL | MD5 usage (low risk) |
+| A03: Injection | 🔴 VULNERABLE | SQL injection found |
+| A04: Insecure Design | ⚠️ PARTIAL | Missing security controls |
+| A05: Security Misconfiguration | ⚠️ PARTIAL | Detailed error messages |
+| A06: Vulnerable Components | ⚠️ PARTIAL | Outdated dependencies |
+| A07: Auth & Session Failures | ✅ N/A | No authentication system |
+| A08: Software & Data Integrity | ✅ GOOD | Safe YAML loading |
+| A09: Logging Failures | ⚠️ PARTIAL | No security audit log |
+| A10: SSRF | 🔴 VULNERABLE | No URL validation |
+
+---
+
+## Recommended Immediate Actions
+
+### Week 1: Critical Fixes
+
+1. **Fix SQL Injection** (CRITICAL)
+   - File: `src/core/database.py:606-608`
+   - Add input validation and use parameterized queries
+
+2. **Add URL Validation** (HIGH)
+   - File: `src/core/async_scraper.py`
+   - Implement `validate_url()` function
+   - Block localhost, private IPs, and non-http(s) protocols
+
+3. **Implement Rate Limiting** (HIGH)
+   - File: `src/core/async_scraper.py`
+   - Add token bucket rate limiter
+   - Set max requests per minute/hour
+
+### Month 1: High/Medium Priority
+
+4. **Sanitize Error Messages** (MEDIUM)
+5. **Add Path Validation** (MEDIUM)
+6. **Update Dependencies** (MEDIUM)
+7. **Redact API Keys in Logs** (HIGH)
+
+### Quarter 1: Low Priority
+
+8. **Replace MD5 with SHA-256** (LOW)
+9. **Add Log Sanitization** (LOW)
+10. **Implement Security Testing** (LOW)
 
 ---
 
 ## Security Testing Recommendations
 
-### 1. Automated Security Testing
+### Automated Security Testing
 
 ```yaml
-# .github/workflows/security-tests.yml
-name: Security Tests
-
+# .github/workflows/security.yml
+name: Security Scan
 on: [push, pull_request]
-
 jobs:
-  sast:
-    name: Static Analysis
+  security:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Run Bandit
+      - uses: actions/checkout@v3
+      - name: Run Bandit Security Scan
         run: |
           pip install bandit
           bandit -r src/ -f json -o bandit-report.json
-
-      - name: Run Semgrep
-        uses: returntocorp/semgrep-action@v1
-
-  dependency-check:
-    name: Dependency Scan
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Run Safety
+      - name: Run Safety Check
         run: |
           pip install safety
-          safety check --json
-
-      - name: Run pip-audit
+          safety check
+      - name: Run Semgrep
         run: |
-          pip install pip-audit
-          pip-audit
-
-  container-scan:
-    name: Container Security
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Build image
-        run: docker build -t rss-analyzer:test .
-
-      - name: Run Trivy
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: 'rss-analyzer:test'
-          format: 'sarif'
-          output: 'trivy-results.sarif'
+          pip install semgrep
+          semgrep --config=auto src/
 ```
 
-### 2. Manual Security Testing
+### Manual Testing Focus Areas
 
-**SSRF Testing:**
-```bash
-# Test internal IP blocking
-curl -X POST http://localhost:8000/scrape \
-  -d '{"url": "http://169.254.169.254/latest/meta-data/"}'
-
-# Test private network access
-curl -X POST http://localhost:8000/scrape \
-  -d '{"url": "http://192.168.1.1/admin"}'
-```
-
-**Rate Limit Testing:**
-```bash
-# Burst test
-for i in {1..100}; do
-  curl http://localhost:8000/api/analyze &
-done
-wait
-```
-
-**SQL Injection Testing:**
-```bash
-# Test parameterization (should fail safely)
-curl http://localhost:8000/article?id="1' OR '1'='1"
-```
+- [ ] SQL injection attempts on all database operations
+- [ ] SSRF attempts on URL parameters
+- [ ] Path traversal on file operations
+- [ ] API key extraction from logs
+- [ ] Rate limit bypass attempts
+- [ ] Memory exhaustion attacks
 
 ---
 
-## Monitoring and Detection
+## Monitoring Recommendations
 
 ### Security Metrics to Track
 
-```python
-# src/core/security_metrics.py
-from dataclasses import dataclass
-from typing import Dict
-import time
+1. Failed authentication attempts
+2. Rate limit violations
+3. SQL query errors
+4. SSRF attempt detection
+5. Unusual API usage patterns
 
-@dataclass
-class SecurityMetrics:
-    """Track security-related metrics"""
-
-    # API Security
-    failed_api_auth_attempts: int = 0
-    api_rate_limit_hits: int = 0
-    api_quota_warnings: int = 0
-
-    # SSRF Protection
-    blocked_ssrf_attempts: int = 0
-    suspicious_urls_detected: int = 0
-
-    # Input Validation
-    invalid_input_attempts: int = 0
-    sanitization_events: int = 0
-
-    # System Security
-    unauthorized_access_attempts: int = 0
-    security_exceptions_raised: int = 0
-
-    def to_dict(self) -> Dict:
-        return {
-            'timestamp': time.time(),
-            'failed_auth': self.failed_api_auth_attempts,
-            'rate_limits': self.api_rate_limit_hits,
-            'ssrf_blocks': self.blocked_ssrf_attempts,
-            'invalid_inputs': self.invalid_input_attempts,
-        }
-```
-
-### Alerting Rules
+### Security Logging
 
 ```python
-# Alert on suspicious patterns
-if metrics.failed_api_auth_attempts > 10:
-    alert("HIGH: Multiple API authentication failures")
+# security_logger.py
+import logging
 
-if metrics.blocked_ssrf_attempts > 5:
-    alert("CRITICAL: Potential SSRF attack detected")
+security_logger = logging.getLogger('security')
+security_handler = logging.FileHandler('logs/security.log')
+security_logger.addHandler(security_handler)
 
-if metrics.api_rate_limit_hits > 100:
-    alert("MEDIUM: Unusual API rate limit hits")
+# Usage
+security_logger.warning(f"Rate limit exceeded: IP={ip}, count={count}")
+security_logger.error(f"SSRF attempt detected: URL={url}")
 ```
 
 ---
 
 ## Conclusion
 
-The RSS Analyzer demonstrates **solid security fundamentals** with proper SQL parameterization, container security, and secret management practices. However, **critical vulnerabilities** in SSRF protection and API key storage require immediate attention.
+The RSS Analyzer codebase demonstrates generally good security practices with parameterized queries, safe YAML loading, and environment-based secret management. However, **1 critical SQL injection vulnerability** and **several high-severity issues** require immediate attention.
 
-### Action Items Summary
+**Most Urgent Actions:**
+1. Fix SQL injection in `cleanup_old_logs()` (database.py)
+2. Implement URL validation to prevent SSRF
+3. Add proper rate limiting to web scraping
 
-**Immediate (This Week):**
-1. ✅ Implement SSRF protection with URL validation
-2. ✅ Set up encrypted secrets management
-3. ✅ Update vulnerable dependencies
-4. ✅ Add API key format validation
+Once these critical issues are addressed, the application's security posture will improve significantly. Regular security audits and dependency updates should be incorporated into the development workflow.
 
-**Short Term (This Month):**
-5. ✅ Implement comprehensive rate limiting
-6. ✅ Add security event logging
-7. ✅ Encrypt database backups
-8. ✅ Fix file permissions
-
-**Long Term (This Quarter):**
-9. ✅ Set up automated security scanning
-10. ✅ Implement anomaly detection
-11. ✅ Add comprehensive security testing
-12. ✅ Configure security monitoring
-
-### Risk Acceptance
-
-If any vulnerabilities cannot be fixed immediately, document risk acceptance with:
-- Business justification
-- Compensating controls
-- Remediation timeline
-- Risk owner
+**Next Audit Recommended:** 3 months after remediation
 
 ---
 
-## References
+## Appendix: Quick Security Checklist
 
-- **OWASP Top 10 2021**: https://owasp.org/Top10/
-- **CWE Top 25**: https://cwe.mitre.org/top25/
-- **NIST Cybersecurity Framework**: https://www.nist.gov/cyberframework
-- **Docker Security Best Practices**: https://docs.docker.com/develop/security-best-practices/
-- **Python Security Best Practices**: https://python.readthedocs.io/en/stable/library/security_warnings.html
+- [ ] All database queries use parameterization
+- [ ] User input is validated before use
+- [ ] URLs are validated before scraping
+- [ ] API keys are never logged or displayed
+- [ ] Error messages don't reveal internal details
+- [ ] File paths are validated against traversal
+- [ ] Rate limiting is enforced
+- [ ] SSL certificate verification is enabled
+- [ ] Dependencies are up to date
+- [ ] Security tests are passing
 
 ---
 
-**Report Generated:** 2025-10-29
-**Next Review:** 2025-11-29 (30 days)
-**Contact:** Security Team
+**Report Prepared By:** Code Review Agent
+**Report Date:** 2025-11-06
+**Contact:** See project documentation for security issue reporting

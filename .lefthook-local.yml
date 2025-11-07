@@ -1,0 +1,14 @@
+# Local Lefthook overrides (not committed to git)
+# Add this to .gitignore
+
+# Example: Skip specific hooks locally
+# pre-commit:
+#   commands:
+#     ruff-check:
+#       skip: true
+
+# Example: Add custom local hooks
+# pre-commit:
+#   commands:
+#     custom-script:
+#       run: ./scripts/my-local-check.sh

@@ -603,10 +603,11 @@ class DatabaseManager:
         """Clean up old processing logs"""
         try:
             with self.get_connection() as conn:
-                cursor = conn.execute(f"""
+                # Use parameterized query to prevent SQL injection
+                cursor = conn.execute("""
                     DELETE FROM processing_log
-                    WHERE timestamp < datetime('now', '-{days_to_keep} days')
-                """)
+                    WHERE timestamp < datetime('now', '-' || ? || ' days')
+                """, (days_to_keep,))
 
                 deleted_count = cursor.rowcount
                 if deleted_count > 0:
