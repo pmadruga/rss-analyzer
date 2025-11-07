@@ -119,15 +119,23 @@ jobs:
         run: |
           PR_NUM=${{ github.event.pull_request.number || inputs.pr_number }}
 
-          gh pr comment $PR_NUM --body "## 🤖 AI Code Review Initiated
+          AGENTS="${{ steps.assign.outputs.agents }}"
+          DEPTH="${{ steps.assign.outputs.depth }}"
+          PRIORITY="${{ steps.assign.outputs.priority }}"
+          CHANGES="${{ steps.analyze.outputs.total_changes }}"
+
+          gh pr comment $PR_NUM --body "$(cat <<'EOF'
+## 🤖 AI Code Review Initiated
 
 **Review Configuration:**
-- Agents: ${{ steps.assign.outputs.agents }}
-- Depth: ${{ steps.assign.outputs.depth }}
-- Priority: ${{ steps.assign.outputs.priority }}
-- Changes: ${{ steps.analyze.outputs.total_changes }} lines
+- Agents: ${AGENTS}
+- Depth: ${DEPTH}
+- Priority: ${PRIORITY}
+- Changes: ${CHANGES} lines
 
-⏳ Review in progress..."
+⏳ Review in progress...
+EOF
+)"
 
   # Security Review Agent
   security-review:
