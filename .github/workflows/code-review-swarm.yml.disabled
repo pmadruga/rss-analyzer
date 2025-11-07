@@ -122,10 +122,10 @@ jobs:
           gh pr comment $PR_NUM --body "## 🤖 AI Code Review Initiated
 
 **Review Configuration:**
-- **Agents**: ${{ steps.assign.outputs.agents }}
-- **Depth**: ${{ steps.assign.outputs.depth }}
-- **Priority**: ${{ steps.assign.outputs.priority }}
-- **Changes**: ${{ steps.analyze.outputs.total_changes }} lines
+- Agents: ${{ steps.assign.outputs.agents }}
+- Depth: ${{ steps.assign.outputs.depth }}
+- Priority: ${{ steps.assign.outputs.priority }}
+- Changes: ${{ steps.analyze.outputs.total_changes }} lines
 
 ⏳ Review in progress..."
 
