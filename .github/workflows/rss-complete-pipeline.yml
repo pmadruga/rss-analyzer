@@ -70,6 +70,17 @@ jobs:
       run: |
         mkdir -p data logs output docs
 
+    - name: 🗄️ Initialize database WAL mode
+      run: |
+        echo "🗄️ Setting up database with WAL mode for concurrency..."
+        if [ -f "data/articles.db" ]; then
+          echo "Database exists, ensuring WAL mode is enabled..."
+          sqlite3 data/articles.db "PRAGMA journal_mode = WAL;"
+          echo "✅ Database configured with WAL mode"
+        else
+          echo "Database will be created with WAL mode on first use"
+        fi
+
     # ========================================
     # TEST PHASE
     # ========================================

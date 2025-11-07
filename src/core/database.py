@@ -40,9 +40,9 @@ class ConnectionPool:
 
     def _create_connection(self) -> sqlite3.Connection:
         """Create a new database connection with proper settings for concurrency"""
-        # Set timeout=30.0 for automatic retry on database lock
+        # Set timeout=60.0 for automatic retry on database lock (increased for batch ops)
         conn = sqlite3.connect(
-            self.db_path, check_same_thread=False, timeout=30.0
+            self.db_path, check_same_thread=False, timeout=60.0
         )
         conn.row_factory = sqlite3.Row  # Enable dict-like access
 
@@ -50,9 +50,9 @@ class ConnectionPool:
         # WAL mode allows readers to operate while writer is active
         conn.execute("PRAGMA journal_mode = WAL")
 
-        # Set busy timeout to 30 seconds (30000ms)
+        # Set busy timeout to 60 seconds (60000ms) - increased for batch operations
         # Retry automatically when database is locked instead of failing immediately
-        conn.execute("PRAGMA busy_timeout = 30000")
+        conn.execute("PRAGMA busy_timeout = 60000")
 
         # Balance between safety and performance
         # NORMAL sync provides good durability with better performance than FULL
@@ -64,6 +64,11 @@ class ConnectionPool:
         # Optimize cache size for better performance (64MB)
         # Negative value = size in KB
         conn.execute("PRAGMA cache_size = -64000")
+
+        # Additional settings for better concurrent write performance
+        conn.execute("PRAGMA temp_store = MEMORY")  # Store temp tables in memory
+        conn.execute("PRAGMA mmap_size = 268435456")  # 256MB memory-mapped I/O
+        conn.execute("PRAGMA page_size = 4096")  # Optimize page size
 
         return conn
 
