@@ -15,6 +15,13 @@ from datetime import datetime
 from queue import Empty, Queue
 from typing import Optional
 
+from .db_utils import (
+    exponential_backoff_retry,
+    safe_executemany,
+    batch_write_context,
+    BatchWriter,
+)
+
 logger = logging.getLogger(__name__)
 
 
@@ -320,6 +327,7 @@ class DatabaseManager:
         except Exception as e:
             logger.warning(f"Migration warning (non-critical): {e}")
 
+    @exponential_backoff_retry(max_retries=5, base_delay=0.1)
     def insert_article(
         self,
         title: str,
@@ -329,7 +337,7 @@ class DatabaseManager:
         publication_date: datetime | None = None,
     ) -> int:
         """
-        Insert new article into database
+        Insert new article into database with exponential backoff retry
 
         Returns:
             Article ID of inserted article
@@ -344,6 +352,7 @@ class DatabaseManager:
                     (title, url, content_hash, rss_guid, publication_date),
                 )
 
+                conn.commit()
                 article_id = cursor.lastrowid
                 logger.debug(f"Inserted article with ID {article_id}: {title}")
                 return article_id
