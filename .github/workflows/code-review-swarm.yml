@@ -1,0 +1,439 @@
+name: 🤖 AI Code Review Swarm
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+      - develop
+
+  # Allow manual trigger
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR number to review'
+        required: true
+        type: number
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  # Initial triage and agent assignment
+  review-triage:
+    name: 📋 Review Triage & Agent Assignment
+    runs-on: ubuntu-latest
+    outputs:
+      agents: ${{ steps.assign.outputs.agents }}
+      depth: ${{ steps.assign.outputs.depth }}
+      priority: ${{ steps.assign.outputs.priority }}
+
+    steps:
+      - name: 🔄 Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🔧 Setup GitHub CLI
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+
+      - name: 📊 Analyze PR Changes
+        id: analyze
+        run: |
+          PR_NUM=${{ github.event.pull_request.number || inputs.pr_number }}
+
+          echo "Analyzing PR #$PR_NUM..."
+
+          # Get changed files
+          CHANGED_FILES=$(gh pr view $PR_NUM --json files --jq '.files[].path' | tr '\n' ',' | sed 's/,$//')
+          echo "changed_files=$CHANGED_FILES" >> $GITHUB_OUTPUT
+
+          # Get PR metadata
+          PR_DATA=$(gh pr view $PR_NUM --json title,body,labels,additions,deletions)
+          echo "pr_data=$PR_DATA" >> $GITHUB_OUTPUT
+
+          # Calculate change magnitude
+          ADDITIONS=$(echo "$PR_DATA" | jq -r '.additions')
+          DELETIONS=$(echo "$PR_DATA" | jq -r '.deletions')
+          TOTAL_CHANGES=$((ADDITIONS + DELETIONS))
+          echo "total_changes=$TOTAL_CHANGES" >> $GITHUB_OUTPUT
+
+      - name: 🎯 Assign Review Agents
+        id: assign
+        run: |
+          CHANGED_FILES="${{ steps.analyze.outputs.changed_files }}"
+          TOTAL_CHANGES=${{ steps.analyze.outputs.total_changes }}
+
+          # Determine required agents based on changed files
+          AGENTS="code-quality,python-best-practices"
+
+          if echo "$CHANGED_FILES" | grep -q "database.py\|migration"; then
+            AGENTS="$AGENTS,database,security"
+          fi
+
+          if echo "$CHANGED_FILES" | grep -q "_client.py\|api"; then
+            AGENTS="$AGENTS,api-integration,security"
+          fi
+
+          if echo "$CHANGED_FILES" | grep -q "workflow\|\.yml"; then
+            AGENTS="$AGENTS,workflow-validation,security"
+          fi
+
+          if echo "$CHANGED_FILES" | grep -q "\.md$"; then
+            AGENTS="$AGENTS,documentation"
+          fi
+
+          # Always include security for any code changes
+          if echo "$CHANGED_FILES" | grep -q "\.py$"; then
+            AGENTS="$AGENTS,security"
+          fi
+
+          # Determine review depth based on change magnitude
+          if [ $TOTAL_CHANGES -lt 100 ]; then
+            DEPTH="standard"
+          elif [ $TOTAL_CHANGES -lt 500 ]; then
+            DEPTH="thorough"
+          else
+            DEPTH="comprehensive"
+          fi
+
+          # Priority based on changed files
+          if echo "$CHANGED_FILES" | grep -q "database.py\|auth\|_client.py"; then
+            PRIORITY="high"
+          else
+            PRIORITY="medium"
+          fi
+
+          echo "agents=$AGENTS" >> $GITHUB_OUTPUT
+          echo "depth=$DEPTH" >> $GITHUB_OUTPUT
+          echo "priority=$PRIORITY" >> $GITHUB_OUTPUT
+
+          echo "📋 Review Assignment:"
+          echo "  Agents: $AGENTS"
+          echo "  Depth: $DEPTH"
+          echo "  Priority: $PRIORITY"
+
+      - name: 💬 Post triage status
+        run: |
+          PR_NUM=${{ github.event.pull_request.number || inputs.pr_number }}
+
+          cat > comment.md <<'COMMENT_EOF'
+          ## 🤖 AI Code Review Initiated
+
+          Review Configuration:
+          - Agents: ${{ steps.assign.outputs.agents }}
+          - Depth: ${{ steps.assign.outputs.depth }}
+          - Priority: ${{ steps.assign.outputs.priority }}
+          - Changes: ${{ steps.analyze.outputs.total_changes }} lines
+
+          ⏳ Review in progress...
+          COMMENT_EOF
+
+          gh pr comment $PR_NUM --body-file comment.md
+
+  # Security Review Agent
+  security-review:
+    name: 🔒 Security Review
+    needs: review-triage
+    if: contains(needs.review-triage.outputs.agents, 'security')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🔄 Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🔧 Setup environment
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+
+      - name: 🔍 Run security analysis
+        id: security
+        run: |
+          PR_NUM=${{ github.event.pull_request.number || inputs.pr_number }}
+
+          echo "Running security review for PR #$PR_NUM..."
+
+          # Get changed Python files
+          CHANGED_PY_FILES=$(gh pr view $PR_NUM --json files --jq '.files[] | select(.path | endswith(".py")) | .path')
+
+          # Check for security patterns
+          ISSUES=""
+          SEVERITY="none"
+
+          for file in $CHANGED_PY_FILES; do
+            if [ -f "$file" ]; then
+              # Check for hardcoded secrets
+              if grep -nE "(API_KEY|PASSWORD|SECRET|TOKEN)\s*=\s*['\"]" "$file"; then
+                ISSUES="$ISSUES\n🔴 Critical: Hardcoded secrets detected in $file"
+                SEVERITY="critical"
+              fi
+
+              # Check for SQL injection risks
+              if grep -nE "execute.*%|execute.*\\.format" "$file"; then
+                ISSUES="$ISSUES\n🟡 High: Potential SQL injection risk in $file"
+                [ "$SEVERITY" != "critical" ] && SEVERITY="high"
+              fi
+
+              # Check for dangerous functions
+              if grep -nE "eval\(|exec\(|os\.system\(|subprocess\.call\(" "$file"; then
+                ISSUES="$ISSUES\n🟡 High: Dangerous function usage in $file"
+                [ "$SEVERITY" != "critical" ] && SEVERITY="high"
+              fi
+
+              # Check for proper error handling in API clients
+              if echo "$file" | grep -q "_client.py"; then
+                if ! grep -q "try:" "$file" || ! grep -q "except" "$file"; then
+                  ISSUES="$ISSUES\n🟠 Medium: Missing error handling in API client: $file"
+                  [ "$SEVERITY" = "none" ] && SEVERITY="medium"
+                fi
+              fi
+            fi
+          done
+
+          # Create review output
+          if [ -n "$ISSUES" ]; then
+            cat > security-review.md <<REVIEW_EOF
+          ## 🔒 Security Review Results
+
+          Status: ⚠️ Issues Found
+          Severity: $SEVERITY
+
+          ### Issues Detected:
+          $ISSUES
+
+          ### Recommendations:
+          - Use environment variables for sensitive data
+          - Implement parameterized queries for database operations
+          - Add proper input validation and sanitization
+          - Use safe alternatives to dangerous functions
+
+          ### References:
+          - [OWASP Top 10](https://owasp.org/www-project-top-ten/)
+          - [Python Security Best Practices](https://python.readthedocs.io/en/stable/library/security_warnings.html)
+          REVIEW_EOF
+          else
+            cat > security-review.md <<REVIEW_EOF
+          ## 🔒 Security Review Results
+
+          Status: ✅ No Issues Found
+          Severity: none
+
+          All security checks passed!
+          REVIEW_EOF
+          fi
+
+          echo "severity=$SEVERITY" >> $GITHUB_OUTPUT
+
+      - name: 💬 Post security review
+        run: |
+          PR_NUM=${{ github.event.pull_request.number || inputs.pr_number }}
+          gh pr comment $PR_NUM --body-file security-review.md
+
+          # Add label if issues found
+          if [ "${{ steps.security.outputs.severity }}" = "critical" ]; then
+            gh pr edit $PR_NUM --add-label "security-critical"
+          elif [ "${{ steps.security.outputs.severity }}" = "high" ]; then
+            gh pr edit $PR_NUM --add-label "security-review-required"
+          fi
+
+  # Code Quality Review Agent
+  code-quality-review:
+    name: 📋 Code Quality Review
+    needs: review-triage
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🔄 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: 🔧 Setup tools
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+          pip install pylint flake8 mypy radon
+
+      - name: 📊 Run code quality checks
+        id: quality
+        run: |
+          PR_NUM=${{ github.event.pull_request.number || inputs.pr_number }}
+
+          echo "Running code quality review for PR #$PR_NUM..."
+
+          # Get changed Python files
+          CHANGED_PY_FILES=$(gh pr view $PR_NUM --json files --jq '.files[] | select(.path | endswith(".py")) | .path' | tr '\n' ' ')
+
+          if [ -z "$CHANGED_PY_FILES" ]; then
+            echo "No Python files changed"
+            exit 0
+          fi
+
+          # Run pylint
+          PYLINT_SCORE=$(pylint $CHANGED_PY_FILES --score=y 2>&1 | grep "Your code has been rated" | grep -oP '\d+\.\d+' || echo "0")
+
+          # Run complexity analysis
+          COMPLEXITY=$(radon cc $CHANGED_PY_FILES -a -s)
+
+          # Run flake8
+          FLAKE8_OUTPUT=$(flake8 $CHANGED_PY_FILES --count --statistics 2>&1 || true)
+          FLAKE8_ERRORS=$(echo "$FLAKE8_OUTPUT" | tail -1 | grep -oP '^\d+' || echo "0")
+
+          # Generate review
+          cat > quality-review.md <<REVIEW_EOF
+          ## 📋 Code Quality Review Results
+
+          Pylint Score: $PYLINT_SCORE/10
+          Flake8 Issues: $FLAKE8_ERRORS
+          Complexity:
+          \`\`\`
+          $COMPLEXITY
+          \`\`\`
+
+          ### Recommendations:
+          - Aim for Pylint score > 8.0
+          - Address all Flake8 issues
+          - Keep cyclomatic complexity < 10
+
+          ### Files Reviewed:
+          $CHANGED_PY_FILES
+          REVIEW_EOF
+
+          echo "pylint_score=$PYLINT_SCORE" >> $GITHUB_OUTPUT
+
+      - name: 💬 Post quality review
+        run: |
+          PR_NUM=${{ github.event.pull_request.number || inputs.pr_number }}
+          gh pr comment $PR_NUM --body-file quality-review.md
+
+  # Python Best Practices Review Agent
+  python-practices-review:
+    name: 🐍 Python Best Practices
+    needs: review-triage
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🔄 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup GitHub CLI
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+
+      - name: 🔍 Check Python practices
+        id: practices
+        run: |
+          PR_NUM=${{ github.event.pull_request.number || inputs.pr_number }}
+
+          CHANGED_PY_FILES=$(gh pr view $PR_NUM --json files --jq '.files[] | select(.path | endswith(".py")) | .path')
+
+          ISSUES=""
+
+          for file in $CHANGED_PY_FILES; do
+            if [ -f "$file" ]; then
+              # Check for type hints
+              if ! grep -q " -> " "$file"; then
+                ISSUES="$ISSUES\n- Consider adding type hints to functions in $file"
+              fi
+
+              # Check for pathlib usage
+              if grep -q "os\.path\." "$file"; then
+                ISSUES="$ISSUES\n- Consider using pathlib instead of os.path in $file"
+              fi
+
+              # Check for f-strings
+              if grep -q "\.format\(" "$file"; then
+                ISSUES="$ISSUES\n- Consider using f-strings instead of .format() in $file"
+              fi
+
+              # Check for context managers
+              if grep -q "open(" "$file" && ! grep -q "with open" "$file"; then
+                ISSUES="$ISSUES\n- Use 'with' statement for file operations in $file"
+              fi
+            fi
+          done
+
+          if [ -n "$ISSUES" ]; then
+            cat > practices-review.md <<REVIEW_EOF
+          ## 🐍 Python Best Practices Review
+
+          Status: 💡 Suggestions Available
+
+          ### Suggestions:
+          $ISSUES
+
+          ### References:
+          - [Python Type Hints](https://docs.python.org/3/library/typing.html)
+          - [Pathlib](https://docs.python.org/3/library/pathlib.html)
+          - [PEP 498 - Literal String Interpolation](https://www.python.org/dev/peps/pep-0498/)
+          REVIEW_EOF
+          else
+            cat > practices-review.md <<REVIEW_EOF
+          ## 🐍 Python Best Practices Review
+
+          Status: ✅ All checks passed!
+          REVIEW_EOF
+          fi
+
+      - name: 💬 Post practices review
+        run: |
+          PR_NUM=${{ github.event.pull_request.number || inputs.pr_number }}
+          gh pr comment $PR_NUM --body-file practices-review.md
+
+  # Final Review Summary
+  review-summary:
+    name: 📊 Review Summary
+    needs: [review-triage, security-review, code-quality-review, python-practices-review]
+    if: always()
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🔧 Setup GitHub CLI
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+
+      - name: 📊 Generate summary
+        run: |
+          PR_NUM=${{ github.event.pull_request.number || inputs.pr_number }}
+
+          SECURITY_STATUS="${{ needs.security-review.result }}"
+          QUALITY_STATUS="${{ needs.code-quality-review.result }}"
+          PRACTICES_STATUS="${{ needs.python-practices-review.result }}"
+
+          # Determine overall status
+          if [ "$SECURITY_STATUS" = "failure" ] || [ "${{ needs.security-review.outputs.severity }}" = "critical" ]; then
+            OVERALL="🔴 Critical Issues Found - Merge blocked"
+            APPROVE=false
+          elif [ "$SECURITY_STATUS" = "failure" ] || [ "$QUALITY_STATUS" = "failure" ]; then
+            OVERALL="🟡 Issues Found - Review required"
+            APPROVE=false
+          else
+            OVERALL="🟢 All checks passed"
+            APPROVE=true
+          fi
+
+          cat > summary.md <<SUMMARY_EOF
+          ## 🤖 AI Code Review Complete
+
+          $OVERALL
+
+          ### Agent Results:
+          - 🔒 Security Review: $SECURITY_STATUS
+          - 📋 Code Quality: $QUALITY_STATUS
+          - 🐍 Python Practices: $PRACTICES_STATUS
+
+          ---
+          *Reviewed by AI Code Review Swarm*
+          *Review depth: ${{ needs.review-triage.outputs.depth }}*
+          SUMMARY_EOF
+
+          gh pr comment $PR_NUM --body-file summary.md
+
+          # Approve or request changes
+          if [ "$APPROVE" = "true" ]; then
+            gh pr review $PR_NUM --approve --body "✅ All automated checks passed!"
+          fi
