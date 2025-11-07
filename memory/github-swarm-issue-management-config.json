@@ -1,0 +1,663 @@
+{
+  "system": "github-swarm/issue-management",
+  "version": "1.0.0",
+  "created": "2025-11-07",
+  "repository": "rss-analyzer",
+  "configuration": {
+    "templates": {
+      "bug_report": {
+        "file": ".github/ISSUE_TEMPLATE/bug_report.yml",
+        "auto_labels": ["type:bug", "status:needs-triage"],
+        "required_fields": [
+          "component",
+          "description",
+          "steps",
+          "expected",
+          "actual",
+          "environment"
+        ],
+        "features": [
+          "async_processing_mode",
+          "optimization_features_checklist",
+          "database_state_query",
+          "environment_details"
+        ]
+      },
+      "feature_request": {
+        "file": ".github/ISSUE_TEMPLATE/feature_request.yml",
+        "auto_labels": ["type:enhancement", "status:needs-triage"],
+        "required_fields": [
+          "feature_type",
+          "component",
+          "problem",
+          "solution",
+          "use_cases"
+        ],
+        "features": [
+          "priority_selection",
+          "breaking_changes_assessment",
+          "technical_approach",
+          "contribution_offer"
+        ]
+      },
+      "documentation": {
+        "file": ".github/ISSUE_TEMPLATE/documentation.yml",
+        "auto_labels": ["type:documentation", "status:needs-triage"],
+        "required_fields": ["doc_type", "issue_type", "location", "issue", "suggested"],
+        "features": [
+          "documentation_type_selection",
+          "issue_type_classification",
+          "target_audience",
+          "optimization_docs_relation"
+        ]
+      },
+      "performance": {
+        "file": ".github/ISSUE_TEMPLATE/performance.yml",
+        "auto_labels": ["type:performance", "priority:medium", "status:needs-triage"],
+        "required_fields": [
+          "issue_type",
+          "component",
+          "processing_mode",
+          "description",
+          "metrics",
+          "workload",
+          "expected_performance",
+          "environment",
+          "config"
+        ],
+        "features": [
+          "performance_metrics",
+          "cache_statistics",
+          "pool_statistics",
+          "profiling_data",
+          "benchmark_comparison"
+        ]
+      }
+    },
+    "labels": {
+      "type": {
+        "mutually_exclusive": true,
+        "labels": {
+          "type:bug": {
+            "description": "Bug reports or broken functionality",
+            "color": "d73a4a"
+          },
+          "type:enhancement": {
+            "description": "New features or improvements",
+            "color": "a2eeef"
+          },
+          "type:documentation": {
+            "description": "Documentation updates",
+            "color": "0075ca"
+          },
+          "type:performance": {
+            "description": "Performance issues",
+            "color": "fbca04"
+          },
+          "type:maintenance": {
+            "description": "Code maintenance tasks",
+            "color": "d4c5f9"
+          },
+          "type:security": {
+            "description": "Security vulnerabilities",
+            "color": "ee0701"
+          }
+        }
+      },
+      "priority": {
+        "mutually_exclusive": true,
+        "labels": {
+          "priority:critical": {
+            "description": "System broken, security issue",
+            "color": "b60205",
+            "sla_hours": 24
+          },
+          "priority:high": {
+            "description": "Major functionality impaired",
+            "color": "d93f0b",
+            "sla_hours": 72
+          },
+          "priority:medium": {
+            "description": "Normal priority",
+            "color": "fbca04",
+            "sla_hours": 168
+          },
+          "priority:low": {
+            "description": "Nice to have",
+            "color": "0e8a16",
+            "sla_hours": null
+          }
+        }
+      },
+      "component": {
+        "mutually_exclusive": false,
+        "labels": {
+          "component:rss-parser": {
+            "description": "RSS feed parsing",
+            "files": ["src/rss_parser.py"]
+          },
+          "component:scraper": {
+            "description": "Web scraping (sync)",
+            "files": ["src/scraper.py"]
+          },
+          "component:async-scraper": {
+            "description": "Async web scraping",
+            "files": ["src/core/async_scraper.py"]
+          },
+          "component:database": {
+            "description": "Database operations",
+            "files": ["src/core/database.py"]
+          },
+          "component:cache": {
+            "description": "Caching system",
+            "files": ["src/core/cache.py"]
+          },
+          "component:ai-clients": {
+            "description": "AI API integrations",
+            "files": ["src/ai_clients/"]
+          },
+          "component:async-processing": {
+            "description": "Async pipeline",
+            "files": ["src/etl_orchestrator.py"]
+          },
+          "component:reports": {
+            "description": "Report generation",
+            "files": ["src/core/report_generator.py"]
+          },
+          "component:config": {
+            "description": "Configuration system",
+            "files": ["config/config.yaml"]
+          },
+          "component:docker": {
+            "description": "Docker/deployment",
+            "files": ["Dockerfile", "docker-compose.yml"]
+          },
+          "component:monitoring": {
+            "description": "Performance monitoring",
+            "files": ["src/core/monitoring.py"]
+          },
+          "component:deduplication": {
+            "description": "Hash-based deduplication",
+            "files": ["tools/remove_duplicates.py"]
+          }
+        }
+      },
+      "status": {
+        "mutually_exclusive": true,
+        "labels": {
+          "status:needs-triage": {
+            "description": "New issue, needs review",
+            "color": "ededed"
+          },
+          "status:needs-info": {
+            "description": "Waiting for more information",
+            "color": "d4c5f9"
+          },
+          "status:needs-reproduction": {
+            "description": "Cannot reproduce",
+            "color": "d4c5f9"
+          },
+          "status:confirmed": {
+            "description": "Issue verified",
+            "color": "0e8a16"
+          },
+          "status:in-progress": {
+            "description": "Work in progress",
+            "color": "1d76db"
+          },
+          "status:blocked": {
+            "description": "Blocked by dependency",
+            "color": "b60205"
+          },
+          "status:needs-review": {
+            "description": "PR submitted, needs review",
+            "color": "fbca04"
+          },
+          "status:wontfix": {
+            "description": "Will not fix",
+            "color": "ffffff"
+          },
+          "status:duplicate": {
+            "description": "Duplicate of another issue",
+            "color": "cfd3d7"
+          }
+        }
+      },
+      "optimization": {
+        "mutually_exclusive": false,
+        "labels": {
+          "opt:connection-pool": {
+            "description": "Connection pooling",
+            "docs": "docs/CONNECTION_POOLING.md"
+          },
+          "opt:cache": {
+            "description": "Two-tier caching",
+            "docs": "docs/CACHE_USAGE.md"
+          },
+          "opt:async": {
+            "description": "Async processing",
+            "docs": "docs/ASYNC_GUIDE.md"
+          },
+          "opt:rate-limiting": {
+            "description": "Rate limiting",
+            "docs": "docs/RATE_LIMITING_QUICKREF.md"
+          },
+          "opt:deduplication": {
+            "description": "Hash-based deduplication",
+            "docs": "docs/DEDUPLICATION.md"
+          },
+          "opt:monitoring": {
+            "description": "Performance monitoring",
+            "docs": "docs/MONITORING_GUIDE.md"
+          }
+        }
+      },
+      "special": {
+        "mutually_exclusive": false,
+        "labels": {
+          "good-first-issue": {
+            "description": "Good for newcomers",
+            "color": "7057ff"
+          },
+          "help-wanted": {
+            "description": "Community help requested",
+            "color": "008672"
+          },
+          "breaking-change": {
+            "description": "Breaking API change",
+            "color": "b60205"
+          },
+          "needs-discussion": {
+            "description": "Requires team discussion",
+            "color": "d4c5f9"
+          },
+          "regression": {
+            "description": "Previously worked, now broken",
+            "color": "d73a4a"
+          }
+        }
+      }
+    },
+    "auto_triage": {
+      "keyword_rules": {
+        "type_detection": {
+          "type:bug": {
+            "title_keywords": [
+              "bug",
+              "error",
+              "crash",
+              "exception",
+              "fail",
+              "broken",
+              "not working",
+              "traceback"
+            ],
+            "description_keywords": [
+              "stack trace",
+              "error message",
+              "exception raised",
+              "unexpected behavior"
+            ]
+          },
+          "type:performance": {
+            "title_keywords": [
+              "slow",
+              "performance",
+              "memory",
+              "cpu",
+              "timeout",
+              "hanging",
+              "inefficient",
+              "optimization"
+            ],
+            "description_keywords": [
+              "takes too long",
+              "high memory usage",
+              "high cpu usage",
+              "processing time",
+              "performance metrics"
+            ]
+          },
+          "type:documentation": {
+            "title_keywords": [
+              "docs",
+              "documentation",
+              "readme",
+              "typo",
+              "unclear",
+              "missing documentation",
+              "guide"
+            ],
+            "description_keywords": [
+              "documentation is",
+              "docs are",
+              "not documented",
+              "unclear documentation"
+            ]
+          },
+          "type:enhancement": {
+            "title_keywords": [
+              "feature",
+              "enhancement",
+              "improvement",
+              "add",
+              "support",
+              "enable"
+            ],
+            "description_keywords": [
+              "would be nice",
+              "feature request",
+              "new functionality"
+            ]
+          }
+        },
+        "component_detection": {
+          "component:async-scraper": {
+            "file_patterns": ["src/core/async_scraper.py", "tests/test_async_scraper.py"],
+            "keywords": [
+              "async scraper",
+              "asyncwebscraper",
+              "async scraping",
+              "concurrent scraping"
+            ]
+          },
+          "component:database": {
+            "file_patterns": ["src/core/database.py", "data/articles.db"],
+            "keywords": [
+              "database",
+              "sqlite",
+              "databasemanager",
+              "connection pool",
+              "sql query",
+              "articles table"
+            ]
+          },
+          "component:cache": {
+            "file_patterns": ["src/core/cache.py"],
+            "keywords": [
+              "cache",
+              "caching",
+              "contentcache",
+              "l1 cache",
+              "l2 cache",
+              "cache hit",
+              "cache miss"
+            ]
+          },
+          "component:async-processing": {
+            "file_patterns": ["src/etl_orchestrator.py", "src/main.py"],
+            "keywords": [
+              "async processing",
+              "asyncarticleprocessor",
+              "concurrent processing",
+              "async mode",
+              "--async flag"
+            ]
+          },
+          "component:ai-clients": {
+            "file_patterns": [
+              "src/ai_clients/",
+              "src/ai_clients/anthropic_client.py",
+              "src/ai_clients/mistral_client.py",
+              "src/ai_clients/openai_client.py"
+            ],
+            "keywords": [
+              "ai client",
+              "claude",
+              "mistral",
+              "openai",
+              "api provider",
+              "api key"
+            ]
+          },
+          "component:monitoring": {
+            "file_patterns": ["src/core/monitoring.py", "tools/api_health_monitor.py"],
+            "keywords": [
+              "monitoring",
+              "performance monitor",
+              "metrics",
+              "health check",
+              "alert"
+            ]
+          }
+        },
+        "priority_detection": {
+          "priority:critical": {
+            "keywords": [
+              "critical",
+              "production down",
+              "data loss",
+              "security vulnerability",
+              "security issue",
+              "exploit",
+              "urgent"
+            ],
+            "error_patterns": [
+              "SegmentationFault",
+              "MemoryError",
+              "SystemExit",
+              "KeyboardInterrupt"
+            ]
+          },
+          "priority:high": {
+            "keywords": [
+              "blocking",
+              "cannot use",
+              "main feature broken",
+              "regression",
+              "async mode broken"
+            ],
+            "error_patterns": [
+              "RuntimeError",
+              "ConnectionError",
+              "TimeoutError",
+              "DatabaseError"
+            ]
+          }
+        },
+        "optimization_detection": {
+          "opt:async": {
+            "keywords": [
+              "async",
+              "asyncio",
+              "concurrent",
+              "MAX_CONCURRENT_ARTICLES",
+              "--async flag"
+            ],
+            "file_patterns": ["src/etl_orchestrator.py", "src/core/async_scraper.py"]
+          },
+          "opt:cache": {
+            "keywords": [
+              "cache",
+              "l1 cache",
+              "l2 cache",
+              "cache hit rate",
+              "cache statistics"
+            ],
+            "file_patterns": ["src/core/cache.py"]
+          },
+          "opt:connection-pool": {
+            "keywords": [
+              "connection pool",
+              "pool size",
+              "database connections",
+              "pool statistics"
+            ],
+            "file_patterns": ["src/core/database.py"]
+          },
+          "opt:deduplication": {
+            "keywords": ["deduplication", "duplicate", "content hash", "hash-based"],
+            "file_patterns": ["tools/remove_duplicates.py"]
+          }
+        }
+      },
+      "error_type_mapping": {
+        "TypeError": ["component:ai-clients", "priority:medium"],
+        "KeyError": ["component:config", "priority:medium"],
+        "FileNotFoundError": ["component:config", "priority:medium"],
+        "ConnectionError": ["component:ai-clients", "priority:high"],
+        "TimeoutError": ["component:ai-clients", "priority:medium"],
+        "DatabaseError": ["component:database", "priority:high"],
+        "MemoryError": ["component:cache", "priority:critical"],
+        "asyncio.TimeoutError": ["component:async-processing", "priority:high"],
+        "aiohttp.ClientError": ["component:async-scraper", "priority:medium"]
+      }
+    },
+    "workflow": {
+      "states": [
+        "needs-triage",
+        "needs-info",
+        "needs-reproduction",
+        "confirmed",
+        "in-progress",
+        "blocked",
+        "needs-review",
+        "wontfix",
+        "duplicate"
+      ],
+      "transitions": [
+        {
+          "from": "needs-triage",
+          "to": "needs-info",
+          "trigger": "Missing details",
+          "action": "Reporter adds information"
+        },
+        {
+          "from": "needs-triage",
+          "to": "confirmed",
+          "trigger": "Issue verified",
+          "action": "Assign priority and component"
+        },
+        {
+          "from": "needs-triage",
+          "to": "wontfix",
+          "trigger": "Won't implement",
+          "action": "Close with explanation"
+        },
+        {
+          "from": "needs-triage",
+          "to": "duplicate",
+          "trigger": "Already exists",
+          "action": "Link to original issue"
+        },
+        {
+          "from": "needs-info",
+          "to": "confirmed",
+          "trigger": "Info provided",
+          "action": "Verify and confirm"
+        },
+        {
+          "from": "needs-info",
+          "to": "closed",
+          "trigger": "No response (14 days)",
+          "action": "Auto-close"
+        },
+        {
+          "from": "confirmed",
+          "to": "in-progress",
+          "trigger": "Work started",
+          "action": "Developer assigned"
+        },
+        {
+          "from": "in-progress",
+          "to": "blocked",
+          "trigger": "Dependency issue",
+          "action": "Document blocker"
+        },
+        {
+          "from": "in-progress",
+          "to": "needs-review",
+          "trigger": "PR submitted",
+          "action": "Review code"
+        },
+        {
+          "from": "blocked",
+          "to": "in-progress",
+          "trigger": "Blocker resolved",
+          "action": "Resume work"
+        },
+        {
+          "from": "needs-review",
+          "to": "in-progress",
+          "trigger": "Changes requested",
+          "action": "Address feedback"
+        },
+        {
+          "from": "needs-review",
+          "to": "merged",
+          "trigger": "PR approved",
+          "action": "Merge and close"
+        }
+      ],
+      "sla": {
+        "critical": {
+          "first_response_hours": 4,
+          "resolution_hours": 24
+        },
+        "high": {
+          "first_response_hours": 24,
+          "resolution_hours": 72
+        },
+        "medium": {
+          "first_response_hours": 72,
+          "resolution_hours": 168
+        },
+        "low": {
+          "first_response_hours": 168,
+          "resolution_hours": null
+        }
+      }
+    },
+    "automation": {
+      "stale_issues": {
+        "enabled": true,
+        "days_before_stale": 60,
+        "days_before_close": 7,
+        "exempt_labels": ["priority:critical", "priority:high", "status:blocked"]
+      },
+      "needs_info_timeout": {
+        "enabled": true,
+        "days_before_close": 14
+      },
+      "auto_label_on_create": {
+        "enabled": true,
+        "use_keywords": true,
+        "use_file_paths": true,
+        "use_error_patterns": true
+      }
+    }
+  },
+  "metrics": {
+    "response_metrics": [
+      "time_to_first_response",
+      "time_to_triage",
+      "time_to_resolution"
+    ],
+    "volume_metrics": [
+      "open_issues_by_type",
+      "open_issues_by_component",
+      "open_issues_by_priority",
+      "issues_opened_vs_closed_per_week"
+    ],
+    "quality_metrics": [
+      "issues_requiring_additional_info_percent",
+      "issues_marked_as_duplicate_percent",
+      "issues_resolved_on_first_attempt_percent",
+      "average_labels_per_issue"
+    ],
+    "component_health": [
+      "open_bugs_by_component",
+      "performance_issues_by_optimization_feature",
+      "documentation_gaps_by_component"
+    ]
+  },
+  "queries": {
+    "high_priority_triage": "is:issue is:open label:status:needs-triage label:priority:high,priority:critical",
+    "performance_issues": "is:issue is:open label:type:performance",
+    "good_first_issues": "is:issue is:open label:good-first-issue",
+    "async_related": "is:issue is:open label:opt:async",
+    "blocked_issues": "is:issue is:open label:status:blocked",
+    "needs_info": "is:issue is:open label:status:needs-info",
+    "in_progress": "is:issue is:open label:status:in-progress"
+  }
+}

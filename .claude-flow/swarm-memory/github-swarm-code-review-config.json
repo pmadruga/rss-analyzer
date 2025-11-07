@@ -1,0 +1,399 @@
+{
+  "project": "rss-analyzer",
+  "system": "automated-code-review",
+  "version": "1.0.0",
+  "created": "2025-11-07",
+
+  "overview": {
+    "description": "Comprehensive automated code review system for RSS Analyzer focusing on Python async best practices",
+    "total_quality_gates": 7,
+    "automation_level": "high",
+    "enforcement": "blocking"
+  },
+
+  "quality_gates": [
+    {
+      "name": "Code Quality",
+      "gate_number": 1,
+      "tools": ["ruff", "mypy", "pylint"],
+      "requirements": {
+        "ruff_errors": 0,
+        "mypy_errors": 0,
+        "pylint_score": ">=8.0"
+      },
+      "severity": "blocking",
+      "execution_time": "1-2 minutes"
+    },
+    {
+      "name": "Security",
+      "gate_number": 2,
+      "tools": ["bandit", "safety"],
+      "requirements": {
+        "critical_issues": 0,
+        "high_issues": 0,
+        "medium_issues": "<=3",
+        "vulnerable_dependencies": 0
+      },
+      "severity": "blocking",
+      "execution_time": "1-2 minutes"
+    },
+    {
+      "name": "Async Patterns",
+      "gate_number": 3,
+      "tools": ["custom_validators"],
+      "requirements": {
+        "blocking_io_instances": 0,
+        "connection_pool_usage": "100%",
+        "cache_check_coverage": ">=90%"
+      },
+      "severity": "blocking",
+      "execution_time": "<1 minute"
+    },
+    {
+      "name": "Test Coverage",
+      "gate_number": 4,
+      "tools": ["pytest", "pytest-cov"],
+      "requirements": {
+        "overall_coverage": ">=80%",
+        "new_code_coverage": ">=90%",
+        "critical_paths_coverage": "100%"
+      },
+      "severity": "blocking",
+      "execution_time": "3-5 minutes"
+    },
+    {
+      "name": "Documentation",
+      "gate_number": 5,
+      "tools": ["custom_validators"],
+      "requirements": {
+        "docstring_coverage": "100%",
+        "type_hint_coverage": "100%",
+        "readme_updates": "if_api_changes"
+      },
+      "severity": "blocking",
+      "execution_time": "<1 minute"
+    },
+    {
+      "name": "Performance",
+      "gate_number": 6,
+      "tools": ["custom_benchmarks"],
+      "requirements": {
+        "regression_threshold": "<=5%",
+        "memory_increase": "<=10%"
+      },
+      "severity": "warning",
+      "execution_time": "3-5 minutes"
+    },
+    {
+      "name": "Code Review",
+      "gate_number": 7,
+      "tools": ["github"],
+      "requirements": {
+        "approvals": ">=1",
+        "maintainer_approval": true,
+        "conversations_resolved": true
+      },
+      "severity": "blocking",
+      "execution_time": "varies"
+    }
+  ],
+
+  "async_patterns": {
+    "blocking_patterns_detected": [
+      "requests.get|post|put|delete",
+      "time.sleep",
+      "open(",
+      "sqlite3.connect",
+      "urllib.request"
+    ],
+    "required_patterns": [
+      "aiohttp.ClientSession",
+      "asyncio.sleep",
+      "aiofiles.open",
+      "db_manager.get_connection"
+    ],
+    "validator_script": "tools/check_async_patterns.py"
+  },
+
+  "connection_pool": {
+    "required": true,
+    "pool_size": "5-10",
+    "validation_script": "tools/check_pool_usage.py",
+    "performance_benefit": "2.78x faster"
+  },
+
+  "cache_strategy": {
+    "tiers": 2,
+    "l1_cache": {
+      "type": "memory",
+      "size": "256MB",
+      "access_time": "microseconds"
+    },
+    "l2_cache": {
+      "type": "disk",
+      "backend": "sqlite",
+      "access_time": "milliseconds"
+    },
+    "ttls": {
+      "api_responses": "30 days",
+      "scraped_content": "7 days",
+      "rss_feed_data": "1 hour"
+    },
+    "performance_benefit": "72% hit rate, 72% cost reduction"
+  },
+
+  "security_checks": {
+    "critical_patterns": [
+      "hardcoded_secrets",
+      "sql_injection",
+      "eval_exec_usage",
+      "xml_vulnerabilities",
+      "insecure_ssl"
+    ],
+    "dependency_scanning": true,
+    "vulnerability_threshold": {
+      "critical": 0,
+      "high": 0,
+      "medium": 3
+    }
+  },
+
+  "files_created": [
+    {
+      "path": "docs/code-review/REVIEW_CHECKLIST.md",
+      "description": "Comprehensive code review checklist for async Python",
+      "size": "large",
+      "sections": 8
+    },
+    {
+      "path": "docs/code-review/AUTOMATED_CHECKS.md",
+      "description": "Automated static analysis and security scanning configuration",
+      "size": "large",
+      "sections": 6
+    },
+    {
+      "path": "docs/code-review/QUALITY_GATES.md",
+      "description": "Quality gates definitions and merge criteria",
+      "size": "large",
+      "gates": 7
+    },
+    {
+      "path": "docs/code-review/REVIEW_BOT_TEMPLATES.md",
+      "description": "Automated review bot comment templates",
+      "size": "large",
+      "categories": 8
+    },
+    {
+      "path": "docs/code-review/CODE_REVIEW_SETUP.md",
+      "description": "Complete setup guide and configuration overview",
+      "size": "large"
+    },
+    {
+      "path": "tools/check_async_patterns.py",
+      "description": "AST-based async pattern validator",
+      "type": "python_script"
+    },
+    {
+      "path": "tools/check_pool_usage.py",
+      "description": "Connection pool usage validator",
+      "type": "python_script"
+    },
+    {
+      "path": "tools/check_quality_gate.sh",
+      "description": "Quality gate runner script",
+      "type": "bash_script"
+    },
+    {
+      "path": ".pre-commit-config.yaml",
+      "description": "Pre-commit hooks configuration",
+      "hooks": 15
+    },
+    {
+      "path": ".github/workflows/automated-code-review.yml",
+      "description": "GitHub Actions CI/CD workflow",
+      "jobs": 6
+    }
+  ],
+
+  "review_bot_templates": {
+    "categories": [
+      "async_await_issues",
+      "database_pool_issues",
+      "cache_usage_issues",
+      "security_issues",
+      "type_hint_issues",
+      "documentation_issues",
+      "performance_issues",
+      "test_coverage_issues"
+    ],
+    "total_templates": 16,
+    "comment_structure": [
+      "severity_icon",
+      "issue_description",
+      "code_example",
+      "impact_explanation",
+      "suggested_fix",
+      "resources"
+    ]
+  },
+
+  "pre_commit_hooks": {
+    "total_hooks": 15,
+    "categories": [
+      "standard_checks",
+      "ruff_linting",
+      "type_checking",
+      "security_scanning",
+      "custom_validators",
+      "yaml_linting",
+      "markdown_linting",
+      "spell_checking"
+    ],
+    "custom_hooks": [
+      "async-pattern-check",
+      "pool-usage-check",
+      "no-print-statements",
+      "no-hardcoded-secrets",
+      "no-eval-exec",
+      "no-sql-formatting"
+    ]
+  },
+
+  "github_actions_workflow": {
+    "trigger": ["pull_request", "workflow_dispatch"],
+    "jobs": [
+      "code-quality",
+      "security",
+      "async-patterns",
+      "test-coverage",
+      "documentation",
+      "review-summary"
+    ],
+    "total_execution_time": "10-15 minutes",
+    "parallelization": true
+  },
+
+  "performance_benchmarks": {
+    "baseline": {
+      "processing_speed": "sync baseline",
+      "concurrency": "1x",
+      "api_costs": "$148.80/month"
+    },
+    "optimized": {
+      "processing_speed": "12-16x faster",
+      "concurrency": "6-8x",
+      "api_costs": "$14.40/month",
+      "cost_reduction": "90%"
+    }
+  },
+
+  "integration": {
+    "local_development": {
+      "pre_commit_hooks": true,
+      "manual_checks": "./tools/check_quality_gate.sh"
+    },
+    "ci_cd": {
+      "github_actions": true,
+      "automated_comments": true,
+      "status_checks": true
+    },
+    "branch_protection": {
+      "required_reviews": 1,
+      "required_status_checks": [
+        "code-quality",
+        "security",
+        "async-patterns",
+        "test-coverage"
+      ],
+      "conversation_resolution": true
+    }
+  },
+
+  "best_practices": {
+    "async_patterns": [
+      "Use aiohttp instead of requests",
+      "Use asyncio.sleep instead of time.sleep",
+      "Use connection pool for database",
+      "Check cache before expensive operations",
+      "Implement bounded concurrency with semaphores"
+    ],
+    "security": [
+      "Never hardcode secrets",
+      "Use parameterized queries",
+      "Validate all inputs",
+      "Keep dependencies updated",
+      "Use HTTPS for external APIs"
+    ],
+    "testing": [
+      "Write tests before implementation (TDD)",
+      "Aim for 90%+ coverage on new code",
+      "Include error scenarios",
+      "Mock external dependencies",
+      "Use pytest-asyncio for async tests"
+    ],
+    "documentation": [
+      "Add docstrings to all public functions",
+      "Include type hints on all signatures",
+      "Provide examples for complex functions",
+      "Update README for API changes",
+      "Document breaking changes"
+    ]
+  },
+
+  "troubleshooting": {
+    "common_issues": [
+      {
+        "issue": "Pre-commit hook fails",
+        "solution": "Run pre-commit run --all-files to see details, fix issues, retry"
+      },
+      {
+        "issue": "Coverage below threshold",
+        "solution": "Run pytest --cov-report=html, open htmlcov/index.html, add tests"
+      },
+      {
+        "issue": "Security scan fails",
+        "solution": "Review Bandit report, fix critical/high issues, use environment variables"
+      },
+      {
+        "issue": "Async pattern check fails",
+        "solution": "Replace blocking calls with async equivalents (aiohttp, asyncio.sleep, etc)"
+      }
+    ]
+  },
+
+  "resources": {
+    "internal_docs": [
+      "docs/code-review/REVIEW_CHECKLIST.md",
+      "docs/code-review/AUTOMATED_CHECKS.md",
+      "docs/code-review/QUALITY_GATES.md",
+      "docs/code-review/REVIEW_BOT_TEMPLATES.md",
+      "docs/ASYNC_GUIDE.md",
+      "docs/CONNECTION_POOLING.md",
+      "docs/OPTIMIZATION_RESULTS.md"
+    ],
+    "external_links": [
+      "https://docs.astral.sh/ruff/",
+      "https://mypy.readthedocs.io/",
+      "https://bandit.readthedocs.io/",
+      "https://docs.pytest.org/",
+      "https://pre-commit.com/",
+      "https://docs.python.org/3/library/asyncio.html"
+    ]
+  },
+
+  "metrics": {
+    "total_validation_time": "10-15 minutes",
+    "false_positive_rate": "low",
+    "developer_impact": "minimal",
+    "merge_confidence": "high",
+    "defect_prevention": "high"
+  },
+
+  "future_enhancements": [
+    "Automated performance regression testing",
+    "AI-powered code review suggestions",
+    "Custom rule configuration per file/module",
+    "Integration with more security scanning tools",
+    "Automatic dependency updates with testing"
+  ]
+}

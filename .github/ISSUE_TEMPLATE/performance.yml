@@ -1,0 +1,283 @@
+name: Performance Issue
+description: Report performance problems, slow processing, or resource consumption issues
+title: "[PERF] "
+labels: ["type:performance", "priority:medium", "status:needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Performance Issue
+        Report performance problems to help us optimize RSS Analyzer. Include benchmarks and measurements when possible.
+
+  - type: dropdown
+    id: issue_type
+    attributes:
+      label: Performance Issue Type
+      description: What kind of performance issue is this?
+      options:
+        - Slow processing speed
+        - High memory usage
+        - High CPU usage
+        - Database performance
+        - Network/API latency
+        - Cache inefficiency
+        - Resource leaks
+        - Scalability issue
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      description: Which component has the performance issue?
+      options:
+        - RSS Parser
+        - Web Scraper (sync)
+        - Async Scraper
+        - Database Manager
+        - Connection Pool
+        - Cache System (L1)
+        - Cache System (L2)
+        - AI Clients
+        - Async Processing Pipeline
+        - Rate Limiter
+        - Report Generator
+        - Deduplication System
+        - Overall system
+        - Multiple components
+    validations:
+      required: true
+
+  - type: dropdown
+    id: processing_mode
+    attributes:
+      label: Processing Mode
+      description: Which mode exhibits the performance issue?
+      options:
+        - Async mode (recommended)
+        - Sync mode (legacy)
+        - Both modes
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Performance Issue Description
+      description: Describe the performance problem in detail
+      placeholder: When processing 50 articles in async mode, the system takes 5 minutes instead of expected 1 minute...
+    validations:
+      required: true
+
+  - type: textarea
+    id: metrics
+    attributes:
+      label: Performance Metrics
+      description: Provide specific measurements (time, memory, CPU, etc.)
+      placeholder: |
+        - Processing time: 5 minutes for 50 articles
+        - Memory usage: 850MB (expected ~350MB)
+        - CPU usage: 95% sustained
+        - Cache hit rate: 15% (expected >70%)
+        - Database operations: 2.5ms avg (expected <0.5ms)
+    validations:
+      required: true
+
+  - type: textarea
+    id: workload
+    attributes:
+      label: Workload Details
+      description: Describe the workload that exhibits the issue
+      placeholder: |
+        - Number of articles: 50
+        - Concurrent articles: 5 (MAX_CONCURRENT_ARTICLES=5)
+        - API provider: Anthropic Claude
+        - Article sources: arXiv RSS feeds
+        - Average article length: 10,000 words
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_performance
+    attributes:
+      label: Expected Performance
+      description: What performance do you expect based on benchmarks?
+      placeholder: |
+        Based on docs/OPTIMIZATION_RESULTS.md:
+        - 50 articles should take ~60 seconds in async mode
+        - Memory should be ~350MB
+        - Cache hit rate should be >70%
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Performance Logs
+      description: Include relevant logs, especially from performance monitoring
+      placeholder: |
+        Run: docker compose run rss-analyzer stats
+
+        Paste performance monitoring output here...
+      render: shell
+    validations:
+      required: false
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: System specifications and configuration
+      value: |
+        - **Python version**:
+        - **Deployment**: (Docker / Native)
+        - **API Provider**: (Anthropic / Mistral / OpenAI)
+        - **Processing Mode**: (Async / Sync)
+        - **OS**:
+        - **CPU**: (cores and model)
+        - **RAM**: (total available)
+        - **Disk type**: (SSD / HDD)
+        - **Network**: (bandwidth and latency)
+    validations:
+      required: true
+
+  - type: textarea
+    id: config
+    attributes:
+      label: Configuration
+      description: Relevant performance configuration
+      value: |
+        database:
+          pool_size: 5
+        cache:
+          enabled: true
+          l1_size_mb: 256
+        processing:
+          max_concurrent_articles: 5
+        monitoring:
+          enabled: true
+      render: yaml
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: optimization_features
+    attributes:
+      label: Optimization Features Enabled
+      description: Which optimization features are enabled?
+      options:
+        - label: Connection pooling
+        - label: Two-tier caching (L1 + L2)
+        - label: Async processing
+        - label: Rate limiting
+        - label: Hash-based deduplication
+        - label: Performance monitoring
+
+  - type: textarea
+    id: cache_stats
+    attributes:
+      label: Cache Statistics
+      description: Output from cache statistics (if available)
+      placeholder: |
+        Run: docker compose run rss-analyzer cache-stats
+
+        Cache hit rate: 15%
+        L1 size: 180MB / 256MB
+        L2 size: 450MB
+      render: shell
+    validations:
+      required: false
+
+  - type: textarea
+    id: pool_stats
+    attributes:
+      label: Connection Pool Statistics
+      description: Output from pool statistics (if available)
+      placeholder: |
+        Run: docker compose run rss-analyzer pool-stats
+
+        Active connections: 5/5
+        Total queries: 1,250
+        Avg wait time: 45ms
+      render: shell
+    validations:
+      required: false
+
+  - type: textarea
+    id: profiling
+    attributes:
+      label: Profiling Data
+      description: Any profiling data (cProfile, memory_profiler, etc.)
+      placeholder: Attach profiling output or screenshots...
+      render: shell
+    validations:
+      required: false
+
+  - type: textarea
+    id: comparison
+    attributes:
+      label: Performance Comparison
+      description: Compare with baseline or expected benchmarks
+      placeholder: |
+        | Metric | Current | Expected | Difference |
+        |--------|---------|----------|------------|
+        | Processing time | 300s | 60s | 5x slower |
+        | Memory usage | 850MB | 350MB | 2.4x higher |
+        | Cache hit rate | 15% | 72% | 4.8x lower |
+      render: markdown
+    validations:
+      required: false
+
+  - type: dropdown
+    id: reproducibility
+    attributes:
+      label: Reproducibility
+      description: How consistently can you reproduce this issue?
+      options:
+        - Always (100%)
+        - Usually (>75%)
+        - Sometimes (25-75%)
+        - Rarely (<25%)
+        - Only once
+    validations:
+      required: true
+
+  - type: textarea
+    id: attempted_solutions
+    attributes:
+      label: Attempted Solutions
+      description: What have you tried to improve performance?
+      placeholder: |
+        - Increased pool_size to 10 (no improvement)
+        - Increased cache size to 512MB (marginal improvement)
+        - Reduced concurrent articles to 3 (helped but still slow)
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Any other relevant information
+      placeholder: Screenshots, graphs, additional logs...
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Pre-submission Checklist
+      description: Please verify before submitting
+      options:
+        - label: I searched existing performance issues
+          required: true
+        - label: I provided specific performance metrics
+          required: true
+        - label: I described the workload and configuration
+          required: true
+        - label: I compared against expected benchmarks
+          required: false

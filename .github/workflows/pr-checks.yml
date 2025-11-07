@@ -1,0 +1,287 @@
+name: 🧪 PR Quality Checks
+
+on:
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - '**.py'
+      - 'requirements.txt'
+      - 'pyproject.toml'
+      - 'tests/**'
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
+jobs:
+  # Run tests
+  tests:
+    name: 🧪 Run Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔄 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: ⚡ Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: "latest"
+
+      - name: 📦 Install dependencies
+        run: uv sync
+
+      - name: 🧪 Run unit tests
+        run: |
+          uv run pytest tests/ -v --cov=src --cov-report=term --cov-report=xml
+
+      - name: 📊 Upload coverage
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage.xml
+          flags: unittests
+          name: codecov-umbrella
+
+  # Type checking
+  type-check:
+    name: 🔍 Type Checking
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔄 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: ⚡ Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: "latest"
+
+      - name: 📦 Install dependencies
+        run: |
+          uv sync
+          uv pip install mypy types-requests types-PyYAML
+
+      - name: 🔍 Run mypy
+        run: |
+          uv run mypy src/ --ignore-missing-imports --show-error-codes
+
+  # Linting
+  lint:
+    name: 🎨 Code Linting
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔄 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: ⚡ Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: "latest"
+
+      - name: 📦 Install dependencies
+        run: |
+          uv sync
+          uv pip install ruff
+
+      - name: 🎨 Run ruff
+        run: |
+          uv run ruff check src/ tests/
+
+  # Security scan
+  security-scan:
+    name: 🔒 Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔄 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: ⚡ Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: "latest"
+
+      - name: 📦 Install dependencies
+        run: |
+          uv sync
+          uv pip install bandit safety
+
+      - name: 🔒 Run Bandit
+        run: |
+          uv run bandit -r src/ -f json -o bandit-report.json || true
+
+      - name: 🔒 Run Safety
+        run: |
+          uv run safety check --json > safety-report.json || true
+
+      - name: 📊 Upload security reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: security-reports
+          path: |
+            bandit-report.json
+            safety-report.json
+
+  # Code coverage check
+  coverage:
+    name: 📊 Coverage Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔄 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: ⚡ Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: "latest"
+
+      - name: 📦 Install dependencies
+        run: uv sync
+
+      - name: 📊 Run coverage
+        run: |
+          uv run pytest tests/ --cov=src --cov-report=term --cov-report=html --cov-fail-under=80
+
+      - name: 📊 Upload coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: htmlcov/
+
+  # Import validation
+  import-check:
+    name: 🔬 Import Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔄 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: ⚡ Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: "latest"
+
+      - name: 📦 Install dependencies
+        run: uv sync
+
+      - name: 🔬 Validate imports
+        run: |
+          uv run python tools/validate_imports.py
+
+  # Docker build test
+  docker-build:
+    name: 🐳 Docker Build Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔄 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🐳 Build Docker image
+        run: |
+          docker compose build rss-analyzer
+
+      - name: 🧪 Test Docker container
+        run: |
+          docker compose run rss-analyzer python -c "import src.main; print('✅ Import successful')"
+
+  # Summary
+  checks-summary:
+    name: 📊 Checks Summary
+    needs: [tests, type-check, lint, security-scan, coverage, import-check, docker-build]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔧 Setup GitHub CLI
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+
+      - name: 📊 Generate summary
+        run: |
+          PR_NUM=${{ github.event.pull_request.number }}
+
+          TESTS="${{ needs.tests.result }}"
+          TYPE_CHECK="${{ needs.type-check.result }}"
+          LINT="${{ needs.lint.result }}"
+          SECURITY="${{ needs.security-scan.result }}"
+          COVERAGE="${{ needs.coverage.result }}"
+          IMPORTS="${{ needs.import-check.result }}"
+          DOCKER="${{ needs.docker-build.result }}"
+
+          # Determine overall status
+          if [ "$TESTS" = "failure" ] || [ "$TYPE_CHECK" = "failure" ] || [ "$LINT" = "failure" ]; then
+            OVERALL="🔴 Some checks failed"
+            STATUS_ICON="❌"
+          elif [ "$COVERAGE" = "failure" ]; then
+            OVERALL="🟡 Coverage below threshold"
+            STATUS_ICON="⚠️"
+          else
+            OVERALL="🟢 All checks passed"
+            STATUS_ICON="✅"
+          fi
+
+          cat > summary.md << EOF
+          ## 🧪 Quality Checks Summary
+
+          $STATUS_ICON **$OVERALL**
+
+          | Check | Status |
+          |-------|--------|
+          | 🧪 Tests | $([ "$TESTS" = "success" ] && echo "✅" || echo "❌") |
+          | 🔍 Type Check | $([ "$TYPE_CHECK" = "success" ] && echo "✅" || echo "❌") |
+          | 🎨 Linting | $([ "$LINT" = "success" ] && echo "✅" || echo "❌") |
+          | 🔒 Security | $([ "$SECURITY" = "success" ] && echo "✅" || echo "⚠️") |
+          | 📊 Coverage | $([ "$COVERAGE" = "success" ] && echo "✅" || echo "⚠️") |
+          | 🔬 Imports | $([ "$IMPORTS" = "success" ] && echo "✅" || echo "❌") |
+          | 🐳 Docker | $([ "$DOCKER" = "success" ] && echo "✅" || echo "❌") |
+
+          ---
+
+          ### Next Steps:
+
+          EOF
+
+          if [ "$OVERALL" = "🔴 Some checks failed" ]; then
+            echo "1. ❌ Fix failing checks before requesting review" >> summary.md
+            echo "2. 🔍 Review detailed logs for each failing check" >> summary.md
+            echo "3. ✅ Re-run checks after fixes" >> summary.md
+          elif [ "$OVERALL" = "🟡 Coverage below threshold" ]; then
+            echo "1. ⚠️ Consider adding more tests to improve coverage" >> summary.md
+            echo "2. 👥 You can still request review if coverage drop is justified" >> summary.md
+          else
+            echo "1. ✅ All automated checks passed!" >> summary.md
+            echo "2. 🤖 Wait for AI code review" >> summary.md
+            echo "3. 👥 Request human review when ready" >> summary.md
+          fi
+
+          echo "" >> summary.md
+          echo "---" >> summary.md
+          echo "*Automated quality checks by GitHub Actions*" >> summary.md
+
+          gh pr comment $PR_NUM --body-file summary.md

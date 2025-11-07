@@ -1,0 +1,203 @@
+name: Feature Request
+description: Suggest a new feature or enhancement for RSS Analyzer
+title: "[FEATURE] "
+labels: ["type:enhancement", "status:needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Feature Request
+        Thank you for suggesting a feature! Please provide detailed information to help us evaluate and prioritize your request.
+
+  - type: dropdown
+    id: feature_type
+    attributes:
+      label: Feature Type
+      description: What type of feature is this?
+      options:
+        - New functionality
+        - Enhancement to existing feature
+        - Performance improvement
+        - Developer experience improvement
+        - API/Integration
+        - Documentation
+        - Configuration option
+    validations:
+      required: true
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      description: Which component would this affect?
+      options:
+        - RSS Parser
+        - Web Scraper
+        - Database Manager
+        - Cache System
+        - AI Clients
+        - Async Processing
+        - Report Generator
+        - Configuration System
+        - CLI Interface
+        - Docker/Deployment
+        - Multiple components
+        - New component
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: What problem does this feature solve?
+      placeholder: Currently, users cannot... This makes it difficult to...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe your proposed solution in detail
+      placeholder: |
+        Add a new command/feature that allows users to...
+
+        Example usage:
+        ```bash
+        docker compose run rss-analyzer <new-command> --option value
+        ```
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: What alternative solutions or workarounds have you considered?
+      placeholder: I considered... but that wouldn't work because...
+    validations:
+      required: false
+
+  - type: textarea
+    id: use_cases
+    attributes:
+      label: Use Cases
+      description: Describe specific use cases for this feature
+      placeholder: |
+        1. As a researcher, I want to... so that I can...
+        2. As a developer, I need to... to improve...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this feature to you?
+      options:
+        - Critical - Blocking my workflow
+        - High - Significantly improves my workflow
+        - Medium - Nice to have
+        - Low - Minor improvement
+    validations:
+      required: true
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Expected Impact
+      description: How would this feature benefit users?
+      placeholder: |
+        This would:
+        - Improve performance by...
+        - Enable users to...
+        - Reduce complexity of...
+    validations:
+      required: false
+
+  - type: dropdown
+    id: breaking_changes
+    attributes:
+      label: Breaking Changes
+      description: Would this require breaking changes to existing functionality?
+      options:
+        - No breaking changes
+        - Minor breaking changes (with migration path)
+        - Major breaking changes
+        - Not sure
+    validations:
+      required: false
+
+  - type: textarea
+    id: technical_approach
+    attributes:
+      label: Technical Approach (Optional)
+      description: If you have ideas on implementation, share them here
+      placeholder: |
+        This could be implemented by:
+        1. Adding a new module in src/...
+        2. Extending the existing...
+        3. Using library X for...
+    validations:
+      required: false
+
+  - type: textarea
+    id: examples
+    attributes:
+      label: Examples / References
+      description: Links to similar features in other projects or documentation
+      placeholder: |
+        - Similar feature in project X: https://...
+        - Related documentation: https://...
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: related_features
+    attributes:
+      label: Related Optimization Features
+      description: Which existing features would this complement?
+      options:
+        - label: Async processing pipeline
+        - label: Connection pooling
+        - label: Two-tier caching
+        - label: Rate limiting
+        - label: Hash-based deduplication
+        - label: Performance monitoring
+        - label: None - completely new functionality
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Any other information, mockups, or examples
+      placeholder: Add screenshots, diagrams, or additional context...
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      description: Would you be interested in contributing?
+      options:
+        - label: I would like to implement this feature
+        - label: I can help with testing
+        - label: I can help with documentation
+        - label: I can provide use case feedback
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Pre-submission Checklist
+      description: Please verify before submitting
+      options:
+        - label: I searched existing issues and PRs to avoid duplicates
+          required: true
+        - label: I described the problem this feature solves
+          required: true
+        - label: I provided specific use cases
+          required: true

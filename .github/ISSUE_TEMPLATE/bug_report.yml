@@ -1,0 +1,174 @@
+name: Bug Report
+description: Report a bug or unexpected behavior in RSS Analyzer
+title: "[BUG] "
+labels: ["type:bug", "status:needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Bug Report
+        Thank you for reporting a bug! Please provide as much detail as possible to help us diagnose and fix the issue.
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      description: Which component is affected?
+      options:
+        - RSS Parser
+        - Web Scraper (sync)
+        - Async Scraper
+        - Database Manager
+        - Cache System (L1/L2)
+        - AI Clients (Claude/Mistral/OpenAI)
+        - Async Processing Pipeline
+        - Report Generator
+        - Configuration System
+        - Docker/Deployment
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: processing_mode
+    attributes:
+      label: Processing Mode
+      description: Which processing mode were you using?
+      options:
+        - Async mode (recommended)
+        - Sync mode (legacy)
+        - Not sure
+    validations:
+      required: false
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of the bug
+      placeholder: Describe what went wrong...
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: Detailed steps to reproduce the behavior
+      placeholder: |
+        1. Run command: `docker compose run rss-analyzer run --limit 5 --async`
+        2. Configure API provider: `API_PROVIDER=anthropic`
+        3. Observe error in...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What should have happened?
+      placeholder: Articles should be processed successfully...
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened?
+      placeholder: Application crashed with error...
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error Logs / Stack Trace
+      description: Include relevant error messages, stack traces, or logs
+      placeholder: |
+        Paste logs here...
+      render: shell
+    validations:
+      required: false
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: System and configuration details
+      value: |
+        - **Python version**: (e.g., 3.11.5)
+        - **Deployment**: (Docker / Native)
+        - **API Provider**: (Anthropic / Mistral / OpenAI)
+        - **Processing Mode**: (Async / Sync)
+        - **OS**: (Linux / macOS / Windows)
+        - **Docker version** (if applicable):
+        - **Cache enabled**: (Yes / No)
+        - **Connection pool size**:
+        - **Max concurrent articles**:
+    validations:
+      required: true
+
+  - type: textarea
+    id: config
+    attributes:
+      label: Configuration
+      description: Relevant configuration from config.yaml or .env (remove sensitive data)
+      placeholder: |
+        database:
+          pool_size: 5
+        cache:
+          enabled: true
+      render: yaml
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: optimization_features
+    attributes:
+      label: Optimization Features in Use
+      description: Which optimization features were enabled?
+      options:
+        - label: Connection pooling
+        - label: Two-tier caching (L1 + L2)
+        - label: Async processing
+        - label: Rate limiting
+        - label: Hash-based deduplication
+        - label: Performance monitoring
+
+  - type: textarea
+    id: database
+    attributes:
+      label: Database State
+      description: Run query to check database state (optional)
+      placeholder: |
+        Run: docker compose run rss-analyzer sqlite3 /app/data/articles.db "SELECT COUNT(*), status FROM articles GROUP BY status;"
+      render: shell
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Any other context, screenshots, or information
+      placeholder: Add any additional information that might help...
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Pre-submission Checklist
+      description: Please verify before submitting
+      options:
+        - label: I searched existing issues to avoid duplicates
+          required: true
+        - label: I included error logs and stack traces (if applicable)
+          required: false
+        - label: I provided environment details
+          required: true
+        - label: I can reproduce this bug consistently
+          required: false

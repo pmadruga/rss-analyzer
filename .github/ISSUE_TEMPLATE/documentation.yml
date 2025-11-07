@@ -1,0 +1,205 @@
+name: Documentation Improvement
+description: Report missing, unclear, or outdated documentation
+title: "[DOCS] "
+labels: ["type:documentation", "status:needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Documentation Improvement
+        Help us improve our documentation! Report issues with existing docs or suggest new documentation.
+
+  - type: dropdown
+    id: doc_type
+    attributes:
+      label: Documentation Type
+      description: What type of documentation needs improvement?
+      options:
+        - README
+        - API Documentation
+        - Configuration Guide
+        - Installation Instructions
+        - User Guide / Tutorial
+        - Architecture Documentation
+        - Performance Documentation
+        - Troubleshooting Guide
+        - Code Comments / Docstrings
+        - CLI Help Text
+        - Docker Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: issue_type
+    attributes:
+      label: Issue Type
+      description: What's wrong with the documentation?
+      options:
+        - Missing documentation
+        - Outdated information
+        - Unclear / Confusing
+        - Incorrect information
+        - Typo / Grammar
+        - Missing examples
+        - Broken links
+        - Incomplete
+    validations:
+      required: true
+
+  - type: textarea
+    id: location
+    attributes:
+      label: Documentation Location
+      description: Where is the documentation issue located?
+      placeholder: |
+        File: docs/ASYNC_GUIDE.md
+        Section: "Concurrent Processing"
+        Line: 42
+
+        Or provide URL if online documentation
+    validations:
+      required: true
+
+  - type: textarea
+    id: current
+    attributes:
+      label: Current Documentation
+      description: Copy the current text that needs improvement (if applicable)
+      placeholder: Paste current documentation text here...
+      render: markdown
+    validations:
+      required: false
+
+  - type: textarea
+    id: issue
+    attributes:
+      label: What's the Issue?
+      description: Describe what's wrong or missing
+      placeholder: |
+        The current documentation doesn't explain...
+        This section is outdated because...
+        Users are confused about...
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggested
+    attributes:
+      label: Suggested Improvement
+      description: How should the documentation be improved?
+      placeholder: |
+        Add a section explaining...
+        Update the example to show...
+        Clarify that...
+      render: markdown
+    validations:
+      required: true
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Related Component
+      description: Which component does this documentation relate to?
+      options:
+        - RSS Parser
+        - Web Scraper
+        - Async Processing
+        - Database Manager
+        - Cache System
+        - AI Clients
+        - Report Generator
+        - Configuration
+        - Docker/Deployment
+        - Performance Optimization
+        - Multiple components
+        - General documentation
+    validations:
+      required: false
+
+  - type: dropdown
+    id: audience
+    attributes:
+      label: Target Audience
+      description: Who is this documentation for?
+      options:
+        - End users
+        - Developers/Contributors
+        - System administrators
+        - API consumers
+        - All users
+    validations:
+      required: false
+
+  - type: textarea
+    id: examples
+    attributes:
+      label: Examples Needed
+      description: What examples would help clarify this documentation?
+      placeholder: |
+        Add example showing:
+        1. How to configure async mode with custom concurrency
+        2. Example output format
+        3. Troubleshooting common errors
+    validations:
+      required: false
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Impact
+      description: How does this documentation issue affect users?
+      placeholder: |
+        - Users cannot figure out how to...
+        - This causes confusion about...
+        - New users struggle with...
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: optimization_docs
+    attributes:
+      label: Related to Optimization Features
+      description: Is this documentation related to performance features?
+      options:
+        - label: Async processing pipeline
+        - label: Connection pooling
+        - label: Two-tier caching
+        - label: Rate limiting
+        - label: Deduplication system
+        - label: Performance monitoring
+        - label: Benchmarking results
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Any other relevant information
+      placeholder: Links, screenshots, or additional context...
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      description: Would you like to help improve this documentation?
+      options:
+        - label: I can submit a PR with the documentation fix
+        - label: I can help review documentation changes
+        - label: I can provide additional examples
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Pre-submission Checklist
+      description: Please verify before submitting
+      options:
+        - label: I searched existing documentation issues
+          required: true
+        - label: I specified the documentation location
+          required: true
+        - label: I provided a clear description of the issue
+          required: true

@@ -1,0 +1,309 @@
+name: Automated Code Review
+
+on:
+  pull_request:
+    branches: [main, develop]
+    types: [opened, synchronize, reopened]
+
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR number to review'
+        required: true
+        type: number
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
+jobs:
+  # Gate 1: Code Quality
+  code-quality:
+    name: Code Quality (Ruff, Mypy, Pylint)
+    runs-on: ubuntu-latest
+    outputs:
+      ruff_passed: ${{ steps.ruff.outcome == 'success' }}
+      mypy_passed: ${{ steps.mypy.outcome == 'success' }}
+      pylint_score: ${{ steps.pylint.outputs.score }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install ruff mypy pylint types-requests types-aiohttp types-PyYAML
+
+      - name: Run Ruff linter
+        id: ruff
+        run: |
+          ruff check src/ --output-format=github
+        continue-on-error: true
+
+      - name: Run Ruff formatter check
+        id: ruff-format
+        run: |
+          ruff format --check src/
+        continue-on-error: true
+
+      - name: Run Mypy type checker
+        id: mypy
+        run: |
+          mypy src/ --ignore-missing-imports --strict-optional
+        continue-on-error: true
+
+      - name: Run Pylint
+        id: pylint
+        run: |
+          SCORE=$(pylint src/ --score=y --exit-zero 2>&1 | grep "Your code has been rated" | grep -oP '\d+\.\d+' || echo "0")
+          echo "score=$SCORE" >> $GITHUB_OUTPUT
+          echo "Pylint score: $SCORE/10.0"
+
+          if (( $(echo "$SCORE < 8.0" | bc -l) )); then
+            echo "❌ Score below 8.0 threshold"
+            exit 1
+          fi
+        continue-on-error: true
+
+  # Gate 2: Security
+  security:
+    name: Security (Bandit, Safety)
+    runs-on: ubuntu-latest
+    outputs:
+      critical_issues: ${{ steps.security.outputs.critical_count }}
+      has_vulnerabilities: ${{ steps.security.outputs.has_vulns }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install security tools
+        run: |
+          pip install bandit safety
+
+      - name: Run Bandit security scan
+        id: security
+        run: |
+          bandit -r src/ --skip B303 -f json -o bandit-report.json || true
+
+          if [ -f "bandit-report.json" ]; then
+            CRITICAL_COUNT=$(jq '[.results[] | select(.issue_severity=="HIGH" or .issue_severity=="CRITICAL")] | length' bandit-report.json)
+            echo "critical_count=$CRITICAL_COUNT" >> $GITHUB_OUTPUT
+
+            if [ "$CRITICAL_COUNT" -gt 0 ]; then
+              echo "❌ $CRITICAL_COUNT critical/high security issues found"
+              jq '.results[] | select(.issue_severity=="HIGH" or .issue_severity=="CRITICAL")' bandit-report.json
+              exit 1
+            fi
+          fi
+
+      - name: Run Safety dependency check
+        run: |
+          safety check --json > safety-report.json || true
+
+          if [ -f "safety-report.json" ]; then
+            VULNS=$(jq '.vulnerabilities | length' safety-report.json 2>/dev/null || echo "0")
+
+            if [ "$VULNS" -gt 0 ]; then
+              echo "⚠️ $VULNS vulnerable dependencies found"
+              jq '.vulnerabilities' safety-report.json
+            fi
+          fi
+
+  # Gate 3: Async Patterns
+  async-patterns:
+    name: Async Patterns Validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Check for blocking I/O
+        run: |
+          python tools/check_async_patterns.py
+
+      - name: Check connection pool usage
+        run: |
+          python tools/check_pool_usage.py
+
+  # Gate 4: Test Coverage
+  test-coverage:
+    name: Test Coverage
+    runs-on: ubuntu-latest
+    outputs:
+      coverage: ${{ steps.coverage.outputs.coverage }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install pytest pytest-asyncio pytest-cov
+          pip install -r requirements.txt
+
+      - name: Run tests with coverage
+        id: coverage
+        run: |
+          pytest --cov=src --cov-report=json --cov-report=term -v
+
+          if [ -f "coverage.json" ]; then
+            COVERAGE=$(jq '.totals.percent_covered' coverage.json)
+            echo "coverage=$COVERAGE" >> $GITHUB_OUTPUT
+            echo "Coverage: $COVERAGE%"
+
+            if (( $(echo "$COVERAGE < 80" | bc -l) )); then
+              echo "❌ Coverage below 80% threshold"
+              exit 1
+            fi
+          fi
+
+      - name: Upload coverage to Codecov
+        if: always()
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage.json
+          flags: unittests
+
+  # Gate 5: Documentation
+  documentation:
+    name: Documentation Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check for missing docstrings
+        run: |
+          MISSING=$(grep -r "^def \|^async def " src/ --include="*.py" | wc -l || echo "0")
+          HAS_DOCS=$(grep -r '"""' src/ --include="*.py" | wc -l || echo "0")
+
+          echo "Functions: $MISSING"
+          echo "Docstrings: $HAS_DOCS"
+
+          if [ "$MISSING" -gt 0 ]; then
+            COVERAGE=$((HAS_DOCS * 100 / MISSING))
+            echo "Docstring coverage: $COVERAGE%"
+
+            if [ "$COVERAGE" -lt 50 ]; then
+              echo "❌ Insufficient docstring coverage"
+              exit 1
+            fi
+          fi
+
+      - name: Check for type hints
+        run: |
+          FUNCTIONS=$(grep -r "^def \|^async def " src/ --include="*.py" | wc -l || echo "0")
+          WITH_HINTS=$(grep -rE "def.*->" src/ --include="*.py" | wc -l || echo "0")
+
+          if [ "$FUNCTIONS" -gt 0 ]; then
+            HINT_COVERAGE=$((WITH_HINTS * 100 / FUNCTIONS))
+            echo "Type hint coverage: $HINT_COVERAGE%"
+
+            if [ "$HINT_COVERAGE" -lt 70 ]; then
+              echo "⚠️ Low type hint coverage"
+            fi
+          fi
+
+  # Summary and Review
+  review-summary:
+    name: Review Summary
+    needs: [code-quality, security, async-patterns, test-coverage, documentation]
+    if: always()
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup GitHub CLI
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+
+      - name: Generate summary
+        run: |
+          PR_NUM=${{ github.event.pull_request.number || inputs.pr_number }}
+
+          CODE_QUALITY="${{ needs.code-quality.result }}"
+          SECURITY="${{ needs.security.result }}"
+          ASYNC="${{ needs.async-patterns.result }}"
+          COVERAGE="${{ needs.test-coverage.result }}"
+          DOCS="${{ needs.documentation.result }}"
+
+          # Determine overall status
+          if [ "$SECURITY" = "failure" ]; then
+            OVERALL="🔴 **CRITICAL ISSUES** - Merge blocked due to security vulnerabilities"
+            APPROVE=false
+          elif [ "$CODE_QUALITY" = "failure" ] || [ "$ASYNC" = "failure" ] || [ "$COVERAGE" = "failure" ]; then
+            OVERALL="🟡 **ISSUES FOUND** - Changes required before merge"
+            APPROVE=false
+          else
+            OVERALL="🟢 **ALL CHECKS PASSED** - Ready for human review"
+            APPROVE=true
+          fi
+
+          # Create summary
+          SUMMARY="## 🤖 Automated Code Review Summary
+
+          $OVERALL
+
+          ### Quality Gate Results:
+          - **Code Quality** (Ruff, Mypy, Pylint): ${CODE_QUALITY}
+          - **Security** (Bandit, Safety): ${SECURITY}
+          - **Async Patterns**: ${ASYNC}
+          - **Test Coverage**: ${COVERAGE} (${{ needs.test-coverage.outputs.coverage }}%)
+          - **Documentation**: ${DOCS}
+
+          ### Details:
+          - Pylint Score: ${{ needs.code-quality.outputs.pylint_score }}/10.0
+          - Security Issues: ${{ needs.security.outputs.critical_issues || 0 }} critical
+          - Coverage: ${{ needs.test-coverage.outputs.coverage }}%
+
+          ---
+          *Automated review by GitHub Actions*
+          *See individual check details above for specific issues*"
+
+          echo "$SUMMARY"
+
+          # Post comment
+          if [ -n "$PR_NUM" ]; then
+            gh pr comment $PR_NUM --body "$SUMMARY" --repo ${{ github.repository }}
+
+            # Approve or request changes
+            if [ "$APPROVE" = "true" ]; then
+              gh pr review $PR_NUM --approve --body "✅ All automated quality gates passed" --repo ${{ github.repository }}
+            fi
+          fi
+
+      - name: Final status
+        run: |
+          if [ "${{ needs.security.result }}" = "failure" ] || \
+             [ "${{ needs.code-quality.result }}" = "failure" ] || \
+             [ "${{ needs.async-patterns.result }}" = "failure" ] || \
+             [ "${{ needs.test-coverage.result }}" = "failure" ]; then
+            echo "❌ Some quality gates failed"
+            exit 1
+          fi
+
+          echo "✅ All quality gates passed"

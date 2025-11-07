@@ -1,19 +1,160 @@
-# Pre-commit hooks configuration for automated code quality checks
+# Pre-commit hooks configuration for RSS Analyzer
+# Install: pre-commit install
+# Run manually: pre-commit run --all-files
+# Update: pre-commit autoupdate
+
 repos:
+  # Standard pre-commit hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.5.0
     hooks:
       - id: trailing-whitespace
+        name: Trim trailing whitespace
       - id: end-of-file-fixer
+        name: Fix end of files
       - id: check-yaml
+        name: Check YAML syntax
+        args: ['--unsafe']  # Allow custom tags in GitHub Actions
+      - id: check-json
+        name: Check JSON syntax
+      - id: check-toml
+        name: Check TOML syntax
       - id: check-added-large-files
+        name: Check for large files
+        args: ['--maxkb=1000']
       - id: check-merge-conflict
+        name: Check for merge conflicts
+      - id: detect-private-key
+        name: Detect private keys
+      - id: check-case-conflict
+        name: Check for case conflicts
+      - id: mixed-line-ending
+        name: Check line endings
+        args: ['--fix=lf']
+      - id: check-docstring-first
+        name: Check docstring placement
 
+  # Ruff - Fast Python linter and formatter
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.12.2
     hooks:
-      # Run the linter
       - id: ruff
-        args: [--fix]
-      # Run the formatter
+        name: Ruff linter
+        args: [--fix, --exit-non-zero-on-fix]
+        types_or: [python, pyi]
       - id: ruff-format
+        name: Ruff formatter
+        types_or: [python, pyi]
+
+  # Mypy - Static type checking
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.8.0
+    hooks:
+      - id: mypy
+        name: Mypy type checker
+        additional_dependencies:
+          - types-requests
+          - types-aiohttp
+          - types-python-dateutil
+          - types-PyYAML
+        args: [--ignore-missing-imports, --strict-optional]
+        exclude: ^tests/
+
+  # Bandit - Security linter
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.7.6
+    hooks:
+      - id: bandit
+        name: Bandit security scanner
+        args: ['-r', 'src/', '--skip', 'B303']
+        pass_filenames: false
+
+  # Custom local hooks
+  - repo: local
+    hooks:
+      # Check for blocking I/O in async functions
+      - id: async-pattern-check
+        name: Async pattern validation
+        entry: python tools/check_async_patterns.py
+        language: system
+        types: [python]
+        pass_filenames: false
+        stages: [commit]
+
+      # Check connection pool usage
+      - id: pool-usage-check
+        name: Connection pool validation
+        entry: python tools/check_pool_usage.py
+        language: system
+        types: [python]
+        pass_filenames: false
+        stages: [commit]
+
+      # Check for print statements (should use logging)
+      - id: no-print-statements
+        name: No print statements (use logging)
+        entry: 'print\('
+        language: pygrep
+        types: [python]
+        exclude: ^(tools/|tests/|scripts/)
+
+      # Check for hardcoded secrets
+      - id: no-hardcoded-secrets
+        name: No hardcoded secrets
+        entry: '(API_KEY|PASSWORD|SECRET|TOKEN)\s*=\s*["\']'
+        language: pygrep
+        types: [python]
+        exclude: ^tests/
+
+      # Check for eval/exec usage
+      - id: no-eval-exec
+        name: No eval/exec usage
+        entry: '\b(eval|exec)\('
+        language: pygrep
+        types: [python]
+        exclude: ^tests/
+
+      # Check for SQL string formatting (injection risk)
+      - id: no-sql-formatting
+        name: No SQL string formatting
+        entry: 'execute.*(%|\.format)'
+        language: pygrep
+        types: [python]
+
+  # YAML linting
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.33.0
+    hooks:
+      - id: yamllint
+        name: YAML linter
+        args: ['-d', '{extends: default, rules: {line-length: {max: 120}, document-start: disable}}']
+
+  # Markdown linting
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.38.0
+    hooks:
+      - id: markdownlint
+        name: Markdown linter
+        args: ['--fix', '--disable', 'MD013', 'MD033', 'MD041']
+
+  # Spell checking (optional, may have false positives)
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.2.6
+    hooks:
+      - id: codespell
+        name: Spell checker
+        args: ['--skip=*.json,*.lock,htmlcov,*.pyc']
+        exclude: ^(\.git/|\.venv/|venv/|build/|dist/)
+
+# Pre-commit CI configuration
+ci:
+  autofix_commit_msg: |
+    [pre-commit.ci] auto fixes from pre-commit hooks
+
+    for more information, see https://pre-commit.ci
+  autofix_prs: true
+  autoupdate_branch: ''
+  autoupdate_commit_msg: '[pre-commit.ci] pre-commit autoupdate'
+  autoupdate_schedule: weekly
+  skip: []
+  submodules: false

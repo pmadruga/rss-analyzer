@@ -1,0 +1,326 @@
+name: 🤖 PR Automation & Auto-labeling
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+    branches:
+      - main
+      - develop
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+  checks: write
+
+jobs:
+  # Auto-label PRs based on changed files and metadata
+  auto-label:
+    name: 🏷️ Auto-label PR
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔄 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup GitHub CLI
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+
+      - name: 🏷️ Apply labels based on changed files
+        run: |
+          PR_NUM=${{ github.event.pull_request.number }}
+
+          # Get changed files
+          CHANGED_FILES=$(gh pr view $PR_NUM --json files --jq '.files[].path' | tr '\n' ',' | sed 's/,$//')
+
+          echo "Changed files: $CHANGED_FILES"
+
+          # Core component labels
+          if echo "$CHANGED_FILES" | grep -q "src/core/"; then
+            gh pr edit $PR_NUM --add-label "core"
+          fi
+
+          if echo "$CHANGED_FILES" | grep -q "src/processors/"; then
+            gh pr edit $PR_NUM --add-label "processors"
+          fi
+
+          # Database changes
+          if echo "$CHANGED_FILES" | grep -q "database.py\|migration"; then
+            gh pr edit $PR_NUM --add-label "database"
+            gh pr edit $PR_NUM --add-label "needs-careful-review"
+          fi
+
+          # API client changes
+          if echo "$CHANGED_FILES" | grep -q "_client.py"; then
+            gh pr edit $PR_NUM --add-label "api-integration"
+          fi
+
+          # Async changes
+          if echo "$CHANGED_FILES" | grep -q "async\|await"; then
+            gh pr edit $PR_NUM --add-label "async"
+          fi
+
+          # Performance optimization
+          if echo "$CHANGED_FILES" | grep -q "cache\|pool\|monitoring\|performance"; then
+            gh pr edit $PR_NUM --add-label "performance"
+          fi
+
+          # Tests
+          if echo "$CHANGED_FILES" | grep -q "tests/"; then
+            gh pr edit $PR_NUM --add-label "tests"
+          fi
+
+          # Documentation
+          if echo "$CHANGED_FILES" | grep -q "\.md$\|docs/"; then
+            gh pr edit $PR_NUM --add-label "documentation"
+          fi
+
+          # Workflows
+          if echo "$CHANGED_FILES" | grep -q "\.github/workflows/"; then
+            gh pr edit $PR_NUM --add-label "ci-cd"
+          fi
+
+          # Docker
+          if echo "$CHANGED_FILES" | grep -q "Dockerfile\|docker-compose"; then
+            gh pr edit $PR_NUM --add-label "docker"
+          fi
+
+          # Dependencies
+          if echo "$CHANGED_FILES" | grep -q "requirements.txt\|pyproject.toml"; then
+            gh pr edit $PR_NUM --add-label "dependencies"
+          fi
+
+      - name: 🏷️ Apply size labels
+        run: |
+          PR_NUM=${{ github.event.pull_request.number }}
+
+          # Get PR size
+          PR_DATA=$(gh pr view $PR_NUM --json additions,deletions)
+          ADDITIONS=$(echo "$PR_DATA" | jq -r '.additions')
+          DELETIONS=$(echo "$PR_DATA" | jq -r '.deletions')
+          TOTAL=$((ADDITIONS + DELETIONS))
+
+          echo "Total changes: $TOTAL lines"
+
+          # Remove existing size labels
+          gh pr edit $PR_NUM --remove-label "size/XS" 2>/dev/null || true
+          gh pr edit $PR_NUM --remove-label "size/S" 2>/dev/null || true
+          gh pr edit $PR_NUM --remove-label "size/M" 2>/dev/null || true
+          gh pr edit $PR_NUM --remove-label "size/L" 2>/dev/null || true
+          gh pr edit $PR_NUM --remove-label "size/XL" 2>/dev/null || true
+
+          # Apply size label
+          if [ $TOTAL -lt 10 ]; then
+            gh pr edit $PR_NUM --add-label "size/XS"
+          elif [ $TOTAL -lt 50 ]; then
+            gh pr edit $PR_NUM --add-label "size/S"
+          elif [ $TOTAL -lt 200 ]; then
+            gh pr edit $PR_NUM --add-label "size/M"
+          elif [ $TOTAL -lt 500 ]; then
+            gh pr edit $PR_NUM --add-label "size/L"
+          else
+            gh pr edit $PR_NUM --add-label "size/XL"
+          fi
+
+      - name: 🏷️ Apply priority labels
+        run: |
+          PR_NUM=${{ github.event.pull_request.number }}
+
+          # Get changed files
+          CHANGED_FILES=$(gh pr view $PR_NUM --json files --jq '.files[].path' | tr '\n' ',' | sed 's/,$//')
+
+          # High priority for critical paths
+          if echo "$CHANGED_FILES" | grep -qE "database\.py|auth|_client\.py|security"; then
+            gh pr edit $PR_NUM --add-label "priority: high"
+          fi
+
+          # Check PR title for urgency keywords
+          PR_TITLE=$(gh pr view $PR_NUM --json title --jq '.title')
+
+          if echo "$PR_TITLE" | grep -iqE "urgent|hotfix|critical|security"; then
+            gh pr edit $PR_NUM --add-label "priority: critical"
+          elif echo "$PR_TITLE" | grep -iqE "bug|fix"; then
+            gh pr edit $PR_NUM --add-label "priority: high"
+          fi
+
+  # Check PR completeness
+  pr-completeness-check:
+    name: ✅ PR Completeness Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔄 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup GitHub CLI
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+
+      - name: 📋 Check PR description completeness
+        run: |
+          PR_NUM=${{ github.event.pull_request.number }}
+          PR_BODY=$(gh pr view $PR_NUM --json body --jq '.body')
+
+          ISSUES=""
+          WARNINGS=""
+
+          # Check for summary
+          if ! echo "$PR_BODY" | grep -q "## Summary"; then
+            ISSUES="$ISSUES\n- ⚠️ Missing **Summary** section"
+          fi
+
+          # Check for type of change
+          if ! echo "$PR_BODY" | grep -q "## Type of Change"; then
+            ISSUES="$ISSUES\n- ⚠️ Missing **Type of Change** section"
+          fi
+
+          # Check for testing
+          if ! echo "$PR_BODY" | grep -q "## Testing"; then
+            WARNINGS="$WARNINGS\n- 💡 Consider adding **Testing** section"
+          fi
+
+          # Check for tests checked
+          if ! echo "$PR_BODY" | grep -q "\[x\].*test"; then
+            WARNINGS="$WARNINGS\n- 💡 No test checkboxes marked"
+          fi
+
+          # Check for documentation checkbox
+          if ! echo "$PR_BODY" | grep -q "\[x\].*documentation\|\[x\].*No documentation needed"; then
+            WARNINGS="$WARNINGS\n- 💡 Documentation checkbox not marked"
+          fi
+
+          # Check if description is too short
+          BODY_LENGTH=$(echo "$PR_BODY" | wc -c)
+          if [ $BODY_LENGTH -lt 100 ]; then
+            WARNINGS="$WARNINGS\n- 💡 PR description is quite short - consider adding more details"
+          fi
+
+          # Generate report
+          if [ -n "$ISSUES" ] || [ -n "$WARNINGS" ]; then
+            REPORT="## 📋 PR Completeness Check\n\n"
+
+            if [ -n "$ISSUES" ]; then
+              REPORT="$REPORT### ⚠️ Issues Found\n\n$ISSUES\n\n"
+            fi
+
+            if [ -n "$WARNINGS" ]; then
+              REPORT="$REPORT### 💡 Suggestions\n\n$WARNINGS\n\n"
+            fi
+
+            REPORT="$REPORT---\n\n**Tip**: Using the PR template helps reviewers understand your changes better and speeds up the review process!\n\n"
+            REPORT="$REPORT*Automated PR completeness check*"
+
+            gh pr comment $PR_NUM --body "$REPORT"
+          else
+            echo "✅ PR description is complete!"
+          fi
+
+  # Link related issues
+  link-issues:
+    name: 🔗 Link Related Issues
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔧 Setup GitHub CLI
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+
+      - name: 🔗 Find and link related issues
+        run: |
+          PR_NUM=${{ github.event.pull_request.number }}
+          PR_BODY=$(gh pr view $PR_NUM --json body --jq '.body')
+          PR_TITLE=$(gh pr view $PR_NUM --json title --jq '.title')
+
+          # Extract issue numbers from body and title
+          ISSUE_NUMS=$(echo "$PR_BODY $PR_TITLE" | grep -oE "#[0-9]+" | sort -u)
+
+          if [ -n "$ISSUE_NUMS" ]; then
+            COMMENT="## 🔗 Linked Issues\n\nThis PR references the following issues:\n\n"
+
+            for issue in $ISSUE_NUMS; do
+              ISSUE_NUM=${issue#\#}
+              ISSUE_TITLE=$(gh issue view $ISSUE_NUM --json title --jq '.title' 2>/dev/null || echo "Unknown")
+
+              if [ "$ISSUE_TITLE" != "Unknown" ]; then
+                COMMENT="$COMMENT- $issue: $ISSUE_TITLE\n"
+              fi
+            done
+
+            COMMENT="$COMMENT\n*Automatically detected issue references*"
+
+            # Post comment with linked issues
+            gh pr comment $PR_NUM --body "$COMMENT"
+          fi
+
+  # Suggest reviewers based on code ownership
+  suggest-reviewers:
+    name: 👥 Suggest Reviewers
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔄 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup GitHub CLI
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+
+      - name: 👥 Suggest reviewers based on CODEOWNERS
+        run: |
+          PR_NUM=${{ github.event.pull_request.number }}
+
+          # Check if CODEOWNERS exists
+          if [ -f ".github/CODEOWNERS" ]; then
+            CHANGED_FILES=$(gh pr view $PR_NUM --json files --jq '.files[].path')
+
+            REVIEWERS=""
+
+            # Read CODEOWNERS and match patterns
+            while IFS= read -r line; do
+              # Skip comments and empty lines
+              [[ "$line" =~ ^#.*$ ]] && continue
+              [[ -z "$line" ]] && continue
+
+              # Extract pattern and owners
+              PATTERN=$(echo "$line" | awk '{print $1}')
+              OWNERS=$(echo "$line" | awk '{$1=""; print $0}' | xargs)
+
+              # Check if any changed file matches pattern
+              for file in $CHANGED_FILES; do
+                if [[ "$file" == $PATTERN* ]]; then
+                  REVIEWERS="$REVIEWERS $OWNERS"
+                fi
+              done
+            done < .github/CODEOWNERS
+
+            # Remove duplicates and format
+            REVIEWERS=$(echo "$REVIEWERS" | tr ' ' '\n' | sort -u | grep "^@" | tr '\n' ' ')
+
+            if [ -n "$REVIEWERS" ]; then
+              COMMENT="## 👥 Suggested Reviewers\n\nBased on CODEOWNERS, the following reviewers are suggested:\n\n$REVIEWERS\n\n*Automatically detected from CODEOWNERS file*"
+              gh pr comment $PR_NUM --body "$COMMENT"
+            fi
+          fi
+
+  # PR status summary
+  pr-status-summary:
+    name: 📊 PR Status Summary
+    needs: [auto-label, pr-completeness-check, link-issues, suggest-reviewers]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔧 Setup GitHub CLI
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+
+      - name: 📊 Generate status summary
+        run: |
+          PR_NUM=${{ github.event.pull_request.number }}
+
+          echo "## 🤖 PR Automation Complete" > summary.md
+          echo "" >> summary.md
+          echo "All automated checks and labeling have been completed." >> summary.md
+          echo "" >> summary.md
+          echo "### Next Steps:" >> summary.md
+          echo "" >> summary.md
+          echo "1. ✅ Review automated feedback" >> summary.md
+          echo "2. 🔍 Wait for AI code review to complete" >> summary.md
+          echo "3. 📝 Address any issues raised" >> summary.md
+          echo "4. 👥 Request human review when ready" >> summary.md
+          echo "" >> summary.md
+          echo "---" >> summary.md
+          echo "*Automated PR processing by GitHub Actions*" >> summary.md
+
+          gh pr comment $PR_NUM --body-file summary.md
