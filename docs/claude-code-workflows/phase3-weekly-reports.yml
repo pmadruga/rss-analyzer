@@ -1,0 +1,186 @@
+# Claude Code - Phase 3: Weekly Comprehensive Reports
+# Copy this file to: .github/workflows/claude-weekly-reports.yml
+
+name: 📊 Weekly Comprehensive Report
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'  # Sunday midnight UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+env:
+  ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+
+jobs:
+  generate-report:
+    name: 📝 Generate Weekly Report
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python & uv
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - uses: astral-sh/setup-uv@v3
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Query database stats
+        id: stats
+        run: |
+          STATS=$(uv run python -c "
+          import sqlite3, json
+          from datetime import datetime, timedelta
+
+          conn = sqlite3.connect('data/articles.db')
+          cursor = conn.cursor()
+
+          # Total articles
+          cursor.execute('SELECT COUNT(*) FROM articles')
+          total = cursor.fetchone()[0]
+
+          # Unique articles
+          cursor.execute('SELECT COUNT(DISTINCT url) FROM articles')
+          unique = cursor.fetchone()[0]
+
+          # This week
+          cursor.execute('SELECT COUNT(*) FROM articles WHERE processed_date > datetime(\"now\", \"-7 days\")')
+          weekly = cursor.fetchone()[0]
+
+          # By category (if available)
+          cursor.execute('SELECT status, COUNT(*) FROM articles GROUP BY status')
+          by_status = dict(cursor.fetchall())
+
+          conn.close()
+
+          result = {
+              'total': total,
+              'unique': unique,
+              'weekly': weekly,
+              'by_status': by_status
+          }
+
+          print(json.dumps(result))
+          ")
+
+          echo "stats=$STATS" >> $GITHUB_OUTPUT
+
+          # Extract values for easy access
+          TOTAL=$(echo "$STATS" | jq -r '.total')
+          WEEKLY=$(echo "$STATS" | jq -r '.weekly')
+
+          echo "total=$TOTAL" >> $GITHUB_OUTPUT
+          echo "weekly=$WEEKLY" >> $GITHUB_OUTPUT
+
+      - name: Generate comprehensive report
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            Generate comprehensive weekly report for the past 7 days.
+
+            Database Statistics:
+            - Total articles: ${{ fromJSON(steps.stats.outputs.stats).total }}
+            - Unique articles: ${{ fromJSON(steps.stats.outputs.stats).unique }}
+            - This week: ${{ fromJSON(steps.stats.outputs.stats).weekly }}
+
+            Reports to Generate:
+
+            1. Executive Summary (docs/reports/weekly-$(date +%Y-%m-%d).md):
+               - Week's highlights (top 5 papers by significance)
+               - Research trend analysis (emerging topics, hot areas)
+               - Key methodology innovations
+               - Cross-disciplinary connections
+               - Recommended reading order
+
+            2. Research Trends Analysis (docs/trends/$(date +%Y-%m-%d).md):
+               - Topic clustering (identify research themes)
+               - Author collaboration patterns
+               - Research area evolution (week-over-week changes)
+               - Citation network analysis
+               - Future research directions
+
+            3. Reading Lists (docs/reading-lists/$(date +%Y-%m-%d).md):
+               - Beginner-friendly papers (accessible explanations)
+               - Advanced deep-dives (technical depth)
+               - Cross-disciplinary papers (broad impact)
+               - Practical applications (real-world use cases)
+
+            4. Data Export (docs/data/weekly-$(date +%Y-%m-%d).json):
+               - Structured data for website
+               - Keyword tags and categories
+               - Citation metrics
+               - Category distribution
+               - Weekly statistics
+
+            5. Update Website Index (docs/index.md):
+               - Add this week's report link
+               - Update cumulative statistics
+               - Refresh trending topics
+
+            Focus on:
+            - Academic accuracy
+            - Practical insights
+            - Clear explanations using Feynman technique
+            - Actionable recommendations
+
+            Format: Professional academic style with accessibility for general audience.
+          claude_args: |
+            --max-turns 4
+            --system-prompt "Senior research analyst with expertise in AI/ML literature review and academic writing"
+
+      - name: Commit reports
+        run: |
+          git config user.name "Weekly Report Bot"
+          git config user.email "reports@github.com"
+          git add docs/
+          git commit -m "Weekly report: $(date +%Y-%m-%d) - ${{ steps.stats.outputs.weekly }} articles analyzed" || echo "No changes"
+          git push
+
+      - name: Deploy to GitHub Pages
+        if: success()
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          commit_message: "Deploy weekly report: $(date +%Y-%m-%d)"
+
+  summary:
+    name: 📊 Report Summary
+    needs: generate-report
+    if: always()
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Generate summary
+        run: |
+          cat >> $GITHUB_STEP_SUMMARY <<EOF
+          # Weekly Report Summary
+
+          ## Statistics
+          - Total articles in database: ${{ needs.generate-report.outputs.total || 'N/A' }}
+          - Articles this week: ${{ needs.generate-report.outputs.weekly || 'N/A' }}
+
+          ## Reports Generated
+          - ✅ Executive Summary
+          - ✅ Research Trends Analysis
+          - ✅ Reading Lists
+          - ✅ Data Export (JSON)
+          - ✅ Website Index Updated
+
+          ## Status
+          - Report generation: ${{ needs.generate-report.result }}
+          - Date: $(date +%Y-%m-%d)
+
+          ## Performance
+          - Workflow runtime: ~${{ github.event.workflow_run.run_duration_ms / 1000 / 60 || 'N/A' }} minutes
+          EOF

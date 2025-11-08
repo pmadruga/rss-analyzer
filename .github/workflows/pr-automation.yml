@@ -28,73 +28,77 @@ jobs:
       - name: 🏷️ Apply labels based on changed files
         run: |
           PR_NUM=${{ github.event.pull_request.number }}
+          REPO="${{ github.repository }}"
+          REPO="${{ github.repository }}"
 
           # Get changed files
-          CHANGED_FILES=$(gh pr view $PR_NUM --json files --jq '.files[].path' | tr '\n' ',' | sed 's/,$//')
+          CHANGED_FILES=$(gh pr view $PR_NUM --repo $REPO --repo $REPO --json files --jq '.files[].path' | tr '\n' ',' | sed 's/,$//')
 
           echo "Changed files: $CHANGED_FILES"
 
           # Core component labels
           if echo "$CHANGED_FILES" | grep -q "src/core/"; then
-            gh pr edit $PR_NUM --add-label "core"
+            gh pr edit $PR_NUM --repo $REPO --repo $REPO --add-label "core"
           fi
 
           if echo "$CHANGED_FILES" | grep -q "src/processors/"; then
-            gh pr edit $PR_NUM --add-label "processors"
+            gh pr edit $PR_NUM --repo $REPO --add-label "processors"
           fi
 
           # Database changes
           if echo "$CHANGED_FILES" | grep -q "database.py\|migration"; then
-            gh pr edit $PR_NUM --add-label "database"
-            gh pr edit $PR_NUM --add-label "needs-careful-review"
+            gh pr edit $PR_NUM --repo $REPO --add-label "database"
+            gh pr edit $PR_NUM --repo $REPO --add-label "needs-careful-review"
           fi
 
           # API client changes
           if echo "$CHANGED_FILES" | grep -q "_client.py"; then
-            gh pr edit $PR_NUM --add-label "api-integration"
+            gh pr edit $PR_NUM --repo $REPO --add-label "api-integration"
           fi
 
           # Async changes
           if echo "$CHANGED_FILES" | grep -q "async\|await"; then
-            gh pr edit $PR_NUM --add-label "async"
+            gh pr edit $PR_NUM --repo $REPO --add-label "async"
           fi
 
           # Performance optimization
           if echo "$CHANGED_FILES" | grep -q "cache\|pool\|monitoring\|performance"; then
-            gh pr edit $PR_NUM --add-label "performance"
+            gh pr edit $PR_NUM --repo $REPO --add-label "performance"
           fi
 
           # Tests
           if echo "$CHANGED_FILES" | grep -q "tests/"; then
-            gh pr edit $PR_NUM --add-label "tests"
+            gh pr edit $PR_NUM --repo $REPO --add-label "tests"
           fi
 
           # Documentation
           if echo "$CHANGED_FILES" | grep -q "\.md$\|docs/"; then
-            gh pr edit $PR_NUM --add-label "documentation"
+            gh pr edit $PR_NUM --repo $REPO --add-label "documentation"
           fi
 
           # Workflows
           if echo "$CHANGED_FILES" | grep -q "\.github/workflows/"; then
-            gh pr edit $PR_NUM --add-label "ci-cd" 2>/dev/null || gh pr edit $PR_NUM --add-label "workflows" || true
+            gh pr edit $PR_NUM --repo $REPO --add-label "ci-cd" 2>/dev/null || gh pr edit $PR_NUM --repo $REPO --add-label "workflows" || true
           fi
 
           # Docker
           if echo "$CHANGED_FILES" | grep -q "Dockerfile\|docker-compose"; then
-            gh pr edit $PR_NUM --add-label "docker"
+            gh pr edit $PR_NUM --repo $REPO --add-label "docker"
           fi
 
           # Dependencies
           if echo "$CHANGED_FILES" | grep -q "requirements.txt\|pyproject.toml"; then
-            gh pr edit $PR_NUM --add-label "dependencies"
+            gh pr edit $PR_NUM --repo $REPO --add-label "dependencies"
           fi
 
       - name: 🏷️ Apply size labels
         run: |
           PR_NUM=${{ github.event.pull_request.number }}
 
+          REPO="${{ github.repository }}"
+
           # Get PR size
-          PR_DATA=$(gh pr view $PR_NUM --json additions,deletions)
+          PR_DATA=$(gh pr view $PR_NUM --repo $REPO --json additions,deletions)
           ADDITIONS=$(echo "$PR_DATA" | jq -r '.additions')
           DELETIONS=$(echo "$PR_DATA" | jq -r '.deletions')
           TOTAL=$((ADDITIONS + DELETIONS))
@@ -102,44 +106,46 @@ jobs:
           echo "Total changes: $TOTAL lines"
 
           # Remove existing size labels
-          gh pr edit $PR_NUM --remove-label "size/XS" 2>/dev/null || true
-          gh pr edit $PR_NUM --remove-label "size/S" 2>/dev/null || true
-          gh pr edit $PR_NUM --remove-label "size/M" 2>/dev/null || true
-          gh pr edit $PR_NUM --remove-label "size/L" 2>/dev/null || true
-          gh pr edit $PR_NUM --remove-label "size/XL" 2>/dev/null || true
+          gh pr edit $PR_NUM --repo $REPO --remove-label "size/XS" 2>/dev/null || true
+          gh pr edit $PR_NUM --repo $REPO --remove-label "size/S" 2>/dev/null || true
+          gh pr edit $PR_NUM --repo $REPO --remove-label "size/M" 2>/dev/null || true
+          gh pr edit $PR_NUM --repo $REPO --remove-label "size/L" 2>/dev/null || true
+          gh pr edit $PR_NUM --repo $REPO --remove-label "size/XL" 2>/dev/null || true
 
           # Apply size label
           if [ $TOTAL -lt 10 ]; then
-            gh pr edit $PR_NUM --add-label "size/XS"
+            gh pr edit $PR_NUM --repo $REPO --add-label "size/XS"
           elif [ $TOTAL -lt 50 ]; then
-            gh pr edit $PR_NUM --add-label "size/S"
+            gh pr edit $PR_NUM --repo $REPO --add-label "size/S"
           elif [ $TOTAL -lt 200 ]; then
-            gh pr edit $PR_NUM --add-label "size/M"
+            gh pr edit $PR_NUM --repo $REPO --add-label "size/M"
           elif [ $TOTAL -lt 500 ]; then
-            gh pr edit $PR_NUM --add-label "size/L"
+            gh pr edit $PR_NUM --repo $REPO --add-label "size/L"
           else
-            gh pr edit $PR_NUM --add-label "size/XL"
+            gh pr edit $PR_NUM --repo $REPO --add-label "size/XL"
           fi
 
       - name: 🏷️ Apply priority labels
         run: |
           PR_NUM=${{ github.event.pull_request.number }}
 
+          REPO="${{ github.repository }}"
+
           # Get changed files
-          CHANGED_FILES=$(gh pr view $PR_NUM --json files --jq '.files[].path' | tr '\n' ',' | sed 's/,$//')
+          CHANGED_FILES=$(gh pr view $PR_NUM --repo $REPO --json files --jq '.files[].path' | tr '\n' ',' | sed 's/,$//')
 
           # High priority for critical paths
           if echo "$CHANGED_FILES" | grep -qE "database\.py|auth|_client\.py|security"; then
-            gh pr edit $PR_NUM --add-label "priority: high"
+            gh pr edit $PR_NUM --repo $REPO --add-label "priority: high"
           fi
 
           # Check PR title for urgency keywords
-          PR_TITLE=$(gh pr view $PR_NUM --json title --jq '.title')
+          PR_TITLE=$(gh pr view $PR_NUM --repo $REPO --json title --jq '.title')
 
           if echo "$PR_TITLE" | grep -iqE "urgent|hotfix|critical|security"; then
-            gh pr edit $PR_NUM --add-label "priority: critical"
+            gh pr edit $PR_NUM --repo $REPO --add-label "priority: critical"
           elif echo "$PR_TITLE" | grep -iqE "bug|fix"; then
-            gh pr edit $PR_NUM --add-label "priority: high"
+            gh pr edit $PR_NUM --repo $REPO --add-label "priority: high"
           fi
 
   # Check PR completeness
@@ -156,7 +162,8 @@ jobs:
       - name: 📋 Check PR description completeness
         run: |
           PR_NUM=${{ github.event.pull_request.number }}
-          PR_BODY=$(gh pr view $PR_NUM --json body --jq '.body')
+          REPO="${{ github.repository }}"
+          PR_BODY=$(gh pr view $PR_NUM --repo $REPO --json body --jq '.body')
 
           ISSUES=""
           WARNINGS=""
@@ -207,7 +214,7 @@ jobs:
             REPORT="$REPORT---\n\n**Tip**: Using the PR template helps reviewers understand your changes better and speeds up the review process!\n\n"
             REPORT="$REPORT*Automated PR completeness check*"
 
-            gh pr comment $PR_NUM --body "$REPORT"
+            gh pr comment $PR_NUM --repo $REPO --body "$REPORT"
           else
             echo "✅ PR description is complete!"
           fi
@@ -226,8 +233,9 @@ jobs:
       - name: 🔗 Find and link related issues
         run: |
           PR_NUM=${{ github.event.pull_request.number }}
-          PR_BODY=$(gh pr view $PR_NUM --json body --jq '.body')
-          PR_TITLE=$(gh pr view $PR_NUM --json title --jq '.title')
+          REPO="${{ github.repository }}"
+          PR_BODY=$(gh pr view $PR_NUM --repo $REPO --json body --jq '.body')
+          PR_TITLE=$(gh pr view $PR_NUM --repo $REPO --json title --jq '.title')
 
           # Extract issue numbers from body and title
           ISSUE_NUMS=$(echo "$PR_BODY $PR_TITLE" | grep -oE "#[0-9]+" | sort -u)
@@ -237,7 +245,7 @@ jobs:
 
             for issue in $ISSUE_NUMS; do
               ISSUE_NUM=${issue#\#}
-              ISSUE_TITLE=$(gh issue view $ISSUE_NUM --json title --jq '.title' 2>/dev/null || echo "Unknown")
+              ISSUE_TITLE=$(gh issue view $ISSUE_NUM --repo $REPO --json title --jq '.title' 2>/dev/null || echo "Unknown")
 
               if [ "$ISSUE_TITLE" != "Unknown" ]; then
                 COMMENT="$COMMENT- $issue: $ISSUE_TITLE\n"
@@ -247,7 +255,7 @@ jobs:
             COMMENT="$COMMENT\n*Automatically detected issue references*"
 
             # Post comment with linked issues
-            gh pr comment $PR_NUM --body "$COMMENT"
+            gh pr comment $PR_NUM --repo $REPO --body "$COMMENT"
           fi
 
   # Suggest reviewers based on code ownership
@@ -265,9 +273,11 @@ jobs:
         run: |
           PR_NUM=${{ github.event.pull_request.number }}
 
+          REPO="${{ github.repository }}"
+
           # Check if CODEOWNERS exists
           if [ -f ".github/CODEOWNERS" ]; then
-            CHANGED_FILES=$(gh pr view $PR_NUM --json files --jq '.files[].path')
+            CHANGED_FILES=$(gh pr view $PR_NUM --repo $REPO --json files --jq '.files[].path')
 
             REVIEWERS=""
 
@@ -294,7 +304,7 @@ jobs:
 
             if [ -n "$REVIEWERS" ]; then
               COMMENT="## 👥 Suggested Reviewers\n\nBased on CODEOWNERS, the following reviewers are suggested:\n\n$REVIEWERS\n\n*Automatically detected from CODEOWNERS file*"
-              gh pr comment $PR_NUM --body "$COMMENT"
+              gh pr comment $PR_NUM --repo $REPO --body "$COMMENT"
             fi
           fi
 
@@ -315,6 +325,8 @@ jobs:
         run: |
           PR_NUM=${{ github.event.pull_request.number }}
 
+          REPO="${{ github.repository }}"
+
           echo "## 🤖 PR Automation Complete" > summary.md
           echo "" >> summary.md
           echo "All automated checks and labeling have been completed." >> summary.md
@@ -329,4 +341,4 @@ jobs:
           echo "---" >> summary.md
           echo "*Automated PR processing by GitHub Actions*" >> summary.md
 
-          gh pr comment $PR_NUM --body-file summary.md
+          gh pr comment $PR_NUM --repo $REPO --body-file summary.md

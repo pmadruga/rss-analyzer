@@ -1,0 +1,68 @@
+# Claude Code - Phase 1: Interactive Article Review
+# Copy this file to: .github/workflows/claude-interactive.yml
+
+name: 🤖 Claude Interactive Review
+
+on:
+  issue_comment:
+    types: [created]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  interactive-review:
+    # Only run when @claude-review is mentioned
+    if: contains(github.event.comment.body, '@claude-review')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: 🔄 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🐍 Setup Python & uv
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: ⚡ Install uv
+        uses: astral-sh/setup-uv@v3
+
+      - name: 📦 Install dependencies
+        run: uv sync
+
+      - name: 🤖 Claude Code Review
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            User mentioned @claude-review in an issue comment.
+
+            Context:
+            - Issue: ${{ github.event.issue.title }}
+            - Comment: ${{ github.event.comment.body }}
+
+            Tasks:
+            1. If comment mentions an article ID, review that specific article from data/articles.db
+            2. If no specific article, review the latest 3 articles
+            3. Provide:
+               - Accuracy assessment
+               - Key insights
+               - Methodology critique
+               - Related research suggestions
+            4. Post findings as a comment on this issue
+
+            Be thorough but concise.
+          claude_args: "--max-turns 2"
+
+      - name: 📊 Summary
+        if: always()
+        run: |
+          echo "## Claude Review Complete" >> $GITHUB_STEP_SUMMARY
+          echo "- Issue: ${{ github.event.issue.title }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Triggered by: ${{ github.event.comment.user.login }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Status: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY

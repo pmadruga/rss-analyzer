@@ -44,14 +44,18 @@ jobs:
         run: |
           PR_NUM=${{ github.event.pull_request.number || inputs.pr_number }}
 
+          REPO="${{ github.repository }}"
+
+          REPO="${{ github.repository }}"
+
           echo "Analyzing PR #$PR_NUM..."
 
           # Get changed files
-          CHANGED_FILES=$(gh pr view $PR_NUM --json files --jq '.files[].path' | tr '\n' ',' | sed 's/,$//')
+          CHANGED_FILES=$(gh pr view $PR_NUM --repo $REPO --json files --jq '.files[].path' | tr '\n' ',' | sed 's/,$//')
           echo "changed_files=$CHANGED_FILES" >> $GITHUB_OUTPUT
 
           # Get PR metadata
-          PR_DATA=$(gh pr view $PR_NUM --json title,body,labels,additions,deletions)
+          PR_DATA=$(gh pr view $PR_NUM --repo $REPO --json title,body,labels,additions,deletions)
           echo "pr_data=$PR_DATA" >> $GITHUB_OUTPUT
 
           # Calculate change magnitude
@@ -119,6 +123,10 @@ jobs:
         run: |
           PR_NUM=${{ github.event.pull_request.number || inputs.pr_number }}
 
+          REPO="${{ github.repository }}"
+
+          REPO="${{ github.repository }}"
+
           cat > comment.md <<'COMMENT_EOF'
           ## 🤖 AI Code Review Initiated
 
@@ -131,7 +139,7 @@ jobs:
           ⏳ Review in progress...
           COMMENT_EOF
 
-          gh pr comment $PR_NUM --body-file comment.md
+          gh pr comment $PR_NUM --repo $REPO --body-file comment.md
 
   # Security Review Agent
   security-review:
@@ -155,10 +163,14 @@ jobs:
         run: |
           PR_NUM=${{ github.event.pull_request.number || inputs.pr_number }}
 
+          REPO="${{ github.repository }}"
+
+          REPO="${{ github.repository }}"
+
           echo "Running security review for PR #$PR_NUM..."
 
           # Get changed Python files
-          CHANGED_PY_FILES=$(gh pr view $PR_NUM --json files --jq '.files[] | select(.path | endswith(".py")) | .path')
+          CHANGED_PY_FILES=$(gh pr view $PR_NUM --repo $REPO --json files --jq '.files[] | select(.path | endswith(".py")) | .path')
 
           # Check for security patterns
           ISSUES=""
@@ -231,13 +243,15 @@ jobs:
       - name: 💬 Post security review
         run: |
           PR_NUM=${{ github.event.pull_request.number || inputs.pr_number }}
-          gh pr comment $PR_NUM --body-file security-review.md
+          REPO="${{ github.repository }}"
+          REPO="${{ github.repository }}"
+          gh pr comment $PR_NUM --repo $REPO --body-file security-review.md
 
           # Add label if issues found
           if [ "${{ steps.security.outputs.severity }}" = "critical" ]; then
-            gh pr edit $PR_NUM --add-label "security-critical"
+            gh pr edit $PR_NUM --repo $REPO --add-label "security-critical"
           elif [ "${{ steps.security.outputs.severity }}" = "high" ]; then
-            gh pr edit $PR_NUM --add-label "security-review-required"
+            gh pr edit $PR_NUM --repo $REPO --add-label "security-review-required"
           fi
 
   # Code Quality Review Agent
@@ -265,10 +279,14 @@ jobs:
         run: |
           PR_NUM=${{ github.event.pull_request.number || inputs.pr_number }}
 
+          REPO="${{ github.repository }}"
+
+          REPO="${{ github.repository }}"
+
           echo "Running code quality review for PR #$PR_NUM..."
 
           # Get changed Python files
-          CHANGED_PY_FILES=$(gh pr view $PR_NUM --json files --jq '.files[] | select(.path | endswith(".py")) | .path' | tr '\n' ' ')
+          CHANGED_PY_FILES=$(gh pr view $PR_NUM --repo $REPO --json files --jq '.files[] | select(.path | endswith(".py")) | .path' | tr '\n' ' ')
 
           if [ -z "$CHANGED_PY_FILES" ]; then
             echo "No Python files changed"
@@ -318,7 +336,9 @@ jobs:
       - name: 💬 Post quality review
         run: |
           PR_NUM=${{ github.event.pull_request.number || inputs.pr_number }}
-          gh pr comment $PR_NUM --body-file quality-review.md
+          REPO="${{ github.repository }}"
+          REPO="${{ github.repository }}"
+          gh pr comment $PR_NUM --repo $REPO --body-file quality-review.md
 
   # Python Best Practices Review Agent
   python-practices-review:
@@ -338,7 +358,11 @@ jobs:
         run: |
           PR_NUM=${{ github.event.pull_request.number || inputs.pr_number }}
 
-          CHANGED_PY_FILES=$(gh pr view $PR_NUM --json files --jq '.files[] | select(.path | endswith(".py")) | .path')
+          REPO="${{ github.repository }}"
+
+          REPO="${{ github.repository }}"
+
+          CHANGED_PY_FILES=$(gh pr view $PR_NUM --repo $REPO --json files --jq '.files[] | select(.path | endswith(".py")) | .path')
 
           ISSUES=""
 
@@ -391,7 +415,9 @@ jobs:
       - name: 💬 Post practices review
         run: |
           PR_NUM=${{ github.event.pull_request.number || inputs.pr_number }}
-          gh pr comment $PR_NUM --body-file practices-review.md
+          REPO="${{ github.repository }}"
+          REPO="${{ github.repository }}"
+          gh pr comment $PR_NUM --repo $REPO --body-file practices-review.md
 
   # Final Review Summary
   review-summary:
@@ -412,6 +438,10 @@ jobs:
       - name: 📊 Generate summary
         run: |
           PR_NUM=${{ github.event.pull_request.number || inputs.pr_number }}
+
+          REPO="${{ github.repository }}"
+
+          REPO="${{ github.repository }}"
 
           SECURITY_STATUS="${{ needs.security-review.result }}"
           QUALITY_STATUS="${{ needs.code-quality-review.result }}"
@@ -444,9 +474,9 @@ jobs:
           *Review depth: ${{ needs.review-triage.outputs.depth }}*
           SUMMARY_EOF
 
-          gh pr comment $PR_NUM --body-file summary.md
+          gh pr comment $PR_NUM --repo $REPO --body-file summary.md
 
           # Approve or request changes
           if [ "$APPROVE" = "true" ]; then
-            gh pr review $PR_NUM --approve --body "✅ All automated checks passed!"
+            gh pr review $PR_NUM --repo $REPO --approve --body "✅ All automated checks passed!"
           fi

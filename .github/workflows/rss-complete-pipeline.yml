@@ -18,8 +18,8 @@ on:
         type: boolean
 
 env:
-  # API Configuration
-  API_PROVIDER: 'anthropic'
+  # API Configuration - using Mistral as Anthropic key is not configured
+  API_PROVIDER: 'mistral'
   ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
   MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}

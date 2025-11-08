@@ -1,0 +1,66 @@
+# Budget Reset Workflow
+# Copy this file to: .github/workflows/budget-reset.yml
+
+name: 💰 Monthly Budget Reset
+
+on:
+  schedule:
+    - cron: '0 0 1 * *'  # First day of each month at midnight UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  reset-budget:
+    name: Reset Monthly Budget
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Reset budget tracker
+        run: |
+          # Get previous month's spend
+          PREVIOUS=$(cat .github/monthly_spend.txt 2>/dev/null || echo "0.00")
+
+          # Reset to 0.00
+          echo "0.00" > .github/monthly_spend.txt
+
+          # Archive previous month's spend
+          DATE=$(date -d "last month" +%Y-%m)
+          mkdir -p .github/budget-history
+          echo "$PREVIOUS" > .github/budget-history/$DATE.txt
+
+          echo "Previous month ($DATE): \$$PREVIOUS"
+          echo "New budget: \$0.00"
+
+      - name: Commit changes
+        run: |
+          git config user.name "Budget Bot"
+          git config user.email "budget@github.com"
+          git add .github/monthly_spend.txt .github/budget-history/
+          git commit -m "Reset monthly budget: $(date +%Y-%m-01)"
+          git push
+
+      - name: Generate summary
+        run: |
+          PREVIOUS=$(cat .github/budget-history/$(date -d "last month" +%Y-%m).txt)
+
+          cat >> $GITHUB_STEP_SUMMARY <<EOF
+          # Monthly Budget Reset
+
+          ## Previous Month
+          - Month: $(date -d "last month" +%Y-%m)
+          - Total spend: \$$PREVIOUS
+
+          ## Current Month
+          - Month: $(date +%Y-%m)
+          - Budget: \$15.00
+          - Current spend: \$0.00
+          - Remaining: \$15.00
+
+          ## History
+          Budget history saved to: .github/budget-history/$(date -d "last month" +%Y-%m).txt
+          EOF

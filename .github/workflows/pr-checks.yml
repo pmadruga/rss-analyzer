@@ -226,6 +226,8 @@ jobs:
         run: |
           PR_NUM=${{ github.event.pull_request.number }}
 
+          REPO="${{ github.repository }}"
+
           TESTS="${{ needs.tests.result }}"
           TYPE_CHECK="${{ needs.type-check.result }}"
           LINT="${{ needs.lint.result }}"
@@ -284,4 +286,4 @@ jobs:
           echo "---" >> summary.md
           echo "*Automated quality checks by GitHub Actions*" >> summary.md
 
-          gh pr comment $PR_NUM --body-file summary.md
+          gh pr comment $PR_NUM --repo $REPO --body-file summary.md
