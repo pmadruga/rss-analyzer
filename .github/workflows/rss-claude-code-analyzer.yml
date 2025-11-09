@@ -1,0 +1,275 @@
+name: 🤖 RSS Analysis with Claude Code
+
+on:
+  schedule:
+    # Run daily at 9:00 AM UTC (1 hour after the regular pipeline)
+    - cron: '0 9 * * *'
+
+  workflow_dispatch:
+    inputs:
+      max_articles:
+        description: 'Maximum number of articles to analyze'
+        required: false
+        default: '5'
+        type: string
+      analysis_mode:
+        description: 'Analysis mode'
+        required: false
+        default: 'standard'
+        type: choice
+        options:
+          - quick
+          - standard
+          - deep
+      generate_reports:
+        description: 'Generate comprehensive reports'
+        required: false
+        default: true
+        type: boolean
+
+permissions:
+  contents: write
+  pull-requests: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "rss-claude-code"
+  cancel-in-progress: false
+
+jobs:
+  claude-code-analysis:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: 🔄 Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: ⚡ Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: "latest"
+
+      - name: 📦 Install dependencies
+        run: |
+          uv sync
+
+      - name: 📁 Create directories
+        run: |
+          mkdir -p data logs output docs
+
+      - name: 🗄️ Initialize database
+        run: |
+          if [ -f "data/articles.db" ]; then
+            echo "Database exists, ensuring WAL mode..."
+            sqlite3 data/articles.db "PRAGMA journal_mode = WAL;"
+          fi
+
+      - name: 🤖 Run Claude Code RSS Analysis
+        id: claude-analysis
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: |
+            # RSS Feed Analysis Task
+
+            You are orchestrating an intelligent RSS feed analysis pipeline for academic papers and technical articles.
+
+            ## Your Mission
+
+            Analyze RSS feed articles using a **hybrid approach**:
+            1. Run the Python analyzer with Mistral for cost-effective bulk processing
+            2. Then YOU (Claude Code) provide enhanced analysis for key articles
+            3. Generate comprehensive reports combining both analyses
+
+            ## Step-by-Step Instructions
+
+            ### Phase 1: Bulk Analysis with Mistral
+            ```bash
+            # Set environment for Mistral
+            export API_PROVIDER=mistral
+            export MAX_ARTICLES_PER_RUN=${{ github.event.inputs.max_articles || '5' }}
+
+            # Run the analyzer
+            uv run python -m src.main run --limit $MAX_ARTICLES_PER_RUN
+            ```
+
+            ### Phase 2: Database Query for Articles
+            ```bash
+            # Get the list of newly analyzed articles
+            sqlite3 data/articles.db -json "
+              SELECT id, title, url
+              FROM articles
+              WHERE status = 'completed'
+              ORDER BY processed_date DESC
+              LIMIT ${{ github.event.inputs.max_articles || '5' }}
+            " > output/recent_articles.json
+            ```
+
+            ### Phase 3: Enhanced Claude Analysis
+
+            For each article in `output/recent_articles.json`:
+
+            1. **Read the Mistral analysis** from the database:
+               ```bash
+               sqlite3 data/articles.db "
+                 SELECT c.analysis
+                 FROM content c
+                 JOIN articles a ON c.article_id = a.id
+                 WHERE a.id = <article_id>
+               " > temp_analysis.txt
+               ```
+
+            2. **Read the article content** from the database:
+               ```bash
+               sqlite3 data/articles.db "
+                 SELECT c.content
+                 FROM content c
+                 JOIN articles a ON c.article_id = a.id
+                 WHERE a.id = <article_id>
+               " > temp_content.txt
+               ```
+
+            3. **Provide YOUR enhanced analysis** by:
+               - Reading both files using your Read tool
+               - Analyzing the content using your deep reasoning
+               - Identifying key insights, implications, and connections
+               - Writing enhanced analysis to `output/claude_analysis_<article_id>.md`
+
+            4. **Create a comparison** showing:
+               - Mistral's analysis (cost-effective, good coverage)
+               - Your analysis (deep reasoning, nuanced insights)
+               - Combined recommendations
+
+            ### Phase 4: Report Generation
+
+            Generate comprehensive reports:
+
+            1. **Combined Analysis Report** (`output/combined_analysis_report.md`):
+               - Executive summary of all articles
+               - Key findings and themes
+               - Comparison: Mistral vs Claude analysis quality
+               - Recommendations for readers
+
+            2. **Update Website Data**:
+               ```bash
+               uv run python tools/generate_website_data.py --verbose
+               ```
+
+            3. **Generate Articles by Date**:
+               ```bash
+               uv run python tools/generate_articles_by_date.py
+               ```
+
+            ### Phase 5: Commit and Deploy
+
+            ```bash
+            git config --local user.email "claude-code@github.com"
+            git config --local user.name "Claude Code RSS Analyzer"
+
+            git add docs/data.json output/ -f
+
+            if ! git diff --staged --quiet; then
+              git commit -m "🤖 RSS Analysis with Claude Code - $(date -u '+%Y-%m-%d %H:%M UTC')
+
+              Enhanced analysis by Claude Code
+              - Mistral: Bulk processing
+              - Claude: Deep analysis and insights
+
+              🤖 Generated with Claude Code
+              Co-Authored-By: Claude-Code <noreply@anthropic.com>"
+
+              git push
+            fi
+            ```
+
+            ## Analysis Mode Guidelines
+
+            **Mode: ${{ github.event.inputs.analysis_mode || 'standard' }}**
+
+            - **quick**: Mistral only, minimal Claude enhancement (1-2 articles)
+            - **standard**: Mistral + Claude for all articles, focus on key insights
+            - **deep**: Mistral + extensive Claude analysis, cross-reference papers, identify research gaps
+
+            ## Important Notes
+
+            - Use Bash tool for all command execution
+            - Use Read tool to examine files before analyzing
+            - Use Write tool to create your enhanced analyses
+            - Include reasoning in your analysis (why is this important?)
+            - Highlight connections between articles if multiple are analyzed
+            - Be thorough but efficient - focus on adding value beyond Mistral's analysis
+
+            ## Success Criteria
+
+            ✅ All articles processed with Mistral
+            ✅ Claude enhanced analysis for key articles
+            ✅ Combined report generated
+            ✅ Website data updated
+            ✅ Changes committed and pushed
+
+            Start by running Phase 1 and proceed through each phase systematically.
+            Report progress as you go!
+
+          claude_args: '--allowed-tools "Bash(*),Read,Write,Edit,Glob,Grep"'
+
+      - name: 🎨 Setup GitHub Pages
+        uses: actions/configure-pages@v4
+
+      - name: 📤 Upload website files
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'docs'
+
+      - name: 🚀 Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: 📤 Upload analysis artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: claude-analysis-${{ github.run_number }}
+          path: |
+            output/
+            logs/
+          retention-days: 30
+          if-no-files-found: ignore
+
+      - name: 📊 Generate pipeline summary
+        if: always()
+        run: |
+          if [ "${{ job.status }}" = "success" ]; then
+            STATUS="✅ Claude Code RSS Analysis completed successfully"
+            EMOJI="🟢"
+          else
+            STATUS="❌ Claude Code RSS Analysis failed"
+            EMOJI="🔴"
+          fi
+
+          echo "## $EMOJI RSS Analysis with Claude Code" >> $GITHUB_STEP_SUMMARY
+          echo "$STATUS" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Analysis Mode**: ${{ github.event.inputs.analysis_mode || 'standard' }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Max Articles**: ${{ github.event.inputs.max_articles || '5' }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Pipeline run**: ${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Timestamp**: $(date -u '+%Y-%m-%d %H:%M UTC')" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ steps.deployment.outputs.page_url }}" ]; then
+            echo "**Website**: ${{ steps.deployment.outputs.page_url }}" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Hybrid Approach" >> $GITHUB_STEP_SUMMARY
+          echo "- **Mistral**: Cost-effective bulk processing" >> $GITHUB_STEP_SUMMARY
+          echo "- **Claude Code**: Enhanced analysis and insights" >> $GITHUB_STEP_SUMMARY
+          echo "- **OAuth Token**: ✅ Used for Claude Code orchestration" >> $GITHUB_STEP_SUMMARY
